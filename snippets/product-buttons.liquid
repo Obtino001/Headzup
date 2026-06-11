@@ -209,40 +209,14 @@
             </button>
             {%- endunless -%}
 
-            {%- if show_newsletter and current_variant.available == false -%}
-              {%- assign newsletter_text = 'general.newsletter_form.newsletter_product_availability' | t -%}
-              {%- assign button_text = 'products.product.sold_out' | t | append: ' - ' | append: newsletter_text -%}
-
-              <popup-component class="product-soldout-notification">
-                <button
-                  type="button"
-                  class="btn {{ button_type }} {{ button_size }} {{ button_style }}"
-                  data-popup-open
-                >
-                  <span class="btn__text">{{ button_text }}</span>
-                </button>
-
-                <dialog class="product-modal" aria-hidden="true" inert data-scroll-lock-required>
-                  <form method="dialog">
-                    <button class="visually-hidden no-js" aria-label="{{ 'general.accessibility.close' | t }}"></button>
-                  </form>
-
-                  <div class="drawer__inner product-modal__notification">
-                    <div class="product-modal__content small" data-scroll-lock-scrollable>
-                      <button
-                        type="button"
-                        class="product-modal__close"
-                        data-popup-close
-                        aria-label="{{ 'general.accessibility.close' | t }}"
-                      >
-                        {%- render 'icon-cancel' -%}
-                      </button>
-
-                      {%- render 'notification-form', product_title: product.title, current_variant: current_variant -%}
-                    </div>
-                  </div>
-                </dialog>
-              </popup-component>
+            {%- if current_variant.available == false -%}
+              <button
+                type="button"
+                class="btn {{ button_type }} {{ button_size }} {{ button_style }} klaviyo-bis-trigger"
+                style="margin-top: 10px; width: 100%;"
+              >
+                <span class="btn__text">Notify me when back in stock</span>
+              </button>
             {%- endif -%}
           </div>
 

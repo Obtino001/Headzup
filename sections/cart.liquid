@@ -214,6 +214,27 @@
             {%- assign animation_delay = animation_delay | plus: animation_delay_increment -%}
           </div>
 
+          {% assign cart_gift_product = all_products[section.settings.gift_box_product] %}
+          {% render 'gift-box-upsell', gift_box_product: cart_gift_product, position: 'cart' %}
+
+          <div class="cart__reassurance" data-animation="{{ animation_name }}" data-animation-duration="{{ animation_duration }}" data-animation-delay="{{ animation_delay }}" style="margin: 20px 0; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1);">
+            <div style="margin-bottom: 15px;">
+              {% render 'estimated-delivery' %}
+            </div>
+            <div class="cart-trust-badges" style="display: flex; gap: 15px; flex-wrap: wrap;">
+              <div class="cart-trust-badge" style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                {% render 'icon-truck' %} <span>Free delivery over 449 kr</span>
+              </div>
+              <div class="cart-trust-badge" style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                {% render 'icon-check' %} <span>365-day exchanges</span>
+              </div>
+              <div class="cart-trust-badge" style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                {% render 'icon-lock' %} <span>Secure payment</span>
+              </div>
+            </div>
+          </div>
+          {%- assign animation_delay = animation_delay | plus: animation_delay_increment -%}
+
           <collapsible-elements single="true">
             {%- for block in section.blocks -%}
               {%- assign animation_delay = forloop.index
@@ -295,26 +316,7 @@
                       </button>
 
                       <div class="cart__buttons-wrapper">
-                        {%- if settings.enable_accept_terms -%}
-                          <input type="hidden" name="attributes[{{ 'cart.general.accepted_terms' | t }}]" value="Yes">
-                          <input
-                            type="checkbox"
-                            class="cart__acceptance__input"
-                            name="acceptance"
-                            id="acceptance"
-                            data-cart-acceptance-checkbox
-                          >
-                          <label for="acceptance" class="cart__acceptance__label" data-cart-acceptance-label>
-                            {{- settings.accept_terms_text -}}
-                          </label>
-
-                          <p class="cart__terms cart__errors__content" data-terms-error-message></p>
-                        {%- endif -%}
-
-                        <div
-                          class="cart__buttons{% if settings.enable_accept_terms %} cart__buttons--disabled{% endif %}"
-                          data-cart-checkout-buttons
-                        >
+                        <div class="cart__buttons" data-cart-checkout-buttons>
                           <fieldset class="cart__buttons__fieldset" data-cart-checkout-button>
                             <button
                               type="submit"
@@ -334,6 +336,7 @@
                               </div>
                             {%- endif -%}
                           </fieldset>
+                          <p style="margin-top: 10px; font-size: 13px; text-align: center;">By completing your purchase you accept our terms and conditions.</p>
                         </div>
                       </div>
 
@@ -402,6 +405,15 @@
       "unit": "px",
       "label": "Bottom",
       "default": 50
+    },
+    {
+      "type": "header",
+      "content": "Gift Box Upsell"
+    },
+    {
+      "type": "product",
+      "id": "gift_box_product",
+      "label": "Gift Box Product"
     }
   ],
   "blocks": [

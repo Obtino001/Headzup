@@ -276,6 +276,43 @@
                     {%- endif -%}
                   </div>
 
+                {%- when 'trust_badges' -%}
+                  {%- assign animation_order = animation_order | plus: 1 -%}
+                  <div
+                    class="hero__trust-badges"
+                    data-aos="hero"
+                    data-aos-anchor="{{ animation_anchor }}"
+                    data-aos-order="{{ animation_order }}"
+                    {{ block.shopify_attributes }}
+                  >
+                    <div class="trust-badges-wrapper" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                      {%- if block.settings.badge_1_text != blank -%}
+                        <div class="trust-badge-item" style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; padding: 6px 12px; background: rgba(255,255,255,0.15); border-radius: 4px; backdrop-filter: blur(4px);">
+                          {% render 'icon-check' %}
+                          <span>{{ block.settings.badge_1_text }}</span>
+                        </div>
+                      {%- endif -%}
+                      {%- if block.settings.badge_2_text != blank -%}
+                        <div class="trust-badge-item" style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; padding: 6px 12px; background: rgba(255,255,255,0.15); border-radius: 4px; backdrop-filter: blur(4px);">
+                          {% render 'icon-check' %}
+                          <span>{{ block.settings.badge_2_text }}</span>
+                        </div>
+                      {%- endif -%}
+                      {%- if block.settings.badge_3_text != blank -%}
+                        <div class="trust-badge-item" style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; padding: 6px 12px; background: rgba(255,255,255,0.15); border-radius: 4px; backdrop-filter: blur(4px);">
+                          {% render 'icon-check' %}
+                          <span>{{ block.settings.badge_3_text }}</span>
+                        </div>
+                      {%- endif -%}
+                      {%- if block.settings.badge_4_text != blank -%}
+                        <div class="trust-badge-item" style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; padding: 6px 12px; background: rgba(255,255,255,0.15); border-radius: 4px; backdrop-filter: blur(4px);">
+                          {% render 'icon-check' %}
+                          <span>{{ block.settings.badge_4_text }}</span>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  </div>
+
                 {%- when 'code' -%}
                   {%- assign animation_order = animation_order | plus: 1 -%}
 

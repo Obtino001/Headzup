@@ -128,6 +128,8 @@
   <script src="{{ 'product-sticky.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
+{% render 'sticky-add-to-cart', product: product %}
+
 <product-component
   id="Product--{{ unique }}"
   class="index-product section-padding {{ color_scheme }}"
@@ -347,6 +349,101 @@
                       block: block,
                       block_style: block_style
                     -%}
+
+                  {%- when 'delivery_date' -%}
+                    <div class="product__block block-padding" {{ block.shopify_attributes }}>
+                      {% render 'estimated-delivery' %}
+                    </div>
+
+                  {%- when 'payment_badge' -%}
+                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: -10px; margin-bottom: 15px;">
+                      <a href="#" style="display: inline-flex; align-items: center; gap: 8px; font-weight: bold; text-decoration: none; padding: 5px 10px; background: #f4f4f4; border-radius: 4px; font-size: 14px;" data-popup-open="payment-calculator">
+                        {% render 'icon-lock' %} From 40 kr/month
+                      </a>
+                    </div>
+
+                  {%- when 'gift_box' -%}
+                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-bottom: 15px;">
+                      {% assign gift_product = all_products[block.settings.gift_box_product] %}
+                      {% render 'gift-box-upsell', gift_box_product: gift_product, position: 'product' %}
+                    </div>
+
+                  {%- when 'limited_urgency' -%}
+                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: 15px; margin-bottom: 15px; color: #d32f2f; font-weight: bold;">
+                      {%- assign current_variant = product.selected_or_first_available_variant -%}
+                      {%- if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity < 5 -%}
+                        <p style="margin: 0;">🔥 Hurry! Only {{ current_variant.inventory_quantity }} left in size {{ current_variant.title }}</p>
+                      {%- endif -%}
+                      
+                      {%- if product.metafields.custom.countdown_date != blank -%}
+                        <div class="countdown-timer" style="margin-top: 10px; font-size: 14px;">
+                          ⏱️ Sale ends: <strong>{{ product.metafields.custom.countdown_date }}</strong>
+                        </div>
+                      {%- endif -%}
+                    </div>
+
+                  {%- when 'store_note' -%}
+                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: -10px; margin-bottom: 15px; font-size: 13px;">
+                      <p style="margin: 0;">📍 Try it in our store at Vesterbrogade 95H, Copenhagen</p>
+                    </div>
+
+                  {%- when 'compare_models' -%}
+                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: 10px; margin-bottom: 15px;">
+                      <a href="#CompareModelsModal" data-popup-open style="text-decoration: underline; font-size: 14px;">Not sure which model? Compare fits</a>
+                      <popup-component class="compare-modal">
+                        <dialog id="CompareModelsModal" class="product-modal" aria-hidden="true" inert data-scroll-lock-required>
+                          <form method="dialog">
+                            <button class="visually-hidden no-js" aria-label="Close"></button>
+                          </form>
+                          <div class="drawer__inner product-modal__notification">
+                            <div class="product-modal__content small" data-scroll-lock-scrollable>
+                              <button type="button" class="product-modal__close" data-popup-close aria-label="Close">
+                                {% render 'icon-cancel' %}
+                              </button>
+                              <h3>Cap Guide: Find Your Style</h3>
+                              <table style="width: 100%; text-align: left; border-collapse: collapse; margin-top: 20px;">
+                                <thead>
+                                  <tr style="border-bottom: 1px solid #ddd;">
+                                    <th style="padding: 10px;">Model</th>
+                                    <th style="padding: 10px;">Fit</th>
+                                    <th style="padding: 10px;">Brim</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 10px;"><strong>59FIFTY</strong></td>
+                                    <td style="padding: 10px;">Structured, Fitted</td>
+                                    <td style="padding: 10px;">Flat</td>
+                                  </tr>
+                                  <tr style="border-bottom: 1px solid #ddd;">
+                                    <td style="padding: 10px;"><strong>9FIFTY</strong></td>
+                                    <td style="padding: 10px;">Adjustable Snapback</td>
+                                    <td style="padding: 10px;">Flat</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </dialog>
+                      </popup-component>
+                    </div>
+
+                  {%- when 'faq_presets' -%}
+                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: 30px;">
+                      <h3>Frequently Asked Questions</h3>
+                      <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <summary style="cursor: pointer; font-weight: bold;">What size do I need?</summary>
+                        <p style="margin-top: 10px; font-size: 14px;">Please refer to our size guide on the product page. For fitted caps, measure the circumference of your head.</p>
+                      </details>
+                      <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <summary style="cursor: pointer; font-weight: bold;">Can I exchange if it doesn't fit?</summary>
+                        <p style="margin-top: 10px; font-size: 14px;">Yes! We offer a 365-day exchange policy. You can exchange sizes easily.</p>
+                      </details>
+                      <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                        <summary style="cursor: pointer; font-weight: bold;">What's the difference between 59FIFTY and 9FIFTY?</summary>
+                        <p style="margin-top: 10px; font-size: 14px;">59FIFTY is a fitted cap with a structured crown and flat brim. 9FIFTY has the same structured crown and flat brim, but features an adjustable snapback closure.</p>
+                      </details>
+                    </div>
 
                   {%- when 'variants' -%}
                     {%- render 'product-variant-options',
@@ -1045,6 +1142,48 @@
           "unit": "px",
           "label": "Bottom",
           "default": 8
+        }
+      ]
+    },
+    {
+      "type": "delivery_date",
+      "name": "Estimated Delivery Date",
+      "limit": 1
+    },
+    {
+      "type": "payment_badge",
+      "name": "Payment Instalment Badge",
+      "limit": 1
+    },
+    {
+      "type": "store_note",
+      "name": "Physical Store Note",
+      "limit": 1
+    },
+    {
+      "type": "limited_urgency",
+      "name": "Limited Edition Urgency",
+      "limit": 1
+    },
+    {
+      "type": "compare_models",
+      "name": "Compare Models Modal",
+      "limit": 1
+    },
+    {
+      "type": "faq_presets",
+      "name": "FAQ Presets",
+      "limit": 1
+    },
+    {
+      "type": "gift_box",
+      "name": "Gift Box Prompt",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product",
+          "id": "gift_box_product",
+          "label": "Gift Box Product"
         }
       ]
     },
