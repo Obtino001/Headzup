@@ -1,0 +1,141 @@
+{%- liquid
+  assign selected_color_scheme = section.settings.color_scheme | strip
+  assign scheme_bg_color = settings.color_schemes[selected_color_scheme].settings.section_bg
+  assign scheme_text_color = settings.color_schemes[selected_color_scheme].settings.section_text
+  assign desktop_height = section.settings.height
+  assign mobile_height = section.settings.mobile_height
+  assign image_desktop = block.settings.image
+  assign image_mobile = block.settings.mobile_image
+  assign alt = image_mobile.alt | default: image_desktop.alt | default: block.settings.title | default: default_slide_label
+  assign image_link = block.settings.link
+  assign show_text_background = block.settings.show_text_background
+  assign overlay_color = block.settings.overlay_color
+  assign overlay_opacity = block.settings.overlay_opacity | times: 0.01
+  assign show_overlay_text = block.settings.show_overlay_text
+  assign bg_color = block.settings.bg_color
+  assign text_color = block.settings.color
+  assign bg = ''
+  assign text = ''
+  assign hero_class = 'hero__image'
+  assign video = block.settings.video
+
+  if video != blank
+    assign hero_class = 'hero__video'
+  endif
+
+  assign hero_transparent = true
+  if show_text_background and scheme_bg_color.alpha != 0.0 or scheme_bg_color != blank or bg_color.alpha != 0.0 or bg_color != blank
+    assign hero_transparent = false
+  endif
+
+  if bg_color.alpha != 0.0 and bg_color != blank
+    assign bg = '--bg:' | append: bg_color | append: ';'
+  endif
+
+  assign show_header_backdrop = false
+  if hero_transparent and show_overlay_text
+    assign show_header_backdrop = true
+  endif
+
+  if text_color.alpha != 0.0 and text_color != blank
+    assign text = '--text:' | append: text_color | append: ';'
+  else
+    assign text = '--text:' | append: scheme_text_color | append: ';'
+  endif
+-%}
+
+{%- capture slide_style -%}
+  --overlay-opacity: {{ overlay_opacity }};
+
+  {%- unless overlay_color.alpha == 0.0 or overlay_color == blank -%}
+    --overlay-bg: {{ overlay_color }};
+  {%- endunless -%}
+
+  {% if show_header_backdrop %}
+    --header-overlay-color: var(--overlay-bg);
+    --header-overlay-opacity: {{ overlay_opacity }};"
+  {% endif %}
+
+  {%- if bg != blank or text != blank -%}
+    {{ bg }}
+    {{ text }}
+  {%- endif -%}
+{%- endcapture -%}
+
+<div
+  class="slideshow__slide frame {{ section.settings.height }} {{ section.settings.mobile_height }}{% if forloop.first %} is-selected{% endif %}"
+  data-slide="{{ block.id }}"
+  data-slide-text-color="{{ text_color }}"
+  style="{{ slide_style }}"
+  {{ block.shopify_attributes }}
+>
+  {%- if image_link != blank -%}
+    <a
+      class="{{ hero_class }} frame__item"
+      href="{{ image_link }}"
+      aria-label="{{ block.settings.title | default: default_slide_label | escape }}"
+    >
+  {%- else -%}
+    <div class="{{ hero_class }} frame__item">
+  {%- endif -%}
+
+  {%- liquid
+    capture slide_image
+      if forloop.first and section.index < 3
+        assign loading = 'eager'
+        assign fetchpriority = 'high'
+        assign preload = true
+      else
+        assign loading = 'lazy'
+        assign fetchpriority = 'high'
+        assign preload = false
+      endif
+
+      render 'image-hero', image_desktop: image_desktop, image_mobile: image_mobile, desktop_height: desktop_height, mobile_height: mobile_height, alt: alt, loading: loading, fetchpriority: fetchpriority, preload: preload, aspect_ratio: video.aspect_ratio, aspect_ratio_mobile: video.aspect_ratio
+    endcapture
+  -%}
+
+  {%- if video != null -%}
+    <div
+      class="video-background {{ desktop_height }} {{ mobile_height }}"
+      style="--aspect-ratio: {{ video.aspect_ratio | default: 1 }};"
+    >
+      <video-background
+        class="video__player is-loading"
+        data-video-player
+        data-video-id="{{ section.id }}-video-background"
+      >
+        <template data-video-template>
+          {{ video | video_tag: autoplay: true, image_size: '1085x', loop: true, muted: true, controls: false }}
+        </template>
+      </video-background>
+
+      <script src="{{ 'video-background.js' | asset_url }}" defer="defer"></script>
+    </div>
+  {%- else -%}
+    {{ slide_image }}
+  {%- endif -%}
+
+  {%- unless show_overlay_text or overlay_opacity == 0.0 -%}
+    <div class="image-overlay"></div>
+  {%- endunless -%}
+
+  {%- if image_link -%}
+    </a>
+  {%- else -%}
+    </div>
+  {%- endif -%}
+
+  {%- if block.type != blank -%}
+    <div class="hero__content__wrapper frame__item {{ block.settings.flex_align_desktop }} {{ block.settings.flex_align_mobile }}{% if show_header_backdrop %} backdrop--linear{% endif %}">
+      <div
+        class="hero__content{% if hero_transparent %} hero__content--transparent{% endif %}{% if show_overlay_text %} backdrop--radial{% endif %}"
+        {% if show_header_backdrop %}
+          style="--overlay-opacity: {{ overlay_opacity }};"
+        {% endif %}
+      >
+        {{ content_blocks }}
+      </div>
+    </div>
+  {%- endif -%}
+</div>

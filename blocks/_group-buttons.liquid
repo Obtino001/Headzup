@@ -1,0 +1,151 @@
+<div
+  class="hero__button-group"
+  data-aos="hero"
+  data-aos-order="auto"
+  data-aos-anchor="{{ section.id }}"
+  {{ block.shopify_attributes }}
+>
+  {%- render 'button',
+    text: block.settings.button_text,
+    link: block.settings.button_url,
+    type: block.settings.button_type,
+    size: block.settings.button_size,
+    style: block.settings.button_style,
+    show_arrow: block.settings.show_arrow
+  -%}
+
+  {%- render 'button',
+    text: block.settings.button_secondary_text,
+    link: block.settings.button_secondary_url,
+    type: block.settings.button_secondary_type,
+    size: block.settings.button_secondary_size,
+    style: block.settings.button_secondary_style,
+    show_arrow: block.settings.show_secondary_arrow
+  -%}
+</div>
+
+{% schema %}
+{
+  "name": "Side by side buttons",
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Primary button"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Text",
+      "default": "View products"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "button_type",
+      "label": "Color",
+      "default": "btn--primary",
+      "options": [
+        {"value": "btn--black", "label": "Black"},
+        {"value": "btn--white", "label": "White"},
+        {"value": "btn--primary", "label": "Primary"},
+        {"value": "btn--secondary", "label": "Secondary"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_size",
+      "label": "Size",
+      "default": "",
+      "options": [
+        {"label": "Small", "value": "btn--small"},
+        {"label": "Medium", "value": ""},
+        {"label": "Large", "value": "btn--large"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Style",
+      "default": "btn--solid",
+      "options": [
+        {"label": "Solid", "value": "btn--solid"},
+        {"label": "Outline", "value": "btn--outline"},
+        {"label": "Text", "value": "btn--text"}
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Show arrow",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Secondary button"
+    },
+    {
+      "type": "text",
+      "id": "button_secondary_text",
+      "label": "Text",
+      "default": "Shop sale"
+    },
+    {
+      "type": "url",
+      "id": "button_secondary_url",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "button_secondary_type",
+      "label": "Color",
+      "default": "btn--secondary",
+      "options": [
+        {"value": "btn--black", "label": "Black"},
+        {"value": "btn--white", "label": "White"},
+        {"value": "btn--primary", "label": "Primary"},
+        {"value": "btn--secondary", "label": "Secondary"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_secondary_size",
+      "label": "Size",
+      "default": "",
+      "options": [
+        {"label": "Small", "value": "btn--small"},
+        {"label": "Medium", "value": ""},
+        {"label": "Large", "value": "btn--large"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_secondary_style",
+      "label": "Style",
+      "default": "btn--solid",
+      "options": [
+        {"label": "Solid", "value": "btn--solid"},
+        {"label": "Outline", "value": "btn--outline"},
+        {"label": "Text", "value": "btn--text"}
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_arrow",
+      "label": "Show arrow",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Side by side buttons",
+      "settings": {
+      }
+    }
+  ]
+}
+{% endschema %}

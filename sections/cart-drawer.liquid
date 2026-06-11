@@ -1,0 +1,888 @@
+{%- liquid
+  assign animation_name = 'cart-items-fade'
+  assign animation_duration = 500
+  assign animation_delay_initial = 200
+  assign animation_delay_increment = 50
+  assign block_index_pinned = 1
+  assign block_index_static = 1
+  assign cart_item_count = cart.item_count
+  assign cart_title_default = 'cart.general.title' | t
+  assign show_empty_cart_menu = settings.show_empty_cart_menu | default: null
+  assign empty_cart_menu = settings.empty_cart_menu
+  assign empty_cart_products = settings.empty_cart_products | default: null
+  assign has_cart_title = false
+  assign has_checkout_buttons = false
+
+  assign title_block = section.blocks | where: 'type', 'title'
+  assign product_block = section.blocks | where: 'type', 'products'
+  assign checkout_buttons_block = section.blocks | where: 'type', 'checkout-buttons'
+  assign color_scheme = 'color-' | append: section.settings.color_scheme
+
+  for block in section.blocks
+    case block.type
+      when 'title'
+        assign has_cart_title = true
+        assign title_block_index = forloop.index
+
+      when 'products'
+        assign products_block_index = forloop.index
+
+      when 'checkout-buttons'
+        assign has_checkout_buttons = true
+    endcase
+  endfor
+-%}
+
+<script src="{{ 'quantity-counter.js' | asset_url }}" defer="defer"></script>
+
+{%- capture cart_title -%}
+  <h3 class="cart__title">
+    {{ title_block[0].settings.title | default: cart_title_default }}
+
+    <cart-count class="cart__items-count" data-cart-count="{{ cart_item_count }}">{{ cart_item_count }}</cart-count>
+  </h3>
+
+  <button type="button" class="drawer__close" data-cart-drawer-close aria-label="{{ 'general.accessibility.close' | t }} {{ 'cart.general.title' | t }}">
+    {%- render 'icon-cancel' -%}
+  </button>
+{%- endcapture -%}
+
+{%- capture cart_items -%}
+  {%- assign animation_delay = products_block_index | times: animation_delay_increment | plus: animation_delay_initial -%}
+
+  <div class="cart__errors drawer__errors"
+    data-cart-errors
+    data-animation="{{ animation_name }}"
+    data-animation-duration="{{ animation_duration }}"
+    data-animation-delay="{{ animation_delay }}">
+    <div class="cart__errors__inner">
+      <h5 class="cart__errors__heading">{{ 'cart.general.limit_message' | t }}</h5>
+
+      <p class="cart__errors__content" data-error-message></p>
+
+      <button class="cart__errors__close" type="button" data-cart-error-close aria-label="{{ 'general.accessibility.close' | t }} {{ 'cart.general.title' | t }}">
+        {%- render 'icon-cancel' -%}
+      </button>
+    </div>
+  </div>
+
+  <div class="drawer__items-title">{{ 'cart.general.products_with_count' | t: count: cart.item_count  }}</div>
+
+  <cart-items class="drawer__items" data-items-holder style="--base-animation-delay: {{ animation_delay }}ms">
+    {%- render 'cart-line-items', part: 'line-items' -%}
+  </cart-items>
+{%- endcapture -%}
+
+{%- capture checkout_buttons -%}
+  {%- assign animation_delay = buttons_block_index | times: animation_delay_increment | plus: animation_delay_initial -%}
+  <form id="cartForm" class="cart__form" action="{{ routes.cart_url }}" method="post" novalidate data-cart-form>
+
+    <div class="cart__foot__inner">
+
+      <div class="cart__price__holder" data-cart-price-holder>
+        {%- render 'cart-price' -%}
+      </div>
+
+      <div class="cart__buttons-all">
+
+        <div class="cart__buttons-wrapper">
+          {%- if settings.enable_accept_terms -%}
+            <input type="hidden" name="attributes[{{ 'cart.general.accepted_terms' | t }}]" value="Yes"/>
+            <input type="checkbox" class="cart__acceptance__input" name="acceptance" id="acceptance" data-cart-acceptance-checkbox>
+            <label for="acceptance" class="cart__acceptance__label" data-cart-acceptance-label>{{ settings.accept_terms_text }}</label>
+
+            <p class="cart__terms cart__errors__content" data-terms-error-message></p>
+          {%- endif -%}
+
+          <div class="cart__buttons{% if settings.enable_accept_terms %} cart__buttons--disabled{% endif %}" data-cart-checkout-buttons>
+            <fieldset class="cart__buttons__fieldset" data-cart-checkout-button>
+              <button type="submit" name="checkout" class="btn btn--primary btn--solid btn--full cart__checkout">
+                {%- if settings.show_lock_icon -%}
+                  {%- render 'animated-icon', filename: 'icon-lock' -%}
+                {%- endif -%}
+
+                {{- 'cart.general.checkout' | t -}}
+              </button>
+
+              {%- if checkout_buttons_block[0].settings.enable_additional_buttons and additional_checkout_buttons -%}
+                <div class="additional-checkout-buttons additional-checkout-buttons--vertical">
+                  {{- content_for_additional_checkout_buttons -}}
+                </div>
+              {%- endif -%}
+            </fieldset>
+          </div>
+        </div>
+
+        {%- if checkout_buttons_block[0].settings.show_view_cart_button -%}
+          {%- assign additional_checkout_buttons = checkout_buttons_block[0].settings.enable_additional_buttons -%}
+          <a href="{{ routes.cart_url }}" class="cart__view{% if additional_checkout_buttons %} cart__view--additional-checkout-buttons{% endif %} btn btn--primary btn--outline">{{- 'cart.general.view_cart' | t -}}</a>
+        {%- endif -%}
+      </div>
+      
+      <div class="estimated-delivery">  
+        {{ 'cart.general.estimate_delivery' | t }}
+      </div>
+
+      {%- if settings.cart_payment_icons -%}
+        <ul class="cart__drawer__payment__icons payment-icons inline-list">
+          {% if settings.payment_1 %}
+            <li>{{ settings.payment_1 | image_url: height: 50 | image_tag }}</li>
+          {% endif %}
+          {% if settings.payment_2 %}
+            <li>{{ settings.payment_2 | image_url: height: 50 | image_tag }}</li>
+          {% endif %}
+          {% if settings.payment_3 %}
+            <li>{{ settings.payment_3 | image_url: height: 50 | image_tag }}</li>
+          {% endif %}
+          {% if settings.payment_4 %}
+            <li>{{ settings.payment_4 | image_url: height: 50 | image_tag }}</li>
+          {% endif %}
+          {% if settings.payment_5 %}
+            <li>{{ settings.payment_5 | image_url: height: 50 | image_tag }}</li>
+          {% endif %}
+          <li><svg xmlns="http://www.w3.org/2000/svg" width="30px" height="20px" viewBox="0 0 30 20">
+    <image href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAmYAAAGQCAYAAAAED6wTAAAAJGVYSWZJSSoACAAAAAEAPAECAAkAAAAaAAAAAAAAAGltYWdlcnk0AAAnPYy6AAAAAXNSR0IB2cksfwAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB+kEHAk0Hysja4AAACAASURBVHja7d1PbBxnmh/gl7S8iKkAw4MZ7Mmkb5GBjbmRLjmMLCMH0YfAGusyY1gQffLsSbIPm01sQBJgLxAEiCQgAdYDZE1ljFkPAv1xLpZPoqhDNoCEkXOQ5rDAUDoEA0hAaCDDHdiWmEOxLZoipW52f29XVT8PMJDgscmu7q6qX31/3ncsEszH2tqDiFiLiM6f4xExtv732PR3AIBMnRwytv6/h+t/dv6/T2NsLOt1FPNWrK11DnJXRHzjcwcAGhTWOiGt41eFA1qRH75xhCzW/zQaBgC0RamANvAf+masrY1HNUL2rUAGALTMWFRLsp6JiIUBB7SB/bDOKNnDeDRHK5QBAG0MZs9GxHfruWeQo2cD+UE/i7W1Z8I6MgBgNA0qnPX9Q95cX+AfUQ3rGSUDAEbJIKc2x/sNZZ0XZOoSABhFa+uh7GFUS7v6DXl9hTIAACL+ZD2cjcfOR8529B8JZQAAgw9nPU9lviWUAQBs6Zv1cPVgh/99T0luY+HYh957AIBtw9Va9L5bs+sRs/lYW3sY1eI2Q2YAAFvb2PGo15nGroPZg/V/+RvBDACg65DVy07NXd38S2+uj5aZvgQA6M7DqDYD9LLe7KnznvOxtvadUAYA0LOxDSHt77pYb/bUqcwH0eWwGgAAP9DZMDke3U1pPjGYvbXebulb7ysAwI50mp53M6U5/rSUt/FPAAB6921UI2dPK9K/7Sxlpzm5UAYA0J9u89S4twoAoLzOyv8n1TbbMpjphQkAMFhr68HrSSHLiBkAQGI4i9h+1OyxYKZJOQBAuWA2FtuPmo1v9R8YRgMAKBvOtqpr9oMMNh9ra09KcQAA9B/MdsXWdc1+EMw6Vf4FMwCAcr7ZJm+Nb05w33ivAACKGouq4Ozmtf3fB7O3Ym1No3IAgPK2K50xvvlfAACgvIdPC2ZGzAAAcm2czhyPeLQbEwCAPJunM8cjqt2Yz3pvAABSPdwiqNmNCQAwBJ0Zy06x2fGt0hoAAOWtRTVr2cliu95cT2gq/gMA5Ptuw993bUxsAADk2jhzqXQZAEBNCGYAAEO2FhE/jbW18YhHOwIAABhOMBuPiHFDZgAAw7WrE846fwEAYDgeRDWDOf6d9wIAYKg6ZcvGFZcFAKhHOLPEDACgJsatLwMAGL6xsCsTAKAWng1TmQAAtfDHMJUJAFAL42HEDABAMAMA4PFwBgCAYAYAQETEQ8EMAKA+BDMAAMEMAADBDABAMAMAQDADABDMAAAQzAAABDMAAAQzAADBDAAAwQwAQDADAEAwAwAQzAAAEMwAAAQzAAAEMwAAwQwAAMEMAEAwAwBAMAMAEMwAABDMAAAQzAAABDMAAAQzAADBDAAAwQwAQDADAEAwAwAQzAAAEMwAAAQzAAAEMwAAwQwAAMEMAEAwAwBAMAMAEMwAABDMAAAEMwAABDMAAMEMAADBDAAAwQwAQDADAEAwAwAQzAAAEMwAAAQzAAAEMwAAwQwAAMEMAEAwAwBAMAMAEMwAABDMAAAEMwAABDMAAMEMAADBDABAMAMAQDADABDMAAAQzAAAEMwAAAQzAAAEMwAAwQwAAMEMAEAwAwBAMAMAEMwAABDMAAAEMwAABDMAAMEMAADBDABAMAMAQDADABDMAAAQzAAABDMAAAQzAADBDAAAwQwAAMEMAEAwAwBAMAMAEMwAABDMAAAEMwAAurGrLQeyezLiucnq7/+4EvGHFR9ur56fefT3+8uOp0nH19ZjpH7X16Z819wT+r++zMxGTExG3FuOWF2JuHPT+yKYPcWeAxH7j0bsO1R9eTa6txxxezHixucR1y/5oLe7cM0dq97HPQce//9vL0Ysnav+vLfcjuO5/nnEjUvNOJ7Nx7b3UMSeVyJeOvB4KOu4c7P6X1O+9xsv/sOwuuGG3fm7gFuZmqmur3sPRUzPNuP64J7Q//u37/WI/fNbn5OrK4+uo0sL3q9Sxt6MtbUmfnkOn9j65ruVe8sRF075Im28yb9xImLuePf/zYWTEZfP1vOpcyfHc/lM9Z2o+1P01EwVNre7UD4tdFy/VB1nnYJoJ0DPHR9eIOvmvbtzs/pz+avqZnT35miMuuyejHjrdPWd6+X6cP7UcO8JR05vHSDdE7q7zrx1ugq03bq3HPHRq817yBXMCjh8IuKNkzv7b4d98aiD6dmIdy9WJ2Kv6ngitu14+gmbTQjWc8ciDp+sbyDr5jtzezHi9tXmjCS3/Xw6cnrn54l7Qn+fufdQMOvrBOxYWoj4+O3RPQE/uNLfTbFOYWZQx3P6J/VaO9HvhbKun93PP4n48Xy7zqnOdN6NS80fTdtzIOK9i826PgziO+We0P+DknA2WM/8WZw82YQXevhExL/5q8F8EceieuIdJVMzEX/5RcTkn/b3czprna6di/j2j+04nn8xV607Wa3BjXX/0Yh/e7l6XYO2e7Kanvr69xF3vsp/qPrXP2/nebXvUHVtmpqJuPtVPb5HOzmOQdygM68Phwc0ojw9W73u//2le0I/of72VeszB2W8KV+gnU5fbuWNk92vT2uLt04PbgRmaibinU8cz6DNHYt4Z6Hs75iYrH7H/qOJYXN+cFOydbZ/PuLM76rv0qBHO0t7/8rgppenZqpp+JKmZwd7T5g77p7Qr/culnmgFMxqqsRN8/CJ0fmQ98/3tqizG3sPDe9CVuJ4ttvJmWXfoYgjZxLPqYW8431jhM61Jga0/fODf52lg867F90T+r3eDfoaOjEZcfB4MArBbGqmzAk+7Btx6oW30OjIsC5kbTuezo6obO9dLB8cStz0mxTQ3r/S2+7GYTh4rNzDRqlQUeI7NUr3hLlCn/lrx4JRCGYlE3ipC8coBNuIR2szHE9/Bj2l0MsTbukp3L2vj/YFtjNNfuR0Pad5pmaqOnJNeoAqOQ0/CveEiclyxzkxOXpTwiMZzGZeLvhEe7T9c+Ilp5EmJiNemHU8fX0H54d7Myg9SvCSi3Q1QnE84qPf1G/0sORnPzHZfV2xXpQ8R0fhQWK68DVuFMLtyAezkl+iicn2bd/PvPBGbF+BvqnHM92ioNmtw4XDLpWpmWpqs07hrPSDSImfPzNb9jMSzPo853/kXG99MCt9Yd/X4iekjPU9mReyjOPJDBKl1srs5HWYfhjNcNa0GYOM963t4az0Ne75Ged564OZm1IfQeZou47n4DGfT9Ney6rG0duGM6UFgEYGs4wK0m2cEy+5SH6ju0kV8/ccKDuFkfl963w+ddqtt+9QmaBQp44KdTs/61A7DxDManlhb+MmgKy1c1lBJmt0Katydd3WNpaqQXRrxDps9GLvoYjX1H0CmhbMMlontXETQEaQub+cE5yzRpfuL1e9D9sUNHtRogbR5TPBE7xxYnTrvAENDWZLCznrVNq0CSBrUfmtxbzjyZB1PHUtulqiBtHqSsQXZ11on/SeHzntfQAaFMxWV3JumHsO5JdKKHbjTxqNuXAqb1ShTcdT500ZJUpnXDipufGTDLO9GSCY7cjlpCfuvS3YBJA17XdrMWd9WeboX8bxZG3K6Of9HvR6y9WViA9fFc6eRCsboFHB7PZiztqf1441fxNA1k3/2rmc3zN3rF3H04SG3iU2AdxbFs6e9lCofAbQmGAWEXH98/K/YxgteZp447+/XK39K21qJqeUSdbxZAbnOj6g3FuOOPZixMdvC2hbaXsXEqA7u5ryQpcWqvUvpasWHz4R8eFiMz/MrGm/rKnlrNGlq0mjZXVd9L/VA8qeAxHXL5U7l5cWHhV3nn55uK2bJiYj/tnM8NtH7XvdLlagQcFsdaW6gZZei9FZY/OHBlYsz1pUXuqGvdVnkeHaQruC5iDMHSv/OWctUejW1Ew1Yr7v0HA2aDT52gMMTqNaMt1ICgQHG1j0MWvR/9JCziL5rNGlrOOpS1/MXl7vqO0UvLdcXWM+no84/mLE+VP5r+GF2QAEs+bI3ATQNFk30aWsab+jjmfY2tiqrJeQduFkFdAy18NNC2YgmDXtBWcUqyxRaLO0rEX/GcE4q6RE5vHUqS9mL2Fy1HcK3luO+Hd/ntfzc/plNyUQzBrmxqWcTgCHG7QeaHo2Z5rsfMsKymYdT1OnBNvYqmwnMuuwzRgxA8GsiS86Y9SsRKHNUjJqfa2u5Kzxm5jMm0LLWnjepEX/m7WpVVm/3/+/ebv873lOLTMQzJr4orO2lDdhE0BWkLl+KWe32L5DOWULshb97z3U7CbVo7gJ4ElBvnSYV2QWaGQwW12xCSA7yLStL2ZWLbbSi/7v3iy//ulwg0f8Bu3W1fIPWoBg1kgZ64OasAkgY7dfG/tiZizmzuhc8MXZ8l0xmjStX1qd6q4BglntLpAZi3HrPGqWtXvxWstKSrSpL+btxWpqv/SGmCbW9isha3cmIJg1UkYrnTqPFrStL2ZGSYk29cXsrJNbXalGAUf1ASVT6QC8quo/CGZNfvEZIwUTk/UdLcgYLSt9w888lszjyehcsLE4buk1c02s7ddEmrsDjQ5mnf6Zpb30Sv2OPatlUdsW/WcdT+lp2c3FcW8vln9IsQmgfGX+/2fEDASzph9ARm2tOpYMyFiPdePzdpWUyNrEkLH2b6vNL6Xr++05oGXQ84W/p3e/clMCwazhsvpn1qlvYNai/y+S6sVlrV/6MqlERtai/80y6vvtHeH+mRHlC+7a9QmMt+EgSpcLiKhX30B9MXd2PNcv5RxP6RC/XXHcjPp+rx0b3dIZGRtUBDOgFcFsaSFnE0Bd+gZmBBl9MXf+2ZQuErp0bnjHOcr9M9/5pOzPv7WY010DEMyKW13J6Z9Zh76BWYv+s57cs9butaUv5tNGMjM2AYxi/8wjp8t/V7Pq6wGCWYpR2QSwN+GmmNVHMitkZh1PRueCbh5AMjYBjErpjKmZiA+uRMwVLpmTWV8PEMxS3LnZ/k0AGeuXIp48VTZIB5MW/S+1qHNBNw8gGZsA9rV8E8Duyao8yF//pl1LBwDBLFXGxW2YmwAy1vbcTQq407MRMwmlFzI3MZReGN5t+ZKMTQB12gwziBD2/Prnd+R0NUL2i/8b8cbJnKbiRsuAjXa16WA662tKXkw7i58vn8k/vowRmS+SSkrMJY2WZY1EZJSR6OXm/cXZsiM9nY4YF04O73zfc6Ba79Zpm1a6xljTv6NAM4y37YDaugkgY/1S2/pirq7krD3MCJq9lvvI2ASQ1XR+q+/PB1cerf2anm1uKLt81mgZ0PJgljGSNYwK6Bk3wbb1xbx+Kaf8QMYmhl4/m4ydylk16DafB1nrvkq7vzzcEUdAMEuRsb4mIrcCetYIk76Y9Q3NOzmWjNHCzP6Z+49GvLOQs+4rI5R9+Kq6ZcAIBLOInDUbmRXQM0YHsvpIZkzJZh5PxqjRTo8lY6dyZ31Xxvt8ZAjrOkuGsozvJyCY1UJG/8yJyYgXkqYzM0aYrrWopETm8dT9s8loV3bweM77PNGSXaDXLwXAaAWzrBtSxjSORf/1PZ7O51PnY8loV1a6CX3W9ybL3PGI969U14+M0WNAMKuFjBtSxjROxgjT1ZYVlM3axFDHRf+bra6U/3wnJssWnN3bwmK2UzNVnbT3r7QrdAKC2VBvSBFlp3GyRgquLeR8JlnV4rMW/WcEzUEcS8YmgJLlQtrcm3NqpmqO/s4nRs+AlgezrBtSyWmcjEX/+mLuTEbngkFtYMhYc1myf+ZzLVlb9rTz4/0rwhnQ8mCWtQmg1A0pY2H5UssW/WcdT0bngkFuYMhYc1lqRHT3CASziCqU/fVvhle4FxDMUmR0AiixCWB6NmfRf1YfyYzRvzb1xVxdGewGhow1l6X6Z95fHp0L8sRkVavtteMBCGbtlNGapsQmgIwRmfMtKyibdTwZIXPQJRWyNgH8uEBgXf5q9C7Mb502cgaCWUtltKaJGOwmgNK73DaG1owRgKz2ORnHkxU0Lxf4zmasuSyxUP/GiNb9emehHa2nAMHs8ZtcQsXwQW4C2HeofDHNrEXy+w61a9F/Rl25uzerqv0lgmuJn7v5/Rl0mLi9OFrTmRu9d9GGABDMWiijf+YgR4bq2ntxJ7KmMS+fzfk9GZ9NyRHejE0AJXYq/7d3R/MCPTEZ8e5FNyoQzFooq39mv+rce7FXWX0xS40wbfXZZNSVK/kQcflMM9dc3riUsyShjqZnq2K0gGDWKk3ZBKAvZu+ybtgp5UsWyobm1ZXynREmJssUXv70eF45lLrRvgkEs1YqfQMfxA2p7r0Xu6Uv5g6DWULwyJj2LVV4+eP5vN23dfPOJ25YIJi1TMY0zkuv7Py/bULvxTqFmMzjyfhssuqwZYwel9yNe+FkxPEXqxA7SpsCSnZXAOpj1ygd7OpKtfi55BRb5+K5kxusRf/1PZ6MzyZzJOiLs2UKI290+ETEh4WC5r3lavQsolqDVXoX88RkFcynZiJeeDnipSEFpJLvKSCYDcXSQvmb7L5DvQezjEX/Nz7PWfS/N6lERtYmhqzOBVl12CKq0ePSwayz+aP0Z5Sx8WOz3ZPV9/zHR3ND2p4DVRAdxjEDOcZH7YAz+mfupDVN1sLyDFmL/rM2MbRh0f9mGSVkIsp0AqiDP6y3zPro1YgPX82dUt17KADBrF1K13LaSWuajEX/1xMqqE/N5HQtyFr0n9WFYRi7DbNKyLS9CfntxYhjL+ZNRb92LADBrF0yGjr30pomY2H5eQVld/Y5JnRhyFr0v1WgyNgE0NZRs80unMw5zzLbnAGCWYqMhs697KDa+3r5Y8668WfdMK4n9U/MCJpXh1ibK6MG3L7XY2RcOJnzngpmIJi1zrWFhBtSF1NgGVN/WeuXMkb+Mo8nq3NBxndxOxl9ZEetzMOFk+XXnPVTlgcQzGrpzs16bALImOZZalml/zYdT9ZO2e1kbQLYN0IL1ldXyk9pTs+6eYFg1kKlL57drK8pffPPWr+UVVIi83gyOhdk7ZR9koypt53sVG6y0utYO3XVAMGsVTIWPz9pfU3GVFnbFv1nHU9WyMxaKzfs86BU/8w6K712cGIyAMGsfUqPFnQKQm43ilD6xn8jqURGxuhS1rRbVtDMaifVzftqE0CZwFvSC6YzQTBro4zFz1sVhMwIM7cWq0KYpWXuxGxT54ILNWrGnRHgp2dHaxPAXdX5AcFsZ6MFpZ9styqymXGD0hdz559XaVntpLqVsRkmonwbqDop/VC021QmCGZtlbEJYPO0Q+kwk3Xjzyop0ba+mNfO1e88KN0Ro/N9GZVAkbFuDxDMWun2YvmmwBtHCjLCzLWWlchoU1/MrHZSvcroiBExepsAAASzGo4WbBwpyFj0n3Hjz1r0nxlkMkbL6rLof7OMjhgRo9PrsfSIVkaIBgSzobl8pvyF7uDxnDCTVYIhqwdiVpDJ6lxQp0X/m2VsAhiVXo+li8D+QTADwazNMkYLXjuWc0PKavCdNY2ZFWQyjqdui/43u71oE0BTvk/3lwMQzNqt9GjBxGTEkdNlf0fb+mJmtSzKKuVQx0X/m2VtAmhzW6GMTSSmMkEwa72M0YLS605a1xdzIef3zCWse1pdyZkqHMR7nnHTz1ifOCz7j5Z/cLmjThoIZqMgY7SglDb2xbzeos4F1y81Y11Q1iaAtvbP3HMg4o2TZX9HXTeQAIJZY0cLStAXc+c30gxZa/8GIWsTQNYGkizTsxHvXSz/e+5+5VoNgtmIyOobWEJWH8msINOmvph3bzZr6imjtl9Eu/pnzh2L+OBKTuHXrHMDEMxqIaN/5qC1bdF/1vFkdS5oYtjP2gTQ9NIZUzNVIDtyJq8av2AGgtlIyeifOfAwmXTjP5hUHLRtmxiaeCPNqO2X+RmUCJXvXow487vccHnjczXMoM12eQu2dv5UxAcNeZLPmibbcyBiZjbneLI2MWQs+s8a/SvxgHJrMWLfobK/Z9+hiE/frX/Y2L3e83bf69Vrfn5mOK/j+qWgoOnZ4X22d282P3T/0yEWkF5dacduZcFsG7cXqw+5CY2Cv2hZQdms48laeL50rrnnweWz5YPZxGTVFePCyeEe6/MzVVjfPfnovJ9+ufr7SweGd7PeqK59Vtvk3YvD/f23F6trRlM/5xdmq6n9Ybm3XL2HF04184FYMOsiINS9Qrm+mPUOmlklTJr+gPLaseEEs6mZatH+/vlmPIRdbXDIpzuddZdvnIj46NXmhothmZqJmJqvzumlhWaMxm9mjdmTRgvO1L90RlY9o6yh6bb1xTx/qvnnQcYI5jD6Zx45Xa0PmzvejFB2fzni2kIwQgHjzO+auwazDvbPR3z0m5xrvWCWpLPGps4utKx2WZv6Yka0Y/dc1i7lrNHp3ZPVVMvc8WZ9DlfPGT0ZRe8slF9O0PaA+/6VZhWzFsyedlOqcZmDrIbYWSUlso4nq3NBUxf9b/WAkhEw9xzIuXi+dbp5JTruL0d8eSYY1XD2STu7ZGSGszdONOf1CmZPkdE/c6eyGmLPHWvX8WSdoEstWg+UNSV7sPAo1v75ZvboPH9KiYxR1tkgQx/3sePNeSATzLpQx/6ZmYvkM4bRM48nq89nm4qAdjYBlFZ6irlJT83fB/wFOzGpNsgYNav39UUwS74w1m0TQNv6SGbtNpuYzJmWbePuuYxNAJ1yFUUuyvPNWwR8fzlv3SX1NjEZ8S+tNav9IINglmR1pX432qzRmKzdalm7zaZn23U8mbI2AZT6zu1tYF/O//QTC/55ZGbWe9DvtWW6Ae+hYNalGzWqtp25qDxj6Lwti+S//6583s6badYmgFKFXOtQILYXv3y3HVXMGZymjfh6DwWzouq0CWCpZdNkmceTMSXd5vVAGdOZpT6jJq3POX8qZ4TShoJmee5H3oNRIJj1eLEctlvJAbH0E3v2IvnSwez+crt7GWZsAri/7DqT1QWh9Hs96J8/6tO6g3g/R/38asLDiGDW401p2KNmv3g79/fdWy57I84Ou6WPp+4FiQcRbEuOmt1fLnfhbMIF+Zfv5ramKv3gVeJ6Ocrh7M5X3r9+3W3A8gDBrEcfvz28HZqXz+afVKsrZS/ewwi6JTdyjMIOupLrLUsG29tX6x14T/8kb4PFxvOv1PXsRqEyQ3UsX5T5edX5M29CKDNi1kL3lqun2mz3lyN+OaQCg6VGtYa16L9UsMjqXDD0p/ab5QJ1yWB741J9389//+fDmwIvNQL6xZnR+hwz7gGDekj+4uxovodNOW7BbIeBInMK7v5yxIevDvcprcSNeFijS6WOJ3uaeZhKfP9LB/U6dvE4f6oKZcMM9JfPDH4E5fqlcu91nbuxNOWcK/GZNyHYNmVjlmC201BxMiecdULZsEdiBj1KeP7UcI9p0FPSw5hmHqbbi4N9+swqpHq+JlPNtxYjjr+Yu55sO6srVb20Qf68T98tf/6O0iL2y2cHGypWV+pzLmT5mwY9OD/zZ3HyZLDjm9Pq1xEvz5W7eJ+uSYHJr38/uGO9fDbi1381/JvRP/yvwfRNvHOz+pxGzT/8ffV9mPzT/n/Wh69G/J/f5jzoxFjESweGF8g+frsKoXUasRjk+/Kff1Z9N0qfv7evRvyrn0Y8+0/afZ7duVmNxn/7x8Gfv8M8FzKdP9Wsot+C2QC+3NfOVa0eBlWxfHUl4n/8h+pkrNPFexAn8tK5iL/9eX1uRne+qsLFTi/utxYj/uNrg79oNsG3f4z4n7/uL5ytrlQ38sypqduL+Tek65ci/vYvqkBW15Geft+XzmeZtVbu699H/P2vB3vtrZulcxH/5WflFqwP41zIfgD/r38R8eWZZr3usTdjbU28Goz98xGHT/RXYXxpobp413labHo24r2LvR1nZ+j8cg1PkKmZiA+u9P65Zdabqrs3Tlbf/V5D7S/eHt53fc+BiJ9/Uq4jwK3FamfitYVmFXLdyfsyzM9yYjJi7njEK0eb193hSe/nhVN5DyxTM9U53JQm3225lwpmifYeqr7gLx3o7knu1mI1LP/lmWZdwLsJop26V004tv3zEQePPbkf3epK9RR7+Yx6QNtd3Pe9/uTv/a3FapS5Lgtx9x6qRl1eeLm/XoTLNyN+e7WaerpxqflV9ffPR/z46PajKasr1TFnBohuPsuXDlSfZdPcW464+1XZXc/dnMN7DkT881ea1/5pdaU65+5+1byHIcEs2fRsFVymZ6uWMM/9KOL+nepLdG854reLzb+AT88+Os7npyP+8evq2IZ5gen34vRC55g2HU9T6uDUYdRlerZ6Lzvf+fvLVSir86Lt3ZPVZz8xWb32iclH5+1GG8/h+8tlC+PW5T3ZeKO+c7PdxwyCGQAAymUAAAhmAAAIZgAAghkAAIIZAIBgBgCAYAYAIJgBACCYAQAIZgAACGYAAIIZAACCGQCAYAYAgGAGACCYAQAgmAEACGYAAAhmAACCGQAAghkAgGAGAIBgBgCAYAYAIJgBACCYAQAIZgAACGYAAIIZAACCGQCAYAYAgGAGACCYAQAgmAEACGYAAAhmAACCGQAAghkAgGAGAIBgBgAgmAEAIJgBAAhmAAAIZgAACGYAAIIZAACCGQCAYAYAgGAGACCYAQAgmAEACGYAAAhmAACCGQAAghkAgGAGAIBgBgAgmAEAIJgBAAhmAAAIZgAAghkAAIIZAIBgBgCAYAYAgGAGACCYAQAgmAEACGYAAAhmAACCGQAAghkAgGAGAIBgBgAgmAEAIJgBAAhmAAAIZgAAghkAAIIZAIBgBgCAYAYAIJgBACCYAQAIZgAACGYAAAhmAACCGQAAghkAgGAGAMC2oUwwAwCoUTgDAEAwAwAgIuJhRIyPeR8AAOoRzNa8DwAAQzcmmAEA1CiYmcoEABh+KIuw+B8AoDbGJTMAgOHqLC0b/857AQBQj2A2Ho/mNQEAyPfMejgzkwkAMGTfxfquzIhHw2cAAOQbCwVmAQBqEcrGncDLAgAAAoBJREFUIuKzGBsbj/WEBgBAvrXYUMdsbUNSAwAg18aNmOOfxdjYWFhnBgAwDLvi0W7M7xf/GzEDAMg1FhHfbg5mEREPvDcAAKkeRjVAthBjY98HMyNmAAD5Ni8nG4+otmcKZgAAwwlnPwhmnX+oDQAAQK5fxaPxsR8EM/XMAACG5/tg9mmn2iwAAMMNZhHVqNmfeE8AAIpbix9OYz4WzJ6JR93NAQAoY7vlYz8IZgsxNqZ0BgBAWdt1XRrf6l98KJwBABTRGS37LB6vVvZYMPt0/V/SOxMAYPDGn5CzbMQEAEgMZWOx9WjZtsHsV6ERAADAoD1tudhTR8wkNACAwYSytXi0bKynYPar9f6ZghkAQP+224nZVTDr/ABtmgAA+vOknZhdB7NP1+uaKZ8BALBz3YyWPTWYxfoPMXIGALAznSz1WRebK58azDo/RF0NAIDedAa2uq140VXe+rsYGxsPDc4BALrVGSnrpWh/1wNhnQbnEdabAQB067Me6sP2lLHejDWdmgAAutRr0f7xkj8cAGDUPOgjN+0oaBk5AwB43GpEPBsR/32Hg1k72mxp5AwA4PFQ9kxEfNvHz+grYBk5AwB4FMoeRMSlPgaw+h756oSz8ai2g0pqAMAoeRBVvbJv+wxlAwlmERFvxdraw/UXpRAtANB2m+uTDWqZ18DWiv001tbGBv1DAQBqGMoerP85FoNdez/wDPVmrK11pjTHhDQAoEXGo5oh7GSdzwa8IbJIbvrp+rqzsXi0EE5AAwCarjPo9GmhChVF81Jn7ZkRNACgaQHsYVQDTA83/PPSJcNSctLGEbRYD2njm/4EABhmENs4iLQxjI1HuRGyzf4/1cvwcuixoFsAAAAASUVORK5CYII="
+    width="30" height="20" />
+</svg></li>
+        </ul>
+    {%- endif -%}           
+
+      <em class="cart__note text-center">
+        {{- 'cart.general.subtotal_note' | t -}}
+      </em>
+    </div>
+  </form>
+{%- endcapture -%}
+
+{%- if template.name != 'cart' -%}
+  <div
+    data-section-id="{{ section.id }}"
+    data-section-type="cart-drawer"
+  >
+    <cart-drawer
+      class="drawer drawer--cart{% if cart_item_count == 0 %} is-empty{% endif %} {{ color_scheme }}"
+      id="cart-drawer"
+      tabindex="0"
+    >
+      <collapsible-elements class="drawer__inner" single="true" data-cart-drawer-inner data-scroll-lock-scrollable>
+        <div class="drawer__body" data-cart-drawer-body data-scroll-lock-scrollable>
+          {%- unless has_cart_title -%}
+            {%- assign title_block_index = title_block_index | default: 1 -%}
+            {%- assign animation_delay = title_block_index
+              | times: animation_delay_increment
+              | plus: animation_delay_initial
+            -%}
+
+            <div
+              class="cart-block cart-block--top drawer__head"
+              data-animation="{{ animation_name }}"
+              data-animation-duration="{{ animation_duration }}"
+              data-animation-delay="{{ animation_delay }}"
+            >
+              {{ cart_title }}
+            </div>
+          {%- endunless -%}
+
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign pin_to_bottom = block.settings.pin_to_bottom
+
+              if pin_to_bottom
+                assign animation_delay = block_index_pinned | times: animation_delay_increment | plus: animation_delay_initial
+                assign block_index_pinned = block_index_pinned | plus: 1
+              else
+                assign animation_delay = block_index_static | times: animation_delay_increment | plus: animation_delay_initial
+                assign block_index_static = block_index_static | plus: 1
+              endif
+
+              capture cart_block_class
+                echo 'cart-block ' | append: block.settings.text_font_size
+
+                case block.type
+                  when 'title'
+                    echo ' cart-block--top drawer__head'
+                  when 'products'
+                    if settings.quantity_style == 'dropdown'
+                      echo ' cart-block--items'
+                    endif
+                endcase
+              endcapture
+            -%}
+
+            {%- capture block_content -%}
+              <div class="{{ cart_block_class }}"
+                data-animation="{{ animation_name }}"
+                data-animation-duration="{{ animation_duration }}"
+                data-animation-delay="{{ animation_delay }}"
+                {{ block.shopify_attributes }}
+              >
+                {%- case block.type -%}
+                  {%- when 'title' -%}
+                    {{ cart_title }}
+
+                  {%- when 'cart-message' -%}
+                    {%- liquid
+                      assign cart_custom_message_text = block.settings.cart_custom_message_text
+                      assign custom_message_color = block.settings.cart_custom_message_color
+                    -%}
+
+                    {%- unless custom_message_color == 'rgba(0,0,0,0)' or custom_message_color == blank -%}
+                      {%- capture style -%}
+                        --text: {{ custom_message_color }};
+                      {%- endcapture -%}
+                    {%- endunless -%}
+
+                    {%- if cart_custom_message_text != blank -%}
+                      <div class="cart__message drawer__message drawer__message--custom {{ block.settings.text_alignment }} {{ block.settings.text_font_size }}" style="{{ style }}">
+                        {{ cart_custom_message_text }}
+                      </div>
+                    {%- endif -%}
+
+                  {%- when 'products' -%}
+                    {{ cart_items }}
+
+                  {%- when 'upsell-products' -%}
+                    {%- render 'cart-block-upsell', block: block -%}
+
+                  {%- when 'product-list' -%}
+                    {%- render 'cart-block-upsell', block: block -%}
+
+                  {%- when 'free-shipping' -%}
+                    {%- render 'free-shipping', message: block.settings.message, color_scheme: block.settings.color_scheme, show_wheel: false, show_progress_bar: true, is_cart_drawer: true -%}
+
+                  {%- when 'order-note' -%}
+                    {%- render 'cart-block-order-note', block: block -%}
+
+                  {%- when 'gift-note' -%}
+                    {%- render 'cart-block-gift-note', block: block -%}
+
+                  {%- when 'shipping-estimate' -%}
+                    {%- render 'cart-block-shipping-calculator', block: block -%}
+
+                  {%- when 'icon' -%}
+                    {%- render 'icon' block: block -%}
+
+                  {%- when 'payment-icons' -%}
+                    {%- unless shop.enabled_payment_types == empty -%}
+                      <ul class="cart__payment-icons{% if block.settings.icon_alignment == 'center' %} justify-center{% endif %}">
+                        {%- for type in shop.enabled_payment_types -%}
+                          <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- endunless -%}
+
+                  {%- when 'code' -%}
+                    {%- if block.settings.code != blank -%}
+                      <div class="cart__custom-code">
+                        {{ block.settings.code }}
+                      </div>
+                    {%- endif -%}
+
+                  {%- when 'checkout-buttons' -%}
+                    {{ checkout_buttons }}
+
+                {%- endcase -%}
+              </div>
+            {%- endcapture -%}
+
+            {%- liquid
+              if pin_to_bottom
+                capture pinned_blocks
+                  echo pinned_blocks
+                  echo block_content
+                endcapture
+              else
+                capture static_blocks
+                  echo static_blocks
+                  echo block_content
+                endcapture
+              endif
+            -%}
+          {%- endfor -%}
+
+          {%- if static_blocks != blank -%}
+            {{ static_blocks }}
+          {%- endif -%}
+
+          {%- if product_block.size == 0 -%}
+            <div
+              class="cart-block"
+              data-animation="{{ animation_name }}"
+              data-animation-duration="{{ animation_duration }}"
+              data-animation-delay="{{ animation_delay }}"
+            >
+              {{ cart_items }}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- if has_checkout_buttons == false or pinned_blocks != blank -%}
+          <div
+            class="drawer__foot"
+            data-checkout-buttons
+            style="--base-animation-delay: {{ block_index_static | times: animation_delay_increment }}ms;"
+          >
+            {%- if pinned_blocks != blank -%}
+              {{ pinned_blocks }}
+            {%- endif -%}
+
+            {%- unless has_checkout_buttons -%}
+              <div
+                data-animation="{{ animation_name }}"
+                data-animation-duration="{{ animation_duration }}"
+                data-animation-delay="{{ block_index_pinned | times: animation_delay_increment | plus: animation_delay_initial }}"
+              >
+                {{ checkout_buttons }}
+              </div>
+            {%- endunless -%}
+          </div>
+        {%- endif -%}
+
+        <div
+          class="drawer__empty"
+          data-cart-empty
+          data-scroll-lock-scrollable
+          style="--base-animation-delay: {{ animation_delay_initial }}ms"
+        >
+          <div class="drawer__empty__inner">
+            <p
+              class="drawer__empty__message"
+              data-animation="{{ animation_name }}"
+              data-animation-duration="{{ animation_duration }}"
+              data-animation-delay="{{ animation_delay_initial }}"
+            >
+              {{- 'cart.general.empty' | t -}}
+            </p>
+            {%- assign animation_delay = animation_delay_initial | plus: animation_delay_increment -%}
+
+            {%- if show_empty_cart_menu and linklists[empty_cart_menu].links.size > 0 -%}
+              <div class="drawer__empty__buttons">
+                {%- for link in linklists[empty_cart_menu].links -%}
+                  {%- liquid
+                    assign is_odd_last = false
+                    capture index_type
+                      cycle 'odd', 'even'
+                    endcapture
+
+                    if forloop.last and index_type == 'odd'
+                      assign is_odd_last = true
+                    endif
+                  -%}
+
+                  <div
+                    class="drawer__empty__item{% if is_odd_last %} drawer__empty__item--odd--last{% endif %}"
+                    data-animation="{{ animation_name }}"
+                    data-animation-duration="{{ animation_duration }}"
+                    data-animation-delay="{{ animation_delay }}"
+                    {%- assign animation_delay = animation_delay | plus: animation_delay_increment -%}
+                  >
+                    <a href="{{ link.url }}" class="btn btn--full btn--primary btn--outline">
+                      {{ link.title | strip_html | escape }}
+                    </a>
+                  </div>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            {%- if empty_cart_products -%}
+              <div
+                class="drawer__empty__product product__upsell--stacked"
+                data-animation="{{ animation_name }}"
+                data-animation-duration="{{ animation_duration }}"
+                data-animation-delay="{{ animation_delay }}"
+              >
+                {%- liquid
+                  assign animation_delay = animation_delay | plus: animation_delay_increment
+                  if empty_cart_products != blank
+                    for upsell_product in empty_cart_products
+                      render 'upsell-product', upsell_product: upsell_product
+                    endfor
+                  endif
+                -%}
+              </div>
+            {%- endif -%}
+
+            {%- if settings.show_recently_viewed_products -%}
+              <script src="{{ 'recently-viewed.js' | asset_url }}" defer="defer"></script>
+
+              <recently-viewed
+                class="drawer__empty__product product__upsell--stacked hidden"
+                id="recently-viewed-products-cart"
+                data-limit="3"
+                data-target="api-upsell-product"
+                data-animation="{{ animation_name }}"
+                data-animation-duration="{{ animation_duration }}"
+                data-animation-delay="{{ animation_delay }}"
+              ></recently-viewed>
+            {%- endif -%}
+          </div>
+        </div>
+      </collapsible-elements>
+
+      <span class="underlay drawer__underlay" data-drawer-underlay></span>
+    </cart-drawer>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "title",
+      "name": "Title",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Text",
+          "default": "Cart"
+        },
+        {
+          "type": "select",
+          "id": "text_font_size",
+          "label": "Text size",
+          "default": "body-medium",
+          "info": "Automatically generated by the base size.",
+          "options": [
+            {"value": "body-x-small", "label": "Extra small"},
+            {"value": "body-small", "label": "Small"},
+            {"value": "body-medium", "label": "Medium"},
+            {"value": "body-large", "label": "Large"},
+            {"value": "body-x-large", "label": "Extra large"}
+          ]
+        }
+      ]
+    },
+    {
+      "type": "cart-message",
+      "name": "Cart message",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "cart_custom_message_text",
+          "label": "Text",
+          "default": "<p>Use coupon code <strong>WELCOME10</strong> for 10% off your first order.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_font_size",
+          "label": "Text size",
+          "default": "body-x-small",
+          "info": "Automatically generated by the base size.",
+          "options": [
+            {"value": "body-x-small", "label": "Extra small"},
+            {"value": "body-small", "label": "Small"},
+            {"value": "body-medium", "label": "Medium"},
+            {"value": "body-large", "label": "Large"},
+            {"value": "body-x-large", "label": "Extra large"}
+          ]
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "label": "Alignment",
+          "default": "text-left",
+          "options": [
+            {"value": "text-left", "label": "Left"},
+            {"value": "text-center", "label": "Center"}
+          ]
+        },
+        {
+          "type": "color",
+          "id": "cart_custom_message_color",
+          "label": "Text color"
+        },
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "free-shipping",
+      "name": "Free shipping message",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Set a minimum amount for free shipping in [Theme settings](/admin/themes/current/editor?context=theme)"
+        },
+        {
+          "type": "textarea",
+          "id": "message",
+          "label": "Message",
+          "info": "Use ||amount|| to display progress towards free shipping.",
+          "default": "You are ||amount|| away from free shipping."
+        },
+        {
+          "type": "select",
+          "id": "text_font_size",
+          "label": "Text size",
+          "default": "body-x-small",
+          "info": "Automatically generated by the base size.",
+          "options": [
+            {"value": "body-x-small", "label": "Extra small"},
+            {"value": "body-small", "label": "Small"},
+            {"value": "body-medium", "label": "Medium"},
+            {"value": "body-large", "label": "Large"},
+            {"value": "body-x-large", "label": "Extra large"}
+          ]
+        },
+        {
+          "type": "color_scheme",
+          "id": "color_scheme",
+          "default": "scheme_1",
+          "label": "Color scheme"
+        },
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "products",
+      "name": "Products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "select",
+          "id": "text_font_size",
+          "label": "Text size",
+          "default": "body-x-small",
+          "info": "Automatically generated by the base size.",
+          "options": [
+            {"value": "body-x-small", "label": "Extra small"},
+            {"value": "body-small", "label": "Small"},
+            {"value": "body-medium", "label": "Medium"},
+            {"value": "body-large", "label": "Large"},
+            {"value": "body-x-large", "label": "Extra large"}
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "upsell-products",
+      "name": "Upsell products",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "upsell_auto_open",
+          "label": "Show upsell products automatically when cart drawer is open",
+          "default": true
+        },
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "order-note",
+      "name": "Order note",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "gift-note",
+      "name": "Gift note",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "shipping-estimate",
+      "name": "Shipping estimate",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "icon",
+      "name": "Icon",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_name",
+          "label": "Icon",
+          "default": "icon-award",
+          "options": [
+            {"label": "Award", "value": "icon-award"},
+            {"label": "Box", "value": "icon-box"},
+            {"label": "Chat", "value": "icon-chat"},
+            {"label": "Check", "value": "icon-check"},
+            {"label": "Check circle", "value": "icon-check-circle"},
+            {"label": "Cloud", "value": "icon-cloud"},
+            {"label": "Diameter", "value": "icon-diameter"},
+            {"label": "Discount", "value": "icon-discount"},
+            {"label": "Donation", "value": "icon-donation"},
+            {"label": "Droplet", "value": "icon-droplet"},
+            {"label": "Info", "value": "icon-info-empty"},
+            {"label": "Email", "value": "icon-email"},
+            {"label": "Fast shipment", "value": "icon-fast-shipment"},
+            {"label": "Flare", "value": "icon-flare"},
+            {"label": "Flower", "value": "icon-flower"},
+            {"label": "Gift", "value": "icon-gift"},
+            {"label": "Green shipment", "value": "icon-green-shipment"},
+            {"label": "Heart", "value": "icon-heart"},
+            {"label": "Leaf", "value": "icon-leaf"},
+            {"label": "Lightning", "value": "icon-lightning"},
+            {"label": "Location", "value": "icon-location"},
+            {"label": "Mail", "value": "icon-mail"},
+            {"label": "Notes", "value": "icon-notes"},
+            {"label": "Pants", "value": "icon-pants"},
+            {"label": "Peace", "value": "icon-peace"},
+            {"label": "Pin", "value": "icon-pin"},
+            {"label": "Planet", "value": "icon-planet"},
+            {"label": "Phone", "value": "icon-phone"},
+            {"label": "Recycle", "value": "icon-recycle"},
+            {"label": "Ruler", "value": "icon-ruler"},
+            {"label": "Shield", "value": "icon-shield"},
+            {"label": "Smile", "value": "icon-smile"},
+            {"label": "Star", "value": "icon-star"},
+            {"label": "Tree", "value": "icon-tree"},
+            {"label": "Trophy", "value": "icon-trophy"},
+            {"label": "Truck", "value": "icon-truck"},
+            {"label": "Vegan", "value": "icon-vegan"},
+            {"label": "Wash", "value": "icon-wash"},
+            {"label": "Washing machine", "value": "icon-washing-machine"}
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Alternative icon/image",
+          "info": "160 x 160px .svg recommended. [Learn more](https://invisiblethemes.com/link/broadcast/images)"
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "label": "Size",
+          "unit": "px",
+          "min": 20,
+          "max": 80,
+          "step": 5,
+          "default": 20
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon color"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Title<\/p>"
+        },
+        {
+          "type": "select",
+          "id": "text_font_size",
+          "label": "Text size",
+          "default": "body-medium",
+          "info": "Automatically generated by the base size. Applies only when content in Text field is set to Paragraph.",
+          "options": [
+            {"value": "body-x-small", "label": "Extra small"},
+            {"value": "body-small", "label": "Small"},
+            {"value": "body-medium", "label": "Medium"},
+            {"value": "body-large", "label": "Large"},
+            {"value": "body-x-large", "label": "Extra large"}
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "product-list",
+      "name": "Product list",
+      "settings": [
+        {
+          "type": "product_list",
+          "id": "product_list",
+          "label": "Product list",
+          "limit": 3,
+          "info": "Choose up to 3 products"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Buy it with"
+        },
+        {
+          "type": "checkbox",
+          "id": "upsell_auto_open",
+          "label": "Show products list automatically when cart drawer is open",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "code",
+      "name": "Custom code",
+      "settings": [
+        {
+          "type": "liquid",
+          "id": "code",
+          "label": "Custom code",
+          "info": "Add app snippets or other Liquid code to create advanced customizations."
+        },
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "payment-icons",
+      "name": "Payment icons",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon_alignment",
+          "label": "Icon alignment",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "checkout-buttons",
+      "name": "Checkout buttons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable_additional_buttons",
+          "label": "Enable additional checkout buttons",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "show_view_cart_button",
+          "label": "Show 'View cart' button",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "pin_to_bottom",
+          "label": "Pin to bottom",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cart drawer",
+      "blocks": [
+        {
+          "type": "cart-message"
+        },
+        {
+          "type": "title"
+        },
+        {
+          "type": "free-shipping",
+          "settings": {
+            "message": "You are ||amount|| away from free shipping."
+          }
+        },
+        {
+          "type": "order-note",
+          "settings": {}
+        },
+        {
+          "type": "gift-note",
+          "settings": {}
+        },
+        {
+          "type": "products",
+          "settings": {}
+        },
+        {
+          "type": "upsell-products",
+          "settings": {}
+        },
+        {
+          "type": "checkout-buttons"
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "groups": ["aside"]
+  }
+}
+{% endschema %}

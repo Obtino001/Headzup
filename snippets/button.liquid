@@ -1,0 +1,52 @@
+{% comment %}
+  Renders list of products in grid layout
+  Accepts:
+  - text: {String} Button label (required)
+  - link: {String} Button link
+  - type: {String} Button color (default: btn--primary)
+  - size: {String} Button size (default: '')
+  - style: {String} Button style (default: btn--solid)
+  - show_arrow: {Boolean} Show arrow icon (default: false)
+  - full_width: {Boolean} Full-width button (default: false)
+  - shopify_attributes: {String} Additional shopify_attributes for the button
+  Usage:
+  {%- render 'button',
+    text: block.settings.text,
+    link: block.settings.link,
+    type: block.settings.type,
+    size: block.settings.size,
+    style: block.settings.style,
+    show_arrow: block.settings.show_arrow,
+    full_width: block.settings.full_width,
+    shopify_attributes: block.shopify_attributes
+  -%}
+{% endcomment %}
+
+{%- liquid
+  if style == 'btn--text' and show_arrow
+    assign style = style | append: ' btn--text-no-underline'
+  endif
+
+  if full_width
+    assign style = style | append: ' btn--full'
+  endif
+-%}
+
+<div
+  class="hero__button"
+  data-aos="hero"
+  data-aos-order="auto"
+  data-aos-anchor="#{{ section.id }}"
+  {{ shopify_attributes }}
+>
+  <a
+    class="btn {{ size }} {{ style }} {{ type }}"
+    href="{{ link }}"
+  >
+    <span>{{ text | escape }}</span>
+
+    {%- if show_arrow -%}
+      {%- render 'icon-arrow-right' -%}
+    {%- endif -%}
+  </a>
+</div>

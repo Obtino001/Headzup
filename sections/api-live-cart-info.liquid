@@ -1,0 +1,14 @@
+<!-- /sections/api-live-cart-info.liquid -->
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign cart_qty = cart | item_count_for_variant: current_variant.id
+
+  assign max_inventory = ''
+  if current_variant.inventory_management and current_variant.inventory_policy == 'deny'
+    assign max_inventory = current_variant.inventory_quantity
+  endif
+-%}
+
+<div data-item-count-for-variant>{{- cart_qty -}}</div>
+<div data-max-inventory>{{- max_inventory -}}</div>

@@ -1,0 +1,36 @@
+ <!-- Google Consent Mode V2 Advanced Mode integration script for Consentmo GDPR Compliance App -->
+    <script id="consentmo-gcmv2-advanced-mode-integration">
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+
+gtag('consent', 'default', {
+  ad_storage: 'denied',
+  ad_personalization: 'denied',
+  ad_user_data: 'denied',
+  analytics_storage: 'denied',
+  functionality_storage: 'denied',
+  personalization_storage: 'denied',
+  security_storage: 'granted',
+  wait_for_update: 1500
+});
+
+      document.addEventListener('consentmoSignal', function(event) {
+  const csmSignal = event.detail;
+
+  // Use GCM integration if available
+  const consentState = csmSignal.integration?.gcm?.isEnabled
+    ? csmSignal.integration.gcm.state
+    : csmSignal.state;
+
+  // Push consent update
+  gtag('consent', 'update', consentState);
+
+  // Optional: extra flags (only if using GCM integration)
+  if (csmSignal.integration?.gcm?.isEnabled) {
+    gtag('set', 'ads_data_redaction', csmSignal.integration.gcm.adsDataRedaction);
+    gtag('set', 'url_passthrough', csmSignal.integration.gcm.urlPassthrough);
+  }
+
+  console.log('Consent updated:', consentState);
+});
+    </script>

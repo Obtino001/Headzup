@@ -1,0 +1,239 @@
+{%- liquid
+  assign brand_1_logo = section.settings.brand_1_logo
+  assign brand_1_text = section.settings.brand_1_text
+  assign brand_1_link = section.settings.brand_1_url
+
+  assign brand_2_logo = section.settings.brand_2_logo
+  assign brand_2_text = section.settings.brand_2_text
+  assign brand_2_link = section.settings.brand_2_url
+
+  assign search_text = section.settings.search_text
+
+  assign cart_item_count = cart.item_count
+  assign cart_icon_as_circle = section.settings.icon_as_circle
+  if cart_item_count > 9
+    assign cart_item_count = '9+'
+  endif
+  assign cart_icon_family = section.settings.cart_icon_family
+  assign show_icons = section.settings.show_icons
+  assign icon_string_cart = 'icon-' | append: cart_icon_family
+  capture navlink_cart_classes
+    echo 'navlink--cart'
+    if cart_icon_as_circle
+      echo ' navlink--cart--circle'
+    endif
+    if cart_icon_as_circle == false and show_icons
+      echo ' navlink--cart--icon'
+    elsif cart_icon_as_circle == false and show_icons == false
+      echo ' navlink--cart--text'
+    endif
+    if show_icons == false
+      echo ' navlink--toplevel'
+    endif
+  endcapture
+
+  assign is_chapter_two = false
+  if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two
+    assign is_chapter_two = true
+  endif
+-%}
+
+{% if brand_1_logo != blank or brand_2_logo != blank %}
+  <div class="header-topbar">
+    <div class="header-topbar__brands">
+      <a href="{{ brand_1_link }}" class="header-topbar__brand{% unless is_chapter_two %} header-topbar__brand--active{% endunless %}">
+        {% if brand_1_logo != blank %}
+          <img src="{{ brand_1_logo | image_url: width: 56, height: 56 }}" alt="{{ brand_1_text | escape }}" class="header-topbar__logo" width="22" height="22" loading="lazy" />
+        {% endif %}
+        <span class="header-topbar__text">{{- brand_1_text -}}</span>
+      </a>
+      <a href="{{ brand_2_link }}" class="header-topbar__brand{% if is_chapter_two %} header-topbar__brand--active{% endif %}">
+        {% if brand_2_logo != blank %}
+          <img src="{{ brand_2_logo | image_url: width: 56, height: 56 }}" alt="{{ brand_2_text | escape }}" class="header-topbar__logo" width="22" height="22" loading="lazy" />
+        {% endif %}
+        <span class="header-topbar__text">{{- brand_2_text -}}</span>
+      </a>
+    </div>
+    <div class="header-topbar__icons">
+      {%- if section.settings.enable_search -%}
+        <div class="header-topbar__icon header-topbar__icon--search navlink navlink--search{% if show_icons == false %} navlink--toplevel{% endif %}" aria-haspopup="dialog" title="{{ 'general.search.search' | t }}">
+            {%- render 'icon-search' -%}
+            <span class="header-topbar__search-text">{{ 'layout.header.search' | t }}</span>
+        </div>
+      {%- endif -%}
+      {% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %}
+        <a href="{{ routes.cart_url }}" class="header-topbar__icon header-topbar__icon--cart navlink chapter-two {{ navlink_cart_classes }}" title="{{ 'cart.general.title' | t }}" data-cart-toggle>
+          <div class="header-topbar__icon navlink {% if show_icons == false %} navlink--toplevel{% endif %}" aria-haspopup="dialog" title="{{ 'general.search.search' | t }}">
+            <span class="header-topbar__cart-text">{{ 'cart.general.title' | t }}</span>
+            <span class="header-topbar__cart-item-count">{{ cart_item_count }}</span>
+        </div>
+        </a>
+      {% else %}
+      <a href="{{ routes.cart_url }}" class="header-topbar__icon header-topbar__icon--cart navlink {{ navlink_cart_classes }}" title="{{ 'cart.general.title' | t }}" data-cart-toggle>
+        <span class="visually-hidden">{{ 'layout.header.cart' | t }}</span>
+        <span class="header-topbar__cap-badge-wrapper">
+          <svg width="32" height="16" viewBox="0 0 32 16" fill="none" xmlns="http://www.w3.org/2000/svg" class="header-topbar__cap-svg">
+            <path d="M14.6891 14.6906C14.8984 14.6146 15.1248 14.5935 15.3458 14.6262C17.4092 14.9336 27.2678 16.2864 30.2364 14.568C31.5383 13.8141 31.0018 8.39354 29.9223 6.25703C29.2611 4.94827 27.9304 3.78042 27.0759 3.19476C25.976 2.44064 24.3962 1.75466 21.6911 1.50445C21.6911 1.50445 21.6785 0.59841 20.8129 0.51201C19.9472 0.42561 19.6891 1.27801 19.6891 1.27801C19.6891 1.27801 15.1646 0.805422 12.2601 2.95092C9.94068 4.66414 9.06304 8.87193 8.71479 10.5132C8.63365 10.8962 8.2878 11.1725 7.88386 11.1766C6.1118 11.1943 1.70352 11.2047 1.19059 12.3645C0.639027 13.6123 1.46008 14.278 1.46008 14.278C1.46008 14.278 2.62788 15.7019 8.2872 15.483C12.461 15.3215 14.1103 14.9005 14.6885 14.6906H14.6891Z" stroke="black" stroke-miterlimit="10" />
+          </svg>
+          <cart-count class="header-topbar__cart-count-badge" data-cart-count="{{ cart.item_count }}" data-limit="10">
+            {{ cart_item_count }}
+          </cart-count>
+        </span>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}
+
+{% style %}
+.header-topbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  background: #fff;
+  border-bottom: 1.5px solid #eaeaea;
+  min-height: 36px;
+  box-sizing: border-box;
+  z-index: 9988;
+  position: relative;
+}
+
+.header-topbar__brands {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+}
+
+.header-topbar__brand:first-child {
+  border-right: 1.5px solid #eaeaea;
+}
+
+.header-topbar__brand {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  height: 36px;
+  text-decoration: none;
+  transition: background 0.2s;
+  position: relative;
+  padding: 0 3rem;
+  color: #222;
+  font-weight: 400;
+  font-size: 1rem;
+  justify-content: flex-start;
+  opacity: 0.6;
+}
+.header-topbar__brand--active {
+  background: #fff;
+  color: #222;
+  opacity: 1;
+}
+.header-topbar__brand--active::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 4px;
+  background: #6fdc6f;
+  border-radius: 2px 2px 0 0;
+}
+{% if brand_2_logo != blank or brand_2_text != blank or brand_2_link != blank %}
+.header-topbar__brand:nth-child(2) {
+  border-right: 1.5px solid #eaeaea;
+}
+{% endif %}
+.header-topbar__logo {
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.header-topbar__brand--active .header-topbar__logo {
+  opacity: 1;
+}
+.header-topbar__text {
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  color: inherit;
+  font-size: var(--text-sm);
+}
+.header-topbar__brand img,
+.header-topbar__brand svg {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+.header-topbar__icons {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 2rem;
+  font-size: 1.1rem;
+  color: #222;
+  padding-right: 35px;
+}
+.header-topbar__icon {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-weight: 500;
+}
+.header-topbar__cart-count {
+  background: #eaeaea;
+  color: #222;
+  border-radius: 1em;
+  padding: 0 0.5em;
+  font-size: 0.95em;
+  margin-left: 0.2em;
+}
+@media (max-width: 600px) {
+  .header-topbar__brand {
+    padding: 0 18.5px;
+  }
+  .header-topbar__brand img,
+  .header-topbar__brand svg {
+    width: 18px;
+    height: 18px;
+  }
+  .header-topbar__icons {
+    gap: 1rem;
+    font-size: 1rem;
+  }
+}
+.header-topbar__cap-badge-wrapper {
+  display: inline-block;
+  position: relative;
+  width: 32px;
+  height: 16px;
+}
+.header-topbar__cap-svg {
+  display: block;
+  width: 32px;
+  height: 16px;
+}
+.header-topbar__cart-count-badge {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  font-weight: bold;
+  color: #222;
+  background: none;
+  border-radius: 0;
+  width: auto;
+  height: auto;
+  line-height: 1;
+  padding: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+.header-topbar__search-text {
+    font-weight: 700;
+    font-size: var(--text-base);
+    line-height: 100%;
+    letter-spacing: 0.8px;
+}
+{% endstyle %}

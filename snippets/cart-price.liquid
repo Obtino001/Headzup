@@ -1,0 +1,78 @@
+{%- liquid
+  assign subtotal = cart.total_price | plus: 0
+  assign cart_discount_size = cart.cart_level_discount_applications.size
+  assign original_subtotal = cart.original_total_price | plus: 0
+  assign currency_code_enable = settings.currency_code_enable
+
+  if currency_code_enable
+    assign original_subtotal_formatted = original_subtotal | money_with_currency
+  else
+    assign original_subtotal_formatted = original_subtotal | money
+  endif
+
+  if original_subtotal < subtotal or cart_discount_size == 0
+    assign cart_total_hidden = true
+  endif
+
+  if cart_discount_size == 0
+    assign cart_total_discount_hidden = true
+  endif
+-%}
+
+{%- unless cart_total_hidden -%}
+  <div class="cart__total">
+    <span class="cart__total__label">{{ 'cart.general.subtotal_items' | t }}</span>
+
+    <span class="cart__total__price">
+      {%- if original_subtotal == 0 -%}
+        {{ 'general.money.free' | t }}
+      {%- else -%}
+        {{- original_subtotal_formatted -}}
+      {%- endif -%}
+    </span>
+  </div>
+{%- endunless -%}
+
+{%- unless cart_total_discount_hidden -%}
+  <div class="cart__total__discount">
+    {%- if cart.cart_level_discount_applications.size > 0 -%}
+      {%- for discount in cart.cart_level_discount_applications -%}
+        {%- liquid
+          if currency_code_enable
+            assign discount_total_allocated_amount = discount.total_allocated_amount | money_with_currency
+          else
+            assign discount_total_allocated_amount = discount.total_allocated_amount | money
+          endif
+        -%}
+
+        <div class="cart__total">
+          <div>
+            {%- render 'icon-tags' -%}
+
+            <span>
+              {{- discount.title -}}
+            </span>
+          </div>
+
+          <span>
+            -{{- discount_total_allocated_amount -}}
+          </span>
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+{%- endunless -%}
+
+<div class="cart__total">
+  <span class="cart__total__label">{{- 'cart.general.subtotal' | t -}}</span>
+
+  <span class="cart__total__price cart__total__price--animated" data-cart-total="{{ subtotal }}">
+    {%- if subtotal == 0 -%}
+      {{ 'general.money.free' | t }}
+    {%- else -%}
+      {{- subtotal | money_with_currency -}}
+    {%- endif -%}
+  </span>
+
+  <div class="cart__price__loader loader"><div class="loader-indeterminate"></div></div>
+</div>

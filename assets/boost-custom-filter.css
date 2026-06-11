@@ -1,0 +1,910 @@
+/* ========================================================================
+   Boost Custom Filter Styles
+   Matching Boost AI Search Design
+   ======================================================================== */
+
+.boost-filter-container *,
+.boost-filter-container *::before,
+.boost-filter-container *::after {
+    box-sizing: border-box;
+}
+
+.boost-filter-container {
+    font-family: inherit;
+    /* Inherits modern sans-serif like Helvetica, Inter, etc. */
+    color: #0c2340;
+    position: relative;
+    margin: 20px 0;
+    transition: opacity 0.1s ease;
+}
+
+.collection__products,
+.grid-outer {
+    transition: opacity 0.1s ease;
+}
+
+.boost-filter-top-bar {
+    padding: 35px;
+}
+
+#BoostFilterDrawer {
+    padding: 0px 35px;
+}
+
+/* ------------------------------------------------------------------------
+   Desktop Top Bar (Title & Count)
+   ------------------------------------------------------------------------ */
+.boost-filter-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.boost-collection-title {
+    margin: 0 0 5px 0;
+    font-size: 24px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.boost-collection-count {
+    margin: 0;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #444;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* ------------------------------------------------------------------------
+   Filter Bar Common
+   ------------------------------------------------------------------------ */
+.boost-filter-bar-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.boost-filter-list {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.boost-filter-item {
+    position: relative;
+}
+
+.boost-filter-label {
+    background: none;
+    border: none;
+    padding: 10px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    font-size: 15px;
+    font-weight: 400;
+    color: #0c2340;
+    letter-spacing: .5px;
+}
+
+.boost-icon-chevron {
+    width: 12px;
+    height: 10px;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="%23333" stroke-width="1.2"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.2s;
+}
+
+.boost-filter-label[aria-expanded="true"] .boost-icon-chevron {
+    transform: rotate(180deg);
+}
+
+.boost-collection-info {
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ------------------------------------------------------------------------
+   Sort Dropdown (Desktop Right Side)
+   ------------------------------------------------------------------------ */
+.boost-sort-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid #e0e0e0;
+    /* padding: 0px 15px; */
+    min-width: 180px;
+}
+
+.boost-sort-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #0c2340;
+    cursor: pointer;
+    outline: none;
+    letter-spacing: 0px;
+}
+
+.boost-icon-chevron-sort {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 6px;
+    background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="%23555" stroke-width="1.2"/></svg>');
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+/* ------------------------------------------------------------------------
+   Desktop Dropdown / Popover
+   ------------------------------------------------------------------------ */
+@media (min-width: 768px) {
+
+    .boost-mobile-trigger-container,
+    .boost-drawer-header,
+    .boost-drawer-footer,
+    .boost-drawer-overlay,
+    .boost-dropdown-mobile-header {
+        display: none !important;
+    }
+
+    .boost-filter-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 15px);
+        left: -20px;
+        background: #fff;
+        min-width: 280px;
+            box-shadow: 0 0 6px #0000001f;
+        border: 1px solid #f0f0f0;
+        border-radius: 8px;
+        z-index: 100;
+        padding: 0;
+    }
+
+    .boost-filter-dropdown.is-open {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* The Popover Arrow */
+    .boost-filter-dropdown::before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        left: 40px;
+        width: 12px;
+        height: 12px;
+        background: #fff;
+        transform: rotate(45deg);
+        border-top: 1px solid #f0f0f0;
+        border-left: 1px solid #f0f0f0;
+        z-index: 2;
+    }
+
+    .boost-dropdown-inner {
+        max-height: 320px;
+        overflow-y: auto;
+        padding: 24px 24px 10px 24px;
+    }
+
+    .boost-dropdown-inner::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .boost-dropdown-inner::-webkit-scrollbar-thumb {
+        background: #ccc;
+        border-radius: 5px;
+    }
+}
+
+/* ------------------------------------------------------------------------
+   Shared Dropdown Content (Checkboxes, Buttons)
+   ------------------------------------------------------------------------ */
+.boost-color-swatch {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    margin-right: 12px;
+    border: 1px solid #e0e0e0;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.boost-color-swatch-light {
+    border-color: #ccc;
+}
+
+.boost-color-swatch-multi {
+    border-style: dashed;
+}
+
+.boost-checkbox-label.is-color-swatch-label .boost-checkbox-box {
+    margin-right: 10px;
+}
+
+.boost-checkbox-count {
+    color: #888;
+    margin-left: 4px;
+}
+
+.boost-checkbox-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.boost-checkbox-list li {
+    margin-bottom: 14px;
+}
+
+.boost-checkbox-list li:last-child {
+    margin-bottom: 0;
+}
+
+.boost-checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 13px;
+    text-transform: none;
+    color: #333;
+}
+
+.boost-checkbox-label.is-active .boost-checkbox-text {
+    font-weight: 700;
+    color: #0c2340;
+}
+
+.boost-checkbox-list input {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.boost-checkbox-box {
+    width: 16px;
+    height: 16px;
+    border: 1px solid #ddd;
+    margin-right: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.boost-checkbox-label input:checked+.boost-checkbox-box {
+    background: #0c2340;
+    border-color: #0c2340;
+}
+
+.boost-checkbox-label input:checked+.boost-checkbox-box::after {
+    content: '';
+    width: 4px;
+    height: 8px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-bottom: 2px;
+}
+
+.boost-checkbox-label input:disabled+.boost-checkbox-box {
+    background: #f9f9f9;
+    border-color: #eee;
+}
+
+.boost-checkbox-label input:disabled~.boost-checkbox-text {
+    color: #999;
+}
+
+.boost-checkbox-text {
+    text-transform: uppercase;
+}
+
+/* Price Range */
+.boost-price-range {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.boost-price-inputs-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.boost-price-input {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    flex: 1;
+    border-radius: 4px;
+}
+
+.boost-price-input input {
+    border: none;
+    background: transparent;
+    width: 100%;
+    padding: 0;
+    outline: none;
+    text-align: center;
+    font-size: 14px;
+}
+
+.boost-price-separator {
+    font-weight: 600;
+    color: #333;
+}
+
+.boost-price-slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    margin-top: 10px;
+}
+
+.boost-price-slider-track {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #e0e0e0;
+    transform: translateY(-50%);
+    border-radius: 2px;
+}
+
+.boost-price-slider-progress {
+    position: absolute;
+    top: 50%;
+    height: 4px;
+    background: #0c2340;
+    transform: translateY(-50%);
+    border-radius: 2px;
+}
+
+.boost-price-slider-wrapper input[type="range"] {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    -webkit-appearance: none;
+    appearance: none;
+    background: none;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.boost-price-slider-wrapper input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #0c2340;
+    pointer-events: auto;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.boost-price-slider-wrapper input[type="range"]::-moz-range-thumb {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #0c2340;
+    pointer-events: auto;
+    cursor: pointer;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Desktop Dropdown Footer */
+@media (min-width: 768px) {
+    .boost-dropdown-footer {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px 24px;
+        background: #fff;
+        border-top: 1px solid #f0f0f0;
+    }
+
+    .boost-btn-apply {
+        border: 1px solid #0c2340;
+        background: #fff;
+        color: #0c2340;
+        padding: 12px 0;
+        width: 100%;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: background 0.2s;
+    }
+
+    .boost-btn-apply:hover {
+        background: #0c2340;
+        color: #fff;
+    }
+}
+
+/* ------------------------------------------------------------------------
+   Mobile Drawer & Accordion
+   ------------------------------------------------------------------------ */
+/* ------------------------------------------------------------------------
+   Mobile Drawer & Next Level Dropdown
+   ------------------------------------------------------------------------ */
+@media (max-width: 767px) {
+
+    .boost-sort-dropdown:not(.boost-sort-mobile) {
+        display: none;
+    }
+
+    .boost-filter-top-bar {
+        padding: 35px 15px 0px;
+    }
+
+    .boost-mobile-trigger-container {
+        display: flex;
+        padding: 20px;
+        gap: 10px;
+    }
+
+    .boost-mobile-trigger {
+        flex: 1;
+        background: #0c2340;
+        color: #fff;
+        border: none;
+        padding: 14px 10px;
+        font-size: 14px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .boost-mobile-trigger svg {
+        display: none;
+    }
+
+    .boost-sort-mobile {
+        flex: 1;
+        position: relative;
+        border: 1px solid #e0e0e0;
+        background: #fff;
+    }
+
+    .boost-sort-mobile select {
+        width: 100%;
+        height: 100%;
+        padding: 0px 13px;
+        font-size: 14px;
+        border: none;
+        background: transparent;
+        appearance: none;
+        -webkit-appearance: none;
+        outline: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        color: #333;
+        height: 35px;
+    }
+
+    .boost-filter-bar-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .boost-filter-list {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .boost-filter-item {
+        border-bottom: 1px solid #f0f0f0;
+        position: static;
+        /* Let absolute children position to drawer */
+    }
+
+    .boost-filter-label {
+        width: 100%;
+        justify-content: space-between;
+        padding: 20px 25px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .boost-icon-chevron {
+        transform: rotate(-90deg);
+        /* Right arrow */
+        border-color: #666;
+        border-width: 0 1px 1px 0;
+        width: 12px;
+        height: 8px;
+        transition: none;
+    }
+
+    .boost-filter-label[aria-expanded="true"] .boost-icon-chevron {
+        transform: rotate(-45deg);
+        /* Always right arrow */
+    }
+
+    /* Next Level Dropdown Sliding Over */
+    .boost-filter-dropdown {
+        position: absolute;
+        top: 61px;
+        /* Just below the drawer header */
+        left: 0;
+        width: 100%;
+        height: calc(100% - 61px - 64px);
+        /* Subtract header and footer height */
+        background: #fff;
+        z-index: 10;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .boost-filter-item.is-open .boost-filter-dropdown {
+        transform: translateX(0);
+    }
+
+    .boost-dropdown-inner {
+        padding: 20px 25px;
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    .boost-dropdown-mobile-header {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e0e0e0;
+        height: 61px;
+        position: absolute;
+        top: -61px;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        z-index: 11;
+    }
+
+    .boost-dropdown-mobile-header .boost-dropdown-title {
+        flex: 1;
+        text-align: center;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+    .boost-mobile-back {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 61px;
+        width: 60px;
+        background: transparent;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
+
+    .boost-mobile-back svg {
+        width: 14px;
+        height: 14px;
+        transform: rotate(45deg);
+        /* Make a < from the chevron */
+        border: solid #000;
+        border-width: 0 0 2px 2px;
+    }
+
+    /* Fullscreen Drawer Styling */
+    .boost-drawer-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 99998;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .boost-drawer-overlay.is-active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .boost-drawer-content {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        max-width: 100vw;
+        height: 100dvh;
+        background: #fff;
+        z-index: 99999;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .boost-drawer-content.is-active {
+        transform: translateX(0);
+    }
+
+    .boost-drawer-header {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #e0e0e0;
+        height: 61px;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .boost-drawer-close {
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: #0c2340;
+        color: #fff;
+        border: none;
+        width: 61px;
+        height: 61px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        flex-shrink: 0;
+        z-index: 10;
+    }
+
+    .boost-drawer-close svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+    }
+
+    .boost-drawer-title {
+        flex: 1;
+        text-align: center;
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1px;
+    }
+
+    .boost-drawer-clear-all {
+        display: none;
+    }
+
+    .boost-filter-form {
+        flex: 1;
+        overflow-y: auto;
+        /* Allow body scroll when NOT sliding */
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        /* For the absolute dropdowns */
+    }
+
+    .boost-drawer-footer {
+        padding: 0;
+        margin-top: auto;
+        flex-shrink: 0;
+        background: #0c2340;
+    }
+
+    .boost-btn-results {
+        width: 100%;
+        background: #0c2340;
+        color: #fff;
+        border: none;
+        padding: 22px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .boost-dropdown-footer {
+        display: none !important;
+    }
+}
+
+/* ==========================================================
+   FORCE FILTERED IMAGES TO BE VISIBLE (BYPASS AOS/LAZYLOAD)
+   ========================================================== */
+.collection-products-section .product-item__image img,
+.collection-products-section .product-item__image [data-aos],
+.collection-products-section .product-item__image .lazyload {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+}
+
+/* ==========================================================
+   PURE CSS HOVER EFFECT (BYPASS <hover-images> JS COMPONENT)
+   ========================================================== */
+.collection-products-section .double__image .product-item__bg__under {
+    opacity: 0 !important;
+    transition: opacity 0.3s ease-in-out !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 2 !important;
+    display: block !important;
+    pointer-events: none;
+    /* prevents blocking clicks */
+}
+
+/* Show the second image on hover */
+.collection-products-section .double__image:hover .product-item__bg__under {
+    opacity: 1 !important;
+}
+
+/* Ensure the image slides inside the hover container are visible */
+.collection-products-section .product-item__bg__slider,
+.collection-products-section .product-item__bg__slide {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ========================================================================
+   INFINITE SCROLL
+   ======================================================================== */
+.boost-infinite-trigger {
+    height: 1px;
+    width: 100%;
+}
+
+.boost-infinite-loading {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    width: 100%;
+}
+
+.boost-infinite-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid #e0e0e0;
+    border-top-color: #0c2340;
+    border-radius: 50%;
+    animation: boost-spin 0.7s linear infinite;
+}
+
+@keyframes boost-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================================================
+   CLEAR / RESET BUTTONS
+   ======================================================================== */
+@media (min-width: 768px) {
+    .boost-dropdown-footer {
+        gap: 10px;
+    }
+
+    .boost-btn-clear {
+        background: transparent;
+        border: none;
+        color: #888;
+        font-size: 12px;
+        font-weight: 500;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        padding: 8px 0;
+        transition: color 0.2s;
+    }
+
+    .boost-btn-clear:hover {
+        color: #0c2340;
+        text-decoration: underline;
+    }
+}
+
+@media (max-width: 767px) {
+    .boost-btn-clear {
+        display: none;
+    }
+}
+
+/* ========================================================================
+   ACTIVE FILTER TAGS (above grid)
+   ======================================================================== */
+.boost-active-filters {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 35px 15px;
+    align-items: center;
+}
+
+.boost-active-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    --link: var(--text);
+    display: flex;
+    background-color: var(--bg-accent);
+    padding: 8px 7px 8px 14px;
+    margin: 0 7px 7px 0;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+.boost-active-tag svg {
+    flex-shrink: 0;
+}
+
+.boost-clear-all-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 6px 10px;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.boost-clear-all-btn:hover {
+    color: #0c2340;
+}
+
+@media (max-width: 767px) {
+    .boost-active-filters {
+        padding: 0 15px 10px;
+    }
+}

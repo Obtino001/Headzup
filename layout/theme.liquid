@@ -1,0 +1,147 @@
+<!doctype html>
+<html class="no-js no-touch supports-no-cookies" lang="{{ request.locale.iso_code }}">
+  <head>
+    <!-- Google Consent Mode V2 Consentmo -->
+{% render 'gcm-integration-script' %}
+    {%- render 'head' -%}
+
+    {{ content_for_header }}
+  
+    <script>
+    /* ViaBill Helper Core | vb-helper v0.4.2 */
+var S=(f,T,m)=>new Promise((q,v)=>{var x=y=>{try{h(m.next(y))}catch(E){v(E)}},I=y=>{try{h(m.throw(y))}catch(E){v(E)}},h=y=>y.done?q(y.value):Promise.resolve(y.value).then(x,I);h((m=m.apply(f,T)).next())});(function(f){"use strict";function T(){return f.viabillOptions=f.viabillOptions||[],f.viabillOptions}function m(e){T().push({"pricetag.cookiesEnabled":e})}function q(e,{gracePeriod:l=200,pollInterval:n=50}={}){return new Promise((r,c)=>{if(!e){c(new Error("ViaBill code is required"));return}if(window.viabillPricetagInternal){r();return}const o=`https://pricetag.viabill.com/script/${e}`,s=Date.now(),t=setInterval(()=>{if(window.viabillPricetagInternal){clearInterval(t),r();return}Date.now()-s>=l&&(clearInterval(t),i())},n);function i(){if(document.querySelector(`script[src="${o}"]`)){const u=setInterval(()=>{window.viabillPricetagInternal&&(clearInterval(u),r())},n);return}const d=document.createElement("script");d.type="text/javascript",d.async=!0,d.src=o,d.onload=()=>r(),d.onerror=()=>c(new Error("Failed to load ViaBill script"));const p=document.getElementsByTagName("script")[0];p.parentNode.insertBefore(d,p)}})}function v(e){return new Promise(l=>{const n=document.body;if(!n){console.warn("document.body not ready yet");return}const r=document.querySelector(e);if(r){l(r);return}const c=new MutationObserver(()=>{const o=document.querySelector(e);o&&(c.disconnect(),l(o))});c.observe(n,{childList:!0,subtree:!0})})}function x(e=[]){const l=`<div id="vb-hidden-prices" style="visibility: hidden;height: 0;margin: 0;padding: 0;overflow: hidden;">
+    ${e.map(n=>{const{type:r}=n;return`<div id="vb-${r}-hidden-price"></div>`}).join("")}
+</div>`;document.body.insertAdjacentHTML("beforeend",l)}function I(e){const{containerElement:l,type:n,style:r="display:flex;justify-content:center;align-items:center;margin-top:5px;margin-botttom:5px;",currency:c="dkk",countryCode:o="dk",language:s="da"}=e,t=n.includes("basket")?"basket":n,i=`#vb-${n}-hidden-price`,a=`<div id="viabill-${n}-pricetag-wrapper" style="${r}"><div class="viabill-pricetag" data-view="${t}" data-dynamic-price="${i}" data-dynamic-price-triggers="${i}" data-language="${s}" data-currency="${c}" data-country-code="${o}"></div></div>`;l.insertAdjacentHTML("afterend",a)}function h(e,l){const n={};function r(s){const t=document.querySelector(s);return t&&t.textContent.replace(/[^\d.,]/g,"").trim()||null}function c(s,t){const i=document.querySelector(t);if(!i)return;const a=r(s);if(!a)return;const d=n[t];a!==d&&(n[t]=a,i.textContent=a,setTimeout(()=>{i.dispatchEvent(new Event("change",{bubbles:!0}))},1e3))}function o(){c(e,l)}o(),setInterval(o,3e3)}function y(e,l=0,{retries:n=20,interval:r=300}={}){if(!e)return Promise.resolve(!1);const c=e.parentElement;return c?new Promise(o=>{function s(t){try{const i=e.contentDocument||e.contentWindow&&e.contentWindow.document;if(!i)throw new Error("no-doc-yet");const a=i.querySelector("body > div");if(!a){t>0?setTimeout(()=>s(t-1),r):o(!1);return}const d=a.scrollWidth||a.offsetWidth||a.clientWidth;if(!d||d<20){t>0?setTimeout(()=>s(t-1),r):o(!1);return}setTimeout(()=>{const p=a.scrollWidth||a.offsetWidth||a.clientWidth;c.style.width=p+5+l+"px",o(!0)},200)}catch(i){if(i instanceof DOMException&&(i.name==="SecurityError"||i.name==="TypeError")){console.warn("Cannot access iframe content (cross-origin)."),o(!1);return}t>0?setTimeout(()=>s(t-1),r):o(!1)}}if(!e.complete&&typeof e.addEventListener=="function"){const t=()=>{e.removeEventListener("load",t),s(n)};e.addEventListener("load",t,{once:!0})}s(n)}):Promise.resolve(!1)}function E(e){return S(this,null,function*(){const{code:l,extraWidth:n,pricetagConfigs:r,cookiesEnabled:c,currency:o,countryCode:s,language:t}=e;(c===!1||c===!0||Array.isArray(c))&&m(c),yield q(l),x(r);const i=Object.create(null);function a(p,u=150){let w;return(...b)=>{clearTimeout(w),w=setTimeout(()=>p(...b),u)}}function d(p){return S(this,null,function*(){var P,$;const{type:u,priceContainerSelector:w,style:b}=p,g=document.querySelector(w);if(!g||i[u])return!1;i[u]=!0;try{const k=`#viabill-${u}-pricetag-wrapper`;document.querySelector(k)||(I({containerElement:g,type:u,style:b,currency:o,countryCode:s,language:t}),($=(P=window.viabillPricetagInternal)==null?void 0:P.init)==null||$.call(P,!0));const C=yield v(`#viabill-${u}-pricetag-wrapper > .viabill-pricetag > iframe`);return yield y(C,n),!0}finally{i[u]=!1}})}return Promise.allSettled(r.map(p=>S(this,null,function*(){const{type:u,priceContainerSelector:w,primaryPriceSelector:b,secondaryPriceSelector:g}=p,P=v(w),$=b?v(b):Promise.resolve(null),k=g?v(g):Promise.resolve(null);$.then(()=>{b&&h(b,`#vb-${u}-hidden-price`)}),k.then(()=>{g&&h(g,`#vb-${u}-hidden-price`)}),yield P,yield d(p);const C=a(()=>S(this,null,function*(){!window.viabillPricetagInternal||!document.querySelector(w)||document.querySelector(`#viabill-${u}-pricetag-wrapper`)||d(p)}),150);return new MutationObserver(()=>{C()}).observe(document.documentElement,{childList:!0,subtree:!0}),!0})))})}f.vbHelper=f.vbHelper||{},f.vbHelper.init=E,f.vbHelper.setCookiesEnabled=m})(window);
+/* ViaBill Helper – Consent Adapter (Shopify) | vb-helper v0.4.2 */
+(function(i){"use strict";function a(e){function o(){try{return new Date().toISOString()}catch(n){return""}}return{log:function(){e&&console.log.apply(console,["[ViaBill][ShopifyConsent]",o()].concat([].slice.call(arguments)))},warn:function(){e&&console.warn.apply(console,["[ViaBill][ShopifyConsent]",o()].concat([].slice.call(arguments)))},error:function(){e&&console.error.apply(console,["[ViaBill][ShopifyConsent]",o()].concat([].slice.call(arguments)))}}}if(!i.vbHelper||typeof i.vbHelper.setCookiesEnabled!="function"){console.warn("[ViaBill] vbHelper core missing. Load vb-helper-core first.");return}function t(e,o,n){if(!e){n&&n.warn("No detail to apply (null/undefined)");return}if(n&&n.log("Applying Shopify detail:",e,"mode:",o),o==="boolean"){const l=!!e.preferencesAllowed||!!e.analyticsAllowed||!!e.marketingAllowed;n&&n.log("Computed cookiesEnabled (boolean):",l),i.vbHelper.setCookiesEnabled(l);return}const r=["necessary"];e.preferencesAllowed&&r.push("functional"),e.analyticsAllowed&&r.push("statistical"),e.marketingAllowed&&r.push("marketing"),n&&n.log("Computed cookiesEnabled (categories):",r),i.vbHelper.setCookiesEnabled(r)}function s(e){if(!i.Shopify)return e&&e.warn("window.Shopify is missing"),null;if(!i.Shopify.customerPrivacy)return e&&e.warn("Shopify.customerPrivacy is missing"),null;const o={preferencesAllowed:!!i.Shopify.customerPrivacy.preferencesProcessingAllowed(),analyticsAllowed:!!i.Shopify.customerPrivacy.analyticsProcessingAllowed(),marketingAllowed:!!i.Shopify.customerPrivacy.marketingAllowed()};return e&&e.log("Read allowed from Shopify.customerPrivacy:",o),o}function c(e,o){if(i.Shopify&&i.Shopify.customerPrivacy)return o&&o.log("Consent API already available (Shopify.customerPrivacy present)"),e();if(!i.Shopify||!i.Shopify.loadFeatures)return o&&o.warn("Shopify.loadFeatures missing (wrong surface or too early)"),e(new Error("Shopify.loadFeatures missing"));o&&o.log("Loading Shopify consent-tracking-api via Shopify.loadFeatures..."),i.Shopify.loadFeatures([{name:"consent-tracking-api",version:"0.1"}],function(n){if(n)return o&&o.error("Shopify.loadFeatures returned error:",n),e(n);if(!i.Shopify.customerPrivacy)return o&&o.error("Shopify.customerPrivacy still missing after loadFeatures"),e(new Error("Shopify.customerPrivacy missing"));o&&o.log("Consent API loaded OK (Shopify.customerPrivacy ready)"),e()})}function f(e){e=e||{};const o=e.mode||"categories",n=a(!!e.debug);i.vbHelper._shopifyConsentDebug={enabled:!!e.debug,mode:o,lastDetail:null},n.log("bindShopifyConsent called with opts:",e),n.log("Setting initial cookiesEnabled to false (strict default)"),i.vbHelper.setCookiesEnabled(!1),document.addEventListener("visitorConsentCollected",function(r){n.log("visitorConsentCollected fired:",r);const l=r&&r.detail?r.detail:s(n);i.vbHelper._shopifyConsentDebug.lastDetail=l,t(l,o,n)}),c(function(r){if(r){n.warn("ensureApi failed:",r.message||r);return}const l=s(n);i.vbHelper._shopifyConsentDebug.lastDetail=l,n.log("Applying initial consent state..."),t(l,o,n)},n)}i.vbHelper=i.vbHelper||{},i.vbHelper.bindShopifyConsent=f})(window);
+  </script>
+  <meta name="google-site-verification" content="Vc9gB2upA4NA_QedIrP5XMnQtausiip5_PCW3tmWqZ4" />
+<!-- Google Tag Manager --> <script> !function(){"use strict";function l(e){for(var t=e,r=0,n=document.cookie.split(";");r<n.length;r++){var o=n[r].split("=");if(o[0].trim()===t)return o[1]}}function s(e){return localStorage.getItem(e)}function u(e){return window[e]}function A(e,t){e=document.querySelector(e);return t?null==e?void 0:e.getAttribute(t):null==e?void 0:e.textContent}var e=window,t=document,r="script",n="dataLayer",o="https://ss.headzup.dk",a="",i="3sFtflkxvxm",c="3l=aWQ9R1RNLVBXSzc3MktQ&apiKey=27244a65",g="jsVariable",v="_sbp",E="",d=!1;try{var d=!!g&&(m=navigator.userAgent,!!(m=new RegExp("Version/([0-9._]+)(.*Mobile)?.*Safari.*").exec(m)))&&16.4<=parseFloat(m[1]),f="stapeUserId"===g,I=d&&!f?function(e,t,r){void 0===t&&(t="");var n={cookie:l,localStorage:s,jsVariable:u,cssSelector:A},t=Array.isArray(t)?t:[t];if(e&&n[e])for(var o=n[e],a=0,i=t;a<i.length;a++){var c=i[a],c=r?o(c,r):o(c);if(c)return c}else console.warn("invalid uid source",e)}(g,v,E):void 0;d=d&&(!!I||f)}catch(e){console.error(e)}var m=e,g=(m[n]=m[n]||[],m[n].push({"gtm.start":(new Date).getTime(),event:"gtm.js"}),t.getElementsByTagName(r)[0]),v=I?"&bi="+encodeURIComponent(I):"",E=t.createElement(r),f=(d&&(i=8<i.length?i.replace(/([a-z]{8}$)/,"kp$1"):"kp"+i),!d&&a?a:o);E.async=!0,E.src=f+"/"+i+".js?"+c+v,null!=(e=g.parentNode)&&e.insertBefore(E,g)}(); </script> <!-- End Google Tag Manager -->
+  
+
+</head>
+
+  <body
+    id="{{ page_title | handle }}"
+    class="template-{{ template.name | handle }} grid-{{ settings.grid_style }}{% if customer %} customer-logged-in{% endif %}{% if settings.animations_enable %} aos-initialized{% endif %}{% if settings.product_grid_outline %} has-line-design{% endif %}{% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %} chapter-two{% endif %} "
+    data-animations="{{ settings.animations_enable }}"
+  >
+    {%- render 'loading' -%}
+
+    <a class="in-page-link visually-hidden skip-link" data-skip-content href="#MainContent">
+      {{- 'general.accessibility.skip_to_content' | t -}}
+    </a>
+
+    <div class="container" data-site-container>
+      <div class="header-sections">
+        {% sections 'group-header' %}
+      </div>
+
+      {% sections 'group-overlay' %}
+
+      <!-- CONTENT -->
+      <main role="main" id="MainContent" class="main-content">
+        {{ content_for_layout }}
+      </main>
+    </div>
+
+    {% sections 'group-pre-footer' %}
+
+    <footer class="footer-sections">
+      {% sections 'group-footer' %}
+    </footer>
+
+    {%- if settings.swatches_type != 'disabled' -%}
+      {% render 'template-swatch' %}
+    {%- endif -%}
+
+    {% render 'zoom-pswp' %}
+
+    {%- if template.name != 'product' and settings.show_scroll_top_button -%}
+      <button
+        type="button"
+        class="btn btn--scroll-top btn--black btn--solid"
+        aria-label="{{ 'general.accessibility.scroll_to_top' | t }}"
+        data-scroll-top-button
+      >
+        {%- render 'icon-arrow-up' -%}
+      </button>
+    {%- endif -%}
+
+    <script src="{{ 'custom.js' | asset_url }}" defer="defer"></script>
+    {%- comment -%}
+      In order to use your custom javascript file at assets/custom.js
+      just cut this next line and paste it outside this comment:
+    {%- endcomment -%}
+    <!-- Paste marketing code or third party scripts below this comment line ============== -->
+
+    <!-- And above this comment line ================================================== -->
+    {% if template == 'cart' %}
+      <script>
+        window.location.href = '/';
+      </script>
+    {% endif %}
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+
+      const code = "wPc%2BXesCxhs%3D";
+      const extraWidth = 20;
+      const pricetagConfigs = [
+        {
+          type: "product",
+          priceContainerSelector: ".product__page .product__price__wrap",
+          primaryPriceSelector: ".product__page .product__price__wrap span",
+          secondaryPriceSelector: ".product__info-wrapper .price .price-item--sale",
+          style: "display:flex;justify-content:flex-start;margin-top:5px;"
+        }
+      ];
+
+
+      function waitForVBHelper() {
+        if (window.vbHelper?.init) {
+          if (window.vbHelper.bindShopifyConsent) {
+            window.vbHelper.bindShopifyConsent({ mode: "categories" });
+          }
+
+          window.vbHelper.init({
+            code,
+            extraWidth,
+            pricetagConfigs,
+          });
+        } else {
+          setTimeout(waitForVBHelper, 50);
+        }
+      }
+
+      waitForVBHelper();
+    });
+    </script>
+
+  <!-- Klaviyo integration script from Consentmo GDPR app -->
+    <script id="consentmo-klaviyo-integration-script">
+      function checkConsentForKlaviyo(isMarketingEnabled) {
+        if (isMarketingEnabled) {
+          console.log('exec klaviyo');
+          document.cookie = "__kla_off=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        } else {
+          console.log('blocked klaviyo');
+          document.cookie = "__kla_off=true"; 
+        }
+      }
+
+      document.addEventListener('consentmoSignal_onLoad', function(eventData) {
+        const csmLoadSignal = eventData.detail || {isActive:false};
+
+        if (!csmLoadSignal.isActive) {
+          checkConsentForKlaviyo(true);
+        } else {
+          document.addEventListener('consentmoSignal', function(event) {
+            const csmPreferences = event.detail.preferences;
+            checkConsentForKlaviyo(csmPreferences.marketing);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

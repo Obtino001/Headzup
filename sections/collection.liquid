@@ -1,0 +1,590 @@
+{%- liquid
+  assign enable_sort = section.settings.enable_sort
+  assign enable_filters = section.settings.enable_filters
+  assign filter_layout = section.settings.filter_layout
+  assign color_scheme = 'color-' | append: section.settings.color_scheme
+
+  assign product_limit = section.settings.products_per_page
+  assign blocks_featured_image = section.blocks | where: 'type', 'featured_image'
+
+  assign columns_desktop = section.settings.grid | plus: 0
+  assign columns_medium = 3
+  assign columns_small = 2
+  assign columns_mobile = section.settings.grid_mobile | plus: 0
+
+  if columns_desktop == 2 or columns_desktop == 4
+    assign columns_medium = 2
+  endif
+  
+
+  
+-%}
+
+{%- capture image_sizes -%}
+  {%- if filter_layout == 'inline-open' and enable_filters -%}
+    {%- if settings.grid_style == 'compact' -%}
+      (min-width: 990px) calc((100vw - 288px) / {{ columns_desktop }}), (min-width: 750px) calc((100vw - 258px) / {{ columns_medium }}), (min-width: 480px) calc(100vw / {{ columns_small }}), calc(100vw / {{ columns_mobile }})
+    {%- else -%}
+      (min-width: 990px) calc((100vw - 288px - 100px) / {{ columns_desktop }} - 32px), (min-width: 750px) calc((100vw - 258px - 64px) / {{ columns_medium }} - 32px), (min-width: 480px) calc((100vw - 32px) / {{ columns_small }}), calc((100vw - 32px) / {{ columns_mobile }})
+    {%- endif -%}
+  {%- else-%}
+    {%- if settings.grid_style == 'compact' -%}
+      (min-width: 990px) calc((100vw) / {{ columns_desktop }}), (min-width: 750px) calc((100vw) / {{ columns_medium }}), (min-width: 480px) calc(100vw / {{ columns_small }}), calc(100vw / {{ columns_mobile }})
+    {%- else -%}
+      (min-width: 990px) calc((100vw - 100px) / {{ columns_desktop }} - 32px), (min-width: 750px) calc((100vw - 64px) / {{ columns_medium }} - 32px), (min-width: 480px) calc((100vw - 32px) / {{ columns_small }}), calc((100vw - 32px) / {{ columns_mobile }})
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+    {{ 'boost-custom-filter.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+  #Collection--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+    --COLUMNS: {{ columns_desktop }};
+    --COLUMNS-MEDIUM: {{ columns_medium }};
+    --COLUMNS-SMALL: {{ columns_small }};
+    --COLUMNS-MOBILE: {{ columns_mobile }};
+  }
+{%- endstyle -%}
+
+{%- paginate collection.products by product_limit -%}
+  {%- assign featured_images_array = '' -%}
+
+  {%- if paginate.current_page == 1 -%}
+    {%- for block in section.blocks -%}
+      {%- capture current_featured_image -%}
+        {%- liquid
+          assign featured_image = block.settings.featured_image
+          assign featured_image_position = block.settings.position
+          assign featured_image_order = featured_image_position | append: '-' | append: forloop.index
+
+          if featured_image_position < 10
+            assign featured_image_order = featured_image_order | prepend: '0'
+          endif
+        -%}
+        {%- render 'collection-featured-image' block: block -%}
+      {%- endcapture -%}
+
+      {%- assign featured_images_array = featured_images_array
+        | append: featured_image_order
+        | append: '#featured_image_position#'
+        | append: featured_image_position
+        | append: '#featured_image_html#'
+        | append: current_featured_image
+        | append: '#featured_image#'
+        | append: featured_image
+        | append: '@@'
+      -%}
+    {%- endfor -%}
+
+    {%- assign featured_images_array = featured_images_array | split: '@@' | sort -%}
+  {%- endif -%}
+
+  <collection-component
+    class="collection collection-products collection-{{ collection.handle }} section-padding {{ color_scheme }}"
+    id="Collection--{{ section.id }}"
+    data-section-id="{{ section.id }}"
+  >
+
+
+
+    {%- liquid
+      assign results = collection | default: search
+      assign total_active_values = 0
+      assign active_sizes = ""
+      assign has_active_size_filter = false
+      assign filter_availability_value = nil
+
+      for filter in results.filters
+        assign total_active_values = total_active_values | plus: filter.active_values.size
+        
+        assign filter_label_downcase = filter.label | downcase
+        if filter_label_downcase contains 'størrelse' or filter_label_downcase contains 'size'
+          for value in filter.active_values
+            assign has_active_size_filter = true
+            assign val_downcase = value.value | downcase
+            assign active_sizes = active_sizes | append: val_downcase | append: '||'
+          endfor
+        endif
+
+        if filter.param_name == 'filter.v.availability'
+          for value in filter.active_values
+            assign filter_availability_value = value.value
+          endfor
+        endif
+      endfor
+    -%}
+
+    <boost-filter class="boost-filter-container">
+      <div class="boost-filter-top-bar">
+        <div class="boost-collection-info">
+          <h1 class="boost-collection-title">{{ collection.title | escape }}</h1>
+          <p class="boost-collection-count">{{ results.products_count | default: results.results_count }} PRODUKTER</p>
+     <div class="boost-collection-desc">
+  {{ collection.description | split: '</p>' | first | append: '</p>' }}
+</div>
+        </div>
+      </div>
+
+      <div class="boost-mobile-trigger-container">
+        <button class="boost-mobile-trigger" type="button" aria-controls="BoostFilterDrawer" aria-expanded="false">
+          FILTRER EFTER
+        </button>
+        <div class="boost-sort-mobile">
+          <select class="boost-sort-select boost-mobile-sort-select" aria-label="Sort by">
+            {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
+            {%- for option in results.sort_options -%}
+              <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
+          <span class="boost-icon-chevron-sort"></span>
+        </div>
+      </div>
+
+      <div class="boost-filter-drawer" id="BoostFilterDrawer">
+        <div class="boost-drawer-overlay"></div>
+        <div class="boost-drawer-content">
+          <div class="boost-drawer-header">
+            <button class="boost-drawer-close" type="button" aria-label="Close">
+              <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <span class="boost-drawer-title">FILTRER EFTER</span>
+            <a href="{{ results.url }}?sort_by={{ results.sort_by }}" class="boost-drawer-clear-all {% if total_active_values == 0 %}hidden{% endif %}">ryd alle</a>
+          </div>
+          
+          <form class="boost-filter-form" id="BoostFilterForm">
+            {%- if results.terms -%}
+              <input type="hidden" name="q" value="{{ results.terms | escape }}">
+              <input name="options[prefix]" type="hidden" value="last">
+            {%- endif -%}
+
+            <div class="boost-filter-bar-wrapper">
+              <div class="boost-filter-list">
+    {%- for filter in results.filters -%}
+  {%- assign has_options = false -%}
+  {%- if filter.type == 'price_range' -%}
+    {%- assign has_options = true -%}
+  {%- else -%}
+    {%- for value in filter.values -%}
+      {%- if value.count > 0 or value.active -%}
+        {%- assign has_options = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+
+  {%- if has_options -%}
+  <div class="boost-filter-item" data-index="{{ forloop.index }}">
+    <button class="boost-filter-label" type="button" aria-expanded="false">
+      <span>{{ filter.label }}</span>
+      <span class="boost-icon-chevron"></span>
+    </button>
+    
+    <div class="boost-filter-dropdown" id="Filter-{{ filter.param_name | escape }}">
+      <div class="boost-dropdown-mobile-header">
+        <button class="boost-mobile-back" type="button" aria-label="Back">
+       <svg width="6" height="10" viewBox="0 0 7 12" focusable="false" aria-hidden="true" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon icon-arrow-right">
+</svg>
+        </button>
+        <span class="boost-dropdown-title">{{ filter.label | upcase }}</span>
+      </div>
+      
+      <div class="boost-dropdown-inner">
+        {%- case filter.type -%}
+          {%- when 'boolean', 'list' -%}
+            {%- assign is_color = false -%}
+            {%- assign is_size = false -%}
+            {%- assign filter_label_down = filter.label | downcase -%}
+            {%- if filter_label_down contains 'color' or filter_label_down contains 'farve' or filter_label_down contains 'colour' -%}
+              {%- assign is_color = true -%}
+            {%- endif -%}
+            {%- if filter_label_down contains 'størrelse' or filter_label_down contains 'size' -%}
+              {%- assign is_size = true -%}
+            {%- endif -%}
+            
+         <ul class="boost-checkbox-list">
+  {%- if is_size -%}
+    {%- assign sorted_values = filter.values -%}
+  {%- else -%}
+    {%- assign sorted_values = filter.values | sort: 'count' | reverse -%}
+  {%- endif -%}
+  {%- for value in sorted_values -%}
+    {%- if value.count > 0 or value.active -%}
+
+              <li>
+                <label class="boost-checkbox-label {% if value.active %}is-active{% endif %} {% if is_color %}is-color-swatch-label{% endif %}">
+                  <input type="checkbox"
+                    name="{{ value.param_name }}"
+                    value="{{ value.value }}"
+                    id="Filter-{{ filter.param_name | escape }}-{{ forloop.index }}"
+                    {% if value.active %}checked{% endif %}
+                    {% if value.count == 0 and value.active == false %}disabled{% endif %}
+                  >
+                  {%- if is_color -%}
+                    {%- liquid
+                      assign color_val = value.label | downcase
+                      assign bg_color = color_val
+                      if color_val == 'flerfarvet' or color_val == 'multicolor'
+                        assign bg_color = 'linear-gradient(45deg, red, blue, green, yellow)'
+                      elsif color_val == 'sølv' or color_val == 'silver'
+                        assign bg_color = '#c0c0c0'
+                      elsif color_val == 'guld' or color_val == 'gold'
+                        assign bg_color = '#ffd700'
+                      elsif color_val == 'sort' or color_val == 'black'
+                        assign bg_color = '#000000'
+                      elsif color_val == 'hvid' or color_val == 'white'
+                        assign bg_color = '#ffffff'
+                      elsif color_val == 'grå' or color_val == 'gray' or color_val == 'grey' or color_val == 'gråt'
+                        assign bg_color = '#808080'
+                      elsif color_val == 'brun' or color_val == 'brown'
+                        assign bg_color = '#8b4513'
+                      elsif color_val == 'grøn' or color_val == 'green'
+                        assign bg_color = '#00a300'
+                      elsif color_val == 'blå' or color_val == 'blue'
+                        assign bg_color = '#005ecc'
+                      elsif color_val == 'rød' or color_val == 'red'
+                        assign bg_color = '#ff0000'
+                      elsif color_val == 'gul' or color_val == 'yellow'
+                        assign bg_color = '#ffe000'
+                      elsif color_val == 'orange'
+                        assign bg_color = '#ff8c00'
+                      elsif color_val == 'lilla' or color_val == 'purple'
+                        assign bg_color = '#9932cc'
+                      elsif color_val == 'pink'
+                        assign bg_color = '#ffb6c1'
+                      elsif color_val == 'marineblå' or color_val == 'navy'
+                        assign bg_color = '#000080'
+                      elsif color_val == 'beige'
+                        assign bg_color = '#eaddcd'
+                      elsif color_val == 'khaki'
+                        assign bg_color = '#c3b091'
+                      endif
+                    -%}
+                    <span class="boost-checkbox-box boost-checkbox-box-swatch"></span>
+                    <span class="boost-color-swatch {% if color_val == 'hvid' or color_val == 'white' or color_val == 'flerfarvet' %}boost-color-swatch-light{% endif %} {% if color_val == 'flerfarvet' or color_val == 'multicolor' %}boost-color-swatch-multi{% endif %}" style="background: {{ bg_color }};"></span>
+                  {%- else -%}
+                    <span class="boost-checkbox-box"></span>
+                  {%- endif -%}
+                  <span class="boost-checkbox-text">{{ value.label | escape }} <span class="boost-checkbox-count">({{ value.count }})</span></span>
+                </label>
+              </li>
+                {%- endif -%}
+              {%- endfor -%}
+            </ul>
+            
+          {%- when 'price_range' -%}
+            <div class="boost-price-range">
+              <div class="boost-price-inputs-wrapper">
+                
+                <div class="boost-price-input">
+                  <input class="boost-price-input-min" name="{{ filter.min_value.param_name }}"
+                    id="Filter-{{ filter.min_value.param_name }}"
+                    {% if filter.min_value.value -%}
+                      value="{{ filter.min_value.value | divided_by: 100 }}"
+                    {%- else -%}
+                      value="0"
+                    {%- endif %}
+                    type="number"
+                    placeholder="0"
+                    min="0"
+                    max="{{ filter.range_max | divided_by: 100 }}">
+                </div>
+                
+                <span class="boost-price-separator">-</span>
+                
+                <div class="boost-price-input">
+                  <input class="boost-price-input-max" name="{{ filter.max_value.param_name }}"
+                    id="Filter-{{ filter.max_value.param_name }}"
+                    {% if filter.max_value.value -%}
+                      value="{{ filter.max_value.value | divided_by: 100 }}"
+                    {%- else -%}
+                      value="{{ filter.range_max | divided_by: 100 }}"
+                    {%- endif %}
+                    type="number"
+                    placeholder="{{ filter.range_max | divided_by: 100 }}"
+                    min="0"
+                    max="{{ filter.range_max | divided_by: 100 }}">
+                </div>
+                
+              </div>
+              
+              <div class="boost-price-slider-wrapper">
+                <div class="boost-price-slider-track"></div>
+                <div class="boost-price-slider-progress"></div>
+                <input type="range" class="boost-price-range-min" min="0" max="{{ filter.range_max | divided_by: 100 }}" value="{% if filter.min_value.value %}{{ filter.min_value.value | divided_by: 100 }}{% else %}0{% endif %}">
+                <input type="range" class="boost-price-range-max" min="0" max="{{ filter.range_max | divided_by: 100 }}" value="{% if filter.max_value.value %}{{ filter.max_value.value | divided_by: 100 }}{% else %}{{ filter.range_max | divided_by: 100 }}{% endif %}">
+              </div>
+            </div>
+        {%- endcase -%}
+      </div>
+      
+      <div class="boost-dropdown-footer">
+        <button type="button" class="boost-btn-apply" data-apply-btn>ANVEND</button>
+        <button type="button" class="boost-btn-clear" data-clear-btn>NULSTIL</button>
+      </div>
+      
+    </div> </div> {%- endif -%} {%- endfor -%}
+              </div>
+
+              <div class="boost-sort-dropdown">
+                <select name="sort_by" class="boost-sort-select" aria-label="Sort by">
+                  {%- assign sort_by = results.sort_by | default: results.default_sort_by -%}
+                  {%- for option in results.sort_options -%}
+                    <option value="{{ option.value }}" {% if option.value == sort_by %}selected{% endif %}>{{ option.name }}</option>
+                  {%- endfor -%}
+                </select>
+                <span class="boost-icon-chevron-sort"></span>
+              </div>
+            </div>
+            
+            <div class="boost-drawer-footer">
+              <button type="submit" class="boost-btn-results">Vis resultater ({{ results.products_count | default: results.results_count }})</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="boost-active-filters" id="BoostActiveFilters"></div>
+    </boost-filter>
+    <!-- END BOOST AI FILTER -->
+
+    <div class="collection__products">
+      <!-- Old filter sidebar is completely removed. Theme grid wrapper continues below: -->
+
+      <div class="grid-outer" data-products-grid data-total-pages="{{ paginate.pages }}">
+        <div class="grid" id="CollectionLoop">
+          {%- if collection.products_count > 0 -%}
+            {%- if featured_images_array.size > 0 -%}
+              {%- liquid
+                assign counter_grid = 1
+                assign counter_delay = 0
+                assign added_images_index = ''
+                assign items_on_row_remaining = columns_desktop
+
+                for product in collection.products
+                  if has_active_size_filter and filter_availability_value != blank
+                    assign size_array = active_sizes | split: '||'
+                    assign variant_match_found = false
+                    for variant in product.variants
+                      for option in variant.options
+                        assign option_downcase = option | downcase
+                        if size_array contains option_downcase
+                          if filter_availability_value == '1' and variant.available
+                            assign variant_match_found = true
+                            break
+                          elsif filter_availability_value == '0' and variant.available == false
+                            assign variant_match_found = true
+                            break
+                          endif
+                        endif
+                      endfor
+                      if variant_match_found
+                        break
+                      endif
+                    endfor
+                    unless variant_match_found
+                      continue
+                    endunless
+                  endif
+
+                  for featured_image in featured_images_array
+                    if featured_image == ''
+                      continue
+                    endif
+
+                    assign featured_image_index = forloop.index
+                    assign featured_image_position = featured_image | split: '#featured_image_position#' | last | split: '#featured_image_html#' | first | times: 1
+                    assign featured_image_markup = featured_image | split: '#featured_image_html#' | last | split: '#featured_image#' | first
+                    assign featured_image_index_tag = '@' | append: featured_image_index | append: '@'
+
+                    if featured_image_position <= counter_grid
+                      unless added_images_index contains featured_image_index_tag
+                        assign counter_grid = counter_grid | plus: 1
+                        assign added_images_index = added_images_index | append: '@' | append: featured_image_index | append: '@#'
+
+                        echo featured_image_markup
+                      endunless
+                    endif
+                  endfor
+
+                  assign counter_delay = counter_delay | plus: 1
+                  assign counter_grid = counter_grid | plus: 1
+                  assign items_on_row_remaining = items_on_row_remaining | minus: 1
+
+                  if collection
+                    render 'product-grid-item', product: product, index: forloop.index, sizes: image_sizes
+                  endif
+                endfor
+              -%}
+
+            {%- else -%}
+              {%- for product in collection.products -%}
+                {%- if has_active_size_filter and filter_availability_value != blank -%}
+                  {%- assign size_array = active_sizes | split: '||' -%}
+                  {%- assign variant_match_found = false -%}
+                  {%- for variant in product.variants -%}
+                    {%- for option in variant.options -%}
+                      {%- assign option_downcase = option | downcase -%}
+                      {%- if size_array contains option_downcase -%}
+                        {%- if filter_availability_value == '1' and variant.available -%}
+                          {%- assign variant_match_found = true -%}{%- break -%}
+                        {%- elsif filter_availability_value == '0' and variant.available == false -%}
+                          {%- assign variant_match_found = true -%}{%- break -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {%- if variant_match_found -%}{%- break -%}{%- endif -%}
+                  {%- endfor -%}
+                  {%- unless variant_match_found -%}
+                    {%- continue -%}
+                  {%- endunless -%}
+                {%- endif -%}
+
+                {%- assign grid_int = section.settings.grid | times: 1 -%}
+                {%- assign animation_delay = forloop.index0 | modulo: grid_int | times: 1 -%}
+                {%- render 'product-grid-item',
+                  product: product,
+                  animation_delay: animation_delay,
+                  index: forloop.index,
+                  sizes: image_sizes
+                -%}
+              {%- endfor -%}
+            {%- endif -%}
+          {%- else -%}
+            <div class="no-results">
+              <p>
+                <strong>{{ 'collections.general.no_matches' | t }}</strong>
+              </p>
+              {%- assign sort_by_string = '' -%}
+              {%- if collection.sort_by != blank -%}
+                {%- assign sort_by_string = '?sort_by=' | append: collection.sort_by -%}
+              {%- endif -%}
+              <a
+                class="btn caps btn--primary btn--solid"
+                href="{{ collection.url | append: sort_by_string }}"
+                data-filter-update-url
+                ><span>{{ 'collections.general.reset' | t }}</span></a
+              >
+            </div>
+          {%- endif -%}
+        </div>
+
+        {% comment %} Infinite scroll sentinel - replaces pagination {% endcomment %}
+        {% if paginate.pages > 1 %}
+          <div class="boost-infinite-trigger"></div>
+        {% endif %}
+        <div class="boost-infinite-loading">
+          <div class="boost-infinite-spinner"></div>
+        </div>
+
+        <div class="grid__loader">
+          <div class="loader grid__loader-line"><div class="loader-indeterminate"></div></div>
+        </div>
+      </div>
+    </div>
+  </collection-component>
+
+{%- endpaginate -%}
+    <script src="{{ 'boost-custom-filter.js' | asset_url }}"></script>
+{% schema %}
+{
+  "name": "Collection products",
+  "class": "collection-products-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product grid"
+    },
+    {
+      "type": "range",
+      "id": "grid",
+      "label": "Products per row on desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "radio",
+      "id": "grid_mobile",
+      "label": "Products per row on mobile",
+      "options": [
+        {
+          "value": "1",
+          "label": "One"
+        },
+        {
+          "value": "2",
+          "label": "Two"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 1,
+      "max": 24,
+      "step": 1,
+      "label": "Products per page",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "default": "scheme_1",
+      "label": "Color scheme"
+    },
+    {
+      "type": "header",
+      "content": "Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_image",
+      "limit": 3,
+      "name": "Featured image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "featured_image",
+          "label": "Image"
+        },
+        {
+          "type": "range",
+          "id": "position",
+          "label": "Image position",
+          "min": 1,
+          "max": 24,
+          "step": 1,
+          "default": 1
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

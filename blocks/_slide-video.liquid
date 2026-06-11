@@ -1,0 +1,143 @@
+{%- capture content_blocks -%}
+  {% content_for 'blocks' %}
+{%- endcapture -%}
+
+{%- render 'slide', content_blocks: content_blocks -%}
+
+{% schema %}
+{
+  "name": "Video",
+  "blocks": [
+    {"type": "heading"},
+    {"type": "text"},
+    {"type": "button"},
+    {"type": "countdown-timer"},
+    {"type": "_group-buttons"},
+    {"type": "@app"}
+  ],
+  "tag": null,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Image link"
+    },
+    {
+      "type": "header",
+      "content": "Desktop"
+    },
+    {
+      "type": "select",
+      "id": "flex_align_desktop",
+      "label": "Text alignment",
+      "default": "align--middle-center-desktop",
+      "options": [
+        {"value": "align--top-left-desktop", "label": "Top left"},
+        {"value": "align--top-center-desktop", "label": "Top center"},
+        {"value": "align--top-right-desktop", "label": "Top right"},
+        {"value": "align--middle-left-desktop", "label": "Middle left"},
+        {"value": "align--middle-center-desktop", "label": "Absolute center"},
+        {"value": "align--middle-right-desktop", "label": "Middle right"},
+        {"value": "align--bottom-left-desktop", "label": "Bottom left"},
+        {"value": "align--bottom-center-desktop", "label": "Bottom center"},
+        {"value": "align--bottom-right-desktop", "label": "Bottom right"}
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "select",
+      "id": "flex_align_mobile",
+      "label": "Text alignment",
+      "default": "align--middle-center-mobile",
+      "options": [
+        {"value": "align--top-left-mobile", "label": "Top left"},
+        {"value": "align--top-center-mobile", "label": "Top center"},
+        {"value": "align--top-right-mobile", "label": "Top right"},
+        {"value": "align--middle-left-mobile", "label": "Middle left"},
+        {"value": "align--middle-center-mobile", "label": "Absolute center"},
+        {"value": "align--middle-right-mobile", "label": "Middle right"},
+        {"value": "align--bottom-left-mobile", "label": "Bottom left"},
+        {"value": "align--bottom-center-mobile", "label": "Bottom center"},
+        {"value": "align--bottom-right-mobile", "label": "Bottom right"}
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "paragraph",
+      "content": "Overrides color scheme. Set to Transparent to revert back to using color schemes."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_text_background",
+      "label": "Show text background",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background"
+    },
+    {
+      "type": "color",
+      "id": "color",
+      "label": "Text"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "info": "Increase contrast for legible text.",
+      "unit": "%",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay_text",
+      "label": "Overlay behind text only",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Video slide"
+          }
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
