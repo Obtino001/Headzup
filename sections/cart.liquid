@@ -27,7 +27,7 @@
 {%- capture free_shipping -%}
   {%- assign block = free_shipping_block[0] -%}
   {%- if settings.free_shipping_limit != blank and block.settings.message != blank -%}
-    {%- render 'free-shipping' message: block.settings.message, color_scheme: block.settings.color_scheme, show_wheel: false, show_progress_bar: true -%}
+    {%- render 'free-shipping' message: block.settings.message, explainer_text: block.settings.explainer_text, color_scheme: block.settings.color_scheme, show_wheel: false, show_progress_bar: true -%}
   {%- endif -%}
 {%- endcapture -%}
 
@@ -217,24 +217,6 @@
           {% assign cart_gift_product = all_products[section.settings.gift_box_product] %}
           {% render 'gift-box-upsell', gift_box_product: cart_gift_product, position: 'cart' %}
 
-          <div class="cart__reassurance" data-animation="{{ animation_name }}" data-animation-duration="{{ animation_duration }}" data-animation-delay="{{ animation_delay }}" style="margin: 20px 0; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1);">
-            <div style="margin-bottom: 15px;">
-              {% render 'estimated-delivery' %}
-            </div>
-            <div class="cart-trust-badges" style="display: flex; gap: 15px; flex-wrap: wrap;">
-              <div class="cart-trust-badge" style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
-                {% render 'icon-truck' %} <span>Free delivery over 449 kr</span>
-              </div>
-              <div class="cart-trust-badge" style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
-                {% render 'icon-check' %} <span>365-day exchanges</span>
-              </div>
-              <div class="cart-trust-badge" style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
-                {% render 'icon-lock' %} <span>Secure payment</span>
-              </div>
-            </div>
-          </div>
-          {%- assign animation_delay = animation_delay | plus: animation_delay_increment -%}
-
           <collapsible-elements single="true">
             {%- for block in section.blocks -%}
               {%- assign animation_delay = forloop.index
@@ -284,6 +266,41 @@
 
                   {%- when 'gift-note' -%}
                     {%- render 'cart-block-gift-note', block: block -%}
+
+                  {%- when 'estimated-delivery' -%}
+                    <div class="cart-block cart__estimated-delivery" {{ block.shopify_attributes }}>
+                      {% render 'estimated-delivery' %}
+                    </div>
+
+                  {%- when 'trust-badges' -%}
+                    <div class="cart__reassurance" style="padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.1);" {{ block.shopify_attributes }}>
+                      <div class="cart-trust-badges__inner" style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        {%- if block.settings.badge_1_text != blank -%}
+                          <div class="cart-trust-badge" style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            {%- if block.settings.badge_1_icon != blank -%}
+                              {% render 'animated-icon', filename: block.settings.badge_1_icon %}
+                            {%- endif -%}
+                            <span>{{ block.settings.badge_1_text }}</span>
+                          </div>
+                        {%- endif -%}
+                        {%- if block.settings.badge_2_text != blank -%}
+                          <div class="cart-trust-badge" style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            {%- if block.settings.badge_2_icon != blank -%}
+                              {% render 'animated-icon', filename: block.settings.badge_2_icon %}
+                            {%- endif -%}
+                            <span>{{ block.settings.badge_2_text }}</span>
+                          </div>
+                        {%- endif -%}
+                        {%- if block.settings.badge_3_text != blank -%}
+                          <div class="cart-trust-badge" style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                            {%- if block.settings.badge_3_icon != blank -%}
+                              {% render 'animated-icon', filename: block.settings.badge_3_icon %}
+                            {%- endif -%}
+                            <span>{{ block.settings.badge_3_text }}</span>
+                          </div>
+                        {%- endif -%}
+                      </div>
+                    </div>
 
                   {%- when 'shipping-estimate' -%}
                     {%- render 'cart-block-shipping-calculator', block: block -%}
@@ -336,7 +353,11 @@
                               </div>
                             {%- endif -%}
                           </fieldset>
-                          <p style="margin-top: 10px; font-size: 13px; text-align: center;">By completing your purchase you accept our terms and conditions.</p>
+                          {%- if block.settings.terms_text != blank -%}
+                            <div class="cart__terms-text rte" style="margin-top: 10px; font-size: 13px; text-align: center;">
+                              {{ block.settings.terms_text }}
+                            </div>
+                          {%- endif -%}
                         </div>
                       </div>
 
@@ -476,6 +497,12 @@
           "default": "You are ||amount|| away from free shipping."
         },
         {
+          "type": "richtext",
+          "id": "explainer_text",
+          "label": "Explainer text",
+          "default": "<p>Free: pick up at package shop. Home delivery: +39 kr</p>"
+        },
+        {
           "type": "select",
           "id": "text_font_size",
           "label": "Text size",
@@ -535,6 +562,61 @@
           "id": "enable_additional_buttons",
           "label": "Enable additional checkout buttons",
           "default": false
+        },
+        {
+          "type": "richtext",
+          "id": "terms_text",
+          "label": "Terms and conditions text",
+          "default": "<p>By completing your purchase you accept our terms and conditions.</p>"
+        }
+      ]
+    },
+    {
+      "type": "estimated-delivery",
+      "name": "Estimated delivery",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "trust-badges",
+      "name": "Trust badges",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "badge_1_text",
+          "label": "Badge 1 text",
+          "default": "Free delivery over 449 kr"
+        },
+        {
+          "type": "text",
+          "id": "badge_1_icon",
+          "label": "Badge 1 icon (e.g. icon-truck)",
+          "default": "icon-truck"
+        },
+        {
+          "type": "text",
+          "id": "badge_2_text",
+          "label": "Badge 2 text",
+          "default": "365-day exchanges"
+        },
+        {
+          "type": "text",
+          "id": "badge_2_icon",
+          "label": "Badge 2 icon (e.g. icon-check)",
+          "default": "icon-check"
+        },
+        {
+          "type": "text",
+          "id": "badge_3_text",
+          "label": "Badge 3 text",
+          "default": "Secure payment"
+        },
+        {
+          "type": "text",
+          "id": "badge_3_icon",
+          "label": "Badge 3 icon (e.g. icon-lock)",
+          "default": "icon-lock"
         }
       ]
     },

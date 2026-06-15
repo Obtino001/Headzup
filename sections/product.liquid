@@ -128,7 +128,9 @@
   <script src="{{ 'product-sticky.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
-{% render 'sticky-add-to-cart', product: product %}
+{%- if section.settings.sticky_atc_enable -%}
+  {% render 'sticky-add-to-cart', product: product %}
+{%- endif -%}
 
 <product-component
   id="Product--{{ unique }}"
@@ -356,9 +358,9 @@
                     </div>
 
                   {%- when 'payment_badge' -%}
-                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: -10px; margin-bottom: 15px;">
-                      <a href="#" style="display: inline-flex; align-items: center; gap: 8px; font-weight: bold; text-decoration: none; padding: 5px 10px; background: #f4f4f4; border-radius: 4px; font-size: 14px;" data-popup-open="payment-calculator">
-                        {% render 'icon-lock' %} From 40 kr/month
+                    <div class="product__block block-padding product__payment-badge" {{ block.shopify_attributes }}>
+                      <a href="#PaymentCalculatorModal" class="payment-badge-link" data-popup-open="payment-calculator" style="display: inline-flex; align-items: center; gap: 8px; font-weight: bold; text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 14px; background: {{ block.settings.bg_color | default: '#f4f4f4' }};">
+                        {% render 'icon-lock' %} {{ block.settings.text | default: 'From 40 kr/month' }}
                       </a>
                     </div>
 
@@ -369,27 +371,30 @@
                     </div>
 
                   {%- when 'limited_urgency' -%}
-                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: 15px; margin-bottom: 15px; color: #d32f2f; font-weight: bold;">
+                    <div class="product__block block-padding product__limited-urgency" {{ block.shopify_attributes }}>
                       {%- assign current_variant = product.selected_or_first_available_variant -%}
-                      {%- if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity < 5 -%}
-                        <p style="margin: 0;">🔥 Hurry! Only {{ current_variant.inventory_quantity }} left in size {{ current_variant.title }}</p>
+                      {%- assign threshold = block.settings.threshold | default: 5 | plus: 0 -%}
+                      {%- if current_variant.inventory_management == 'shopify' and current_variant.inventory_policy == 'deny' and current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= threshold -%}
+                        <p class="urgency-text" style="color: {{ block.settings.text_color | default: '#d32f2f' }}; font-weight: bold; margin: 0;">
+                          {{ block.settings.urgency_text | default: '🔥 Hurry! Only [quantity] left in size [size]' | replace: '[quantity]', current_variant.inventory_quantity | replace: '[size]', current_variant.title }}
+                        </p>
                       {%- endif -%}
                       
                       {%- if product.metafields.custom.countdown_date != blank -%}
-                        <div class="countdown-timer" style="margin-top: 10px; font-size: 14px;">
+                        <div class="countdown-timer" style="margin-top: 10px; font-size: 14px; color: {{ block.settings.text_color | default: '#d32f2f' }}; font-weight: bold;">
                           ⏱️ Sale ends: <strong>{{ product.metafields.custom.countdown_date }}</strong>
                         </div>
                       {%- endif -%}
                     </div>
 
                   {%- when 'store_note' -%}
-                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: -10px; margin-bottom: 15px; font-size: 13px;">
-                      <p style="margin: 0;">📍 Try it in our store at Vesterbrogade 95H, Copenhagen</p>
+                    <div class="product__block block-padding product__store-note" {{ block.shopify_attributes }}>
+                      <div class="rte" style="margin: 0; font-size: 13px;">{{ block.settings.text | default: '<p>📍 Try it in our store at Vesterbrogade 95H, Copenhagen</p>' }}</div>
                     </div>
 
                   {%- when 'compare_models' -%}
-                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: 10px; margin-bottom: 15px;">
-                      <a href="#CompareModelsModal" data-popup-open style="text-decoration: underline; font-size: 14px;">Not sure which model? Compare fits</a>
+                    <div class="product__block block-padding product__compare-models" {{ block.shopify_attributes }}>
+                      <a href="#CompareModelsModal" data-popup-open style="text-decoration: underline; font-size: 14px;">{{ block.settings.link_text | default: 'Not sure which model? Compare fits' }}</a>
                       <popup-component class="compare-modal">
                         <dialog id="CompareModelsModal" class="product-modal" aria-hidden="true" inert data-scroll-lock-required>
                           <form method="dialog">
@@ -400,28 +405,34 @@
                               <button type="button" class="product-modal__close" data-popup-close aria-label="Close">
                                 {% render 'icon-cancel' %}
                               </button>
-                              <h3>Cap Guide: Find Your Style</h3>
-                              <table style="width: 100%; text-align: left; border-collapse: collapse; margin-top: 20px;">
-                                <thead>
-                                  <tr style="border-bottom: 1px solid #ddd;">
-                                    <th style="padding: 10px;">Model</th>
-                                    <th style="padding: 10px;">Fit</th>
-                                    <th style="padding: 10px;">Brim</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 10px;"><strong>59FIFTY</strong></td>
-                                    <td style="padding: 10px;">Structured, Fitted</td>
-                                    <td style="padding: 10px;">Flat</td>
-                                  </tr>
-                                  <tr style="border-bottom: 1px solid #ddd;">
-                                    <td style="padding: 10px;"><strong>9FIFTY</strong></td>
-                                    <td style="padding: 10px;">Adjustable Snapback</td>
-                                    <td style="padding: 10px;">Flat</td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                              <h3>{{ block.settings.modal_title | default: 'Cap Guide: Find Your Style' }}</h3>
+                              {%- if block.settings.page != blank -%}
+                                <div class="rte">{{ pages[block.settings.page].content }}</div>
+                              {%- elsif block.settings.fallback_html != blank -%}
+                                <div class="rte">{{ block.settings.fallback_html }}</div>
+                              {%- else -%}
+                                <table style="width: 100%; text-align: left; border-collapse: collapse; margin-top: 20px;">
+                                  <thead>
+                                    <tr style="border-bottom: 1px solid #ddd;">
+                                      <th style="padding: 10px;">Model</th>
+                                      <th style="padding: 10px;">Fit</th>
+                                      <th style="padding: 10px;">Brim</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr style="border-bottom: 1px solid #ddd;">
+                                      <td style="padding: 10px;"><strong>59FIFTY</strong></td>
+                                      <td style="padding: 10px;">Structured, Fitted</td>
+                                      <td style="padding: 10px;">Flat</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #ddd;">
+                                      <td style="padding: 10px;"><strong>9FIFTY</strong></td>
+                                      <td style="padding: 10px;">Adjustable Snapback</td>
+                                      <td style="padding: 10px;">Flat</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              {%- endif -%}
                             </div>
                           </div>
                         </dialog>
@@ -429,20 +440,46 @@
                     </div>
 
                   {%- when 'faq_presets' -%}
-                    <div class="product__block block-padding" {{ block.shopify_attributes }} style="margin-top: 30px;">
-                      <h3>Frequently Asked Questions</h3>
-                      <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-                        <summary style="cursor: pointer; font-weight: bold;">What size do I need?</summary>
-                        <p style="margin-top: 10px; font-size: 14px;">Please refer to our size guide on the product page. For fitted caps, measure the circumference of your head.</p>
-                      </details>
-                      <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-                        <summary style="cursor: pointer; font-weight: bold;">Can I exchange if it doesn't fit?</summary>
-                        <p style="margin-top: 10px; font-size: 14px;">Yes! We offer a 365-day exchange policy. You can exchange sizes easily.</p>
-                      </details>
-                      <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
-                        <summary style="cursor: pointer; font-weight: bold;">What's the difference between 59FIFTY and 9FIFTY?</summary>
-                        <p style="margin-top: 10px; font-size: 14px;">59FIFTY is a fitted cap with a structured crown and flat brim. 9FIFTY has the same structured crown and flat brim, but features an adjustable snapback closure.</p>
-                      </details>
+                    <div class="product__block block-padding product__faq-presets" {{ block.shopify_attributes }} style="margin-top: 30px;">
+                      {%- if block.settings.title != blank -%}
+                        <h3>{{ block.settings.title }}</h3>
+                      {%- else -%}
+                        <h3>Frequently Asked Questions</h3>
+                      {%- endif -%}
+                      
+                      {%- if block.settings.question_1 != blank and block.settings.answer_1 != blank -%}
+                        <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                          <summary style="cursor: pointer; font-weight: bold;">{{ block.settings.question_1 }}</summary>
+                          <div style="margin-top: 10px; font-size: 14px;" class="rte">{{ block.settings.answer_1 }}</div>
+                        </details>
+                      {%- else -%}
+                        <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                          <summary style="cursor: pointer; font-weight: bold;">What size do I need?</summary>
+                          <div style="margin-top: 10px; font-size: 14px;" class="rte"><p>Please refer to our size guide on the product page. For fitted caps, measure the circumference of your head.</p></div>
+                        </details>
+                        <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                          <summary style="cursor: pointer; font-weight: bold;">Can I exchange if it doesn't fit?</summary>
+                          <div style="margin-top: 10px; font-size: 14px;" class="rte"><p>Yes! We offer a 365-day exchange policy. You can exchange sizes easily.</p></div>
+                        </details>
+                        <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                          <summary style="cursor: pointer; font-weight: bold;">What's the difference between 59FIFTY and 9FIFTY?</summary>
+                          <div style="margin-top: 10px; font-size: 14px;" class="rte"><p>59FIFTY is a fitted cap with a structured crown and flat brim. 9FIFTY has the same structured crown and flat brim, but features an adjustable snapback closure.</p></div>
+                        </details>
+                      {%- endif -%}
+                      
+                      {%- if block.settings.question_2 != blank and block.settings.answer_2 != blank -%}
+                        <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                          <summary style="cursor: pointer; font-weight: bold;">{{ block.settings.question_2 }}</summary>
+                          <div style="margin-top: 10px; font-size: 14px;" class="rte">{{ block.settings.answer_2 }}</div>
+                        </details>
+                      {%- endif -%}
+                      
+                      {%- if block.settings.question_3 != blank and block.settings.answer_3 != blank -%}
+                        <details style="margin-bottom: 10px; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+                          <summary style="cursor: pointer; font-weight: bold;">{{ block.settings.question_3 }}</summary>
+                          <div style="margin-top: 10px; font-size: 14px;" class="rte">{{ block.settings.answer_3 }}</div>
+                        </details>
+                      {%- endif -%}
                     </div>
 
                   {%- when 'variants' -%}
@@ -956,6 +993,12 @@
       "type": "checkbox",
       "id": "product_sticky_enable",
       "label": "Enable sticky form",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sticky_atc_enable",
+      "label": "Enable mobile sticky add-to-cart bar",
       "default": true
     },
     {
@@ -3009,6 +3052,141 @@
           "unit": "px",
           "label": "Bottom",
           "default": 16
+        }
+      ]
+    },
+    {
+      "type": "payment_badge",
+      "name": "Payment badge",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "From 40 kr/month"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background color",
+          "default": "#f4f4f4"
+        }
+      ]
+    },
+    {
+      "type": "limited_urgency",
+      "name": "Limited urgency",
+      "settings": [
+        {
+          "type": "range",
+          "id": "threshold",
+          "label": "Inventory threshold",
+          "min": 1,
+          "max": 20,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "text",
+          "id": "urgency_text",
+          "label": "Urgency text",
+          "default": "🔥 Hurry! Only [quantity] left in size [size]",
+          "info": "Use [quantity] and [size] as placeholders."
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#d32f2f"
+        }
+      ]
+    },
+    {
+      "type": "store_note",
+      "name": "Store note",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>📍 Try it in our store at Vesterbrogade 95H, Copenhagen</p>"
+        }
+      ]
+    },
+    {
+      "type": "compare_models",
+      "name": "Compare models",
+      "settings": [
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "Not sure which model? Compare fits"
+        },
+        {
+          "type": "text",
+          "id": "modal_title",
+          "label": "Modal title",
+          "default": "Cap Guide: Find Your Style"
+        },
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Page content"
+        },
+        {
+          "type": "html",
+          "id": "fallback_html",
+          "label": "Fallback HTML",
+          "info": "Used if no page is selected."
+        }
+      ]
+    },
+    {
+      "type": "faq_presets",
+      "name": "FAQ presets",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Frequently Asked Questions"
+        },
+        {
+          "type": "text",
+          "id": "question_1",
+          "label": "Question 1",
+          "default": "What size do I need?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_1",
+          "label": "Answer 1",
+          "default": "<p>Please refer to our size guide on the product page. For fitted caps, measure the circumference of your head.</p>"
+        },
+        {
+          "type": "text",
+          "id": "question_2",
+          "label": "Question 2",
+          "default": "Can I exchange if it doesn't fit?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_2",
+          "label": "Answer 2",
+          "default": "<p>Yes! We offer a 365-day exchange policy. You can exchange sizes easily.</p>"
+        },
+        {
+          "type": "text",
+          "id": "question_3",
+          "label": "Question 3",
+          "default": "What's the difference between 59FIFTY and 9FIFTY?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer_3",
+          "label": "Answer 3",
+          "default": "<p>59FIFTY is a fitted cap with a structured crown and flat brim. 9FIFTY has the same structured crown and flat brim, but features an adjustable snapback closure.</p>"
         }
       ]
     }

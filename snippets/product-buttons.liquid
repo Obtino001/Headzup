@@ -212,10 +212,9 @@
             {%- if current_variant.available == false -%}
               <button
                 type="button"
-                class="btn {{ button_type }} {{ button_size }} {{ button_style }} klaviyo-bis-trigger"
-                style="margin-top: 10px; width: 100%;"
+                class="btn {{ button_type }} {{ button_size }} {{ button_style }} klaviyo-bis-trigger product__submit-bis"
               >
-                <span class="btn__text">Notify me when back in stock</span>
+                <span class="btn__text">{{ 'products.product.notify_me' | t | default: 'Notify me when back in stock' }}</span>
               </button>
             {%- endif -%}
           </div>
