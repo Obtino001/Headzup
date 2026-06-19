@@ -858,7 +858,7 @@ product-images .product__thumb.is-active:after {
 /* Content */
 .product__title__wrapper {
   gap: 8px; 
-  margin-top: 35px; 
+  margin-top: 15px; 
 }
 
 .product__form__outer .select-popout__toggle {
