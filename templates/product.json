@@ -120,6 +120,24 @@
             "data-region": "denmark"
           }
         },
+        "countdown_jFJ7N3": {
+          "type": "countdown",
+          "settings": {
+            "end_date": "2026-06-31",
+            "end_time": "11:59",
+            "period": "am",
+            "end_message": "<p>Offer has expired</p>",
+            "hide_on_complete": true,
+            "digits_font_size": "heading-x-large",
+            "text_font_size": "body-small",
+            "text": "<p>Limited time offer</p>",
+            "heading_font_size": "heading-x-small",
+            "bg_color": "",
+            "color": "",
+            "text_align": "text-center",
+            "padding_bottom": 16
+          }
+        },
         "payment_icons_eJiFgw": {
           "type": "payment-icons",
           "settings": {
@@ -194,6 +212,7 @@
         "variants_Lkjwdn",
         "buttons",
         "onskeskyen_wishlist_button_tfCaQD",
+        "countdown_jFJ7N3",
         "payment_icons_eJiFgw",
         "divider_KFN98n",
         "pickup",
