@@ -348,30 +348,27 @@
                       block_style: block_style
                     -%}
 
-                  {%- when 'variants' -%}
-                    {%- liquid
-                      assign size_guide_block = nil
-                      for section_block in section.blocks
-                        if section_block.type == 'ring_size'
-                          assign size_guide_block = section_block
-                          break
-                        endif
-                      endfor
-                    -%}
+                {%- when 'variants' -%}
                     {%- render 'product-variant-options',
-                      product: product,
-                      unique: unique,
-                      block: block,
-                      block_style: block_style,
-                      product_form_id: product_form_id,
-                      enable_size_chart: true,
-                      size_guide_block: size_guide_block
+                    product: product,
+                    unique: unique,
+                    block: block,
+                    block_style: block_style,
+                    product_form_id: product_form_id,
+                    enable_size_chart: true,
                     -%}
 
-                  {%- when 'ring_size' -%}
-                                            <div class="rsg-inline-wrapper" style="margin-top: 5px; margin-bottom: 15px;">
-                          {%- render 'size-guide', block: block,%}
-                                            </div>
+                    {%- comment -%} This renders the size guide right under the variants if the block exists {%- endcomment -%}
+                    {%- if size_guide_block != nil -%}
+                    <div class="rsg-inline-wrapper" style="margin-top: 5px; margin-bottom: 15px;">
+                      {%- render 'size-guide', block: size_guide_block -%}
+                    </div>
+                    {%- endif -%}
+
+                    {%- when 'ring_size' -%}
+                    <div class="rsg-inline-wrapper" style="margin-top: 5px; margin-bottom: 15px;">
+                    {%- render 'size-guide', block: block -%}
+                    </div>
 
                   {%- when 'buttons' -%}
                     {%- render 'product-buttons',
