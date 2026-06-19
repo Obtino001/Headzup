@@ -816,7 +816,7 @@
       </div>
 
       {%- for block in section.blocks -%}
-        {%- if block.type == 'product_tabs-new' -%}
+        {%- if block.type == 'product-tabs-new' -%}
           {% render 'product-tabs', block: block %}
         {%- endif -%}
       {%- endfor -%}
@@ -3066,7 +3066,7 @@
       ]
     },
     {
-  "type": "product_tabs-new",
+  "type": "product-tabs-new",
   "name": "Bike Info & Features",
   "limit": 1,
   "settings": [
