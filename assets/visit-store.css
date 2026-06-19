@@ -26,6 +26,40 @@
   background: #e8e6e1;
 }
 
+.visit-store__media--map {
+  min-height: 560px;
+  background: #e8e6e1;
+}
+
+.visit-store__map,
+.visit-store__map-embed iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  border: 0;
+  display: block;
+  filter: grayscale(15%) contrast(1.04);
+}
+
+.visit-store__map-embed {
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+}
+
+.visit-store__map-embed iframe {
+  min-height: 560px;
+}
+
+@media (max-width: 989px) {
+  .visit-store__media--map,
+  .visit-store__map,
+  .visit-store__map-embed,
+  .visit-store__map-embed iframe {
+    min-height: 320px;
+  }
+}
+
 .visit-store__media img,
 .visit-store__media .placeholder-svg {
   width: 100%;
