@@ -372,7 +372,7 @@
         
         <div class="rsg-diagram-wrapper">
           {%- if block.settings.tab1_image != blank -%}
-            {{ block.settings.tab1_image | image_url: width: 300 | image_tag: loading: 'lazy' }}
+            {{ block.settings.tab1_image | image_url: width: 1300 | image_tag: loading: 'lazy' }}
           {%- else -%}
             {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
           {%- endif -%}
