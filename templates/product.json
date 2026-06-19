@@ -20,6 +20,14 @@
             "padding_bottom": 8
           }
         },
+        "trustpilot_RcGQRK": {
+          "type": "trustpilot",
+          "settings": {
+            "trustpilot_text": "4,3 stjerner | Baseret på +575 anmeldelser",
+            "trustpilot_link": "",
+            "padding_bottom": 16
+          }
+        },
         "price": {
           "type": "price",
           "settings": {
@@ -27,6 +35,8 @@
             "padding_bottom": 16
           }
         },
+<<<<<<< Updated upstream
+=======
         "trustpilot": {
           "type": "trustpilot",
           "settings": {
@@ -34,6 +44,7 @@
             "padding_bottom": 16
           }
         },
+>>>>>>> Stashed changes
         "text_W4nY4h": {
           "type": "text",
           "settings": {
@@ -160,8 +171,12 @@
       },
       "block_order": [
         "title",
+        "trustpilot_RcGQRK",
         "price",
+<<<<<<< Updated upstream
+=======
         "trustpilot",
+>>>>>>> Stashed changes
         "text_W4nY4h",
         "variants_Lkjwdn",
         "ring_size_guide",
