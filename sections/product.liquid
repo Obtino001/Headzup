@@ -358,13 +358,6 @@
                     enable_size_chart: true,
                     -%}
 
-                    {%- comment -%} This renders the size guide right under the variants if the block exists {%- endcomment -%}
-                    {%- if size_guide_block != nil -%}
-                    <div class="rsg-inline-wrapper" style="margin-top: 5px; margin-bottom: 15px;">
-                      {%- render 'size-guide', block: size_guide_block -%}
-                    </div>
-                    {%- endif -%}
-
                     {%- when 'ring_size' -%}
                     <div class="rsg-inline-wrapper" style="margin-top: 5px; margin-bottom: 15px;">
                     {%- render 'size-guide', block: block -%}
