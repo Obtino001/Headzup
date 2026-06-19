@@ -708,15 +708,20 @@
         <a class="product-link" href="{{ product_url }}" data-product-link="{{ product_url }}">
 
           
-          {% if product.metafields.custom.short_name != blank %}
+          {%- liquid
+            assign display_title = product.title | strip_html | escape
+            if product.metafields.custom.short_title != blank
+              assign display_title = product.metafields.custom.short_title
+            elsif product.metafields.custom.short_name != blank
+              assign display_title = product.metafields.custom.short_name
+            else
+              assign display_title = display_title | truncate: 35
+            endif
+          -%}
+          {% if product.vendor != blank %}
             <p class="product-item__vendor">{{ product.vendor | upcase }}</p>
-            <p class="product-item__short-name"> {{ product.metafields.custom.short_name }} </p>
-          {% elsif product.vendor != blank %}
-            <p class="product-item__vendor">{{ product.vendor | upcase }}</p>
-            <p class="product-item__title product-item__short-name">{{ product.title | strip_html | escape }}</p>
-          {% else %}
-            <p class="product-item__title product-item__short-name">{{ product.title | strip_html | escape }}</p>
           {% endif %}
+          <p class="product-item__title product-item__short-name">{{ display_title }}</p>
          
 
           <div class="product-item__price__holder{% if has_siblings %} has-siblings{% endif %}">

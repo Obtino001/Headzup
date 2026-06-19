@@ -26,7 +26,7 @@
     {% endif %}
     <h1 class="product__title {{ block.settings.heading_font_size | default: 'heading-small' }}">
       {%- unless is_title_linked -%}
-        <span data-zoom-caption>{% if product.metafields.custom.short_name.value %}{{ product.metafields.custom.short_name.value }}{% else %}{{ product.title }}{% endif %}</span>
+        <span data-zoom-caption>{{ product.title }}</span>
       {%- else -%}
         <a href="{{ product.url }}">
           <span class="product-item__short-name-product-api" data-zoom-caption>{{ product.title | strip_html }}</span>
