@@ -3,20 +3,7 @@
   Vanilla CSS, Web Component, 100% Editable Schema
 {%- endcomment -%}
 
-{%- assign downcased_type = product.type | downcase -%}
-{%- assign downcased_title = product.title | downcase -%}
-{%- assign is_ring = false -%}
-{%- if downcased_type contains 'ring' or downcased_title contains 'ring' -%}
-  {%- assign is_ring = true -%}
-{%- endif -%}
-{%- for tag in product.tags -%}
-  {%- assign downcased_tag = tag | downcase -%}
-  {%- if downcased_tag contains 'ring' -%}
-    {%- assign is_ring = true -%}
-  {%- endif -%}
-{%- endfor -%}
 
-{%- if is_ring -%}
 
 <style>
   /* --- Trigger Button --- */
@@ -615,4 +602,4 @@
     customElements.define('ring-size-modal', RingSizeModal);
   }
 </script>
-{%- endif -%}
+
