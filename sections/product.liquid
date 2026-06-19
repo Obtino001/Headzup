@@ -372,7 +372,7 @@
                     {%- for inline_block in section.blocks -%}
                         {%- if inline_block.type == 'ring_size' -%}
                           <div class="rsg-inline-wrapper" style="margin-top: 5px; margin-bottom: 15px;">
-                            {%- render 'ring', block: inline_block -%}
+                            {%- render 'size-guide', block: inline_block -%}
                           </div>
                         {%- endif -%}
                       {%- endfor -%}
