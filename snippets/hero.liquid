@@ -276,43 +276,6 @@
                     {%- endif -%}
                   </div>
 
-                {%- when 'trust_badges' -%}
-                  {%- assign animation_order = animation_order | plus: 1 -%}
-                  <div
-                    class="hero__trust-badges"
-                    data-aos="hero"
-                    data-aos-anchor="{{ animation_anchor }}"
-                    data-aos-order="{{ animation_order }}"
-                    {{ block.shopify_attributes }}
-                  >
-                    <div class="trust-badges-wrapper hero-trust-badges">
-                      {%- if block.settings.badge_1_text != blank -%}
-                        <div class="trust-badge-item hero-trust-badge">
-                          {% render 'icon-check' %}
-                          <span>{{ block.settings.badge_1_text }}</span>
-                        </div>
-                      {%- endif -%}
-                      {%- if block.settings.badge_2_text != blank -%}
-                        <div class="trust-badge-item hero-trust-badge">
-                          {% render 'icon-check' %}
-                          <span>{{ block.settings.badge_2_text }}</span>
-                        </div>
-                      {%- endif -%}
-                      {%- if block.settings.badge_3_text != blank -%}
-                        <div class="trust-badge-item hero-trust-badge">
-                          {% render 'icon-check' %}
-                          <span>{{ block.settings.badge_3_text }}</span>
-                        </div>
-                      {%- endif -%}
-                      {%- if block.settings.badge_4_text != blank -%}
-                        <div class="trust-badge-item hero-trust-badge">
-                          {% render 'icon-check' %}
-                          <span>{{ block.settings.badge_4_text }}</span>
-                        </div>
-                      {%- endif -%}
-                    </div>
-                  </div>
-
                 {%- when 'code' -%}
                   {%- assign animation_order = animation_order | plus: 1 -%}
 

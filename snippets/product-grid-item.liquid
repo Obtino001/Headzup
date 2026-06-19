@@ -417,14 +417,11 @@
       data-aos-duration="{{ aos_duration }}"
       data-aos-anchor="{{ aos_anchor }}">{{ 'products.product.pre_order' | t }}</span>
   {%- elsif on_sale and sold_out == false -%}
-    {% assign discount = product.compare_at_price | minus: product.price %}
     <span class="sale-box {{ badge_alignment }}"
       data-aos="fade"
       data-aos-delay="{{ aos_delay }}"
       data-aos-duration="{{ aos_duration }}"
-      data-aos-anchor="{{ aos_anchor }}">
-      <span class="sale-box__text">{{ 'products.product.save' | t | default: 'Save' }}</span> <span class="sale-box__amount">{{ discount | money }}</span>
-    </span>
+      data-aos-anchor="{{ aos_anchor }}">{{ 'products.product.on_sale' | t }}</span>
   {%- endif -%}
 
   {%- if settings.quickview_enable and current_variant -%}
@@ -717,10 +714,6 @@
             <p class="product-item__title product-item__short-name">{{ product.title | strip_html | escape }}</p>
           {% endif %}
          
-          <!-- Review widget placeholder -->
-          <div class="product-item__reviews">
-            {%- render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: false, product: product -%}
-          </div>
 
           <div class="product-item__price__holder{% if has_siblings %} has-siblings{% endif %}">
             {%- if any_sibling_cutline or product_item_cutline != blank -%}
