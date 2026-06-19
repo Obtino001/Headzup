@@ -7,9 +7,15 @@
   endif
 
   assign directions_url = section.settings.directions_url
-  if directions_url == blank and section.settings.address != blank
-    assign directions_url = 'https://www.google.com/maps/dir/?api=1&destination=' | append: section.settings.address | url_encode
+  assign map_query = section.settings.map_address | default: 'Vesterbrogade 95H, 1620 København V, Denmark'
+  assign map_zoom = section.settings.map_zoom | default: 16
+  assign map_embed_url = 'https://maps.google.com/maps?q=' | append: map_query | url_encode | append: '&t=&z=' | append: map_zoom | append: '&ie=UTF8&iwloc=&output=embed'
+
+  if directions_url == blank
+    assign directions_url = 'https://www.google.com/maps/dir/?api=1&destination=' | append: map_query | url_encode
   endif
+
+  assign left_media_type = section.settings.left_media_type | default: 'image'
 -%}
 
 {%- style -%}
@@ -27,8 +33,23 @@
 >
   <div class="{{ section.settings.width }}">
     <div class="visit-store__grid{% if section.settings.reverse_layout %} visit-store__grid--reversed{% endif %}">
-      <div class="visit-store__media">
-        {%- if section.settings.image != blank -%}
+      <div class="visit-store__media{% if left_media_type == 'map' %} visit-store__media--map{% endif %}">
+        {%- if left_media_type == 'map' -%}
+          {%- if section.settings.map_embed != blank -%}
+            <div class="visit-store__map-embed">
+              {{ section.settings.map_embed }}
+            </div>
+          {%- else -%}
+            <iframe
+              class="visit-store__map"
+              src="{{ map_embed_url }}"
+              allowfullscreen
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="{{ section.settings.heading | default: 'Store location' | escape }}"
+            ></iframe>
+          {%- endif -%}
+        {%- elsif section.settings.image != blank -%}
           {%- render 'image',
             image: section.settings.image,
             sizes: '(min-width: 990px) 50vw, 100vw',
@@ -122,15 +143,52 @@
       "content": "Media"
     },
     {
+      "type": "select",
+      "id": "left_media_type",
+      "label": "Left column media",
+      "default": "image",
+      "options": [
+        {"value": "image", "label": "Store image"},
+        {"value": "map", "label": "Google Map embed"}
+      ]
+    },
+    {
       "type": "image_picker",
       "id": "image",
       "label": "Store image",
-      "info": "2000 x 1400px recommended"
+      "info": "Used when left column media is set to Store image. 2000 x 1400px recommended."
+    },
+    {
+      "type": "header",
+      "content": "Map embed",
+      "info": "Shown when left column media is Google Map embed"
+    },
+    {
+      "type": "text",
+      "id": "map_address",
+      "label": "Map address",
+      "default": "Vesterbrogade 95H, 1620 København V, Denmark",
+      "info": "Used to auto-generate the map iframe"
+    },
+    {
+      "type": "range",
+      "id": "map_zoom",
+      "label": "Map zoom level",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "default": 16
+    },
+    {
+      "type": "html",
+      "id": "map_embed",
+      "label": "Custom map embed code",
+      "info": "Optional. Paste the full iframe HTML from Google Maps → Share → Embed a map. Overrides the auto-generated map."
     },
     {
       "type": "checkbox",
       "id": "reverse_layout",
-      "label": "Image on right",
+      "label": "Media on right",
       "default": false
     },
     {
