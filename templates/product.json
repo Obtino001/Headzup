@@ -12,20 +12,20 @@
     "main": {
       "type": "product",
       "blocks": {
-        "title": {
-          "type": "title",
-          "settings": {
-            "subheading_option": "breadcrumb",
-            "heading_font_size": "heading-medium",
-            "padding_bottom": 8
-          }
-        },
         "trustpilot_RcGQRK": {
           "type": "trustpilot",
           "settings": {
             "trustpilot_text": "4,3 stjerner | Baseret på +575 anmeldelser",
             "trustpilot_link": "",
             "padding_bottom": 42
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {
+            "subheading_option": "breadcrumb",
+            "heading_font_size": "heading-medium",
+            "padding_bottom": 8
           }
         },
         "price": {
@@ -218,8 +218,8 @@
         }
       },
       "block_order": [
-        "title",
         "trustpilot_RcGQRK",
+        "title",
         "price",
         "text_W4nY4h",
         "inventory_countdown_ePdH6p",
