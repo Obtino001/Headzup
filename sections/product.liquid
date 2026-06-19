@@ -761,6 +761,48 @@
                         </div>
                       {%- endif -%}
                     </div>
+                  {%- when 'trustpilot' -%}
+                    <div
+                      class="product__block product__trustpilot block-padding"
+                      {{ block.shopify_attributes }}
+                      {{ block_style }}
+                      style="margin-bottom: var(--block-padding-bottom, 16px);"
+                    >
+                      {%- if block.settings.trustpilot_link != blank -%}
+                        <a href="{{ block.settings.trustpilot_link }}" target="_blank" rel="noopener" class="product__trustpilot-link" style="display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; flex-wrap: wrap; vertical-align: middle;">
+                      {%- else -%}
+                        <div class="product__trustpilot-wrapper" style="display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; vertical-align: middle;">
+                      {%- endif -%}
+
+                        {%- if block.settings.trustpilot_image != blank -%}
+                          <div class="product__trustpilot-image" style="flex-shrink: 0; display: flex; align-items: center; max-width: 120px;">
+                            {%- render 'image',
+                              image: block.settings.trustpilot_image,
+                              width: 120,
+                              sizes: '120px',
+                              widths: '120, 240'
+                            -%}
+                          </div>
+                        {%- else -%}
+                          <div class="product__trustpilot-stars" style="display: inline-flex; gap: 3px; flex-shrink: 0; align-items: center; vertical-align: middle;">
+                            {%- for i in (1..5) -%}
+                              <span style="background-color: #00b67a; color: white; display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; border-radius: 2px; font-family: sans-serif; font-size: 13px; font-weight: bold; line-height: 1;">★</span>
+                            {%- endfor -%}
+                          </div>
+                        {%- endif -%}
+
+                        {%- if block.settings.trustpilot_text != blank -%}
+                          <span class="product__trustpilot-text" style="font-size: 13px; font-weight: 500; color: #1a1a1a; letter-spacing: 0;">
+                            {{ block.settings.trustpilot_text }}
+                          </span>
+                        {%- endif -%}
+
+                      {%- if block.settings.trustpilot_link != blank -%}
+                        </a>
+                      {%- else -%}
+                        </div>
+                      {%- endif -%}
+                    </div>
                 {%- endcase -%}
               {%- endfor -%}
             </div>
@@ -2383,7 +2425,15 @@
         {
           "type": "video",
           "id": "tab2_video",
-          "label": "Tab 2 Video"
+          "label": "Tab 2 Video",
+          "info": "Upload an MP4/MOV file. Used when set."
+        },
+        {
+          "type": "video_url",
+          "id": "tab2_video_youtube",
+          "label": "Tab 2 YouTube link",
+          "accept": ["youtube"],
+          "info": "Used when no uploaded video is set. Paste a YouTube URL."
         },
         {
           "type": "textarea",
@@ -2918,6 +2968,43 @@
           "unit": "px",
           "label": "Bottom",
           "default": 8
+        }
+      ]
+    },
+    {
+      "type": "trustpilot",
+      "name": "Trustpilot Badge",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "trustpilot_image",
+          "label": "Trustpilot Stars Image",
+          "info": "Upload custom stars image or Trustpilot logo. If empty, default 5 green stars will be rendered."
+        },
+        {
+          "type": "text",
+          "id": "trustpilot_text",
+          "label": "Review Text",
+          "default": "4,3 stjerner | Baseret på +575 anmeldelser"
+        },
+        {
+          "type": "url",
+          "id": "trustpilot_link",
+          "label": "Trustpilot Link URL"
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom",
+          "default": 16
         }
       ]
     },
