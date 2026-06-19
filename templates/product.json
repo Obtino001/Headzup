@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 /*
  * ------------------------------------------------------------
  * IMPORTANT: The contents of this file are auto-generated.
@@ -8,8 +7,6 @@
  * made to this file may be overwritten.
  * ------------------------------------------------------------
  */
-=======
->>>>>>> Stashed changes
 {
   "sections": {
     "main": {
@@ -23,6 +20,14 @@
             "padding_bottom": 8
           }
         },
+        "trustpilot_RcGQRK": {
+          "type": "trustpilot",
+          "settings": {
+            "trustpilot_text": "4,3 stjerner | Baseret på +575 anmeldelser",
+            "trustpilot_link": "",
+            "padding_bottom": 16
+          }
+        },
         "price": {
           "type": "price",
           "settings": {
@@ -30,28 +35,13 @@
             "padding_bottom": 16
           }
         },
-<<<<<<< Updated upstream
-=======
-        "trustpilot": {
-          "type": "trustpilot",
-          "settings": {
-            "trustpilot_text": "4,3 stjerner | Baseret på +575 anmeldelser",
-            "padding_bottom": 16
-          }
-        },
->>>>>>> Stashed changes
         "text_W4nY4h": {
           "type": "text",
           "settings": {
             "title": "",
             "heading_font_size": "body-medium",
-<<<<<<< Updated upstream
             "image_icon": "shopify://shop_images/SVG.svg",
             "text": "<p>Del dit køb op i 4, 6, 8 eller 10 betalinger</p>",
-=======
-            "image_icon": "shopify:\/\/shop_images\/SVG.svg",
-            "text": "<p>Del dit køb op i 4, 6, 8 eller 10 betalinger<\/p>",
->>>>>>> Stashed changes
             "text_font_size": "body-medium",
             "text_alignment": "text-left",
             "layout": "left",
@@ -61,11 +51,6 @@
         "variants_Lkjwdn": {
           "type": "variants",
           "settings": {
-<<<<<<< Updated upstream
-=======
-            "info_page": "storrelsesguide",
-            "size_chart_style": "text",
->>>>>>> Stashed changes
             "subscriptions_enable_selectors": false,
             "padding_bottom": 0
           }
@@ -86,11 +71,7 @@
           }
         },
         "onskeskyen_wishlist_button_tfCaQD": {
-<<<<<<< Updated upstream
           "type": "shopify://apps/onskeskyen/blocks/wishlist-button/be6e5a80-54ea-40af-aa80-5746282173b8",
-=======
-          "type": "shopify:\/\/apps\/onskeskyen\/blocks\/wishlist-button\/be6e5a80-54ea-40af-aa80-5746282173b8",
->>>>>>> Stashed changes
           "settings": {
             "text": "TILFØJ TIL ØNSKESKYEN",
             "rounded": "none",
@@ -139,29 +120,17 @@
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": "",
-<<<<<<< Updated upstream
             "text": "<p>Fri fragt over 449 kr. </p>",
-=======
-            "text": "<p>Fri fragt over 449 kr. <\/p>",
->>>>>>> Stashed changes
             "text_font_size": "body-small",
             "icon_name_2": "icon-location",
             "icon_size_2": 20,
             "icon_color_2": "",
-<<<<<<< Updated upstream
             "text_2": "<p>1-3 dages levering</p>",
-=======
-            "text_2": "<p>1-3 dages levering<\/p>",
->>>>>>> Stashed changes
             "text_font_size_2": "body-small",
             "icon_name_3": "icon-recycle",
             "icon_size_3": 20,
             "icon_color_3": "",
-<<<<<<< Updated upstream
             "text_3": "<p>365 dages returret</p>",
-=======
-            "text_3": "<p>365 dages returret<\/p>",
->>>>>>> Stashed changes
             "text_font_size_3": "body-small",
             "width": "full",
             "padding_bottom": 16
@@ -185,11 +154,8 @@
       },
       "block_order": [
         "title",
+        "trustpilot_RcGQRK",
         "price",
-<<<<<<< Updated upstream
-=======
-        "trustpilot",
->>>>>>> Stashed changes
         "text_W4nY4h",
         "variants_Lkjwdn",
         "buttons",
@@ -229,11 +195,7 @@
             "title": "Icon heading",
             "heading_font_size": "heading-small",
             "icon_alignment": "left",
-<<<<<<< Updated upstream
             "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.</p>",
-=======
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>",
->>>>>>> Stashed changes
             "text_alignment": "text-left"
           }
         },
@@ -246,11 +208,7 @@
             "title": "Fast shipping",
             "heading_font_size": "heading-small",
             "icon_alignment": "left",
-<<<<<<< Updated upstream
             "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.</p>",
-=======
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>",
->>>>>>> Stashed changes
             "text_alignment": "text-left"
           }
         },
@@ -263,11 +221,7 @@
             "title": "Order tracking",
             "heading_font_size": "heading-small",
             "icon_alignment": "left",
-<<<<<<< Updated upstream
             "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.</p>",
-=======
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>",
->>>>>>> Stashed changes
             "text_alignment": "text-left"
           }
         },
@@ -280,11 +234,7 @@
             "title": "Get in touch",
             "heading_font_size": "heading-small",
             "icon_alignment": "left",
-<<<<<<< Updated upstream
             "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.</p>",
-=======
-            "text": "<p>Use this to answer some common questions you hear from your customers. You could discuss product details, size fit, shipping policies, or anything you think would help merchants make an informed decision about your products. This section will appear across all products.<\/p>",
->>>>>>> Stashed changes
             "text_alignment": "text-left"
           }
         }
@@ -391,8 +341,4 @@
     "related",
     "1762707182514cb288"
   ]
-<<<<<<< Updated upstream
 }
-=======
-}
->>>>>>> Stashed changes
