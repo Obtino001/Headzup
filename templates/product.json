@@ -48,13 +48,6 @@
             "padding_bottom": 16
           }
         },
-        "variants_Lkjwdn": {
-          "type": "variants",
-          "settings": {
-            "subscriptions_enable_selectors": false,
-            "padding_bottom": 0
-          }
-        },
         "ring_size_TVjGKw": {
           "type": "ring_size",
           "name": "Size Guide",
@@ -62,7 +55,7 @@
             "trigger_text": "Size Guide",
             "modal_heading": "RING SIZE GUIDE",
             "tab1_title": "MEASURE MY OWN RING",
-            "tab1_instructions": "1. Use a ring that fits the desired finger.\n2. Measure the internal diameter of the ring (in mm). Ensure your ruler starts at the 0mm mark.",
+            "tab1_instructions": "Hos Headz Up tilbyder vi et bredt udvalg af caps og hatte i forskellige størrelser. Det er vigtigt at finde den rette størrelse for at opnå den perfekte pasform og komfort. Her får du nogle nyttige tips til at finde din cap størrelse.\n\n \n\nFørst og fremmest er der forskel på hvilken type kasket man prøver. Baseball caps med rund skygge (buet skygge) er ofte lavere i fronten, og smallere i siden. Derfor kan en fitted cap, eller snapback med flad skygge virke højere og bredere. Faktisk er de fleste kasketter mulige at justere. Du kan enten bøje skyggen lidt ud eller ind, og derved også se at kasketten former sig konstruktionsmæssigt. Hvis du ønsker en fladere kasket så kan du med fordel bøje den lidt. Det samme gør sig gældende hvis du ønsker en bredere cap. \n\n \n\n- Mål dit hovede!\n\nDu kan med fordel finde et fleksibelt målebånd og måle fra panden og hele vejen rundt. Placer båndet der hvor du forestiller dig at kasketten skal sidde. De fleste har deres kasket siddende lige over ørene. Noter dig målene i centimer. Det kan også være at du har en studenter hue som har et mål indeni.  \n\n \n\n- Prøv dig frem hos os!\n\nDu er altid velkommen i vores butik/showroom på Vesterbrogade 95 i København. Her kan du både prøve de forskellige størrelser, og spørge om råd og vejledning. Du kan både afhente dine pakker hos os, eller købe direkte i vores butik. \n\nHvis du har mulighed for at prøve din kasket på først. Så kan du prøve dig frem og på den måde lokalisere hvilken type kasket der passer bedst til dit hovede.\n\n \n\n- Undersøg om du har en kasket derhjemme i forvejen som passer godt\n\nDet kan fx være at du allerede har en kasket derhjemme som passer godt, og så kan du tage udgangspunkt i den. Ofte sidder de på samme både indenfor de samme brands, og modeller. Men det kan også være du har en derhjemme som ikke passer så godt, og så er det et ligeså godt udgangspunkt for at se på om den skal være mindre eller større. Måske skal det være en helt anden pasform. \n\n \n\nSe vores sizeguide fra New Era\n\nØnsker du stadig at måle dit hovede og finde din pasform, så se vores størrelsesguide herunder! Vi har har medregnet nogle forskellige sizeguides fra New Era, Yupoong og Flexfit. + en video. \n\n \n\nSkulle du alligevel være i tvivl, så tag endelig fat i os på Facebook, Instagram, info@headzup.dk eller på telefon: 31326848.\n\n \n\n Se size guide video fra New Era herunder:",
             "t1_col1_heading": "Internal Diameter (mm)",
             "t1_col2_heading": "US/CAN",
             "t1_col3_heading": "UK/AUS",
@@ -85,6 +78,13 @@
             "footer_phone_subtext": "(North America only)",
             "footer_store_text": "Visit a Store",
             "footer_store_url": ""
+          }
+        },
+        "variants_Lkjwdn": {
+          "type": "variants",
+          "settings": {
+            "subscriptions_enable_selectors": false,
+            "padding_bottom": 0
           }
         },
         "buttons": {
@@ -189,8 +189,8 @@
         "trustpilot_RcGQRK",
         "price",
         "text_W4nY4h",
-        "variants_Lkjwdn",
         "ring_size_TVjGKw",
+        "variants_Lkjwdn",
         "buttons",
         "onskeskyen_wishlist_button_tfCaQD",
         "payment_icons_eJiFgw",
