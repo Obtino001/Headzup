@@ -349,6 +349,15 @@
                     -%}
 
                   {%- when 'variants' -%}
+                    {%- liquid
+                      assign size_guide_block = nil
+                      for section_block in section.blocks
+                        if section_block.type == 'ring_size'
+                          assign size_guide_block = section_block
+                          break
+                        endif
+                      endfor
+                    -%}
                     {%- render 'product-variant-options',
                       product: product,
                       unique: unique,
@@ -356,14 +365,14 @@
                       block_style: block_style,
                       product_form_id: product_form_id,
                       enable_size_chart: true,
-                      section: section
+                      size_guide_block: size_guide_block
                     -%}
 
                   {%- when 'ring_size' -%}
                     {%- liquid
                       assign size_guide_modal_id = 'SizeGuideModal-' | append: block.id
                     -%}
-                    <div class="visually-hidden" {{ block.shopify_attributes }}>
+                    <div {{ block.shopify_attributes }} style="display: contents;">
                       {%- render 'size-guide', block: block, part: 'modal', modal_id: size_guide_modal_id -%}
                       {%- render 'size-guide', block: block, part: 'assets', modal_id: size_guide_modal_id -%}
                     </div>

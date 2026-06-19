@@ -12,13 +12,17 @@
   endif
 
   assign size_guide_blocks = section.blocks | where: 'type', 'ring_size'
-  assign size_guide_block = size_guide_blocks.first
-  if enable_size_chart and size_guide_block == blank
+  if size_guide_block == blank
+    assign size_guide_block = size_guide_blocks.first
+  endif
+
+  if enable_size_chart == false or size_guide_block == blank
     assign enable_size_chart = false
   endif
 
   if size_guide_block != blank
     assign size_guide_modal_id = 'SizeGuideModal-' | append: size_guide_block.id
+    assign show_size_chart = true
   endif
 
   assign variant_lines_setting = settings.variant_lines
@@ -27,17 +31,11 @@
   endif
 -%}
 
-{%- capture size_chart -%}
-  {%- if enable_size_chart and size_guide_block != blank -%}
-    {%- liquid
-      assign show_size_chart = true
-    -%}
-
-    {%- capture size_chart_link -%}
-      {%- render 'size-guide', block: size_guide_block, part: 'trigger', modal_id: size_guide_modal_id -%}
-    {%- endcapture -%}
-  {%- endif -%}
-{%- endcapture -%}
+{%- if size_guide_block != blank -%}
+  {%- capture size_chart_link -%}
+    {%- render 'size-guide', block: size_guide_block, part: 'trigger', modal_id: size_guide_modal_id -%}
+  {%- endcapture -%}
+{%- endif -%}
 
 {%- capture product_variant_options -%}
   {%- if settings.show_labels == false -%}
@@ -58,13 +56,21 @@
             assign is_size_option = false
             assign size_translation = 'general.size_chart.size' | t
             assign translation_string_size = size_translation | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | replace: ',', '____' | handle | replace: '____', ',' | append: ',' | prepend: ','
+            assign option_handle = option.name | handle
+            assign size_handles = 'size,storrelse,storlek,taille,talla,taglia,grosse' | split: ','
 
-            if translation_string_size contains option_name_handle_separator
+            for size_handle in size_handles
+              if option_handle == size_handle
+                assign is_size_option = true
+                assign show_size_link_separated = false
+                break
+              endif
+            endfor
+
+            if is_size_option == false and translation_string_size contains option_name_handle_separator
               assign is_size_option = true
               assign show_size_link_separated = false
             endif
-
-            echo size_chart
 
             comment
               Determine if current option matches swatch handle translations
@@ -110,7 +116,7 @@
             endif
           -%}
 
-          <div class="selector-wrapper{% if variant_lines_setting and is_size_option %} selector-wrapper--size{% elsif variant_lines_setting or is_swatch_option %} selector-wrapper--fullwidth{% endif %}"
+          <div class="selector-wrapper{% if is_size_option %} selector-wrapper--size{% elsif variant_lines_setting or is_swatch_option %} selector-wrapper--fullwidth{% endif %}"
             data-option-position="{{ option.position }}">
             {%- if variant_lines_setting or is_swatch_option or is_native_swatch_option -%}
               {%- liquid
@@ -135,7 +141,7 @@
               -%}
               <fieldset>
                 <div class="{{ radio_fieldset_class }}">
-                  <legend class="radio__legend{% if is_size_option and size_chart_link and show_size_link_separated == false %} radio__legend--size{% endif %}">
+                  <legend class="radio__legend{% if is_size_option and size_chart_link != blank %} radio__legend--size{% endif %}">
 
 
                     <span class="radio__legend__label">
@@ -148,7 +154,7 @@
                           </div>
                         {%- endif -%}
 
-                      {%- if is_size_option -%}
+                      {%- if is_size_option and size_chart_link != blank -%}
                         {{- size_chart_link -}}
                       {%- endif -%}
 
@@ -320,11 +326,11 @@
               <fieldset>
                 <div class="select__fieldset">
                   {%- capture input_id -%}{{ uniq_id }}-option-{{ option.position }}{%- endcapture -%}
-                  <legend class="radio__legend{% if is_size_option and size_chart_link and show_size_link_separated == false %} radio__legend--size{% endif %}">
+                  <legend class="radio__legend{% if is_size_option and size_chart_link != blank %} radio__legend--size{% endif %}">
                     <span class="radio__legend__label" id="{{ uniq_id }}-select-{{ option.name | handle }}-label">
                       <span class="radio__legend__option-name">{{ option.name }}:</span>
 
-                      {%- if is_size_option -%}
+                      {%- if is_size_option and size_chart_link != blank -%}
                         {{- size_chart_link -}}
                       {%- endif -%}
 

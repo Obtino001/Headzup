@@ -900,6 +900,18 @@ legend.radio__legend.radio__legend--size,
   content: none; 
 }
 
+.radio__legend--size .radio__legend__label {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.radio__legend--size .rsg-trigger-btn.radio__legend__link {
+  margin-left: auto;
+}
+
 .select-popout__option:hover {
   background-color: var(--grey-1);
 }

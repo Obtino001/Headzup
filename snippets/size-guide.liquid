@@ -5,7 +5,9 @@
 
 {%- liquid
   assign part = part | default: 'all'
-  assign modal_id = modal_id | default: 'SizeGuideModal-' | append: block.id
+  unless modal_id != blank
+    assign modal_id = 'SizeGuideModal-' | append: block.id
+  endunless
   if block.settings.trigger_text != blank
     assign trigger_text = block.settings.trigger_text
   else
