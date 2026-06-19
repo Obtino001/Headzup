@@ -1,10 +1,21 @@
 {%- comment -%}
-  MEJURI STYLE RING SIZE GUIDE MODAL
-  Vanilla CSS, Web Component, 100% Editable Schema
+  Size guide drawer modal
+  Renders trigger, modal, or assets via the part parameter: trigger | modal | assets | all
 {%- endcomment -%}
 
+{%- liquid
+  assign part = part | default: 'all'
+  unless modal_id != blank
+    assign modal_id = 'SizeGuideModal-' | append: block.id
+  endunless
+  if block.settings.trigger_text != blank
+    assign trigger_text = block.settings.trigger_text
+  else
+    assign trigger_text = 'general.size_chart.title' | t
+  endif
+-%}
 
-
+{%- if part == 'assets' or part == 'all' -%}
 <style>
   /* --- Trigger Button --- */
   .rsg-trigger-btn {
@@ -13,16 +24,12 @@
     color: inherit;
     border: none;
     padding: 0;
-    font-size: 11px;
-    font-family: inherit;
+    font: inherit;
     cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     transition: opacity 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
   .rsg-trigger-btn:hover {
     opacity: 0.6;
@@ -214,11 +221,24 @@
     margin-bottom: 32px;
     background-color: var(--rsg-gray);
   }
-  .rsg-video-wrapper video {
+  .rsg-video-wrapper video,
+  .rsg-video-wrapper iframe {
     width: 100%;
     height: auto;
     display: block;
     object-fit: cover;
+    border: 0;
+  }
+  .rsg-video-wrapper--external {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+  .rsg-video-wrapper--external iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
   }
   .rsg-video-btn {
     position: absolute;
@@ -342,16 +362,22 @@
     margin-top: 4px;
   }
 </style>
+{%- endif -%}
 
-{%- comment -%} TRIGGER BUTTON {%- endcomment -%}
-<div class="product-block" {{ block.shopify_attributes }}>
-  <button type="button" class="rsg-trigger-btn" data-modal-target="RingSizeModal-{{ block.id }}">
-    {{ block.settings.trigger_text }}
+{%- if part == 'trigger' or part == 'all' -%}
+  <button
+    type="button"
+    class="radio__legend__link body-x-small text-link rsg-trigger-btn"
+    data-modal-target="{{ modal_id }}"
+    aria-haspopup="dialog"
+  >
+    <span class="radio__legend__link__label">{{ trigger_text }}</span>
+    {%- render 'icon-plus-custom' -%}
   </button>
-</div>
+{%- endif -%}
 
-{%- comment -%} MODAL COMPONENT {%- endcomment -%}
-<ring-size-modal id="RingSizeModal-{{ block.id }}">
+{%- if part == 'modal' or part == 'all' -%}
+<ring-size-modal id="{{ modal_id }}">
   <div class="rsg-overlay" data-modal-close></div>
   
   <div class="rsg-dialog" role="dialog" aria-modal="true" aria-labelledby="rsg-title-{{ block.id }}">
@@ -426,6 +452,15 @@
             <button type="button" class="rsg-video-btn" aria-label="Pause Video">
               <svg viewBox="0 0 24 24"><rect x="8" y="5" width="3" height="14"/><rect x="14" y="5" width="3" height="14"/></svg>
             </button>
+          </div>
+        {%- elsif block.settings.tab2_video_youtube != blank -%}
+          {%- assign youtube_video = block.settings.tab2_video_youtube -%}
+          <div class="rsg-video-wrapper rsg-video-wrapper--external">
+            {{
+              youtube_video
+              | external_video_url: autoplay: true, loop: true, playlist: youtube_video.id, controls: false, mute: true, playsinline: true
+              | external_video_tag: class: 'rsg-video-iframe', loading: 'lazy', data-host: youtube_video.type
+            }}
           </div>
         {%- endif -%}
 
@@ -522,9 +557,9 @@
     </div>
   </div>
 </ring-size-modal>
+{%- endif -%}
 
-
-{%- comment -%} WEB COMPONENT JAVASCRIPT LOGIC {%- endcomment -%}
+{%- if part == 'assets' or part == 'all' -%}
 <script>
   if (!customElements.get('ring-size-modal')) {
     class RingSizeModal extends HTMLElement {
@@ -535,30 +570,42 @@
         this.closeBtns = this.querySelectorAll('[data-modal-close]');
         this.tabs = this.querySelectorAll('.rsg-tab');
         this.panels = this.querySelectorAll('.rsg-panel');
-        // Because modal moves to body, we must query document for triggers
-        this.triggers = document.querySelectorAll(`[data-modal-target="${this.id}"]`);
         this.video = this.querySelector('.rsg-video-el');
         this.videoBtn = this.querySelector('.rsg-video-btn');
+        this.youtubeIframe = this.querySelector('.rsg-video-iframe');
+        if (this.youtubeIframe && !this._youtubeSrc) {
+          this._youtubeSrc = this.youtubeIframe.src;
+        }
 
         this.bindEvents();
       }
 
       connectedCallback() {
-        // Move modal to body to avoid z-index clipping by transform/opacity parents
         if (this.parentElement && this.parentElement !== document.body) {
           document.body.appendChild(this);
         }
-      }
 
-      bindEvents() {
+        this.triggers = document.querySelectorAll(`[data-modal-target="${this.id}"]`);
         this.triggers.forEach(trigger => {
+          if (trigger.dataset.rsgBound === 'true') return;
+          trigger.dataset.rsgBound = 'true';
           trigger.addEventListener('click', (e) => {
             e.preventDefault();
             this.open();
           });
         });
+      }
 
+      bindEvents() {
         this.closeBtns.forEach(btn => btn.addEventListener('click', () => this.close()));
+
+        this.overlay?.addEventListener('click', () => this.close());
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.hasAttribute('open')) {
+            this.close();
+          }
+        });
         
         this.tabs.forEach(tab => {
           tab.addEventListener('click', (e) => this.switchTab(e.currentTarget));
@@ -579,13 +626,20 @@
 
       open() {
         this.setAttribute('open', '');
-        document.body.style.overflow = 'hidden'; 
+        document.body.style.overflow = 'hidden';
+
+        if (this.youtubeIframe && this._youtubeSrc) {
+          this.youtubeIframe.src = this._youtubeSrc;
+        }
       }
 
       close() {
         this.removeAttribute('open');
-        document.body.style.overflow = ''; 
-        if(this.video) this.video.pause();
+        document.body.style.overflow = '';
+        if (this.video) this.video.pause();
+        if (this.youtubeIframe) {
+          this.youtubeIframe.src = 'about:blank';
+        }
       }
 
       switchTab(selectedTab) {
@@ -602,4 +656,4 @@
     customElements.define('ring-size-modal', RingSizeModal);
   }
 </script>
-
+{%- endif -%}
