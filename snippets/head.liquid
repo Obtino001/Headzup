@@ -766,7 +766,9 @@
 <script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script>
 {% comment %} <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script> {% endcomment %}
 <script src="{{ 'theme.dev.js' | asset_url }}" defer="defer"></script>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js" defer="defer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js" defer="defer"></script>
 {%- if request.design_mode -%}
   <script
     src="{{ 'theme-editor.js' | asset_url }}"
