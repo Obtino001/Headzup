@@ -3,19 +3,6 @@
   Renders trigger, modal, or assets via the part parameter: trigger | modal | assets | all
 {%- endcomment -%}
 
-{%- liquid
-  assign part = part | default: 'all'
-  unless modal_id != blank
-    assign modal_id = 'SizeGuideModal-' | append: block.id
-  endunless
-  if block.settings.trigger_text != blank
-    assign trigger_text = block.settings.trigger_text
-  else
-    assign trigger_text = 'general.size_chart.title' | t
-  endif
--%}
-
-{%- if part == 'assets' or part == 'all' -%}
 <style>
   /* --- Trigger Button --- */
   .rsg-trigger-btn {
@@ -362,9 +349,6 @@
     margin-top: 4px;
   }
 </style>
-{%- endif -%}
-
-{%- if part == 'trigger' or part == 'all' -%}
   <button
     type="button"
     class="radio__legend__link body-x-small text-link rsg-trigger-btn"
@@ -374,9 +358,6 @@
     <span class="radio__legend__link__label">{{ trigger_text }}</span>
     {%- render 'icon-plus-custom' -%}
   </button>
-{%- endif -%}
-
-{%- if part == 'modal' or part == 'all' -%}
 <ring-size-modal id="{{ modal_id }}">
   <div class="rsg-overlay" data-modal-close></div>
   
@@ -557,9 +538,8 @@
     </div>
   </div>
 </ring-size-modal>
-{%- endif -%}
 
-{%- if part == 'assets' or part == 'all' -%}
+
 <script>
   if (!customElements.get('ring-size-modal')) {
     class RingSizeModal extends HTMLElement {
@@ -656,4 +636,4 @@
     customElements.define('ring-size-modal', RingSizeModal);
   }
 </script>
-{%- endif -%}
+
