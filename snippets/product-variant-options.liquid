@@ -57,7 +57,7 @@
             assign size_translation = 'general.size_chart.size' | t
             assign translation_string_size = size_translation | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | replace: ',', '____' | handle | replace: '____', ',' | append: ',' | prepend: ','
             assign option_handle = option.name | handle
-            assign size_handles = 'size,storrelse,storlek,taille,talla,taglia,grosse' | split: ','
+            assign size_handles = 'size,storrelse,størrelse,st-rrelse,storlek,taille,talla,taglia,grosse' | split: ','
 
             for size_handle in size_handles
               if option_handle == size_handle
