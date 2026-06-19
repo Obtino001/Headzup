@@ -12,6 +12,34 @@
     "main": {
       "type": "product",
       "blocks": {
+        "product_tabs_new_RDHRJa": {
+          "type": "product_tabs-new",
+          "settings": {
+            "padding_top": 36,
+            "padding_bottom": 36,
+            "description": "<p>The Joieem X represents the next generation of smart e-bikes. With a powerful yet smooth ride, <strong>up to 80-100 km of range</strong>, and intelligent app-connected features like GPS tracking and anti-theft protection, it adapts seamlessly to your everyday life.</p><p>Designed for effortless performance and minimal maintenance.</p>",
+            "tab_1": "Description",
+            "tab_2": "Features",
+            "tab_3": "Specifications",
+            "tab_4": "Accessories",
+            "tab_5": "FAQ",
+            "btn1_text": "Book a Free Test Ride",
+            "btn1_link": "",
+            "btn2_text": "Add to Cart",
+            "f1_icon": "cyclist",
+            "f1_title": "Suitable for cyclists from 160 to 200 cm",
+            "f2_icon": "seat",
+            "f2_title": "Comfortable sitting position",
+            "f3_icon": "shield",
+            "f3_title": "Safety features",
+            "f4_icon": "frame",
+            "f4_title": "Step-through frame",
+            "f5_icon": "gps",
+            "f5_title": "GPS tracking",
+            "f6_icon": "brakes",
+            "f6_title": "Mechanical brakes"
+          }
+        },
         "trustpilot_RcGQRK": {
           "type": "trustpilot",
           "settings": {
@@ -236,6 +264,7 @@
         }
       },
       "block_order": [
+        "product_tabs_new_RDHRJa",
         "trustpilot_RcGQRK",
         "title",
         "price",
