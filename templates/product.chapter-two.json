@@ -41,10 +41,15 @@
         "variants_Lkjwdn": {
           "type": "variants",
           "settings": {
-            "info_page": "storrelsesguide",
-            "size_chart_style": "text",
             "subscriptions_enable_selectors": false,
             "padding_bottom": 12
+          }
+        },
+        "ring_size_guide": {
+          "type": "ring_size",
+          "settings": {
+            "trigger_text": "",
+            "modal_heading": "STØRRELSESGUIDE"
           }
         },
         "buttons": {
@@ -133,6 +138,7 @@
         "trustpilot",
         "text_W4nY4h",
         "variants_Lkjwdn",
+        "ring_size_guide",
         "buttons",
         "payment_icons_bMCGr4",
         "divider_6fd4J4",
