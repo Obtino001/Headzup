@@ -4,6 +4,9 @@
   assign current_variant = product.selected_or_first_available_variant
   assign enable_size_chart = enable_size_chart | default: false
   assign show_size_chart = false
+  assign tags_string = product.tags | join: ','
+  assign size_separator = '_size_'
+  assign specific_pages = ''
   assign show_size_link_separated = true
   assign has_form_buttons = true
   assign form_button_blocks = section.blocks | where: 'type', 'buttons'
@@ -11,18 +14,21 @@
     assign has_form_buttons = false
   endif
 
-  assign size_guide_blocks = section.blocks | where: 'type', 'ring_size'
-  if size_guide_block == blank
-    assign size_guide_block = size_guide_blocks.first
+  assign size_style = block.settings.size_chart_style
+  assign specific_pages = ''
+
+  if block.settings.info_page != blank
+    assign size_translation = 'general.size_chart.size' | t
+    assign info_page = pages[block.settings.info_page]
   endif
 
-  if enable_size_chart == false or size_guide_block == blank
-    assign enable_size_chart = false
-  endif
-
-  if size_guide_block != blank
-    assign size_guide_modal_id = 'SizeGuideModal-' | append: size_guide_block.id
-    assign show_size_chart = true
+  if tags_string contains size_separator
+    for tag in product.tags
+      if tag contains size_separator
+        assign page_handle = tag | split: size_separator | last | split: ',' | first
+        assign specific_pages = specific_pages | append: page_handle | append: ','
+      endif
+    endfor
   endif
 
   assign variant_lines_setting = settings.variant_lines
@@ -31,11 +37,142 @@
   endif
 -%}
 
-{%- if size_guide_block != blank -%}
-  {%- capture size_chart_link -%}
-    {%- render 'size-guide', block: size_guide_block, part: 'trigger', modal_id: size_guide_modal_id -%}
-  {%- endcapture -%}
-{%- endif -%}
+{%- capture size_chart -%}
+  {%- if enable_size_chart -%}
+    {%- if block.settings.info_page != blank or specific_pages != '' -%}
+      {%- liquid
+        assign show_size_chart = true
+        assign specific_pages_arr = specific_pages | split: ','
+      -%}
+
+      {%- capture size_button -%}
+        {%- unless show_size_link_separated -%}
+          {%- case size_style -%}
+            {%- when 'text' -%}
+              <span class="radio__legend__link__label">
+                {{- 'general.size_chart.title' | t -}}
+              </span>
+
+            {%- when 'ruler' -%}
+              <span class="btn-size-chart">
+                {%- render 'icon-ruler' -%}
+              </span>
+
+            {%- when 'question' -%}
+              <span class="btn-size-chart">
+                {%- render 'icon-question' -%}
+              </span>
+          {%- endcase -%}
+        {%- else -%}
+          <span class="radio__legend__link__label">
+            {{- 'general.size_chart.title' | t -}}
+          </span>
+        {%- endunless -%}
+      {%- endcapture -%}
+
+      {%- capture size_chart_link -%}
+        <popup-component>
+          <a href="{{ info_page.url }}" data-popup-open class="radio__legend__link body-x-small{% if product.has_only_default_variant %} size-popup-link{% endif %}{% if size_style == 'text' or show_size_link_separated %} text-link{% endif %}">
+            {{ size_button }}
+            {% render 'icon-plus-custom' %}
+          </a>
+
+          <dialog class="product-modal" aria-hidden="true" inert data-scroll-lock-required>
+            <form method="dialog">
+              <button class="visually-hidden no-js" aria-label="{{ 'general.accessibility.close' | t }}"></button>
+            </form>
+
+            <div class="product-modal__outer">
+              <div class="product-modal__content small" data-scroll-lock-scrollable>
+                <button type="button" class="product-modal__close" data-popup-close aria-label="{{ 'general.accessibility.close' | t }}">
+                  {%- render 'icon-cancel' -%}
+                </button>
+
+                <tabs-component class="rte product-tabs">
+                  {%- liquid
+                    assign tabs_navigation = ''
+                    assign tabs = ''
+                    assign has_current = false
+                    assign number_tabs = 0
+                  -%}
+
+                  {%- for page_handle in specific_pages_arr -%}
+                    {%- assign page_size_chart = pages[page_handle] -%}
+
+                    {%- if page_size_chart.title != blank -%}
+                      {%- capture tabs_navigation -%}
+                        {{ tabs_navigation }}
+
+                        <li class="tab-link tab-link-{{ forloop.index0 }}{% if forloop.index == 1 %} current{% endif %}" data-tab="{{ forloop.index0 }}" tabindex="0">
+                          <span>{{ page_size_chart.title }}</span>
+                        </li>
+                      {%- endcapture -%}
+
+                      {%- capture tabs -%}
+                        {{ tabs }}
+
+                        <div class="tab-content tab-content-{{ forloop.index0 }}{% unless has_current %} current{% endunless %}">
+                          {{ page_size_chart.content }}
+                        </div>
+                      {%- endcapture -%}
+
+                      {%- assign has_current = true -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+
+                  {%- if info_page -%}
+                    {%- assign number_tabs = specific_pages_arr.size -%}
+
+                    {%- capture tabs_navigation -%}
+                      {{ tabs_navigation }}
+
+                      <li class="tab-link tab-link-{{ number_tabs }}" data-tab="{{ number_tabs }}" data-lock-scroll tabindex="0">
+                        <span>{{ info_page.title }}</span>
+                      </li>
+                    {%- endcapture -%}
+
+                    {%- capture tabs -%}
+                      {{ tabs }}
+
+                      <div class="tab-content tab-content-{{ number_tabs }}{% unless has_current %} current{% endunless %}">
+                        {{ info_page.content }}
+                      </div>
+                    {%- endcapture -%}
+
+                    {%- assign has_current = true -%}
+                  {%- endif -%}
+
+                  {%- if specific_pages_arr.size > 1 -%}
+                    <native-scrollbar class="tabs__head product-tabs__head">
+                      <ul class="tabs product-tabs-title" data-scrollbar data-scrollbar-slider data-scroll-lock-scrollable>
+                        {{ tabs_navigation }}
+                      </ul>
+
+                      <button type="button" class="tabs__arrow tabs__arrow--prev is-hidden" data-scrollbar-arrow-prev>
+                        {%- render 'icon-nav-arrow-left' -%}
+                        <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+                      </button>
+
+                      <button type="button" class="tabs__arrow tabs__arrow--next is-hidden" data-scrollbar-arrow-next>
+                        {%- render 'icon-nav-arrow-right' -%}
+                        <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+                      </button>
+                    </native-scrollbar>
+                  {%- endif -%}
+
+                  {%- if tabs != '' -%}
+                    {{ tabs }}
+                  {%- endif -%}
+                </tabs-component>
+              </div>
+            </div>
+          </dialog>
+        </popup-component>
+      {%- endcapture -%}
+
+    {%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
 
 {%- capture product_variant_options -%}
   {%- if settings.show_labels == false -%}
@@ -56,21 +193,13 @@
             assign is_size_option = false
             assign size_translation = 'general.size_chart.size' | t
             assign translation_string_size = size_translation | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | replace: ',', '____' | handle | replace: '____', ',' | append: ',' | prepend: ','
-            assign option_handle = option.name | handle
-            assign size_handles = 'size,storrelse,størrelse,st-rrelse,storlek,taille,talla,taglia,grosse' | split: ','
 
-            for size_handle in size_handles
-              if option_handle == size_handle
-                assign is_size_option = true
-                assign show_size_link_separated = false
-                break
-              endif
-            endfor
-
-            if is_size_option == false and translation_string_size contains option_name_handle_separator
+            if translation_string_size contains option_name_handle_separator
               assign is_size_option = true
               assign show_size_link_separated = false
             endif
+
+            echo size_chart
 
             comment
               Determine if current option matches swatch handle translations
@@ -116,7 +245,7 @@
             endif
           -%}
 
-          <div class="selector-wrapper{% if is_size_option %} selector-wrapper--size{% elsif variant_lines_setting or is_swatch_option %} selector-wrapper--fullwidth{% endif %}"
+          <div class="selector-wrapper{% if variant_lines_setting and is_size_option %} selector-wrapper--size{% elsif variant_lines_setting or is_swatch_option %} selector-wrapper--fullwidth{% endif %}"
             data-option-position="{{ option.position }}">
             {%- if variant_lines_setting or is_swatch_option or is_native_swatch_option -%}
               {%- liquid
@@ -141,10 +270,10 @@
               -%}
               <fieldset>
                 <div class="{{ radio_fieldset_class }}">
-                  <legend class="radio__legend{% if is_size_option and size_chart_link != blank %} radio__legend--size{% endif %}">
+                  <legend class="radio__legend{% if is_size_option and size_chart_link and show_size_link_separated == false %} radio__legend--size{% endif %}">
 
 
-                    <span class="radio__legend__label">
+                    <span class="radio__legend__label{% if size_style == 'text' %} radio__legend__label--text{% endif %}">
 
                       <span class="radio__legend__option-name">{{ option.name }}:</span>
 
@@ -154,7 +283,7 @@
                           </div>
                         {%- endif -%}
 
-                      {%- if is_size_option and size_chart_link != blank -%}
+                      {%- if is_size_option -%}
                         {{- size_chart_link -}}
                       {%- endif -%}
 
@@ -326,11 +455,11 @@
               <fieldset>
                 <div class="select__fieldset">
                   {%- capture input_id -%}{{ uniq_id }}-option-{{ option.position }}{%- endcapture -%}
-                  <legend class="radio__legend{% if is_size_option and size_chart_link != blank %} radio__legend--size{% endif %}">
-                    <span class="radio__legend__label" id="{{ uniq_id }}-select-{{ option.name | handle }}-label">
+                  <legend class="radio__legend{% if is_size_option and size_chart_link and show_size_link_separated == false %} radio__legend--size{% endif %}">
+                    <span class="radio__legend__label{% if size_style == 'text' %} radio__legend__label--text{% endif %}" id="{{ uniq_id }}-select-{{ option.name | handle }}-label">
                       <span class="radio__legend__option-name">{{ option.name }}:</span>
 
-                      {%- if is_size_option and size_chart_link != blank -%}
+                      {%- if is_size_option -%}
                         {{- size_chart_link -}}
                       {%- endif -%}
 
@@ -395,7 +524,7 @@
   {%- endcapture -%}
 
   {%- if product.has_only_default_variant -%}
-    {{ size_chart_link }}
+    {{ size_chart }}
   {%- endif -%}
 
 
