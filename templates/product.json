@@ -20,9 +20,13 @@
             "description": "<p>The Joieem X represents the next generation of smart e-bikes. With a powerful yet smooth ride, <strong>up to 80-100 km of range</strong>, and intelligent app-connected features like GPS tracking and anti-theft protection, it adapts seamlessly to your everyday life.</p><p>Designed for effortless performance and minimal maintenance.</p>",
             "tab_1": "Description",
             "tab_2": "Features",
+            "tab_2_content": "",
             "tab_3": "Specifications",
+            "tab_3_content": "",
             "tab_4": "Accessories",
+            "tab_4_content": "",
             "tab_5": "FAQ",
+            "tab_5_content": "",
             "btn1_text": "Book a Free Test Ride",
             "btn1_link": "",
             "btn2_text": "Add to Cart",
@@ -128,16 +132,6 @@
           "settings": {
             "subscriptions_enable_selectors": false,
             "padding_bottom": 0
-          }
-        },
-        "cap_guide": {
-          "type": "cap_guide",
-          "settings": {
-            "enable": true,
-            "trigger_text": "Ikke sikker på hvilken model?",
-            "open_as": "drawer",
-            "page_link": "shopify://pages/cap-guide",
-            "padding_bottom": 12
           }
         },
         "buttons": {
@@ -283,7 +277,6 @@
         "inventory_countdown_ePdH6p",
         "ring_size_TVjGKw",
         "variants_Lkjwdn",
-        "cap_guide",
         "buttons",
         "onskeskyen_wishlist_button_tfCaQD",
         "countdown_jFJ7N3",
@@ -298,7 +291,7 @@
       "settings": {
         "product_sticky_enable": true,
         "variant_image_scroll": true,
-        "show_cart_bar": false,
+        "show_cart_bar": true,
         "variant_lines": false,
         "variant_lines_chapter_two": false,
         "enable_zoom": false,

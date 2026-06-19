@@ -16,7 +16,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
     margin-top: 2rem;
     flex-wrap: wrap;
     gap: 2rem;
@@ -32,7 +32,7 @@
 
   /* Accent yellow underline for active tab */
   .product-block-{{ block.id }} .tabs > li span:first-of-type::after {
-    background-color: #FFD100;
+    background-color: #0c2340;
     height: 3px;
     bottom: -11px; /* Align to the border bottom */
   }
@@ -49,27 +49,23 @@
 
   /* Custom button overrides for pill shape and colors */
   .product-block-{{ block.id }} .btn-outline-custom {
-    border-radius: 30px;
     border-color: var(--border);
     transition: all 0.3s ease;
   }
   .product-block-{{ block.id }} .btn-outline-custom:hover {
-    border-color: #FFD100;
+    border-color: #0c2340;
     background-color: transparent;
     color: var(--text-dark);
   }
   .product-block-{{ block.id }} .btn-solid-custom {
-    background-color: #FFD100;
-    color: #000000;
-    border-radius: 30px;
-    border-color: #FFD100;
+    background-color: #0c2340;
+    border-color: #0c2340;
     transition: opacity 0.3s ease;
   }
   .product-block-{{ block.id }} .btn-solid-custom:hover {
     opacity: 0.85;
-    background-color: #FFD100;
-    color: #000000;
-    border-color: #FFD100;
+    background-color: #0c2340;
+    border-color: #0c2340;
   }
 
   /* --- Main Content Layout --- */
