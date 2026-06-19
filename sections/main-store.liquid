@@ -1,0 +1,264 @@
+{{ 'visit-store.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign map_query = section.settings.map_address | default: 'Vesterbrogade 95H, 1620 København V, Denmark'
+  assign map_embed = 'https://maps.google.com/maps?q=' | append: map_query | url_encode | append: '&t=&z=16&ie=UTF8&iwloc=&output=embed'
+
+  assign directions_url = section.settings.directions_url
+  if directions_url == blank
+    assign directions_url = 'https://www.google.com/maps/dir/?api=1&destination=' | append: map_query | url_encode
+  endif
+
+  assign button_style = section.settings.button_style
+  if button_style == 'btn--text' and section.settings.show_arrow
+    assign button_style = button_style | append: ' btn--text-no-underline'
+  endif
+-%}
+
+{%- style -%}
+  #StorePage--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section
+  id="StorePage--{{ section.id }}"
+  class="store-page section-padding color-{{ section.settings.color_scheme }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="{{ section.settings.width }}">
+    <div class="store-page__hero">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="store-page__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="store-page__title">{{ section.settings.heading | escape }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.subheading != blank -%}
+        <p class="store-page__subtitle">{{ section.settings.subheading | escape }}</p>
+      {%- endif -%}
+    </div>
+
+    <iframe
+      class="store-page__map"
+      src="{{ map_embed }}"
+      allowfullscreen
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="{{ section.settings.heading | default: 'Store location' | escape }}"
+    ></iframe>
+
+    <div class="store-page__grid">
+      <div class="store-page__card">
+        <div class="store-page__card-label">{{ section.settings.address_label | default: 'Adresse' | escape }}</div>
+        <div class="store-page__card-body rte">{{ section.settings.address }}</div>
+      </div>
+
+      <div class="store-page__card">
+        <div class="store-page__card-label">{{ section.settings.hours_label | default: 'Åbningstider' | escape }}</div>
+        <div class="store-page__card-body rte">{{ section.settings.hours }}</div>
+      </div>
+
+      <div class="store-page__card">
+        <div class="store-page__card-label">{{ section.settings.contact_label | default: 'Kontakt' | escape }}</div>
+        <div class="store-page__card-body rte">
+          {%- if section.settings.phone != blank -%}
+            <p><a href="tel:{{ section.settings.phone | replace: ' ', '' }}">{{ section.settings.phone | escape }}</a></p>
+          {%- endif -%}
+          {%- if section.settings.email != blank -%}
+            <p><a href="mailto:{{ section.settings.email }}">{{ section.settings.email | escape }}</a></p>
+          {%- endif -%}
+          {{ section.settings.contact_text }}
+        </div>
+      </div>
+    </div>
+
+    <div class="store-page__cta-row">
+      <a
+        href="{{ directions_url }}"
+        class="btn {{ section.settings.button_type }} {{ section.settings.button_size }} {{ button_style }}"
+        target="_blank"
+        rel="noopener"
+      >
+        <span>{{ section.settings.button_text | default: 'Find vej' | escape }}</span>
+        {%- if section.settings.show_arrow -%}
+          {%- render 'icon-arrow-right' -%}
+        {%- endif -%}
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Store page",
+  "tag": "section",
+  "class": "section-store-page",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Headz Up"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Vores butik"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Besøg os på Vesterbrogade 95H i København — prøv caps, hent din ordre, eller få personlig vejledning."
+    },
+    {
+      "type": "text",
+      "id": "map_address",
+      "label": "Map address",
+      "default": "Vesterbrogade 95H, 1620 København V, Denmark"
+    },
+    {
+      "type": "richtext",
+      "id": "address",
+      "label": "Address",
+      "default": "<p><strong>Vesterbrogade 95H</strong><br>(inde i baggården)<br>1620 København V<br>Danmark</p>"
+    },
+    {
+      "type": "text",
+      "id": "address_label",
+      "label": "Address label",
+      "default": "Adresse"
+    },
+    {
+      "type": "richtext",
+      "id": "hours",
+      "label": "Opening hours",
+      "default": "<p>Man – Tirs: 10:30 – 16:00<br>Ons – Fre: 10:30 – 18:00<br>Lør: 11:00 – 14:00<br>Søn & helligdage: Lukket</p>"
+    },
+    {
+      "type": "text",
+      "id": "hours_label",
+      "label": "Hours label",
+      "default": "Åbningstider"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "+45 31 32 68 48"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "info@headzup.dk"
+    },
+    {
+      "type": "richtext",
+      "id": "contact_text",
+      "label": "Extra contact info"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "Contact label",
+      "default": "Kontakt"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Directions button",
+      "default": "Find vej på Google Maps"
+    },
+    {
+      "type": "url",
+      "id": "directions_url",
+      "label": "Directions URL"
+    },
+    {
+      "type": "select",
+      "id": "button_type",
+      "label": "Button color",
+      "default": "btn--primary",
+      "options": [
+        {"value": "btn--black", "label": "Black"},
+        {"value": "btn--primary", "label": "Primary"},
+        {"value": "btn--secondary", "label": "Secondary"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_size",
+      "label": "Button size",
+      "default": "",
+      "options": [
+        {"label": "Small", "value": "btn--small"},
+        {"label": "Medium", "value": ""},
+        {"label": "Large", "value": "btn--large"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "default": "btn--solid",
+      "options": [
+        {"label": "Solid", "value": "btn--solid"},
+        {"label": "Outline", "value": "btn--outline"}
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Show arrow",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wrapper--full",
+      "options": [
+        {"value": "wrapper--full", "label": "Full width"},
+        {"value": "wrapper--full-padded", "label": "Full width padded"}
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-7"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Store page"
+    }
+  ]
+}
+{% endschema %}

@@ -24,7 +24,16 @@
           "type": "price",
           "settings": {
             "text_font_size": "body-x-large",
-            "padding_bottom": 16
+            "padding_bottom": 8
+          }
+        },
+        "store_note": {
+          "type": "store_note",
+          "settings": {
+            "enable": true,
+            "text": "Prøv den i vores butik på Vesterbrogade 95H, København",
+            "store_link": "shopify://pages/butik",
+            "padding_bottom": 12
           }
         },
         "trustpilot": {
@@ -144,6 +153,7 @@
       "block_order": [
         "title",
         "price",
+        "store_note",
         "trustpilot",
         "text_W4nY4h",
         "variants_Lkjwdn",

@@ -1,0 +1,24 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-store",
+      "settings": {
+        "eyebrow": "Headz Up",
+        "heading": "Vores butik",
+        "subheading": "Besøg os på Vesterbrogade 95H i København — prøv caps, hent din ordre, eller få personlig vejledning.",
+        "map_address": "Vesterbrogade 95H, 1620 København V, Denmark",
+        "address": "<p><strong>Vesterbrogade 95H</strong><br>(inde i baggården)<br>1620 København V<br>Danmark</p>",
+        "hours": "<p>Man – Tirs: 10:30 – 16:00<br>Ons – Fre: 10:30 – 18:00<br>Lør: 11:00 – 14:00<br>Søn & helligdage: Lukket</p>",
+        "phone": "+45 31 32 68 48",
+        "email": "info@headzup.dk",
+        "button_text": "Find vej på Google Maps",
+        "color_scheme": "scheme-7",
+        "padding_top": 0,
+        "padding_bottom": 48
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

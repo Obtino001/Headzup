@@ -1,0 +1,32 @@
+{{ 'visit-store.css' | asset_url | stylesheet_tag }}
+
+{%- if block.settings.enable and block.settings.text != blank -%}
+  {%- liquid
+    assign store_page = block.settings.store_page
+    if store_page != blank
+      assign store_url = store_page.url
+    else
+      assign store_url = block.settings.store_link
+    endif
+  -%}
+
+  <div
+    class="product__block product-store-note block-padding"
+    {{ block.shopify_attributes }}
+    {{ block_style }}
+  >
+    <div class="product-store-note">
+      <svg class="product-store-note__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+        <path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11z"/>
+        <circle cx="12" cy="10" r="2.5"/>
+      </svg>
+      <p class="product-store-note__text">
+        {%- if store_url != blank -%}
+          <a href="{{ store_url }}">{{ block.settings.text }}</a>
+        {%- else -%}
+          {{ block.settings.text }}
+        {%- endif -%}
+      </p>
+    </div>
+  </div>
+{%- endif -%}

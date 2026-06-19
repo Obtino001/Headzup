@@ -1,0 +1,307 @@
+{{ 'visit-store.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign button_style = section.settings.button_style
+  if button_style == 'btn--text' and section.settings.show_arrow
+    assign button_style = button_style | append: ' btn--text-no-underline'
+  endif
+
+  assign directions_url = section.settings.directions_url
+  if directions_url == blank and section.settings.address != blank
+    assign directions_url = 'https://www.google.com/maps/dir/?api=1&destination=' | append: section.settings.address | url_encode
+  endif
+-%}
+
+{%- style -%}
+  #VisitStore--{{ section.id }} {
+    --PT: {{ section.settings.padding_top }}px;
+    --PB: {{ section.settings.padding_bottom }}px;
+  }
+{%- endstyle -%}
+
+<section
+  id="VisitStore--{{ section.id }}"
+  class="visit-store section-padding color-{{ section.settings.color_scheme }}"
+  data-section-id="{{ section.id }}"
+  data-section-type="visit-store"
+>
+  <div class="{{ section.settings.width }}">
+    <div class="visit-store__grid{% if section.settings.reverse_layout %} visit-store__grid--reversed{% endif %}">
+      <div class="visit-store__media">
+        {%- if section.settings.image != blank -%}
+          {%- render 'image',
+            image: section.settings.image,
+            sizes: '(min-width: 990px) 50vw, 100vw',
+            widths: '600, 900, 1200, 1600, 2000',
+            loading: 'lazy'
+          -%}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </div>
+
+      <div class="visit-store__content">
+        <div class="visit-store__inner">
+          {%- if section.settings.eyebrow != blank -%}
+            <span class="visit-store__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+          {%- endif -%}
+
+          {%- if section.settings.heading != blank -%}
+            <h2 class="visit-store__heading">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
+
+          {%- if section.settings.lead != blank -%}
+            <p class="visit-store__lead">{{ section.settings.lead | escape }}</p>
+          {%- endif -%}
+
+          <div class="visit-store__details">
+            {%- if section.settings.address != blank -%}
+              <div class="visit-store__detail">
+                <span class="visit-store__detail-label">{{ section.settings.address_label | default: 'Address' | escape }}</span>
+                <div class="visit-store__detail-value rte">{{ section.settings.address }}</div>
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.hours != blank -%}
+              <div class="visit-store__detail">
+                <span class="visit-store__detail-label">{{ section.settings.hours_label | default: 'Hours' | escape }}</span>
+                <div class="visit-store__detail-value rte">{{ section.settings.hours }}</div>
+              </div>
+            {%- endif -%}
+
+            {%- if section.settings.phone != blank -%}
+              <div class="visit-store__detail">
+                <span class="visit-store__detail-label">{{ section.settings.phone_label | default: 'Phone' | escape }}</span>
+                <p class="visit-store__detail-value">
+                  <a href="tel:{{ section.settings.phone | replace: ' ', '' }}">{{ section.settings.phone | escape }}</a>
+                </p>
+              </div>
+            {%- endif -%}
+          </div>
+
+          <div class="visit-store__actions">
+            {%- if section.settings.button_text != blank -%}
+              <a
+                href="{{ section.settings.button_link | default: routes.root_url }}"
+                class="visit-store__cta btn {{ section.settings.button_type }} {{ section.settings.button_size }} {{ button_style }}"
+              >
+                <span>{{ section.settings.button_text | escape }}</span>
+                {%- if section.settings.show_arrow -%}
+                  {%- render 'icon-arrow-right' -%}
+                {%- endif -%}
+              </a>
+            {%- endif -%}
+
+            {%- if directions_url != blank -%}
+              <a href="{{ directions_url }}" class="visit-store__link" target="_blank" rel="noopener">
+                {{ section.settings.directions_text | default: 'Get directions' | escape }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  @media (min-width: 990px) {
+    .visit-store__grid--reversed .visit-store__media { order: 2; }
+    .visit-store__grid--reversed .visit-store__content { order: 1; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Visit our store",
+  "tag": "section",
+  "class": "section-visit-store",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Store image",
+      "info": "2000 x 1400px recommended"
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse_layout",
+      "label": "Image on right",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "København V"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Besøg vores butik"
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Introduction",
+      "default": "Danmarks største udvalg af caps og kasketter — samlet ét sted. Kom forbi, prøv pasformen, og hent din Click & Collect ordre."
+    },
+    {
+      "type": "richtext",
+      "id": "address",
+      "label": "Address",
+      "default": "<p>Vesterbrogade 95H<br>(inde i baggården)<br>1620 København V</p>"
+    },
+    {
+      "type": "text",
+      "id": "address_label",
+      "label": "Address label",
+      "default": "Adresse"
+    },
+    {
+      "type": "richtext",
+      "id": "hours",
+      "label": "Opening hours",
+      "default": "<p>Man – Tirs: 10:30 – 16:00<br>Ons – Fre: 10:30 – 18:00<br>Lør: 11:00 – 14:00<br>Søn & helligdage: Lukket</p>"
+    },
+    {
+      "type": "text",
+      "id": "hours_label",
+      "label": "Hours label",
+      "default": "Åbningstider"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone",
+      "default": "+45 31 32 68 48"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Phone label",
+      "default": "Telefon"
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Primary button",
+      "default": "Prøv før du køber"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "directions_text",
+      "label": "Directions link text",
+      "default": "Find vej"
+    },
+    {
+      "type": "url",
+      "id": "directions_url",
+      "label": "Directions URL",
+      "info": "Leave blank to auto-generate from address"
+    },
+    {
+      "type": "select",
+      "id": "button_type",
+      "label": "Button color",
+      "default": "btn--primary",
+      "options": [
+        {"value": "btn--black", "label": "Black"},
+        {"value": "btn--white", "label": "White"},
+        {"value": "btn--primary", "label": "Primary"},
+        {"value": "btn--secondary", "label": "Secondary"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_size",
+      "label": "Button size",
+      "default": "",
+      "options": [
+        {"label": "Small", "value": "btn--small"},
+        {"label": "Medium", "value": ""},
+        {"label": "Large", "value": "btn--large"}
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "default": "btn--solid",
+      "options": [
+        {"label": "Solid", "value": "btn--solid"},
+        {"label": "Outline", "value": "btn--outline"}
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrow",
+      "label": "Show arrow on button",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wrapper--full",
+      "options": [
+        {"value": "wrapper--full", "label": "Full width"},
+        {"value": "wrapper--full-padded", "label": "Full width padded"}
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-7"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 2,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Visit our store"
+    }
+  ]
+}
+{% endschema %}
