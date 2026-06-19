@@ -19,13 +19,29 @@
   {% endif %}
 >
   <div class="product__price__wrap">
+    {%- liquid
+      assign on_sale = false
+      if current_variant.compare_at_price > current_variant.price
+        assign on_sale = true
+      endif
+    -%}
     <div
       class="product__price{% if has_units %} product__price--has-units{% endif %}{% if price_font_size != blank %} {{ price_font_size }}{% endif %}"
       data-price-wrapper
     >
+      <span class="price-label-was{% unless on_sale %} hidden{% endunless %}">{{ 'products.product.was' | t }}: </span>
+
+      <s class="product__price--strike{% unless on_sale %} hidden{% endunless %}" data-compare-price>
+        {%- if on_sale -%}
+          {{ current_variant.compare_at_price | money }}
+        {%- endif -%}
+      </s>
+
+      <span class="price-label-now{% unless on_sale %} hidden{% endunless %}"> - {{ 'products.product.now' | t }}: </span>
+
       <span
         data-product-price
-        {% if current_variant.compare_at_price > current_variant.price %}
+        {% if on_sale %}
           class="product__price--sale"
         {% endif %}
       >
@@ -37,12 +53,7 @@
       </span>
 
       {%- if product.compare_at_price_max > product.price -%}
-        <span class="visually-hidden" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
-        <s class="product__price--strike" data-compare-price>
-          {%- if current_variant.compare_at_price > current_variant.price -%}
-            {{ current_variant.compare_at_price | money }}
-          {%- endif -%}
-        </s>
+        <span class="visually-hidden{% unless on_sale %} hidden{% endunless %}" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
       {%- endif -%}
 
       {%- if has_units -%}
@@ -101,9 +112,17 @@
         {% endif %}
       >
         {%- if sale_badge -%}
-          <span class="product__price--off hidden" data-price-off-badge>
-            <span data-price-off-amount></span>
-            {{ 'products.product.off' | t }}
+          {%- liquid
+            assign compare_price = current_variant.compare_at_price
+            assign sale_price = current_variant.price
+            assign on_sale_badge = false
+            if compare_price > sale_price
+              assign on_sale_badge = true
+              assign discount_percent = compare_price | minus: sale_price | times: 100 | divided_by: compare_price | round
+            endif
+          -%}
+          <span class="product__price--off{% unless on_sale_badge %} hidden{% endunless %}" data-price-off-badge>
+            {{ 'products.product.save' | t }} <span data-price-off-amount>{%- if on_sale_badge -%}{{ discount_percent }}%{%- endif -%}</span>
           </span>
         {%- endif -%}
 

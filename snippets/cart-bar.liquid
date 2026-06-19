@@ -36,8 +36,24 @@
     <div class="cart-bar__info">
       <h4 class="cart-bar__product__title">{{ product.title | strip_html }}</h4>
 
+      {%- liquid
+        assign on_sale = false
+        if current_variant.compare_at_price > current_variant.price
+          assign on_sale = true
+        endif
+      -%}
       <div class="body-small cart-bar__product__price product__price" data-price-wrapper>
-        <span data-product-price {% if current_variant.compare_at_price > current_variant.price %} class="product__price--sale"{% endif %}>
+        <span class="price-label-was{% unless on_sale %} hidden{% endunless %}">{{ 'products.product.was' | t }}: </span>
+
+        <s class="product__price--strike{% unless on_sale %} hidden{% endunless %}" data-compare-price>
+          {% if on_sale %}
+            {{ current_variant_compare_at_price }}
+          {% endif %}
+        </s>
+
+        <span class="price-label-now{% unless on_sale %} hidden{% endunless %}"> - {{ 'products.product.now' | t }}: </span>
+
+        <span data-product-price {% if on_sale %} class="product__price--sale"{% endif %}>
           {%- if current_variant.price == 0 -%}
             {{ 'general.money.free' | t }}
           {%- else -%}
@@ -46,12 +62,7 @@
         </span>
 
         {% if product.compare_at_price_max > product.price %}
-          <span class="visually-hidden" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
-          <s class="product__price--strike" data-compare-price>
-            {% if current_variant.compare_at_price > current_variant.price %}
-              {{ current_variant_compare_at_price }}
-            {% endif %}
-          </s>
+          <span class="visually-hidden{% unless on_sale %} hidden{% endunless %}" data-compare-text>{{ 'products.product.regular_price' | t }}</span>
         {% endif %}
       </div>
     </div>

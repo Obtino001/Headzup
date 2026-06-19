@@ -1324,3 +1324,15 @@ a[href="/collections/bandana"] .nav-link-collections {
     }
   }
 }
+
+/* Pricing labels styling */
+.price-label-was,
+.price-label-now {
+  font-size: 0.9em;
+  opacity: 0.8;
+  font-weight: normal;
+  display: inline;
+}
+.price-label-now {
+  margin-left: 2px;
+}

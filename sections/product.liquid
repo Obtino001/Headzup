@@ -668,7 +668,8 @@
                       {%- endif -%}
 
                       {%- if on_sale and sold_out == false and block.settings.sale_badge -%}
-                        <span class="sale-box">{{ 'products.product.on_sale' | t }}</span>
+                        {%- assign savings_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round -%}
+                        <span class="sale-box">{{ 'products.product.save' | t }} {{ savings_percent }}%</span>
                       {%- endif -%}
                     </div>
 

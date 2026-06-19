@@ -21,6 +21,11 @@
 
 <span class="price{% if product.compare_at_price > product.price %} sale{% endif %}">
   {% if product.available or badge_soldout != '' %}
+    {% if product.compare_at_price > product.price %}
+      <span class="price-label-was">{{ 'products.product.was' | t }}: </span>
+      <span class="old-price">{{ product_compare_at_price }}</span>
+      <span class="price-label-now"> - {{ 'products.product.now' | t }}: </span>
+    {% endif %}
     <span class="new-price">
       {% if product.price_varies %}
         <small>{{ 'products.general.from' | t }}</small>
@@ -31,9 +36,6 @@
         {{ product_price_min }}
       {%- endif -%}
     </span>
-    {% if product.compare_at_price > product.price %}
-      <span class="old-price">{{ product_compare_at_price }}</span>
-    {% endif %}
   {% else %}
     <span class="sold-out">{{ 'products.product.sold_out' | t }}</span>
   {% endif %}

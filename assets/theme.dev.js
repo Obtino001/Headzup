@@ -6305,6 +6305,8 @@
               const comparePriceEl = wrap.querySelector(selectors$9.comparePrice);
               const productPriceEl = wrap.querySelector(selectors$9.productPrice);
               const comparePriceText = wrap.querySelector(selectors$9.comparePriceText);
+              const wasLabelEl = wrap.querySelector('.price-label-was');
+              const nowLabelEl = wrap.querySelector('.price-label-now');
 
               let comparePrice = '';
               let price = '';
@@ -6328,10 +6330,14 @@
                   comparePriceEl.classList.remove(classes$8.hidden);
                   comparePriceText.classList.remove(classes$8.hidden);
                   productPriceEl.classList.add(classes$8.productPriceSale);
+                  if (wasLabelEl) wasLabelEl.classList.remove(classes$8.hidden);
+                  if (nowLabelEl) nowLabelEl.classList.remove(classes$8.hidden);
                 } else {
                   comparePriceEl.classList.add(classes$8.hidden);
                   comparePriceText.classList.add(classes$8.hidden);
                   productPriceEl.classList.remove(classes$8.productPriceSale);
+                  if (wasLabelEl) wasLabelEl.classList.add(classes$8.hidden);
+                  if (nowLabelEl) nowLabelEl.classList.add(classes$8.hidden);
                 }
                 comparePriceEl.innerHTML = window.theme.formatMoney(comparePrice, theme.moneyFormat);
               }

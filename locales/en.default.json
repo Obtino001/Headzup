@@ -461,6 +461,8 @@
       "final_sale": "Final sale",
       "unavailable": "Unavailable",
       "compare_at": "Compare at",
+      "was": "Was",
+      "now": "Now",
       "unit_price_label": "Unit price",
       "subscription": "Subscription",
       "save": "Save",
