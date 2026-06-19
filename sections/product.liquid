@@ -369,14 +369,7 @@
                     -%}
 
                   {%- when 'ring_size' -%}
-                    {%- liquid
-                      assign size_guide_modal_id = 'SizeGuideModal-' | append: block.id
-                    -%}
-                    <div {{ block.shopify_attributes }} class="product__block block-padding">
-                      {%- render 'size-guide', block: block, part: 'trigger', modal_id: size_guide_modal_id -%}
-                      {%- render 'size-guide', block: block, part: 'modal', modal_id: size_guide_modal_id -%}
-                      {%- render 'size-guide', block: block, part: 'assets', modal_id: size_guide_modal_id -%}
-                    </div>
+                          {%- render 'size-guide', block: block,%}
 
                   {%- when 'buttons' -%}
                     {%- render 'product-buttons',
