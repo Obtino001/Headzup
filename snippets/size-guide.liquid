@@ -1,23 +1,19 @@
 {%- comment -%}
-  MEJURI STYLE RING SIZE GUIDE MODAL
-  Vanilla CSS, Web Component, 100% Editable Schema
+  Size guide drawer modal
+  Renders trigger, modal, or assets via the part parameter: trigger | modal | assets | all
 {%- endcomment -%}
 
-{%- assign downcased_type = product.type | downcase -%}
-{%- assign downcased_title = product.title | downcase -%}
-{%- assign is_ring = false -%}
-{%- if downcased_type contains 'ring' or downcased_title contains 'ring' -%}
-  {%- assign is_ring = true -%}
-{%- endif -%}
-{%- for tag in product.tags -%}
-  {%- assign downcased_tag = tag | downcase -%}
-  {%- if downcased_tag contains 'ring' -%}
-    {%- assign is_ring = true -%}
-  {%- endif -%}
-{%- endfor -%}
+{%- liquid
+  assign part = part | default: 'all'
+  assign modal_id = modal_id | default: 'SizeGuideModal-' | append: block.id
+  if block.settings.trigger_text != blank
+    assign trigger_text = block.settings.trigger_text
+  else
+    assign trigger_text = 'general.size_chart.title' | t
+  endif
+-%}
 
-{%- if is_ring -%}
-
+{%- if part == 'assets' or part == 'all' -%}
 <style>
   /* --- Trigger Button --- */
   .rsg-trigger-btn {
@@ -26,16 +22,12 @@
     color: inherit;
     border: none;
     padding: 0;
-    font-size: 11px;
-    font-family: inherit;
+    font: inherit;
     cursor: pointer;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     transition: opacity 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    border-bottom: 1px solid currentColor;
-    padding-bottom: 2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
   }
   .rsg-trigger-btn:hover {
     opacity: 0.6;
@@ -355,16 +347,22 @@
     margin-top: 4px;
   }
 </style>
+{%- endif -%}
 
-{%- comment -%} TRIGGER BUTTON {%- endcomment -%}
-<div class="product-block" {{ block.shopify_attributes }}>
-  <button type="button" class="rsg-trigger-btn" data-modal-target="RingSizeModal-{{ block.id }}">
-    {{ block.settings.trigger_text }}
+{%- if part == 'trigger' or part == 'all' -%}
+  <button
+    type="button"
+    class="radio__legend__link body-x-small text-link rsg-trigger-btn"
+    data-modal-target="{{ modal_id }}"
+    aria-haspopup="dialog"
+  >
+    <span class="radio__legend__link__label">{{ trigger_text }}</span>
+    {%- render 'icon-plus-custom' -%}
   </button>
-</div>
+{%- endif -%}
 
-{%- comment -%} MODAL COMPONENT {%- endcomment -%}
-<ring-size-modal id="RingSizeModal-{{ block.id }}">
+{%- if part == 'modal' or part == 'all' -%}
+<ring-size-modal id="{{ modal_id }}">
   <div class="rsg-overlay" data-modal-close></div>
   
   <div class="rsg-dialog" role="dialog" aria-modal="true" aria-labelledby="rsg-title-{{ block.id }}">
@@ -535,9 +533,9 @@
     </div>
   </div>
 </ring-size-modal>
+{%- endif -%}
 
-
-{%- comment -%} WEB COMPONENT JAVASCRIPT LOGIC {%- endcomment -%}
+{%- if part == 'assets' or part == 'all' -%}
 <script>
   if (!customElements.get('ring-size-modal')) {
     class RingSizeModal extends HTMLElement {
@@ -548,8 +546,6 @@
         this.closeBtns = this.querySelectorAll('[data-modal-close]');
         this.tabs = this.querySelectorAll('.rsg-tab');
         this.panels = this.querySelectorAll('.rsg-panel');
-        // Because modal moves to body, we must query document for triggers
-        this.triggers = document.querySelectorAll(`[data-modal-target="${this.id}"]`);
         this.video = this.querySelector('.rsg-video-el');
         this.videoBtn = this.querySelector('.rsg-video-btn');
 
@@ -557,21 +553,31 @@
       }
 
       connectedCallback() {
-        // Move modal to body to avoid z-index clipping by transform/opacity parents
         if (this.parentElement && this.parentElement !== document.body) {
           document.body.appendChild(this);
         }
-      }
 
-      bindEvents() {
+        this.triggers = document.querySelectorAll(`[data-modal-target="${this.id}"]`);
         this.triggers.forEach(trigger => {
+          if (trigger.dataset.rsgBound === 'true') return;
+          trigger.dataset.rsgBound = 'true';
           trigger.addEventListener('click', (e) => {
             e.preventDefault();
             this.open();
           });
         });
+      }
 
+      bindEvents() {
         this.closeBtns.forEach(btn => btn.addEventListener('click', () => this.close()));
+
+        this.overlay?.addEventListener('click', () => this.close());
+
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.hasAttribute('open')) {
+            this.close();
+          }
+        });
         
         this.tabs.forEach(tab => {
           tab.addEventListener('click', (e) => this.switchTab(e.currentTarget));
