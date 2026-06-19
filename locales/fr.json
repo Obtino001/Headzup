@@ -477,6 +477,8 @@
       "out_of_stock": "L'article est en rupture de stock",
       "item_unavailable": "L'article n'est pas disponible",
       "remaining_html": "Dépêchez-vous, il n'en reste plus que {{ inventory }}!",
+      "limited_edition_remaining_html": "Plus que {{ inventory }} en taille {{ size }}",
+      "limited_edition_remaining_no_size_html": "Plus que {{ inventory }}",
       "remaining_no_count": "Dépêchez-vous ! Faible inventaire",
       "pickup_availability": {
         "pickup_options": "Options de ramassage",

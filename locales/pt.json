@@ -477,6 +477,8 @@
       "out_of_stock": "Item está esgotado",
       "item_unavailable": "Item não está disponível",
       "remaining_html": "Rápido, só restam {{ inventory }}!",
+      "limited_edition_remaining_html": "Apenas {{ inventory }} restantes no tamanho {{ size }}",
+      "limited_edition_remaining_no_size_html": "Apenas {{ inventory }} restantes",
       "remaining_no_count": "Apresse-se! Baixo estoque",
       "pickup_availability": {
         "pickup_options": "Opções de pickup",

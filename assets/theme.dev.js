@@ -6109,20 +6109,45 @@
 
             if (variant && this.remainingWrapper && this.remainingJSON) {
               const remaining = this.remainingJSON[variant.id];
+              const isLimitedEdition = this.remainingWrapper.getAttribute('data-limited-edition') === 'true';
 
-              if (remaining === 'out' || remaining < 1) {
-                this.remainingWrapper.classList.add(classes$8.remainingOut);
-              }
+              if (isLimitedEdition) {
+                const qty = parseInt(remaining, 10);
+                if (isNaN(qty) || qty < 1) {
+                  this.remainingWrapper.classList.add(classes$8.remainingOut);
+                } else if (qty > 0 && qty < 5) {
+                  this.remainingWrapper.classList.add(classes$8.remainingLow);
 
-              if (remaining === 'in' || remaining >= this.remainingMaxInt) {
-                this.remainingWrapper.classList.add(classes$8.remainingIn);
-              }
+                  const sizeIndexAttr = this.remainingWrapper.getAttribute('data-size-option-index');
+                  const sizeIndex = sizeIndexAttr ? parseInt(sizeIndexAttr, 10) : -1;
+                  const sizeVal = (sizeIndex > -1 && variant.options && variant.options[sizeIndex]) ? variant.options[sizeIndex] : '';
 
-              if (remaining === 'low' || (remaining > 0 && remaining < this.remainingMaxInt)) {
-                this.remainingWrapper.classList.add(classes$8.remainingLow);
+                  const textEl = this.remainingWrapper.querySelector('[data-remaining-text]');
+                  const template = sizeVal 
+                    ? this.remainingWrapper.getAttribute('data-limited-edition-message-template')
+                    : this.remainingWrapper.getAttribute('data-limited-edition-message-template-no-size');
 
-                if (this.remainingCount) {
-                  this.remainingCount.innerHTML = remaining;
+                  if (textEl && template) {
+                    textEl.textContent = template.replace('[inventory]', qty).replace('[size]', sizeVal);
+                  }
+                } else {
+                  this.remainingWrapper.classList.add(classes$8.remainingIn);
+                }
+              } else {
+                if (remaining === 'out' || remaining < 1) {
+                  this.remainingWrapper.classList.add(classes$8.remainingOut);
+                }
+
+                if (remaining === 'in' || remaining >= this.remainingMaxInt) {
+                  this.remainingWrapper.classList.add(classes$8.remainingIn);
+                }
+
+                if (remaining === 'low' || (remaining > 0 && remaining < this.remainingMaxInt)) {
+                  this.remainingWrapper.classList.add(classes$8.remainingLow);
+
+                  if (this.remainingCount) {
+                    this.remainingCount.innerHTML = remaining;
+                  }
                 }
               }
             } else if (!variant && this.remainingWrapper) {

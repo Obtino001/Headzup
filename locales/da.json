@@ -487,6 +487,8 @@
       "out_of_stock": "Varen er udsolgt",
       "item_unavailable": "Varen er utilgængelig",
       "remaining_html": "Skynd dig, kun {{ inventory }} tilbage!",
+      "limited_edition_remaining_html": "Kun {{ inventory }} tilbage i størrelse {{ size }}",
+      "limited_edition_remaining_no_size_html": "Kun {{ inventory }} tilbage",
       "remaining_no_count": "Skynd dig! Lav beholdning",
       "pickup_availability": {
         "pickup_options": "Afhentningsmuligheder",

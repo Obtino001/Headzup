@@ -1,6 +1,24 @@
 {% comment %} Product inventory {% endcomment %}
 
 {%- liquid
+  assign is_limited_edition = false
+  for tag in product.tags
+    assign tag_downcase = tag | downcase
+    if tag_downcase == 'limited edition' or tag_downcase == 'limited-edition'
+      assign is_limited_edition = true
+      break
+    endif
+  endfor
+
+  assign size_option_index = -1
+  for option in product.options
+    assign option_downcase = option | downcase
+    if option_downcase == 'size' or option_downcase == 'størrelse' or option_downcase == 'størrelser' or option_downcase == 'storlek'
+      assign size_option_index = forloop.index0
+      break
+    endif
+  endfor
+
   assign show_remaining_class = ''
   assign show_notice = block.settings.show_notice
   assign max_inventory = block.settings.max_inventory
@@ -22,13 +40,24 @@
   assign max_inventory_quantity = max_inventory | plus: 1
 
   if current_variant.inventory_management and current_variant.inventory_policy == 'deny'
-    if current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= max_inventory
-      assign show_remaining_class = 'count-is-low'
-      assign current_inventory = current_variant.inventory_quantity | at_most: max_inventory_quantity
-    elsif current_variant.inventory_quantity > 0 and current_variant.inventory_quantity > max_inventory and show_notice == 'always'
-      assign show_remaining_class = 'count-is-in'
-    elsif current_variant.inventory_quantity < 1 and show_notice == 'always'
-      assign show_remaining_class = 'count-is-out'
+    if is_limited_edition
+      assign current_inventory = current_variant.inventory_quantity
+      if current_inventory > 0 and current_inventory < 5
+        assign show_remaining_class = 'count-is-low'
+      elsif current_inventory > 0
+        assign show_remaining_class = 'count-is-in'
+      else
+        assign show_remaining_class = 'count-is-out'
+      endif
+    else
+      if current_variant.inventory_quantity > 0 and current_variant.inventory_quantity <= max_inventory
+        assign show_remaining_class = 'count-is-low'
+        assign current_inventory = current_variant.inventory_quantity | at_most: max_inventory_quantity
+      elsif current_variant.inventory_quantity > 0 and current_variant.inventory_quantity > max_inventory and show_notice == 'always'
+        assign show_remaining_class = 'count-is-in'
+      elsif current_variant.inventory_quantity < 1 and show_notice == 'always'
+        assign show_remaining_class = 'count-is-out'
+      endif
     endif
   endif
 
@@ -48,6 +77,10 @@
   endfor
 
   if has_low_inventory or has_soldout and show_notice == 'always'
+    assign show_inventory = true
+  endif
+
+  if is_limited_edition
     assign show_inventory = true
   endif
 
@@ -97,23 +130,39 @@
     data-remaining-max="{{ max_inventory }}"
     data-remaining-show-notice="{{ show_notice }}"
     data-remaining-wrapper
+    {% if is_limited_edition %}
+      data-limited-edition="true"
+      data-size-option-index="{{ size_option_index }}"
+      data-limited-edition-message-template="{{ 'products.product.limited_edition_remaining_html' | t: inventory: '[inventory]', size: '[size]' }}"
+      data-limited-edition-message-template-no-size="{{ 'products.product.limited_edition_remaining_no_size_html' | t: inventory: '[inventory]' }}"
+    {% endif %}
     {{ block.shopify_attributes }}
     {{ block_style }}>
     <span class="variant__countdown--in"{{ in_stock_icon_color }}>
       {% render 'icon-in-stock' %}
       <span class="variant__countdown-text">{{ 'products.product.in_stock' | t }}</span>
     </span>
-    {%- if hide_inventory_count -%}
-      <span class="variant__countdown--low"{{ low_stock_icon_color }}>
-        {% render 'icon-low-inventory' %}
-        <span class="variant__countdown-text">{{ 'products.product.remaining_no_count' | t }}</span>
+    <span class="variant__countdown--low"{{ low_stock_icon_color }}>
+      {% render 'icon-low-inventory' %}
+      <span class="variant__countdown-text" data-remaining-text>
+        {%- liquid
+          if is_limited_edition
+            if size_option_index != -1
+              assign current_size = current_variant.options[size_option_index]
+              echo 'products.product.limited_edition_remaining_html' | t: inventory: current_inventory, size: current_size
+            else
+              echo 'products.product.limited_edition_remaining_no_size_html' | t: inventory: current_inventory
+            endif
+          else
+            if hide_inventory_count
+              echo 'products.product.remaining_no_count' | t
+            else
+              echo 'products.product.remaining_html' | t: inventory: inventory
+            endif
+          endif
+        -%}
       </span>
-    {%- else -%}
-      <span class="variant__countdown--low"{{ low_stock_icon_color }}>
-        {% render 'icon-low-inventory' %}
-        <span class="variant__countdown-text">{{ 'products.product.remaining_html' | t: inventory: inventory }}</span>
-      </span>
-    {%- endif -%}
+    </span>
 
     <span class="variant__countdown--out"{{ out_of_stock_icon_color }}>
       {% render 'icon-out-of-stock' %}
@@ -131,18 +180,23 @@
             assign variant_id = variant.id | json
 
             if variant.inventory_management and variant.inventory_policy == 'deny'
-              assign quantity = variant.inventory_quantity | at_most: max_inventory_quantity
+              assign quantity = variant.inventory_quantity
 
-              if hide_inventory_count
-                if quantity < 1
-                  assign remaining_value = 'out'
-                elsif quantity > 0 and quantity < max_inventory
-                  assign remaining_value = 'low'
-                else
-                  assign remaining_value = 'in'
-                endif
-              else
+              if is_limited_edition
                 assign remaining_value = quantity
+              else
+                assign quantity_capped = quantity | at_most: max_inventory_quantity
+                if hide_inventory_count
+                  if quantity_capped < 1
+                    assign remaining_value = 'out'
+                  elsif quantity_capped > 0 and quantity_capped < max_inventory
+                    assign remaining_value = 'low'
+                  else
+                    assign remaining_value = 'in'
+                  endif
+                else
+                  assign remaining_value = quantity_capped
+                endif
               endif
             else
               assign remaining_value = 'unavailable'
@@ -157,6 +211,17 @@
         -%}
       }
     </script>
+
+    {%- if is_limited_edition and product.metafields.custom.sell_out_date != blank -%}
+      <div style="margin-top: 15px;" data-countdown-block>
+        {%- render 'countdown-timer',
+          end_date: product.metafields.custom.sell_out_date,
+          end_time: '12:00',
+          period: 'pm',
+          hide_on_complete: true
+        -%}
+      </div>
+    {%- endif -%}
   </div>
 {%- elsif request.design_mode -%}
   <div {{ block.shopify_attributes }}></div>

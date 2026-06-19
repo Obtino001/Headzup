@@ -487,6 +487,8 @@
       "out_of_stock": "Item is out of stock",
       "item_unavailable": "Item is unavailable",
       "remaining_html": "Hurry, Only {{ inventory }} Left!",
+      "limited_edition_remaining_html": "Only {{ inventory }} left in size {{ size }}",
+      "limited_edition_remaining_no_size_html": "Only {{ inventory }} left",
       "remaining_no_count": "Hurry! Low inventory",
       "pickup_availability": {
         "pickup_options": "Pickup options",

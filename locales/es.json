@@ -314,6 +314,8 @@
       "out_of_stock": "El artículo está agotado",
       "item_unavailable": "El artículo no está disponible",
       "remaining_html": "Date prisa, solo quedan {{ inventory }}!",
+      "limited_edition_remaining_html": "¡Solo quedan {{ inventory }} en talla {{ size }}!",
+      "limited_edition_remaining_no_size_html": "¡Solo quedan {{ inventory }}!",
       "remaining_no_count": "¡Date prisa! Bajo inventario",
       "pickup_availability": {
         "pickup_options": "Opciones de recogida",

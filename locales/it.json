@@ -477,6 +477,8 @@
       "out_of_stock": "Articolo esaurito",
       "item_unavailable": "Articolo non disponibile",
       "remaining_html": "Solo {{ inventory }} pezzo rimasto",
+      "limited_edition_remaining_html": "Solo {{ inventory }} rimasti nella taglia {{ size }}",
+      "limited_edition_remaining_no_size_html": "Solo {{ inventory }} rimasti",
       "remaining_no_count": "Affrettati! Le scorte stanno finendo",
       "pickup_availability": {
         "pickup_options": "Opzioni di ritiro",
