@@ -538,7 +538,9 @@
                       block: block,
                       block_style: block_style,
                       quick_add_product: false
-                    -%}
+                    -%}   
+                                    {%- when 'riders_experience' -%}
+                {% render 'product-riders-experience', block: block %}
 
                   {%- when 'text' -%}
                     {%- render 'product-block-text', block: block, block_style: block_style -%}
@@ -1947,6 +1949,125 @@
           "label": "Bottom",
           "default": 16
         }
+      ]
+    },
+     {
+      "type": "riders_experience",
+      "name": "Riders Experience",
+      "limit": 1,
+      "settings": [
+       {
+  "type": "text",
+  "id": "Heading",
+  "label": "Heading"
+},
+    {
+  "type": "range",
+  "id": "video_margin_top",
+  "label": "Top Spacing (px)",
+  "min": 0,
+  "max": 100,
+  "step": 1,
+  "default": 20
+},
+{
+  "type": "range",
+  "id": "video_margin_bottom",
+  "label": "Bottom Spacing (px)",
+  "min": 0,
+  "max": 100,
+  "step": 1,
+  "default": 20
+},
+ {
+      "type": "checkbox",
+      "id": "use_metafields",
+      "label": "Use product metafields instead of uploaded videos",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Video Uploads (Used if metafields are disabled)"
+    },
+    {
+      "type": "video",
+      "id": "video_1",
+      "label": "Video 1"
+    },
+    {
+    "type": "image_picker",
+    "id": "thumb_1",
+    "label": "Thumbnail for Video 1"
+    },
+    {
+    "type": "text",
+    "id": "video_text_1",
+    "label": "Video 1 Title"
+    },
+
+    {
+    "type": "video",
+    "id": "video_2",
+    "label": "Video 2"
+    },
+
+    {
+    "type": "image_picker",
+    "id": "thumb_2",
+    "label": "Thumbnail for Video 2"
+    },
+    {
+    "type": "text",
+    "id": "video_text_2",
+    "label": "Video 2 Title"
+    },
+    {
+    "type": "video",
+    "id": "video_3",
+    "label": "Video 3"
+    },
+
+    {
+    "type": "image_picker",
+    "id": "thumb_3",
+    "label": "Thumbnail for Video 3"
+    },
+    {
+    "type": "text",
+    "id": "video_text_3",
+    "label": "Video 3 Title"
+    },
+    {
+    "type": "video",
+    "id": "video_4",
+    "label": "Video 4"
+    },
+
+    {
+    "type": "image_picker",
+    "id": "thumb_4",
+    "label": "Thumbnail for Video 4"
+    },
+    {
+    "type": "text",
+    "id": "video_text_4",
+    "label": "Video 4 Title"
+    },
+    {
+    "type": "video",
+    "id": "video_5",
+    "label": "Video 5"
+    },
+    {
+    "type": "image_picker",
+    "id": "thumb_5",
+    "label": "Thumbnail for Video 5"
+    },
+    {
+    "type": "text",
+    "id": "video_text_5",
+    "label": "Video 5 Title"
+    },
       ]
     },
     {
