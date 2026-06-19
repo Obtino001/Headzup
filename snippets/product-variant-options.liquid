@@ -11,7 +11,15 @@
     assign has_form_buttons = false
   endif
 
-  assign size_guide_modal_id = 'SizeGuideModal-' | append: block.id
+  assign size_guide_blocks = section.blocks | where: 'type', 'ring_size'
+  assign size_guide_block = size_guide_blocks.first
+  if enable_size_chart and size_guide_block == blank
+    assign enable_size_chart = false
+  endif
+
+  if size_guide_block != blank
+    assign size_guide_modal_id = 'SizeGuideModal-' | append: size_guide_block.id
+  endif
 
   assign variant_lines_setting = settings.variant_lines
   if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two
@@ -20,18 +28,13 @@
 -%}
 
 {%- capture size_chart -%}
-  {%- if enable_size_chart -%}
+  {%- if enable_size_chart and size_guide_block != blank -%}
     {%- liquid
       assign show_size_chart = true
     -%}
 
     {%- capture size_chart_link -%}
-      {%- render 'size-guide', block: block, part: 'trigger', modal_id: size_guide_modal_id -%}
-    {%- endcapture -%}
-
-    {%- capture size_chart_modal -%}
-      {%- render 'size-guide', block: block, part: 'modal', modal_id: size_guide_modal_id -%}
-      {%- render 'size-guide', block: block, part: 'assets', modal_id: size_guide_modal_id -%}
+      {%- render 'size-guide', block: size_guide_block, part: 'trigger', modal_id: size_guide_modal_id -%}
     {%- endcapture -%}
   {%- endif -%}
 {%- endcapture -%}
@@ -391,10 +394,6 @@
 
 
   {{- form_fields -}}
-
-  {%- if show_size_chart and size_chart_modal != blank -%}
-    {{ size_chart_modal }}
-  {%- endif -%}
 
   {%- if product.selling_plan_groups.size > 0 and block.settings.subscriptions_enable_selectors -%}
     {%- render 'subscription-form', product: product, product_form_id: product_form_id -%}
