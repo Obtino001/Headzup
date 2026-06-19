@@ -17,7 +17,7 @@
           "settings": {
             "padding_top": 36,
             "padding_bottom": 36,
-            "description": "<p>The Joieem X represents the next generation of smart e-bikes. With a powerful yet smooth ride, <strong>up to 80-100 km of range</strong>, and intelligent app-connected features like GPS tracking and anti-theft protection, it adapts seamlessly to your everyday life.</p><p>Designed for effortless performance and minimal maintenance.</p>",
+            "description": "",
             "tab_1": "Description",
             "tab_2": "Features",
             "tab_2_content": "",
@@ -30,7 +30,7 @@
             "btn1_text": "Book a Free Test Ride",
             "btn1_link": "",
             "btn2_text": "Add to Cart",
-            "f1_icon": "cyclist",
+            "f1_icon": "seat",
             "f1_title": "Suitable for cyclists from 160 to 200 cm",
             "f2_icon": "seat",
             "f2_title": "Comfortable sitting position",
