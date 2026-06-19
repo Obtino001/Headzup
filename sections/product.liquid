@@ -812,13 +812,14 @@
           </div>
         </div>
       </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'product_tabs-new' -%}
+          {% render 'product-tabs', block: block %}
+        {%- endif -%}
+      {%- endfor -%}
+
     </div>
-      </div>
-  {%- for block in section.blocks -%}
-    {%- if block.type == 'product_tabs-new' -%}
-      {% render 'product-tabs', block: block %}
-    {%- endif -%}
-  {%- endfor -%}
   </{{ wrapper_tag }}>
 
   {% unless product == empty %}
