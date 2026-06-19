@@ -25,7 +25,7 @@
           "settings": {
             "trustpilot_text": "4,3 stjerner | Baseret på +575 anmeldelser",
             "trustpilot_link": "",
-            "padding_bottom": 16
+            "padding_bottom": 42
           }
         },
         "price": {
@@ -45,6 +45,19 @@
             "text_font_size": "body-medium",
             "text_alignment": "text-left",
             "layout": "left",
+            "padding_bottom": 16
+          }
+        },
+        "inventory_countdown_ePdH6p": {
+          "type": "inventory_countdown",
+          "settings": {
+            "show_notice": "low-inventory",
+            "max_inventory": 10,
+            "hide_inventory_counter": true,
+            "icon_size": 20,
+            "in_stock_color": "#56ad6a",
+            "low_stock_color": "#f79554",
+            "out_of_stock_color": "#721c24",
             "padding_bottom": 16
           }
         },
@@ -209,6 +222,7 @@
         "trustpilot_RcGQRK",
         "price",
         "text_W4nY4h",
+        "inventory_countdown_ePdH6p",
         "ring_size_TVjGKw",
         "variants_Lkjwdn",
         "buttons",
