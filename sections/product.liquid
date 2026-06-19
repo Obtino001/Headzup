@@ -354,6 +354,12 @@
                       block_style: block_style
                     -%}
 
+                  {%- when 'cap_guide' -%}
+                    {%- render 'product-cap-guide',
+                      block: block,
+                      block_style: block_style
+                    -%}
+
                 {%- when 'variants' -%}
                     {%- render 'product-variant-options',
                     product: product,
@@ -1188,6 +1194,55 @@
           "unit": "px",
           "label": "Bottom",
           "default": 8
+        }
+      ]
+    },
+    {
+      "type": "cap_guide",
+      "name": "Cap model guide",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enable",
+          "label": "Show cap guide link",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "trigger_text",
+          "label": "Link text",
+          "default": "Ikke sikker på hvilken model?"
+        },
+        {
+          "type": "select",
+          "id": "open_as",
+          "label": "Open as",
+          "default": "drawer",
+          "options": [
+            {"value": "drawer", "label": "Drawer modal"},
+            {"value": "page", "label": "Link to page"}
+          ]
+        },
+        {
+          "type": "url",
+          "id": "page_link",
+          "label": "Comparison page URL",
+          "info": "Used when Open as is Link to page. Example: /pages/cap-guide"
+        },
+        {
+          "type": "header",
+          "content": "Padding"
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom",
+          "default": 12
         }
       ]
     },
@@ -3110,9 +3165,13 @@
     },
     { "type": "text", "id": "tab_1", "label": "Tab 1 Title", "default": "Description" },
     { "type": "text", "id": "tab_2", "label": "Tab 2 Title", "default": "Features" },
+    { "type": "richtext", "id": "tab_2_content", "label": "Tab 2 Content" },
     { "type": "text", "id": "tab_3", "label": "Tab 3 Title", "default": "Specifications" },
+    { "type": "richtext", "id": "tab_3_content", "label": "Tab 3 Content" },
     { "type": "text", "id": "tab_4", "label": "Tab 4 Title", "default": "Accessories" },
+    { "type": "richtext", "id": "tab_4_content", "label": "Tab 4 Content" },
     { "type": "text", "id": "tab_5", "label": "Tab 5 Title", "default": "FAQ" },
+    { "type": "richtext", "id": "tab_5_content", "label": "Tab 5 Content" },
     {
       "type": "header",
       "content": "Action Buttons"

@@ -1,0 +1,93 @@
+{%- comment -%}
+  Cap guide drawer — parts: trigger | modal | assets | all
+{%- endcomment -%}
+
+{%- liquid
+  assign part = part | default: 'all'
+  unless modal_id != blank
+    assign modal_id = 'CapGuideModal-' | append: section.id
+  endunless
+  assign trigger_text = block.settings.trigger_text | default: section.settings.trigger_text | default: 'Ikke sikker på hvilken model?'
+-%}
+
+{%- if part == 'assets' or part == 'all' -%}
+  {{ 'cap-guide.css' | asset_url | stylesheet_tag }}
+{%- endif -%}
+
+{%- if part == 'trigger' or part == 'all' -%}
+  {%- if block.settings.open_as == 'page' and block.settings.page_link != blank -%}
+    <a href="{{ block.settings.page_link }}" class="cap-guide-trigger">{{ trigger_text | escape }}</a>
+  {%- else -%}
+    <button type="button" class="cap-guide-trigger" data-cap-guide-target="{{ modal_id }}" aria-haspopup="dialog">
+      {{ trigger_text | escape }}
+    </button>
+  {%- endif -%}
+{%- endif -%}
+
+{%- if part == 'modal' or part == 'all' -%}
+<cap-guide-modal id="{{ modal_id }}" class="cap-guide-modal">
+  <div class="cg-overlay" data-cap-guide-close></div>
+  <div class="cg-dialog" role="dialog" aria-modal="true" aria-labelledby="cg-title-{{ section.id }}">
+    <div class="cg-header">
+      <h2 id="cg-title-{{ section.id }}">{{ section.settings.drawer_heading | default: section.settings.heading | default: 'Sammenlign modeller' | escape }}</h2>
+      <button type="button" class="cg-close" data-cap-guide-close aria-label="{{ 'general.accessibility.close' | t }}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="cg-body">
+      {%- if section.settings.lead != blank -%}
+        <p class="cap-guide-page__lead" style="margin: 24px 0 8px;">{{ section.settings.lead | escape }}</p>
+      {%- endif -%}
+      {%- render 'cap-guide-table', section: section, mode: 'drawer' -%}
+    </div>
+  </div>
+</cap-guide-modal>
+{%- endif -%}
+
+{%- if part == 'assets' or part == 'all' -%}
+<script>
+  if (!customElements.get('cap-guide-modal')) {
+    class CapGuideModal extends HTMLElement {
+      constructor() {
+        super();
+        this.closeBtns = this.querySelectorAll('[data-cap-guide-close]');
+        this.overlay = this.querySelector('.cg-overlay');
+        this.bindEvents();
+      }
+
+      connectedCallback() {
+        if (this.parentElement && this.parentElement !== document.body) {
+          document.body.appendChild(this);
+        }
+        document.querySelectorAll(`[data-cap-guide-target="${this.id}"]`).forEach(trigger => {
+          if (trigger.dataset.cgBound === 'true') return;
+          trigger.dataset.cgBound = 'true';
+          trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.open();
+          });
+        });
+      }
+
+      bindEvents() {
+        this.closeBtns.forEach(btn => btn.addEventListener('click', () => this.close()));
+        this.overlay?.addEventListener('click', () => this.close());
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && this.hasAttribute('open')) this.close();
+        });
+      }
+
+      open() {
+        this.setAttribute('open', '');
+        document.body.style.overflow = 'hidden';
+      }
+
+      close() {
+        this.removeAttribute('open');
+        document.body.style.overflow = '';
+      }
+    }
+    customElements.define('cap-guide-modal', CapGuideModal);
+  }
+</script>
+{%- endif -%}

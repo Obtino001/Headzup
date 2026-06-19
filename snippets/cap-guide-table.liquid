@@ -1,0 +1,80 @@
+{%- comment -%}
+  Cap comparison table — pass section with model blocks
+  mode: page | drawer
+{%- endcomment -%}
+
+{%- liquid
+  assign mode = mode | default: 'page'
+  assign model_blocks = section.blocks | where: 'type', 'model'
+-%}
+
+<div class="cap-compare{% if mode == 'drawer' %} cap-compare--drawer{% endif %}">
+  {%- if model_blocks.size > 0 -%}
+    <div class="cap-compare__table-wrap">
+      <table class="cap-compare__table">
+        <thead>
+          <tr>
+            <th class="cap-compare__model">{{ section.settings.col_model | default: 'Model' }}</th>
+            <th>{{ section.settings.col_fit | default: 'Fit' }}</th>
+            <th>{{ section.settings.col_brim | default: 'Brim' }}</th>
+            <th>{{ section.settings.col_sizing | default: 'Sizing' }}</th>
+            <th>{{ section.settings.col_best_for | default: 'Best for' }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- for block in model_blocks -%}
+            <tr {{ block.shopify_attributes }}>
+              <td class="cap-compare__model">
+                <span class="cap-compare__model-name">{{ block.settings.title | escape }}</span>
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 240 | image_tag: class: 'cap-compare__model-img', loading: 'lazy', alt: block.settings.title }}
+                {%- endif -%}
+                {%- if block.settings.collection != blank -%}
+                  <a href="{{ block.settings.collection.url }}" class="cap-compare__model-link">{{ section.settings.shop_label | default: 'Shop' | escape }}</a>
+                {%- endif -%}
+              </td>
+              <td>{{ block.settings.fit }}</td>
+              <td>{{ block.settings.brim }}</td>
+              <td>{{ block.settings.sizing }}</td>
+              <td>{{ block.settings.best_for }}</td>
+            </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="cap-compare__cards">
+      {%- for block in model_blocks -%}
+        <article class="cap-compare__card" {{ block.shopify_attributes }}>
+          <div class="cap-compare__card-header">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 200 | image_tag: class: 'cap-compare__model-img', loading: 'lazy', alt: block.settings.title }}
+            {%- endif -%}
+            <div>
+              <span class="cap-compare__model-name">{{ block.settings.title | escape }}</span>
+              {%- if block.settings.collection != blank -%}
+                <a href="{{ block.settings.collection.url }}" class="cap-compare__model-link">{{ section.settings.shop_label | default: 'Shop' | escape }}</a>
+              {%- endif -%}
+            </div>
+          </div>
+          <div class="cap-compare__card-row">
+            <span class="cap-compare__card-label">{{ section.settings.col_fit | default: 'Fit' }}</span>
+            <span>{{ block.settings.fit }}</span>
+          </div>
+          <div class="cap-compare__card-row">
+            <span class="cap-compare__card-label">{{ section.settings.col_brim | default: 'Brim' }}</span>
+            <span>{{ block.settings.brim }}</span>
+          </div>
+          <div class="cap-compare__card-row">
+            <span class="cap-compare__card-label">{{ section.settings.col_sizing | default: 'Sizing' }}</span>
+            <span>{{ block.settings.sizing }}</span>
+          </div>
+          <div class="cap-compare__card-row">
+            <span class="cap-compare__card-label">{{ section.settings.col_best_for | default: 'Best for' }}</span>
+            <span>{{ block.settings.best_for }}</span>
+          </div>
+        </article>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</div>

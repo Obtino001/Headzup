@@ -130,6 +130,16 @@
             "padding_bottom": 0
           }
         },
+        "cap_guide": {
+          "type": "cap_guide",
+          "settings": {
+            "enable": true,
+            "trigger_text": "Ikke sikker på hvilken model?",
+            "open_as": "drawer",
+            "page_link": "shopify://pages/cap-guide",
+            "padding_bottom": 12
+          }
+        },
         "buttons": {
           "type": "buttons",
           "settings": {
@@ -272,6 +282,7 @@
         "inventory_countdown_ePdH6p",
         "ring_size_TVjGKw",
         "variants_Lkjwdn",
+        "cap_guide",
         "buttons",
         "onskeskyen_wishlist_button_tfCaQD",
         "countdown_jFJ7N3",

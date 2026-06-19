@@ -1,0 +1,252 @@
+/* Cap model comparison — premium */
+.cap-guide-modal {
+  --cg-bg: var(--colorBody, #ffffff);
+  --cg-text: var(--colorTextBody, #0c2340);
+  --cg-muted: rgba(12, 35, 64, 0.55);
+  --cg-border: rgba(12, 35, 64, 0.12);
+  --cg-z: 2147483646;
+  display: block;
+}
+
+.cap-guide-modal .cg-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: var(--cg-z);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+.cap-guide-modal[open] .cg-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.cap-guide-modal .cg-dialog {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 920px;
+  height: 100vh;
+  height: 100dvh;
+  background: var(--cg-bg);
+  z-index: calc(var(--cg-z) + 1);
+  transform: translateX(100%);
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.cap-guide-modal[open] .cg-dialog {
+  transform: translateX(0);
+}
+
+.cap-guide-modal .cg-header {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  border-bottom: 1px solid var(--cg-border);
+}
+
+.cap-guide-modal .cg-header h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cg-text);
+}
+
+.cap-guide-modal .cg-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--cg-text);
+}
+
+.cap-guide-modal .cg-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 28px 40px;
+}
+
+.cap-guide-trigger {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  color: var(--navy, #0c2340);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  letter-spacing: 0.02em;
+  transition: opacity 0.25s ease;
+}
+
+.cap-guide-trigger:hover {
+  opacity: 0.65;
+}
+
+/* Page hero */
+.cap-guide-page {
+  --cg-text: #0c2340;
+}
+
+.cap-guide-page__hero {
+  text-align: center;
+  padding: clamp(48px, 8vw, 88px) 24px clamp(32px, 5vw, 56px);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.cap-guide-page__eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(12, 35, 64, 0.5);
+  margin-bottom: 12px;
+}
+
+.cap-guide-page__title {
+  margin: 0 0 16px;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--cg-text);
+}
+
+.cap-guide-page__lead {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+  color: rgba(12, 35, 64, 0.65);
+}
+
+/* Comparison grid */
+.cap-compare {
+  padding: 0 24px clamp(48px, 6vw, 80px);
+}
+
+.cap-compare__table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cap-compare__table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+}
+
+.cap-compare__table th,
+.cap-compare__table td {
+  padding: 20px 16px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(12, 35, 64, 0.1);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--cg-text);
+}
+
+.cap-compare__table th {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(12, 35, 64, 0.5);
+  padding-bottom: 14px;
+}
+
+.cap-compare__model {
+  min-width: 180px;
+}
+
+.cap-compare__model-name {
+  display: block;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+  color: var(--cg-text);
+}
+
+.cap-compare__model-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 2px;
+  background: #f0efec;
+}
+
+.cap-compare__model-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cg-text);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+/* Mobile cards */
+.cap-compare__cards {
+  display: none;
+  gap: 20px;
+}
+
+.cap-compare__card {
+  border: 1px solid rgba(12, 35, 64, 0.1);
+  padding: 24px;
+}
+
+.cap-compare__card-header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.cap-compare__card-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(12, 35, 64, 0.08);
+  font-size: 14px;
+}
+
+.cap-compare__card-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(12, 35, 64, 0.5);
+}
+
+@media (max-width: 749px) {
+  .cap-compare__table-wrap {
+    display: none;
+  }
+
+  .cap-compare__cards {
+    display: grid;
+  }
+
+  .cap-guide-modal .cg-dialog {
+    max-width: 100%;
+  }
+}

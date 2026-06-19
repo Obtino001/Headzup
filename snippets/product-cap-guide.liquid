@@ -1,0 +1,23 @@
+{%- if block.settings.enable -%}
+  {{ 'cap-guide.css' | asset_url | stylesheet_tag }}
+  {%- liquid
+    assign modal_id = 'CapGuideModal-global'
+    assign cap_guide_sections = sections | default: nil
+  -%}
+
+  <div
+    class="product__block product-cap-guide block-padding"
+    {{ block.shopify_attributes }}
+    {{ block_style }}
+  >
+    {%- if block.settings.open_as == 'page' and block.settings.page_link != blank -%}
+      <a href="{{ block.settings.page_link }}" class="cap-guide-trigger">
+        {{ block.settings.trigger_text | escape }}
+      </a>
+    {%- else -%}
+      <button type="button" class="cap-guide-trigger" data-cap-guide-target="{{ modal_id }}" aria-haspopup="dialog">
+        {{ block.settings.trigger_text | escape }}
+      </button>
+    {%- endif -%}
+  </div>
+{%- endif -%}

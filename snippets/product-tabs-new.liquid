@@ -1,351 +1,330 @@
 {%- style -%}
-    /* --- Block Padding Logic --- */
+  /* --- Block Padding Logic --- */
+  .block-padding-{{ block.id }} {
+    padding-top: {{ block.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ block.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
     .block-padding-{{ block.id }} {
-      padding-top: {{ block.settings.padding_top | times: 0.75 | round: 0 }}px;
-      padding-bottom: {{ block.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      padding-top: {{ block.settings.padding_top }}px;
+      padding-bottom: {{ block.settings.padding_bottom }}px;
     }
-    @media screen and (min-width: 750px) {
-      .block-padding-{{ block.id }} {
-        padding-top: {{ block.settings.padding_top }}px;
-        padding-bottom: {{ block.settings.padding_bottom }}px;
-      }
-    }
+  }
 
-    /* --- Top Header: Tabs on Left, Buttons on Right --- */
+  /* --- Top Header: Tabs on Left, Buttons on Right --- */
+  .joieem-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    gap: 2rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1rem;
+  }
+
+  .joieem-tabs-container {
+    flex: 1 1 auto;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* Accent yellow underline for active tab */
+  .product-block-{{ block.id }} .tabs > li span:first-of-type::after {
+    background-color: #FFD100;
+    height: 3px;
+    bottom: -11px; /* Align to the border bottom */
+  }
+
+  .product-block-{{ block.id }} .tabs > li.current {
+    --text: var(--text-dark);
+  }
+
+  .joieem-actions-container {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  /* Custom button overrides for pill shape and colors */
+  .product-block-{{ block.id }} .btn-outline-custom {
+    border-radius: 30px;
+    border-color: var(--border);
+    transition: all 0.3s ease;
+  }
+  .product-block-{{ block.id }} .btn-outline-custom:hover {
+    border-color: #FFD100;
+    background-color: transparent;
+    color: var(--text-dark);
+  }
+  .product-block-{{ block.id }} .btn-solid-custom {
+    background-color: #FFD100;
+    color: #000000;
+    border-radius: 30px;
+    border-color: #FFD100;
+    transition: opacity 0.3s ease;
+  }
+  .product-block-{{ block.id }} .btn-solid-custom:hover {
+    opacity: 0.85;
+    background-color: #FFD100;
+    color: #000000;
+    border-color: #FFD100;
+  }
+
+  /* --- Main Content Layout --- */
+  .joieem-content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 8rem;
+    align-items: start;
+  }
+
+  .joieem-text-column {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Style tab transitions */
+  .product-block-{{ block.id }} .tab-content {
+    transition: opacity 0.35s ease, transform 0.35s ease;
+    transform: translateY(8px);
+  }
+  .product-block-{{ block.id }} .tab-content.current {
+    transform: translateY(0);
+  }
+
+  .joieem-text-area {
+    line-height: 1.6;
+    color: var(--text);
+  }
+
+  .joieem-features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 4rem;
+    column-gap: 3rem;
+  }
+
+  .joieem-feature-block {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .joieem-feature-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-dark);
+  }
+
+  .joieem-feature-icon img,
+  .joieem-feature-icon svg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .joieem-feature-text {
+    font-size: var(--font-body-medium);
+    line-height: 1.4;
+    color: var(--text-dark);
+    font-weight: 500;
+  }
+
+  /* --- Mobile Responsiveness --- */
+  @media screen and (max-width: 989px) {
+    .joieem-content-grid {
+      grid-template-columns: 1fr;
+      gap: 5rem;
+    }
+  }
+
+  @media screen and (max-width: 749px) {
     .joieem-header-wrapper {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5rem;
-      margin-top: 3rem;
-      flex-wrap: wrap;
-      gap: 2rem;
-    }
-
-    .joieem-tabs-container {
-      display: flex;
-      gap: 3rem;
-    }
-
-    .joieem-tab-item {
-      font-size: 1.4rem;
-         font-weight: 500;
-      text-transform: uppercase;
-      color: rgb(var(--color-foreground));
-      padding-bottom: 0.6rem;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    .joieem-tab-item.is-active {
-      border-bottom: 3px solid #FFD100; 
-    }
-
-    /* --- Tab Panels CSS --- */
-    .joieem-text-column {
-      display: flex;
       flex-direction: column;
-      max-width: 700px;
-    }
-
-    .joieem-tab-panel {
-      display: none;
-      animation: fadeIn 0.4s ease;
+      align-items: flex-start;
+      gap: 2.5rem;
     }
     
-    .joieem-tab-panel.is-active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .joieem-tabs-container {
+      width: 100%;
     }
 
     .joieem-actions-container {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .btn-outline-custom {
-      background: transparent;
-      border: 2px solid #e5e5e5;
-      border-radius: 30px;
-      padding: 1.2rem 2.5rem;
-      font-size: 1.3rem;
-         font-weight: 500;
-      text-transform: uppercase;
-      color: rgb(var(--color-foreground));
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-
-    .btn-outline-custom:hover {
-      border-color: #FFD100;
-    }
-
-    .btn-solid-custom {
-      background: #FFD100;
-      border-radius: 30px;
-      padding: 1.4rem 3rem;
-      font-size: 1.3rem;
-         font-weight: 500;
-      text-transform: uppercase;
-      color: #000000;
-      text-decoration: none;
-      transition: opacity 0.3s ease;
-      position: relative;
-    }
-
-    .btn-solid-custom:hover {
-      opacity: 0.85;
-    }
-
-    /* --- Main Content Layout --- */
-    .joieem-content-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 8rem;
-      align-items: start;
-    }
-
-    .joieem-text-area {
-      font-size: 1.6rem;
-      line-height: 1.6;
-      color: rgba(var(--color-foreground), 0.85);
-    }
-
-    .joieem-text-area strong {
-      color: rgb(var(--color-foreground));
-      font-weight: 500;
-    }
-
-    .joieem-text-area p {
-      margin-top: 0;
-      margin-bottom: 2.5rem;
-    }
-
-    .joieem-features-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      row-gap: 4.5rem;
-      column-gap: 3rem;
-    }
-
-    .joieem-feature-block {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      align-items: flex-start;
-    }
-
-    .joieem-feature-icon {
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgb(var(--color-foreground));
-    }
-
-    .joieem-feature-icon img,
-    .joieem-feature-icon svg {
       width: 100%;
-      height: 100%;
-      object-fit: contain;
+      flex-direction: column;
     }
 
-    .joieem-feature-text {
-      font-size: 1.4rem;
-      line-height: 1.4;
-      color: rgb(var(--color-foreground));
-      max-width: 200px;
+    .joieem-actions-container .btn {
+      width: 100%;
+      text-align: center;
     }
+  }
+{%- endstyle -%}
 
-    /* --- Mobile Responsiveness --- */
-    @media screen and (max-width: 989px) {
-      .joieem-content-grid {
-        grid-template-columns: 1fr;
-        gap: 5rem;
-      }
-    }
-
-    @media screen and (max-width: 749px) {
-      .joieem-header-wrapper {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2.5rem;
-      }
-      
-      .joieem-tabs-container {
-        overflow-x: auto;
-        width: 100%;
-        padding-bottom: 1rem;
-        scrollbar-width: none;
-      }
-      
-      .joieem-tabs-container::-webkit-scrollbar {
-        display: none;
-      }
-
-      .joieem-actions-container {
-        width: 100%;
-        flex-direction: column;
-      }
-
-      .btn-outline-custom, .btn-solid-custom {
-        width: 100%;
-        text-align: center;
-      }
-    }
-  {%- endstyle -%}
-
-  <div class="product-block-{{ block.id }} page-width block-padding-{{ block.id }}" {{ block.shopify_attributes }}>
-    
-    <div class="joieem-header-wrapper">
-      <div class="joieem-tabs-container">
+<tabs-component class="product-block-{{ block.id }} page-width block-padding-{{ block.id }} product-tabs" {{ block.shopify_attributes }}>
+  
+  <div class="joieem-header-wrapper">
+    <native-scrollbar class="tabs__head product-tabs__head joieem-tabs-container">
+      <ul class="tabs product-tabs-title" data-scrollbar data-scrollbar-slider>
         {%- if block.settings.tab_1 != blank -%}
-          <div class="joieem-tab-item is-active" data-target="#panel-1-{{ block.id }}">{{ block.settings.tab_1 }}</div>
+          <li class="tab-link tab-link-0 current" data-tab="0" tabindex="0">
+            <span>{{ block.settings.tab_1 }}</span>
+          </li>
         {%- endif -%}
         {%- if block.settings.tab_2 != blank -%}
-          <div class="joieem-tab-item" data-target="#panel-2-{{ block.id }}">{{ block.settings.tab_2 }}</div>
+          <li class="tab-link tab-link-1" data-tab="1" tabindex="0">
+            <span>{{ block.settings.tab_2 }}</span>
+          </li>
         {%- endif -%}
         {%- if block.settings.tab_3 != blank -%}
-          <div class="joieem-tab-item" data-target="#panel-3-{{ block.id }}">{{ block.settings.tab_3 }}</div>
+          <li class="tab-link tab-link-2" data-tab="2" tabindex="0">
+            <span>{{ block.settings.tab_3 }}</span>
+          </li>
         {%- endif -%}
         {%- if block.settings.tab_4 != blank -%}
-          <div class="joieem-tab-item" data-target="#panel-4-{{ block.id }}">{{ block.settings.tab_4 }}</div>
+          <li class="tab-link tab-link-3" data-tab="3" tabindex="0">
+            <span>{{ block.settings.tab_4 }}</span>
+          </li>
         {%- endif -%}
         {%- if block.settings.tab_5 != blank -%}
-          <div class="joieem-tab-item" data-target="#panel-5-{{ block.id }}">{{ block.settings.tab_5 }}</div>
+          <li class="tab-link tab-link-4" data-tab="4" tabindex="0">
+            <span>{{ block.settings.tab_5 }}</span>
+          </li>
         {%- endif -%}
-      </div>
-      
-      <div class="joieem-actions-container">
-        {%- if block.settings.btn1_text != blank -%}
-          <a href="{{ block.settings.btn1_link | default: '#' }}" class="btn-outline-custom">
-            {{ block.settings.btn1_text }}
-          </a>
-        {%- endif -%}
-        {%- if block.settings.btn2_text != blank -%}
-          <button type="button" class="btn-solid-custom button" onclick="
-            var mainBtn = document.querySelector('.product__info-container .product-form__submit') || document.querySelector('.product-form__submit');
-            var spinner = this.querySelector('.loading__spinner');
+      </ul>
+
+      <button
+        type="button"
+        class="tabs__arrow tabs__arrow--prev product-tabs__arrow product-tabs__arrow--prev is-hidden"
+        data-scrollbar-arrow-prev
+      >
+        {%- render 'icon-nav-arrow-left' -%}
+        <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+      </button>
+
+      <button
+        type="button"
+        class="tabs__arrow tabs__arrow--next product-tabs__arrow product-tabs__arrow--next is-hidden"
+        data-scrollbar-arrow-next
+      >
+        {%- render 'icon-nav-arrow-right' -%}
+        <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
+      </button>
+    </native-scrollbar>
+    
+    <div class="joieem-actions-container">
+      {%- if block.settings.btn1_text != blank -%}
+        <a href="{{ block.settings.btn1_link | default: '#' }}" class="btn btn--outline btn--secondary btn-outline-custom">
+          <span class="btn__text">{{ block.settings.btn1_text }}</span>
+        </a>
+      {%- endif -%}
+      {%- if block.settings.btn2_text != blank -%}
+        <button type="button" class="btn btn--solid btn--primary btn-solid-custom" onclick="
+          var mainBtn = document.querySelector('.product__info-container .product-form__submit') || document.querySelector('.product-form__submit');
+          if(mainBtn) { 
+            mainBtn.click(); 
             
-            if(mainBtn) { 
-              mainBtn.click(); 
-              
-              /* Add loading states */
-              this.classList.add('loading');
-              if(spinner) spinner.classList.remove('hidden');
-              
-              /* Remove loading states after a short delay so the button resets */
-              setTimeout(() => {
-                this.classList.remove('loading');
-                if(spinner) spinner.classList.add('hidden');
-              }, 2000);
-            }
-          ">
-            <span>{{ block.settings.btn2_text }}</span>
-            {%- render 'loading-spinner' -%}
-          </button>
-        {%- endif -%}
-      </div>
-    </div>
-
-    <div class="joieem-content-grid">
-      
-      <div class="joieem-text-column">
-        <div id="panel-1-{{ block.id }}" class="joieem-tab-panel is-active">
-          <div class="joieem-text-area rte">
-            {{ block.settings.description | default: product.description }}
-          </div>
-        </div>
-
-        <div id="panel-2-{{ block.id }}" class="joieem-tab-panel">
-          <div class="joieem-text-area rte">{{ block.settings.tab_2_content }}</div>
-        </div>
-
-        <div id="panel-3-{{ block.id }}" class="joieem-tab-panel">
-          <div class="joieem-text-area rte">{{ block.settings.tab_3_content }}</div>
-        </div>
-
-        <div id="panel-4-{{ block.id }}" class="joieem-tab-panel">
-          <div class="joieem-text-area rte">{{ block.settings.tab_4_content }}</div>
-        </div>
-
-        <div id="panel-5-{{ block.id }}" class="joieem-tab-panel">
-          <div class="joieem-text-area rte">{{ block.settings.tab_5_content }}</div>
-        </div>
-      </div>
-
-      <div class="joieem-features-grid">
-        {%- for i in (1..6) -%}
-          {%- assign img_key = 'f' | append: i | append: '_image' -%}
-          {%- assign icon_key = 'f' | append: i | append: '_icon' -%}
-          {%- assign title_key = 'f' | append: i | append: '_title' -%}
-          
-          {%- assign f_image = block.settings[img_key] -%}
-          {%- assign f_icon = block.settings[icon_key] -%}
-          {%- assign f_title = block.settings[title_key] -%}
-
-          {%- if f_title != blank -%}
-            <div class="joieem-feature-block">
-              <div class="joieem-feature-icon">
-                {%- if f_image != blank -%}
-                  {{ f_image | image_url: width: 64 | image_tag: loading: 'lazy' }}
-                {%- else -%}
-                  {%- case f_icon -%}
-                    {%- when 'cyclist' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16m-4-4h8M8 8h8M6 12h12"/></svg>
-                    {%- when 'seat' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3"/><path d="M12 10v10m-3-3h6"/></svg>
-                    {%- when 'shield' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-                    {%- when 'frame' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18L10 6h4l6 12M5 13h14"/></svg>
-                    {%- when 'gps' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    {%- when 'brakes' -%}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 3"/></svg>
-                  {%- endcase -%}
-                {%- endif -%}
-              </div>
-              <div class="joieem-feature-text">{{ f_title }}</div>
-            </div>
-          {%- endif -%}
-        {%- endfor -%}
-      </div>
-
+            /* Add loading states */
+            this.classList.add('is-loading');
+            
+            /* Remove loading states after a short delay so the button resets */
+            setTimeout(() => {
+              this.classList.remove('is-loading');
+            }, 2000);
+          }
+        ">
+          <span class="btn__text">{{ block.settings.btn2_text }}</span>
+          <span class="btn__loader">
+            <svg height="18" width="18" class="svg-loader">
+              <circle r="7" cx="9" cy="9" />
+              <circle stroke-dasharray="87.96459430051421 87.96459430051421" r="7" cx="9" cy="9" />
+            </svg>
+          </span>
+        </button>
+      {%- endif -%}
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const blockContainer = document.querySelector('.product-block-{{ block.id }}');
-      if (!blockContainer) return;
+  <div class="joieem-content-grid">
+    
+    <div class="joieem-text-column">
+      {%- if block.settings.tab_1 != blank -%}
+        <div class="tab-content tab-content-0 current rte">
+          <div class="joieem-text-area">
+            {{ block.settings.description | default: product.description }}
+          </div>
+        </div>
+      {%- endif -%}
 
-      const tabs = blockContainer.querySelectorAll('.joieem-tab-item');
-      const panels = blockContainer.querySelectorAll('.joieem-tab-panel');
+      {%- if block.settings.tab_2 != blank -%}
+        <div class="tab-content tab-content-1 rte">
+          <div class="joieem-text-area">{{ block.settings.tab_2_content }}</div>
+        </div>
+      {%- endif -%}
 
-      tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-          // 1. Remove active state from all tabs and panels
-          tabs.forEach(t => t.classList.remove('is-active'));
-          panels.forEach(p => p.classList.remove('is-active'));
+      {%- if block.settings.tab_3 != blank -%}
+        <div class="tab-content tab-content-2 rte">
+          <div class="joieem-text-area">{{ block.settings.tab_3_content }}</div>
+        </div>
+      {%- endif -%}
 
-          // 2. Add active state to clicked tab
-          this.classList.add('is-active');
+      {%- if block.settings.tab_4 != blank -%}
+        <div class="tab-content tab-content-3 rte">
+          <div class="joieem-text-area">{{ block.settings.tab_4_content }}</div>
+        </div>
+      {%- endif -%}
 
-          // 3. Show target text panel
-          const targetId = this.getAttribute('data-target');
-          const targetPanel = blockContainer.querySelector(targetId);
-          if (targetPanel) {
-            targetPanel.classList.add('is-active');
-          }
-        });
-      });
-    });
-  </script>
+      {%- if block.settings.tab_5 != blank -%}
+        <div class="tab-content tab-content-4 rte">
+          <div class="joieem-text-area">{{ block.settings.tab_5_content }}</div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="joieem-features-grid">
+      {%- for i in (1..6) -%}
+        {%- assign img_key = 'f' | append: i | append: '_image' -%}
+        {%- assign icon_key = 'f' | append: i | append: '_icon' -%}
+        {%- assign title_key = 'f' | append: i | append: '_title' -%}
+        
+        {%- assign f_image = block.settings[img_key] -%}
+        {%- assign f_icon = block.settings[icon_key] -%}
+        {%- assign f_title = block.settings[title_key] -%}
+
+        {%- if f_title != blank -%}
+          <div class="joieem-feature-block">
+            <div class="joieem-feature-icon">
+              {%- if f_image != blank -%}
+                {{ f_image | image_url: width: 64 | image_tag: loading: 'lazy' }}
+              {%- else -%}
+                {%- case f_icon -%}
+                  {%- when 'cyclist' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16m-4-4h8M8 8h8M6 12h12"/></svg>
+                  {%- when 'seat' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7" r="3"/><path d="M12 10v10m-3-3h6"/></svg>
+                  {%- when 'shield' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+                  {%- when 'frame' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18L10 6h4l6 12M5 13h14"/></svg>
+                  {%- when 'gps' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  {%- when 'brakes' -%}
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 3"/></svg>
+                {%- endcase -%}
+              {%- endif -%}
+            </div>
+            <div class="joieem-feature-text">{{ f_title }}</div>
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+  </div>
+</tabs-component>

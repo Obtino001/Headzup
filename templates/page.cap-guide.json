@@ -1,65 +1,6 @@
 {
-  "type": "aside",
-  "name": "Overlay",
   "sections": {
-    "cart-drawer": {
-      "type": "cart-drawer",
-      "blocks": {
-        "title": {
-          "type": "title",
-          "settings": {
-            "title": "Kurv"
-          }
-        },
-        "free-shipping": {
-          "type": "free-shipping",
-          "settings": {
-            "message": "Du er ||amount|| fra at opnå gratis fragt til pakkeshop.",
-            "pin_to_bottom": false
-          }
-        },
-        "products": {
-          "type": "products",
-          "settings": {
-            "pin_to_bottom": false
-          }
-        },
-        "upsell-products": {
-          "type": "upsell-products",
-          "settings": {
-            "upsell_auto_open": true,
-            "pin_to_bottom": false
-          }
-        },
-        "gift-note": {
-          "type": "gift-note",
-          "disabled": true,
-          "settings": {
-            "pin_to_bottom": false
-          }
-        },
-        "checkout-buttons": {
-          "type": "checkout-buttons",
-          "settings": {
-            "enable_additional_buttons": false,
-            "show_view_cart_button": false,
-            "pin_to_bottom": true
-          }
-        }
-      },
-      "block_order": [
-        "title",
-        "free-shipping",
-        "products",
-        "upsell-products",
-        "gift-note",
-        "checkout-buttons"
-      ],
-      "settings": {
-        "color_scheme": "scheme-d6bd4972-6b07-41d3-8a08-1c6521bae106"
-      }
-    },
-    "cap_guide_drawer": {
+    "main": {
       "type": "cap-guide",
       "blocks": {
         "model_59fifty": {
@@ -110,21 +51,22 @@
         "model_39thirty"
       ],
       "settings": {
-        "drawer_only": true,
-        "heading": "Sammenlign modeller",
+        "drawer_only": false,
+        "eyebrow": "Cap Guide",
+        "heading": "Find din stil",
+        "lead": "Sammenlign vores mest populære New Era modeller og find den cap, der passer bedst til dig.",
         "drawer_heading": "Sammenlign modeller",
-        "lead": "Sammenlign vores mest populære New Era modeller.",
         "col_fit": "Pasform",
         "col_brim": "Skyggestil",
         "col_sizing": "Størrelse",
         "col_best_for": "Bedst til",
         "shop_label": "Shop",
+        "width": "wrapper--full-padded",
         "color_scheme": "scheme-7"
       }
     }
   },
   "order": [
-    "cart-drawer",
-    "cap_guide_drawer"
+    "main"
   ]
 }

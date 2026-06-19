@@ -63,6 +63,16 @@
             "padding_bottom": 12
           }
         },
+        "cap_guide": {
+          "type": "cap_guide",
+          "settings": {
+            "enable": true,
+            "trigger_text": "Ikke sikker på hvilken model?",
+            "open_as": "drawer",
+            "page_link": "shopify://pages/cap-guide",
+            "padding_bottom": 12
+          }
+        },
         "ring_size_guide": {
           "type": "ring_size",
           "settings": {
@@ -157,6 +167,7 @@
         "trustpilot",
         "text_W4nY4h",
         "variants_Lkjwdn",
+        "cap_guide",
         "ring_size_guide",
         "buttons",
         "payment_icons_bMCGr4",

@@ -1,0 +1,243 @@
+{{ 'cap-guide.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign drawer_only = drawer_only | default: section.settings.drawer_only
+  if section.settings.drawer_only
+    assign modal_id = 'CapGuideModal-global'
+  else
+    assign modal_id = 'CapGuideModal-' | append: section.id
+  endif
+-%}
+
+{%- unless drawer_only -%}
+<section
+  class="cap-guide-page section-padding color-{{ section.settings.color_scheme }}"
+  data-section-id="{{ section.id }}"
+>
+  <div class="{{ section.settings.width }}">
+    <div class="cap-guide-page__hero">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="cap-guide-page__eyebrow">{{ section.settings.eyebrow | escape }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h1 class="cap-guide-page__title">{{ section.settings.heading | escape }}</h1>
+      {%- endif -%}
+      {%- if section.settings.lead != blank -%}
+        <p class="cap-guide-page__lead">{{ section.settings.lead | escape }}</p>
+      {%- endif -%}
+    </div>
+    {%- render 'cap-guide-table', section: section, mode: 'page' -%}
+  </div>
+</section>
+{%- endunless -%}
+
+<div {% if drawer_only %}style="display:contents"{% endif %} {{ section.shopify_attributes }}>
+  {%- render 'cap-guide', section: section, part: 'modal', modal_id: modal_id -%}
+  {%- render 'cap-guide', section: section, part: 'assets', modal_id: modal_id -%}
+</div>
+
+{% schema %}
+{
+  "name": "Cap model guide",
+  "tag": "section",
+  "class": "section-cap-guide",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "drawer_only",
+      "label": "Drawer only (hide page content)",
+      "info": "Enable for overlay drawer. Disable for full comparison page.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Page content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Cap Guide"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Find din stil"
+    },
+    {
+      "type": "textarea",
+      "id": "lead",
+      "label": "Introduction",
+      "default": "Sammenlign vores mest populære modeller og find den cap, der passer bedst til dig."
+    },
+    {
+      "type": "text",
+      "id": "drawer_heading",
+      "label": "Drawer heading",
+      "default": "Sammenlign modeller"
+    },
+    {
+      "type": "text",
+      "id": "trigger_text",
+      "label": "Product trigger text",
+      "default": "Ikke sikker på hvilken model?"
+    },
+    {
+      "type": "header",
+      "content": "Table columns"
+    },
+    {
+      "type": "text",
+      "id": "col_model",
+      "label": "Model column",
+      "default": "Model"
+    },
+    {
+      "type": "text",
+      "id": "col_fit",
+      "label": "Fit column",
+      "default": "Pasform"
+    },
+    {
+      "type": "text",
+      "id": "col_brim",
+      "label": "Brim column",
+      "default": "Skyggestil"
+    },
+    {
+      "type": "text",
+      "id": "col_sizing",
+      "label": "Sizing column",
+      "default": "Størrelse"
+    },
+    {
+      "type": "text",
+      "id": "col_best_for",
+      "label": "Best for column",
+      "default": "Bedst til"
+    },
+    {
+      "type": "text",
+      "id": "shop_label",
+      "label": "Shop link label",
+      "default": "Shop"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "width",
+      "label": "Width",
+      "default": "wrapper--full-padded",
+      "options": [
+        {"value": "wrapper", "label": "Normal"},
+        {"value": "wrapper--full-padded", "label": "Full width padded"}
+      ]
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-7"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "model",
+      "name": "Cap model",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Model name",
+          "default": "59FIFTY"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo (worn on model)"
+        },
+        {
+          "type": "text",
+          "id": "fit",
+          "label": "Fit",
+          "default": "Fitted, structured"
+        },
+        {
+          "type": "text",
+          "id": "brim",
+          "label": "Brim",
+          "default": "Flat brim"
+        },
+        {
+          "type": "text",
+          "id": "sizing",
+          "label": "Sizing",
+          "default": "Fitted sizes (6 7/8 – 8)"
+        },
+        {
+          "type": "text",
+          "id": "best_for",
+          "label": "Best for",
+          "default": "Classic MLB look, collectors"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Shop collection link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Cap model guide",
+      "blocks": [
+        {
+          "type": "model",
+          "settings": {
+            "title": "59FIFTY",
+            "fit": "Fitted, structured crown",
+            "brim": "Flat brim",
+            "sizing": "Fitted (6 7/8 – 8)",
+            "best_for": "Classic MLB look, collectors"
+          }
+        },
+        {
+          "type": "model",
+          "settings": {
+            "title": "9FIFTY",
+            "fit": "Adjustable snapback",
+            "brim": "Flat brim",
+            "sizing": "One size (snapback)",
+            "best_for": "Everyday wear, easy fit"
+          }
+        },
+        {
+          "type": "model",
+          "settings": {
+            "title": "9FORTY",
+            "fit": "Adjustable strapback",
+            "brim": "Curved brim",
+            "sizing": "One size (strap)",
+            "best_for": "Casual, curved brim fans"
+          }
+        },
+        {
+          "type": "model",
+          "settings": {
+            "title": "39THIRTY",
+            "fit": "Stretch fitted",
+            "brim": "Curved brim",
+            "sizing": "S / M / L / XL",
+            "best_for": "Comfort fit, curved brim"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
