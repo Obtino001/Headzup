@@ -1,0 +1,618 @@
+{%- comment -%}
+  MEJURI STYLE RING SIZE GUIDE MODAL
+  Vanilla CSS, Web Component, 100% Editable Schema
+{%- endcomment -%}
+
+{%- assign downcased_type = product.type | downcase -%}
+{%- assign downcased_title = product.title | downcase -%}
+{%- assign is_ring = false -%}
+{%- if downcased_type contains 'ring' or downcased_title contains 'ring' -%}
+  {%- assign is_ring = true -%}
+{%- endif -%}
+{%- for tag in product.tags -%}
+  {%- assign downcased_tag = tag | downcase -%}
+  {%- if downcased_tag contains 'ring' -%}
+    {%- assign is_ring = true -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if is_ring -%}
+
+<style>
+  /* --- Trigger Button --- */
+  .rsg-trigger-btn {
+    appearance: none;
+    background: transparent;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font-size: 11px;
+    font-family: inherit;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: opacity 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+  }
+  .rsg-trigger-btn:hover {
+    opacity: 0.6;
+  }
+
+  /* --- Modal Variables & Base --- */
+  ring-size-modal {
+    --rsg-bg: var(--colorBody, #ffffff);
+    --rsg-text: var(--colorTextBody, #000000);
+    --rsg-border: var(--colorBorder, #000000);
+    --rsg-border-light: var(--colorBorder, #e5e5e5);
+    --rsg-gray: rgba(0,0,0,0.03);
+    --rsg-gray-text: rgba(0,0,0,0.6);
+    --rsg-z-index: 2147483647;
+    --rsg-font-sans: inherit;
+    --rsg-font-mono: inherit;
+    display: block;
+  }
+
+  /* --- Overlay --- */
+  .rsg-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: var(--rsg-z-index);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  /* --- Dialog Drawer --- */
+  .rsg-dialog {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 480px;
+    height: 100vh;
+    height: 100dvh;
+    background-color: var(--rsg-bg);
+    z-index: calc(var(--rsg-z-index) + 1);
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Open States */
+  ring-size-modal[open] .rsg-overlay {
+    opacity: 1;
+    visibility: visible;
+  }
+  ring-size-modal[open] .rsg-dialog {
+    transform: translateX(0);
+  }
+
+  /* --- Header --- */
+  .rsg-header {
+    position: sticky;
+    top: 0;
+    background: var(--rsg-bg);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+  }
+  .rsg-header h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--rsg-text);
+    font-family: var(--typeHeaderPrimary, var(--rsg-font-sans));
+  }
+  .rsg-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    color: var(--rsg-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+  }
+  .rsg-close:hover {
+    transform: scale(1.1);
+  }
+
+  /* --- Tabs --- */
+  .rsg-tablist {
+    position: sticky;
+    top: 64px;
+    background: var(--rsg-bg);
+    z-index: 20;
+    display: flex;
+    gap: 24px;
+    padding: 0 24px;
+    border-bottom: 1px solid var(--rsg-border);
+  }
+  .rsg-tab {
+    background: none;
+    border: none;
+    padding: 0 0 8px 0;
+    font-size: 11px;
+    font-family: var(--rsg-font-sans);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--rsg-text);
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    position: relative;
+  }
+  .rsg-tab[aria-selected="true"] {
+    font-weight: 700;
+  }
+  .rsg-tab[aria-selected="true"]::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--rsg-text);
+  }
+
+  /* --- Panels --- */
+  .rsg-panel {
+    display: none;
+    flex: 1;
+    background: var(--rsg-bg);
+  }
+  .rsg-panel:not([hidden]) {
+    display: block;
+    animation: rsgFadeIn 0.3s ease;
+  }
+  @keyframes rsgFadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .rsg-panel-content {
+    padding: 24px;
+  }
+
+  .rsg-section-title {
+    font-family: var(--rsg-font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    color: var(--rsg-text);
+  }
+
+  /* --- Tab 1 specific --- */
+  .rsg-mono-text {
+    font-family: var(--rsg-font-mono);
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--rsg-text);
+    margin-bottom: 16px;
+    white-space: pre-wrap;
+  }
+.rsg-diagram-wrapper {
+    text-align: center;
+    width: 100%;
+    margin: 32px 0;
+    max-width: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+}
+  .rsg-diagram-wrapper img {
+    max-width: 180px;
+    height: auto;
+  }
+
+  /* --- Tab 2 specific (Steps & Video) --- */
+  .rsg-video-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 32px;
+    background-color: var(--rsg-gray);
+  }
+  .rsg-video-wrapper video {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+  .rsg-video-btn {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    z-index: 2;
+    padding: 4px;
+  }
+  .rsg-video-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+
+  .rsg-step {
+    margin-bottom: 32px;
+  }
+  .rsg-step-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 16px;
+  }
+
+  /* --- Divider --- */
+  .rsg-divider {
+    border: none;
+    border-top: 1px solid var(--rsg-border-light);
+    margin: 32px 24px;
+  }
+
+  /* --- Size Chart Table --- */
+  .rsg-table-intro {
+    font-family: var(--rsg-font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+    margin: 0 24px 24px;
+    color: var(--rsg-text);
+  }
+  .rsg-table-wrapper {
+    padding: 0 24px 40px;
+  }
+  .rsg-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+  }
+  .rsg-table th {
+    font-family: var(--rsg-font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 0 8px 16px;
+    border-bottom: 1px solid var(--rsg-border);
+    color: var(--rsg-text);
+    vertical-align: bottom;
+  }
+  .rsg-table td {
+    font-family: var(--rsg-font-mono);
+    font-size: 13px;
+    padding: 18px 8px;
+    border-bottom: 1px solid var(--rsg-border);
+    color: var(--rsg-text);
+  }
+
+  /* --- Footer --- */
+  .rsg-footer {
+    background-color: var(--rsg-gray);
+    padding: 32px 24px;
+    margin-top: auto;
+  }
+  .rsg-footer-title {
+    font-family: var(--rsg-font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+    color: var(--rsg-text);
+  }
+  .rsg-contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .rsg-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .rsg-contact-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--rsg-text);
+  }
+  .rsg-contact-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+  .rsg-contact-text {
+    font-family: var(--rsg-font-sans);
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--rsg-text);
+  }
+  .rsg-contact-text a {
+    color: var(--rsg-text);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  .rsg-contact-subtext {
+    color: var(--rsg-gray-text);
+    font-family: var(--rsg-font-mono); /* specifically monospace per image */
+    font-size: 12px;
+    margin-top: 4px;
+  }
+</style>
+
+{%- comment -%} TRIGGER BUTTON {%- endcomment -%}
+<div class="product-block" {{ block.shopify_attributes }}>
+  <button type="button" class="rsg-trigger-btn" data-modal-target="RingSizeModal-{{ block.id }}">
+    {{ block.settings.trigger_text }}
+  </button>
+</div>
+
+{%- comment -%} MODAL COMPONENT {%- endcomment -%}
+<ring-size-modal id="RingSizeModal-{{ block.id }}">
+  <div class="rsg-overlay" data-modal-close></div>
+  
+  <div class="rsg-dialog" role="dialog" aria-modal="true" aria-labelledby="rsg-title-{{ block.id }}">
+    
+    <div class="rsg-header">
+      <h2 id="rsg-title-{{ block.id }}">{{ block.settings.modal_heading }}</h2>
+      <button type="button" class="rsg-close" data-modal-close aria-label="Close">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="rsg-tablist" role="tablist">
+      <button type="button" role="tab" class="rsg-tab" aria-selected="true" aria-controls="rsg-panel1-{{ block.id }}" id="rsg-tab1-{{ block.id }}">
+        {{ block.settings.tab1_title }}
+      </button>
+      <button type="button" role="tab" class="rsg-tab" aria-selected="false" aria-controls="rsg-panel2-{{ block.id }}" id="rsg-tab2-{{ block.id }}">
+        {{ block.settings.tab2_title }}
+      </button>
+    </div>
+
+    <div id="rsg-panel1-{{ block.id }}" class="rsg-panel" role="tabpanel" aria-labelledby="rsg-tab1-{{ block.id }}">
+      <div class="rsg-panel-content">
+        <div class="rsg-section-title">Instruktioner</div>
+        <div class="rsg-mono-text">{{ block.settings.tab1_instructions | newline_to_br }}</div>
+        
+        <div class="rsg-diagram-wrapper">
+          {%- if block.settings.tab1_image != blank -%}
+            {{ block.settings.tab1_image | image_url: width: 300 | image_tag: loading: 'lazy' }}
+          {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          {%- endif -%}
+        </div>
+      </div>
+
+      <hr class="rsg-divider" style="margin-top: 0;">
+
+      <div class="rsg-table-intro">{{ block.settings.table_heading }}</div>
+      <div class="rsg-table-wrapper">
+        <table class="rsg-table">
+          <thead>
+            <tr>
+              <th>{{ block.settings.t1_col1_heading | newline_to_br }}</th>
+              <th>{{ block.settings.t1_col2_heading | newline_to_br }}</th>
+              <th>{{ block.settings.t1_col3_heading | newline_to_br }}</th>
+              <th>{{ block.settings.t1_col4_heading | newline_to_br }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- assign t1_rows = block.settings.tab1_rows | split: '||' -%}
+            {%- for t1_row in t1_rows -%}
+              {%- assign cols = t1_row | split: ',' -%}
+              {%- if cols.size >= 1 and cols[0] != blank -%}
+              <tr>
+                <td>{{ cols[0] | strip }}</td>
+                <td>{{ cols[1] | strip }}</td>
+                <td>{{ cols[2] | strip }}</td>
+                <td>{{ cols[3] | strip }}</td>
+              </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="rsg-panel2-{{ block.id }}" class="rsg-panel" role="tabpanel" aria-labelledby="rsg-tab2-{{ block.id }}" hidden>
+      
+      <div class="rsg-panel-content" style="padding-top: 0;">
+        {%- if block.settings.tab2_video != blank -%}
+          <div class="rsg-video-wrapper">
+            {{ block.settings.tab2_video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, class: 'rsg-video-el' }}
+            <button type="button" class="rsg-video-btn" aria-label="Pause Video">
+              <svg viewBox="0 0 24 24"><rect x="8" y="5" width="3" height="14"/><rect x="14" y="5" width="3" height="14"/></svg>
+            </button>
+          </div>
+        {%- endif -%}
+
+        <div class="rsg-section-title" style="margin-top: 24px;">Instruktioner</div>
+
+        {%- for i in (1..3) -%}
+          {%- capture step_text_key -%}tab2_step{{ i }}_text{%- endcapture -%}
+          {%- capture step_img_key -%}tab2_step{{ i }}_image{%- endcapture -%}
+          {%- assign step_text = block.settings[step_text_key] -%}
+          {%- assign step_img = block.settings[step_img_key] -%}
+          {%- if step_text != blank or step_img != blank -%}
+            <div class="rsg-step">
+              {%- if step_text != blank -%}
+                <div class="rsg-mono-text" style="margin-bottom: 0;">{{ step_text | newline_to_br }}</div>
+              {%- endif -%}
+              {%- if step_img != blank -%}
+                {{ step_img | image_url: width: 800 | image_tag: class: 'rsg-step-img', loading: 'lazy' }}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      <hr class="rsg-divider" style="margin-top: 0;">
+
+      <div class="rsg-table-intro">{{ block.settings.table_heading }}</div>
+      <div class="rsg-table-wrapper">
+        <table class="rsg-table">
+          <thead>
+            <tr>
+              <th>{{ block.settings.t2_col1_heading | newline_to_br }}</th>
+              <th>{{ block.settings.t2_col2_heading | newline_to_br }}</th>
+              <th>{{ block.settings.t2_col3_heading | newline_to_br }}</th>
+              <th>{{ block.settings.t2_col4_heading | newline_to_br }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {%- assign t2_rows = block.settings.tab2_rows | split: '||' -%}
+            {%- for t2_row in t2_rows -%}
+              {%- assign cols = t2_row | split: ',' -%}
+              {%- if cols.size >= 1 and cols[0] != blank -%}
+              <tr>
+                <td>{{ cols[0] | strip }}</td>
+                <td>{{ cols[1] | strip }}</td>
+                <td>{{ cols[2] | strip }}</td>
+                <td>{{ cols[3] | strip }}</td>
+              </tr>
+              {%- endif -%}
+            {%- endfor -%}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="rsg-footer">
+      <h3 class="rsg-footer-title">{{ block.settings.footer_heading }}</h3>
+      <ul class="rsg-contact-list">
+        {%- if block.settings.footer_email != blank -%}
+          <li class="rsg-contact-item">
+            <div class="rsg-contact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 14" fill="currentColor"><path d="M10 14C7.27391 14 4.54782 14 1.82154 14C1.07818 14 0.50047 13.4265 0.500282 12.6862C0.499906 8.89539 0.499906 5.10461 0.500282 1.31383C0.50047 0.573529 1.07837 0 1.82173 0C7.27391 0 12.7263 0 18.1785 0C18.9218 0 19.4995 0.573529 19.4997 1.31383C19.5001 5.10461 19.5001 8.89539 19.4997 12.6862C19.4997 13.4265 18.9218 13.9998 18.1785 14C15.4524 14 12.7263 14 10 14ZM1.52404 1.11344C1.68556 1.24641 1.83919 1.37359 1.99339 1.50021C4.31831 3.41054 6.64342 5.32031 8.96778 7.2312C9.5731 7.72891 10.4115 7.73507 11.0223 7.23811C11.5378 6.81847 12.05 6.39454 12.5636 5.97247C14.3146 4.53388 16.0656 3.0953 17.8165 1.65672C18.0355 1.47668 18.2541 1.29628 18.4746 1.11456C18.3944 0.995971 18.2866 0.963289 18.1557 0.963476C12.7195 0.964783 7.28349 0.964596 1.84727 0.964596C1.83168 0.964596 1.8159 0.964596 1.80032 0.964596C1.68481 0.963476 1.5971 1.0139 1.52404 1.11344ZM2.38667 13.0302H17.6081C17.5636 12.9953 17.5335 12.9702 17.5021 12.9471C15.4231 11.4061 13.3438 9.8654 11.2657 8.32317C11.2163 8.28656 11.1802 8.28227 11.1237 8.3086C10.3726 8.65858 9.62043 8.65709 8.87031 8.3058C8.81585 8.28021 8.78129 8.28769 8.73678 8.32186C8.5807 8.44139 8.42163 8.55717 8.26368 8.67427C6.53806 9.95299 4.81245 11.2315 3.08683 12.5102C2.85958 12.6787 2.63251 12.8475 2.38667 13.0302ZM1.47559 12.5045C3.65458 10.8898 5.81912 9.28571 7.99116 7.67606C5.8163 5.88917 3.65214 4.11107 1.47559 2.3225V12.5045ZM12.0088 7.67624C14.1845 9.28833 16.3492 10.8926 18.5244 12.5043V2.32269C16.3479 4.11107 14.1837 5.88936 12.0088 7.67624Z"/></svg>
+            </div>
+            <div class="rsg-contact-text">
+              <a href="mailto:{{ block.settings.footer_email }}">{{ block.settings.footer_email }}</a>
+            </div>
+          </li>
+        {%- endif -%}
+
+        {%- if block.settings.footer_phone != blank -%}
+          <li class="rsg-contact-item">
+            <div class="rsg-contact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.29116 1.99831C3.13033 1.83748 2.86957 1.83748 2.70873 1.99831C0.959463 3.74758 0.762652 6.51693 2.24696 8.496L3.42852 10.0714C4.70774 11.777 6.22289 13.2922 7.92852 14.5714L9.50394 15.753C11.483 17.2373 14.2524 17.0405 16.0016 15.2912C16.1625 15.1304 16.1625 14.8696 16.0016 14.7088L13.3535 12.0606C13.1582 11.8654 12.8417 11.8654 12.6464 12.0606L11.6252 13.0818C11.3108 13.3963 10.8304 13.4742 10.4326 13.2753C7.96252 12.0403 5.95965 10.0374 4.7246 7.56733C4.52572 7.16956 4.60368 6.68915 4.91814 6.37469L5.93929 5.35354C6.13455 5.15828 6.13455 4.8417 5.93929 4.64644L3.29116 1.99831ZM2.00163 1.2912C2.55298 0.739847 3.44691 0.739845 3.99827 1.2912L6.6464 3.93933C7.23218 4.52512 7.23218 5.47486 6.6464 6.06065L5.62525 7.0818C5.61514 7.0919 5.61264 7.10734 5.61903 7.12012C6.75731 9.39667 8.60326 11.2426 10.8798 12.3809C10.8926 12.3873 10.908 12.3848 10.9181 12.3747L11.9393 11.3535C12.5251 10.7678 13.4748 10.7678 14.0606 11.3535L16.7087 14.0017C17.2601 14.553 17.2601 15.447 16.7087 15.9983C14.6076 18.0995 11.2811 18.3359 8.90394 16.553L7.32852 15.3714C5.54709 14.0353 3.9646 12.4529 2.62852 10.6714L1.44696 9.096C-0.335939 6.71881 -0.0995363 3.39237 2.00163 1.2912Z"/></svg>
+            </div>
+            <div class="rsg-contact-text">
+              <a href="#" style="text-decoration:none; cursor:default;">{{ block.settings.footer_phone }}</a>
+              {%- if block.settings.footer_phone_subtext != blank -%}
+                <div class="rsg-contact-subtext">{{ block.settings.footer_phone_subtext }}</div>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endif -%}
+
+        {%- if block.settings.footer_store_text != blank -%}
+          <li class="rsg-contact-item">
+            <div class="rsg-contact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M17.4664 2.5H6.53383H6.5338C6.18265 2.49998 5.87599 2.49996 5.62469 2.53001C5.35341 2.56245 5.09188 2.6349 4.85776 2.81769C4.62365 3.00049 4.48993 3.23664 4.39267 3.49195C4.30256 3.72846 4.2282 4.02598 4.14305 4.36666L4.1363 4.39366L2.92967 9.22021L2.92967 9.22021C2.88382 9.40359 2.84488 9.55935 2.81952 9.68851C2.79334 9.82183 2.77465 9.95912 2.78433 10.1016C2.82589 10.7135 3.23576 11.2385 3.81931 11.4272C3.95601 11.4714 4.09553 11.4864 4.2326 11.4933C4.31127 11.4973 4.40046 11.4989 4.50009 11.4995L4.50009 17.0366C4.50008 17.9483 4.50007 18.6832 4.57777 19.2612C4.65845 19.8612 4.83105 20.3665 5.23233 20.7678C5.6336 21.169 6.13885 21.3416 6.73892 21.4223C7.31691 21.5 8.05179 21.5 8.96352 21.5H9.50009H14.5001H15.0367C15.9484 21.5 16.6833 21.5 17.2613 21.4223C17.8613 21.3416 18.3666 21.169 18.7679 20.7678C19.1691 20.3665 19.3417 19.8612 19.4224 19.2612C19.5001 18.6832 19.5001 17.9483 19.5001 17.0366V11.4995C19.5997 11.4989 19.6889 11.4973 19.7676 11.4933C19.9047 11.4864 20.0442 11.4714 20.1809 11.4272C20.7644 11.2385 21.1743 10.7135 21.2159 10.1016C21.2256 9.95912 21.2069 9.82184 21.1807 9.68851C21.1553 9.55934 21.1164 9.40357 21.0705 9.22017L21.0705 9.22014L19.8571 4.36661L19.8571 4.36655C19.772 4.02592 19.6976 3.72844 19.6075 3.49195C19.5103 3.23664 19.3766 3.00049 19.1424 2.81769C18.9083 2.6349 18.6468 2.56245 18.3755 2.53001C18.1242 2.49996 17.8176 2.49998 17.4664 2.5H17.4664ZM18.5001 11.4867C18.3641 11.4774 18.2423 11.4616 18.1272 11.4348C17.4296 11.2723 16.8396 10.8197 16.5003 10.1983C16.081 10.966 15.276 11.4782 14.3637 11.4993C14.3347 11.5 14.303 11.5 14.2566 11.5H14.2436C14.1972 11.5 14.1655 11.5 14.1366 11.4993C13.2243 11.4782 12.4194 10.9661 12.0001 10.1986C11.5808 10.9661 10.7759 11.4782 9.86366 11.4993C9.83467 11.5 9.80296 11.5 9.75661 11.5H9.7436C9.69725 11.5 9.66554 11.5 9.63655 11.4993C8.72421 11.4782 7.91923 10.966 7.49995 10.1983C7.16064 10.8197 6.57066 11.2723 5.87306 11.4348C5.75793 11.4616 5.63611 11.4774 5.50009 11.4867V17C5.50009 17.9569 5.50115 18.6244 5.56886 19.1279C5.63463 19.6171 5.75492 19.8762 5.93943 20.0607C6.12394 20.2452 6.38299 20.3655 6.87217 20.4312C7.37574 20.4989 8.04315 20.5 9.00009 20.5L9.00009 16C9.00009 15.1716 9.67166 14.5 10.5001 14.5H13.5001C14.3285 14.5 15.0001 15.1716 15.0001 16L15.0001 20.5C15.957 20.5 16.6244 20.4989 17.128 20.4312C17.6172 20.3655 17.8762 20.2452 18.0608 20.0607C18.2453 19.8762 18.3656 19.6171 18.4313 19.1279C18.499 18.6244 18.5001 17.9569 18.5001 17V11.4867ZM5.47318 3.6059C5.51032 3.5769 5.57191 3.54345 5.74342 3.52294C5.92829 3.50083 6.17451 3.5 6.56166 3.5H17.4386C17.8257 3.5 18.0719 3.50083 18.2568 3.52294C18.4283 3.54345 18.4899 3.5769 18.527 3.6059C18.5642 3.6349 18.6116 3.68654 18.6731 3.84796C18.7393 4.02194 18.7999 4.26061 18.8938 4.6362L20.0974 9.45065C20.1471 9.64939 20.1796 9.78015 20.1994 9.88117C20.219 9.98086 20.2192 10.0191 20.2182 10.0339C20.2043 10.2378 20.0677 10.4128 19.8732 10.4757C19.8599 10.4801 19.8222 10.4893 19.7175 10.4946C19.6121 10.4999 19.4736 10.5 19.2642 10.5C18.7036 10.5 18.508 10.4967 18.354 10.4609C17.8836 10.3513 17.4947 10.0219 17.3093 9.57586C17.2486 9.42976 17.2141 9.24259 17.1241 8.70237L17.1228 8.69452L17.1227 8.69445C17.1119 8.62938 17.1018 8.56855 17.0924 8.52203C17.0876 8.49793 17.0807 8.4662 17.0713 8.43392L17.0709 8.43242L17.0709 8.43241C17.0649 8.41179 17.0424 8.33481 16.9874 8.25824C16.748 7.92496 16.2522 7.92496 16.0128 8.25824C15.9578 8.33481 15.9354 8.41179 15.9294 8.43241L15.9293 8.43242L15.9289 8.43392C15.9195 8.4662 15.9126 8.49793 15.9078 8.52203C15.8984 8.56855 15.8883 8.62938 15.8775 8.69445L15.8775 8.69452L15.7946 9.19161C15.7855 9.24609 15.7823 9.26511 15.7793 9.28075C15.647 9.97539 15.0475 10.4833 14.3405 10.4996C14.3246 10.5 14.3053 10.5 14.2501 10.5C14.1949 10.5 14.1756 10.5 14.1597 10.4996C13.4527 10.4833 12.8532 9.97539 12.7209 9.28075C12.7179 9.26511 12.7147 9.24609 12.7056 9.19161L12.6228 8.69452L12.6227 8.69445C12.6119 8.62938 12.6018 8.56855 12.5924 8.52203C12.5876 8.49793 12.5807 8.4662 12.5713 8.43392L12.5709 8.43242L12.5709 8.43241C12.5649 8.41179 12.5424 8.33481 12.4874 8.25824C12.248 7.92496 11.7522 7.92496 11.5128 8.25824C11.4578 8.33481 11.4354 8.41179 11.4294 8.43241L11.4293 8.43242L11.4289 8.43392C11.4195 8.4662 11.4126 8.49793 11.4078 8.52203C11.3984 8.56855 11.3883 8.62938 11.3775 8.69445L11.3775 8.69452L11.2946 9.19161C11.2855 9.24609 11.2823 9.26511 11.2793 9.28075C11.147 9.97539 10.5475 10.4833 9.84054 10.4996C9.82462 10.5 9.80534 10.5 9.75011 10.5C9.69487 10.5 9.67559 10.5 9.65968 10.4996C8.95273 10.4833 8.35322 9.97539 8.22087 9.28075C8.21789 9.26511 8.21469 9.24609 8.20561 9.19161L8.12274 8.69442C8.1119 8.62936 8.10177 8.56855 8.09243 8.52203C8.08759 8.49793 8.08075 8.4662 8.0713 8.43392L8.07086 8.43242C8.06485 8.4118 8.04242 8.33481 7.98742 8.25824C7.74802 7.92496 7.25219 7.92496 7.01279 8.25824C6.95779 8.33481 6.93536 8.4118 6.92935 8.43242L6.92891 8.43392C6.91946 8.4662 6.91262 8.49793 6.90778 8.52203C6.89844 8.56857 6.8883 8.62942 6.87746 8.69452L6.87615 8.70237C6.78611 9.24259 6.75166 9.42976 6.69091 9.57586C6.50547 10.0219 6.1166 10.3513 5.64618 10.4609C5.49225 10.4967 5.2966 10.5 4.73602 10.5C4.52661 10.5 4.38813 10.4999 4.2827 10.4946C4.17799 10.4893 4.14036 10.4801 4.12703 10.4757C3.93251 10.4128 3.79588 10.2378 3.78203 10.0339C3.78103 10.0191 3.78121 9.98086 3.80078 9.88117C3.82062 9.78015 3.85315 9.64939 3.90283 9.45065L5.10645 4.6362C5.20034 4.26061 5.26087 4.02194 5.32715 3.84796C5.38864 3.68654 5.43603 3.6349 5.47318 3.6059ZM14.0001 20.5H10.0001V16C10.0001 15.7239 10.2239 15.5 10.5001 15.5H13.5001C13.7762 15.5 14.0001 15.7239 14.0001 16V20.5Z"/></svg>
+            </div>
+            <div class="rsg-contact-text">
+              <a href="{{ block.settings.footer_store_url }}">{{ block.settings.footer_store_text }}</a>
+            </div>
+          </li>
+        {%- endif -%}
+      </ul>
+    </div>
+  </div>
+</ring-size-modal>
+
+
+{%- comment -%} WEB COMPONENT JAVASCRIPT LOGIC {%- endcomment -%}
+<script>
+  if (!customElements.get('ring-size-modal')) {
+    class RingSizeModal extends HTMLElement {
+      constructor() {
+        super();
+        this.dialog = this.querySelector('.rsg-dialog');
+        this.overlay = this.querySelector('.rsg-overlay');
+        this.closeBtns = this.querySelectorAll('[data-modal-close]');
+        this.tabs = this.querySelectorAll('.rsg-tab');
+        this.panels = this.querySelectorAll('.rsg-panel');
+        // Because modal moves to body, we must query document for triggers
+        this.triggers = document.querySelectorAll(`[data-modal-target="${this.id}"]`);
+        this.video = this.querySelector('.rsg-video-el');
+        this.videoBtn = this.querySelector('.rsg-video-btn');
+
+        this.bindEvents();
+      }
+
+      connectedCallback() {
+        // Move modal to body to avoid z-index clipping by transform/opacity parents
+        if (this.parentElement && this.parentElement !== document.body) {
+          document.body.appendChild(this);
+        }
+      }
+
+      bindEvents() {
+        this.triggers.forEach(trigger => {
+          trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.open();
+          });
+        });
+
+        this.closeBtns.forEach(btn => btn.addEventListener('click', () => this.close()));
+        
+        this.tabs.forEach(tab => {
+          tab.addEventListener('click', (e) => this.switchTab(e.currentTarget));
+        });
+
+        if (this.videoBtn && this.video) {
+          this.videoBtn.addEventListener('click', () => {
+            if (this.video.paused) {
+              this.video.play();
+              this.videoBtn.innerHTML = '<svg viewBox="0 0 24 24"><rect x="8" y="5" width="3" height="14"/><rect x="14" y="5" width="3" height="14"/></svg>';
+            } else {
+              this.video.pause();
+              this.videoBtn.innerHTML = '<svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>';
+            }
+          });
+        }
+      }
+
+      open() {
+        this.setAttribute('open', '');
+        document.body.style.overflow = 'hidden'; 
+      }
+
+      close() {
+        this.removeAttribute('open');
+        document.body.style.overflow = ''; 
+        if(this.video) this.video.pause();
+      }
+
+      switchTab(selectedTab) {
+        this.tabs.forEach(tab => tab.setAttribute('aria-selected', 'false'));
+        this.panels.forEach(panel => panel.setAttribute('hidden', ''));
+        
+        selectedTab.setAttribute('aria-selected', 'true');
+        const targetPanel = this.querySelector(`#${selectedTab.getAttribute('aria-controls')}`);
+        if (targetPanel) {
+          targetPanel.removeAttribute('hidden');
+        }
+      }
+    }
+    customElements.define('ring-size-modal', RingSizeModal);
+  }
+</script>
+{%- endif -%}
