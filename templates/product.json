@@ -187,6 +187,24 @@
             "padding_bottom": 16
           }
         },
+        "riders_experience_UHrm8H": {
+          "type": "riders_experience",
+          "settings": {
+            "Heading": "",
+            "video_margin_top": 20,
+            "video_margin_bottom": 20,
+            "use_metafields": false,
+            "video_1": "shopify://files/videos/Enigma - opdateret.MOV",
+            "video_text_1": "",
+            "video_2": "shopify://files/videos/Annonce3.mp4",
+            "video_text_2": "",
+            "video_3": "shopify://files/videos/Video 1.mp4",
+            "video_text_3": "",
+            "video_4": "shopify://files/videos/Video 2.mp4",
+            "video_text_4": "",
+            "video_text_5": ""
+          }
+        },
         "divider_KFN98n": {
           "type": "divider",
           "settings": {
@@ -258,6 +276,7 @@
         "onskeskyen_wishlist_button_tfCaQD",
         "countdown_jFJ7N3",
         "payment_icons_eJiFgw",
+        "riders_experience_UHrm8H",
         "divider_KFN98n",
         "pickup",
         "divider_ibTNJA",
