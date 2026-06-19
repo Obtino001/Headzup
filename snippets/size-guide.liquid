@@ -1,7 +1,12 @@
 
 <style>
+  .rsg-inline-wrapper {
+    justify-content: end;
+    width: 100%;
+    position: relative;
+}
   /* --- Trigger Button --- */
-  .rsg-trigger-btn {
+.rsg-trigger-btn {
     appearance: none;
     background: transparent;
     color: inherit;
@@ -14,10 +19,14 @@
     letter-spacing: 0.1em;
     transition: opacity 0.3s ease;
     text-decoration: none;
-    display: inline-block;
-    border-bottom: 1px solid currentColor;
+    display: flex;
+    /* border-bottom: 1px solid currentColor; */
     padding-bottom: 2px;
-  }
+    justify-content: end;
+    width: 100%;
+    position: absolute;
+    bottom: -40px;
+}
   .rsg-trigger-btn:hover {
     opacity: 0.6;
   }
