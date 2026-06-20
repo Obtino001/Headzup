@@ -27,7 +27,7 @@
   {%- assign selling_plan_hide = false -%}
 {% endif %}
 
-{%- if product.has_only_default_variant and selling_plan_hide -%}
+{%- if selling_plan_hide -%}
   {%- assign button_add = true -%}
 {%- endif -%}
 
