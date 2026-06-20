@@ -1,9 +1,7 @@
 /* Product Upsell Addon Styles */
 upsell-addon {
   display: block;
-  background-color: var(--upsell-bg, #9cbfe1);
   padding: 20px;
-  border-radius: 8px;
   margin-top: 15px;
   margin-bottom: 15px;
 }
