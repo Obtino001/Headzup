@@ -200,10 +200,10 @@
         "brands_WRyrRK": {
           "type": "brands",
           "settings": {
-            "premium_brands": "New Era, Goorin Bros",
-            "streetwear_brands": "",
-            "sports_brands": "",
-            "lifestyle_brands": "",
+            "premium_brands": "Deus Ex Machina, Goorin Bros, Kangol, Stetson",
+            "streetwear_brands": "Atlantis, BLS Hafnia, Brixton, Capslab, Dickies, Hood Hat, HUF, Lau Lau, Pasteelo, Pica Pica, Sabochini, Upfront Nordic, Von Dutch",
+            "sports_brands": "'47, Mitchell & Ness, New Era",
+            "lifestyle_brands": "Activate, Flexfit, Jason Markk, Salty Crew, Vans, Yupoong",
             "position": "4"
           }
         }
