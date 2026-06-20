@@ -57,16 +57,52 @@
         "show_placeholder": true
       }
     },
-    "section_custom_code_cgCW9h": {
-      "type": "section-custom-code",
-      "custom_css": [],
-      "name": "Custom code",
+    "trust_banner_xzcnmW": {
+      "type": "trust-banner",
+      "blocks": {
+        "trustpilot_Dcc8Bd": {
+          "type": "trustpilot",
+          "settings": {
+            "alignment": "left",
+            "main_icon": "<svg width=\"14\" height=\"14\" viewbox=\"0 0 24 24\" fill=\"#00B67A\"><path d=\"M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z\"></path></svg>",
+            "title": "TRUSTPILOT",
+            "score": "4.4",
+            "star_bg_color": "#00B67A",
+            "star_icon_color": "#FFFFFF",
+            "subtext": "· 1 200+ anmeldelser"
+          }
+        },
+        "stats_BTryzQ": {
+          "type": "stats",
+          "settings": {
+            "alignment": "center",
+            "number": "200 000 +",
+            "subtext": "sengetøy solgt i Norge"
+          }
+        },
+        "brand_4i9prx": {
+          "type": "brand",
+          "settings": {
+            "alignment": "left",
+            "icon": "<svg width=\"22\" height=\"14\" viewbox=\"0 0 22 14\" fill=\"none\"><rect width=\"22\" height=\"14\" fill=\"#EF2B2D\"></rect><rect y=\"5\" width=\"22\" height=\"4\" fill=\"white\"></rect><rect x=\"6\" y=\"0\" width=\"4\" height=\"14\" fill=\"white\"></rect><rect y=\"5.6\" width=\"22\" height=\"2.8\" fill=\"#002868\"></rect><rect x=\"6.6\" y=\"0\" width=\"2.8\" height=\"14\" fill=\"#002868\"></rect></svg>",
+            "title": "Norsk merkevare",
+            "subtext": "Skandinavisk kvalitet siden 2021"
+          }
+        }
+      },
+      "block_order": [
+        "trustpilot_Dcc8Bd",
+        "stats_BTryzQ",
+        "brand_4i9prx"
+      ],
+      "name": "Trust Banner",
       "settings": {
-        "code": "<div class=\"btb\"> <div class=\"btb-i\"> <div class=\"btb-col\"> <div class=\"btb-row\"> <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"#00B67A\"><path d=\"M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z\"/></svg> <span class=\"btb-name\">TRUSTPILOT</span> <span class=\"btb-score\">4.4</span> </div> <div class=\"btb-row\"> <div class=\"btb-stars\"> <div class=\"btb-star\"><svg viewBox=\"0 0 24 24\" fill=\"white\" width=\"8\" height=\"8\"><path d=\"M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z\"/></svg></div> <div class=\"btb-star\"><svg viewBox=\"0 0 24 24\" fill=\"white\" width=\"8\" height=\"8\"><path d=\"M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z\"/></svg></div> <div class=\"btb-star\"><svg viewBox=\"0 0 24 24\" fill=\"white\" width=\"8\" height=\"8\"><path d=\"M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z\"/></svg></div> <div class=\"btb-star\"><svg viewBox=\"0 0 24 24\" fill=\"white\" width=\"8\" height=\"8\"><path d=\"M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z\"/></svg></div> <div class=\"btb-star\"><svg viewBox=\"0 0 24 24\" fill=\"white\" width=\"8\" height=\"8\"><path d=\"M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z\"/></svg></div> </div> <span class=\"btb-sub\">· 1 200+ anmeldelser</span> </div> </div> <div class=\"btb-line\"></div> <div class=\"btb-col btb-mid\"> <span class=\"btb-num\">200 000 + </span> <span class=\"btb-sub\">sengetøy solgt i Norge</span> </div> <div class=\"btb-line\"></div> <div class=\"btb-col\"> <div class=\"btb-row\"> <svg width=\"22\" height=\"14\" viewBox=\"0 0 22 14\" fill=\"none\"> <rect width=\"22\" height=\"14\" fill=\"#EF2B2D\"/> <rect y=\"5\" width=\"22\" height=\"4\" fill=\"white\"/> <rect x=\"6\" y=\"0\" width=\"4\" height=\"14\" fill=\"white\"/> <rect y=\"5.6\" width=\"22\" height=\"2.8\" fill=\"#002868\"/> <rect x=\"6.6\" y=\"0\" width=\"2.8\" height=\"14\" fill=\"#002868\"/> </svg> <em class=\"btb-italic\">Norsk merkevare</em> </div> <span class=\"btb-sub\">Skandinavisk kvalitet siden 2021</span> </div> </div> </div> <style> .btb { background: #FAF8F4; border-top: 1px solid #DDD8CF; border-bottom: 1px solid #DDD8CF; padding: 14px 20px; width: 100%; } .btb-i { display: flex; align-items: center; justify-content: center; max-width: 1200px; margin: 0 auto; } .btb-col { display: flex; flex-direction: column; gap: 5px; flex: 1; align-items: flex-start; padding: 0 30px; } .btb-mid { align-items: center; text-align: center; } .btb-line { width: 1px; height: 26px; background: #D0CCC4; flex-shrink: 0; } .btb-row { display: flex; align-items: center; gap: 6px; white-space: nowrap; } .btb-name { font-family: Helvetica, Arial, sans-serif; font-size: 10px; font-weight: bold; letter-spacing: 0.08em; color: #1A1A1A; } .btb-score { font-family: Helvetica, Arial, sans-serif; font-size: 18px; font-weight: bold; color: #1A1A1A; } .btb-stars { display: flex; gap: 2px; } .btb-star { background: #00B67A; width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; } .btb-sub { font-family: Helvetica, Arial, sans-serif; font-size: 8px; letter-spacing: 0.15em; text-transform: uppercase; color: #9A9590; white-space: nowrap; } .btb-num { font-family: Georgia, serif; font-size: 18px; color: #1A1A1A; } .btb-italic { font-family: Georgia, serif; font-style: italic; font-size: 15px; color: #1A1A1A; } @media screen and (max-width: 640px) { .btb { overflow-x: auto; } .btb-i { min-width: 600px; } .btb-col { padding: 0 14px; } } </style>",
-        "width": "wrapper",
-        "color_scheme": "",
-        "padding_top": 0,
-        "padding_bottom": 0
+        "max_width": 1200,
+        "bg_color": "#FAF8F4",
+        "border_color": "#DDD8CF",
+        "divider_color": "#D0CCC4",
+        "text_color": "#1A1A1A",
+        "subtext_color": "#9A9590"
       }
     },
     "section_collection_z9PpK4": {
@@ -717,7 +753,7 @@
   },
   "order": [
     "section_hero_MGFqFK",
-    "section_custom_code_cgCW9h",
+    "trust_banner_xzcnmW",
     "section_collection_z9PpK4",
     "section_collections_list_QpxrYH",
     "section_collections_list_CUrbjK",
