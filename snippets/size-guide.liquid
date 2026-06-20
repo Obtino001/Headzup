@@ -421,7 +421,7 @@
 
     <div id="rsg-panel2-{{ block.id }}" class="rsg-panel" role="tabpanel" aria-labelledby="rsg-tab2-{{ block.id }}" hidden>
       
-      <div class="rsg-panel-content" style="padding-top: 0;">
+      <div class="rsg-panel-content">
         {%- if block.settings.tab2_video != blank -%}
           <div class="rsg-video-wrapper">
             {{ block.settings.tab2_video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, class: 'rsg-video-el' }}
