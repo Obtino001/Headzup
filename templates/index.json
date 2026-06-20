@@ -746,8 +746,17 @@
     "video_lifestyle_lookbook_tgR639": {
       "type": "video-lifestyle-lookbook",
       "blocks": {
-        "image_tbcpXU": {
-          "type": "image",
+        "media_7AA4AL": {
+          "type": "media",
+          "settings": {
+            "video": "shopify://files/videos/Enigma - opdateret.MOV",
+            "label": "",
+            "caption": "",
+            "link": ""
+          }
+        },
+        "media_bbq9j3": {
+          "type": "media",
           "settings": {
             "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_1.webp",
             "label": "",
@@ -755,55 +764,37 @@
             "link": ""
           }
         },
-        "image_QJe3qC": {
-          "type": "image",
+        "media_UgqDBh": {
+          "type": "media",
           "settings": {
-            "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_1.webp",
+            "image": "shopify://shop_images/2ESEJM6SH6011LFCT-BRNX_1_ca965e83-2bd1-4693-9bbd-6aa18f6fccda.webp",
             "label": "",
             "caption": "",
             "link": ""
           }
         },
-        "image_PxK6rD": {
-          "type": "image",
+        "media_KeipFr": {
+          "type": "media",
           "settings": {
-            "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_1.webp",
+            "video": "shopify://files/videos/Video 1.mp4",
             "label": "",
             "caption": "",
             "link": ""
           }
         },
-        "image_hhytHU": {
-          "type": "image",
+        "media_CNQg7m": {
+          "type": "media",
           "settings": {
-            "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_1.webp",
+            "video": "shopify://files/videos/Annonce3.mp4",
             "label": "",
             "caption": "",
             "link": ""
           }
         },
-        "image_NRxp93": {
-          "type": "image",
+        "media_gqJLHh": {
+          "type": "media",
           "settings": {
-            "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_1.webp",
-            "label": "",
-            "caption": "",
-            "link": ""
-          }
-        },
-        "image_CL8ahG": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_1.webp",
-            "label": "",
-            "caption": "",
-            "link": ""
-          }
-        },
-        "image_Y7aeMV": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_1.webp",
+            "video": "shopify://files/videos/IMG_2722.MOV",
             "label": "",
             "caption": "",
             "link": ""
@@ -811,13 +802,12 @@
         }
       },
       "block_order": [
-        "image_tbcpXU",
-        "image_QJe3qC",
-        "image_PxK6rD",
-        "image_hhytHU",
-        "image_NRxp93",
-        "image_CL8ahG",
-        "image_Y7aeMV"
+        "media_7AA4AL",
+        "media_bbq9j3",
+        "media_UgqDBh",
+        "media_KeipFr",
+        "media_CNQg7m",
+        "media_gqJLHh"
       ],
       "name": "Video & Image Lookbook",
       "settings": {
