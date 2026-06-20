@@ -55,6 +55,9 @@
     "enable_superscript": false,
     "show_scroll_top_button": false,
     "predictive_search_enabled": true,
+    "personalized_search_enabled": true,
+    "personalized_search_limit": 4,
+    "personalized_search_show_fallback": true,
     "empty_search_product_list": [
       "47-anaheim-ducks-mvp-adjustable-cap-bone-1",
       "47-anaheim-ducks-mvp-adjustable-cap-bone",

@@ -758,7 +758,34 @@
         "type": "product_list",
         "id": "empty_search_product_list",
         "label": "Products",
-        "limit": 5
+        "limit": 5,
+        "info": "Shown when no browsing history is available, or when personalized search is disabled."
+      },
+      {
+        "type": "header",
+        "content": "Personalized search"
+      },
+      {
+        "type": "checkbox",
+        "id": "personalized_search_enabled",
+        "label": "Enable personalized product recommendations",
+        "info": "Show products based on brands the customer has recently viewed instead of the same popular products for everyone.",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "personalized_search_limit",
+        "min": 3,
+        "max": 5,
+        "step": 1,
+        "label": "Number of personalized products",
+        "default": 4
+      },
+      {
+        "type": "checkbox",
+        "id": "personalized_search_show_fallback",
+        "label": "Show popular products when no browsing history",
+        "default": true
       }
     ]
   },

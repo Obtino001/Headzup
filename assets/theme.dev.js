@@ -8177,6 +8177,10 @@
         },
 
         hasProducts: cookie.read().length > 0,
+
+        getRecentlyViewed: function () {
+          return cookie.read();
+        },
       };
     })();
 

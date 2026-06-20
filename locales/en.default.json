@@ -89,7 +89,9 @@
       "placeholder": "Search our store",
       "search": "SEARCH",
       "popular_searches": "Popular searches",
-      "popular_products": "Popular products"
+      "popular_products": "Popular products",
+      "personalized_products": "Recommended for you",
+      "personalized_products_brand": "Because you viewed {{ brand }}"
     },
     "accessibility": {
       "skip_to_content": "Skip to content",

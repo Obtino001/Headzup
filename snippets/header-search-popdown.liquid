@@ -143,13 +143,20 @@
               {%- assign animation_delay = animation_delay | plus: 100 -%}
               <div
                 class="predictive-search__column"
+                data-personalized-search
                 style="--columns: repeat({{ empty_search_product_list_size }}, minmax(0, 1fr));"
               >
-                <p class="predictive-search__heading">{{ 'general.search.popular_products' | t }}</p>
+                <p class="predictive-search__heading" data-personalized-heading>
+                  {%- if settings.personalized_search_enabled -%}
+                    {{ 'general.search.personalized_products' | t }}
+                  {%- else -%}
+                    {{ 'general.search.popular_products' | t }}
+                  {%- endif -%}
+                </p>
 
                 <div class="predictive-search__group">
                   <div class="predictive-search__products__list grid-outer">
-                    <div class="grid">
+                    <div class="grid" data-personalized-products-grid>
                       {%- for product in empty_search_product_list limit: empty_search_product_list_size -%}
                         {%- render 'product-grid-item',
                           product: product,

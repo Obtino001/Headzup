@@ -718,6 +718,8 @@
         otherColor: {{ 'collections.general.colors_with_count.other' | t | json }},
         free: {{ 'general.money.free' | t | json }},
         sku: {{ 'products.product.sku' | t | json }},
+        personalizedSearchHeading: {{ 'general.search.personalized_products' | t | json }},
+        personalizedSearchBrandHeading: {{ 'general.search.personalized_products_brand' | t | json }},
       },
       settings: {
         cartType: {{ settings.cart_type | json }},
@@ -730,7 +732,10 @@
         mobileMenuType: {{ settings.mobile_menu_type | json }},
         atcButtonShowPrice: {{ settings.atc_show_product_price | json }},
         freeShippingLimit_dkk: {{ settings.free_shipping_limit_dkk | json }},
-        shippingPrice_dkk: {{ settings.shipping_price_dkk | json }}
+        shippingPrice_dkk: {{ settings.shipping_price_dkk | json }},
+        personalizedSearchEnabled: {{ settings.personalized_search_enabled | json }},
+        personalizedSearchLimit: {{ settings.personalized_search_limit | default: 4 | json }},
+        personalizedSearchShowFallback: {{ settings.personalized_search_show_fallback | json }}
       },
       variables: {
         productPageSticky: false,
@@ -766,6 +771,9 @@
 <script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script>
 {% comment %} <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script> {% endcomment %}
 <script src="{{ 'theme.dev.js' | asset_url }}" defer="defer"></script>
+{%- if settings.personalized_search_enabled -%}
+  <script src="{{ 'personalized-search.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js" defer="defer"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-element-bundle.min.js" defer="defer"></script>

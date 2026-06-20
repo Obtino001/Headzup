@@ -89,7 +89,9 @@
       "placeholder": "Søg i vores butik",
       "search": "SØG",
       "popular_searches": "Populære søgninger",
-      "popular_products": "Populære produkter"
+      "popular_products": "Populære produkter",
+      "personalized_products": "Anbefalet til dig",
+      "personalized_products_brand": "Fordi du har set {{ brand }}"
     },
     "accessibility": {
       "skip_to_content": "Spring til indhold",
