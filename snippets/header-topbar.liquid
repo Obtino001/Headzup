@@ -243,16 +243,18 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  background-color: var(--navy, #0c2340);
-  color: #fff;
+  background-color: #ffffff;
+  color: var(--navy, #0c2340);
   text-align: center;
   padding: 8px 12px;
   border-radius: 4px;
   white-space: nowrap;
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 500;
   z-index: 999999;
   margin-top: 5px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  border: 1px solid #eaeaea;
 }
 .header-topbar__tooltip::after {
   content: "";
@@ -262,7 +264,7 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent var(--navy, #0c2340) transparent;
+  border-color: transparent transparent #ffffff transparent;
 }
 .header-topbar__brand--tooltip:hover .header-topbar__tooltip {
   display: block;
