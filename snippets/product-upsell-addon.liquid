@@ -9,7 +9,7 @@
 -%}
 
 {%- if upsell_products != blank -%}
-  <upsell-addon class="product__block upsell-addon block-padding" style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;" {{ block.shopify_attributes }}>
+  <upsell-addon class="product__block upsell-addon block-padding" data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}" style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;" {{ block.shopify_attributes }}>
     {%- if heading != blank -%}
       <h3 class="upsell-addon__heading">{{ heading }}</h3>
     {%- endif -%}
@@ -56,9 +56,6 @@
         <span>Totalt:</span>
         <span data-upsell-total>0,00 kr</span>
       </div>
-      <button type="button" class="upsell-addon__add-to-cart" data-upsell-add disabled>
-        Legg i handlekurv
-      </button>
     </div>
   </upsell-addon>
 {%- endif -%}

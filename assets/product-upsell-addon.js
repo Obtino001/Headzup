@@ -4,7 +4,7 @@ if (!customElements.get('upsell-addon')) {
       super();
       this.items = this.querySelectorAll('[data-upsell-item]');
       this.totalPriceEl = this.querySelector('[data-upsell-total]');
-      this.addToCartBtn = this.querySelector('[data-upsell-add]');
+      this.mainProductPrice = parseInt(this.getAttribute('data-main-product-price') || 0, 10);
       
       this.bindEvents();
       this.calculateTotal();
@@ -22,20 +22,46 @@ if (!customElements.get('upsell-addon')) {
         });
       });
 
-      if (this.addToCartBtn) {
-        this.addToCartBtn.addEventListener('click', this.addToCart.bind(this));
+      this.form = this.closest('form[action*="/cart/add"]');
+      if (this.form) {
+        // Find the main submit button
+        const submitBtn = this.form.querySelector('[type="submit"], [name="add"]');
+        if (submitBtn) {
+          submitBtn.addEventListener('click', (e) => {
+            const checkedItems = this.getCheckedItems();
+            if (checkedItems.length > 0) {
+              e.preventDefault();
+              e.stopPropagation();
+              this.addMultipleToCart(submitBtn, checkedItems);
+            }
+          }, true); // Intercept in capture phase
+        }
       }
     }
 
+    getCheckedItems() {
+      const items = [];
+      this.items.forEach(item => {
+        if (item.classList.contains('is-checked')) {
+          const variantId = item.getAttribute('data-selected-variant-id');
+          if (variantId) {
+            items.push({
+              id: parseInt(variantId, 10),
+              quantity: 1
+            });
+          }
+        }
+      });
+      return items;
+    }
+
     calculateTotal() {
-      let total = 0;
-      let checkedCount = 0;
+      let total = this.mainProductPrice;
 
       this.items.forEach(item => {
         if (item.classList.contains('is-checked')) {
           const price = parseInt(item.getAttribute('data-selected-price') || 0, 10);
           total += price;
-          checkedCount++;
         }
       });
 
@@ -48,30 +74,25 @@ if (!customElements.get('upsell-addon')) {
         this.totalPriceEl.innerHTML = formattedTotal;
       }
 
-      if (this.addToCartBtn) {
-        this.addToCartBtn.disabled = checkedCount === 0;
       }
     }
 
-    async addToCart() {
-      const itemsToAdd = [];
-      this.items.forEach(item => {
-        if (item.classList.contains('is-checked')) {
-          const variantId = item.getAttribute('data-selected-variant-id');
-          if (variantId) {
-            itemsToAdd.push({
-              id: parseInt(variantId, 10),
-              quantity: 1
-            });
-          }
-        }
-      });
+    async addMultipleToCart(submitBtn, checkedItems) {
+      const mainInput = this.form.querySelector('[name="id"]');
+      const mainId = mainInput ? parseInt(mainInput.value, 10) : null;
+      
+      const itemsToAdd = [...checkedItems];
+      if (mainId) {
+        // Add main product to the beginning of the array
+        itemsToAdd.unshift({
+          id: mainId,
+          quantity: 1
+        });
+      }
 
-      if (itemsToAdd.length === 0) return;
-
-      const originalText = this.addToCartBtn.innerText;
-      this.addToCartBtn.innerText = 'Legger til...';
-      this.addToCartBtn.disabled = true;
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<span class="btn__loader"><svg height="18" width="18" class="svg-loader"><circle r="7" cx="9" cy="9" /><circle stroke-dasharray="87.96459430051421 87.96459430051421" r="7" cx="9" cy="9" /></svg></span> Legger til...';
+      submitBtn.disabled = true;
 
       try {
         const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
@@ -84,22 +105,24 @@ if (!customElements.get('upsell-addon')) {
         });
         
         if (response.ok) {
-          // Trigger theme's cart drawer update
           document.dispatchEvent(new CustomEvent('cart:updated'));
           document.dispatchEvent(new CustomEvent('cart:build'));
-          // In many standard themes, dispatching a 'cart:build' or calling theme cart API works.
-          if (window.theme && typeof theme.cart === 'function') {
-             // Let theme handle it if there's a global
-          } else {
-             // Generic fallback to redirect to cart if no drawer pops up
-             window.location.href = '/cart';
+          // Attempt to open standard theme drawers if applicable
+          setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+          }, 1000);
+          
+          if (!document.querySelector('.cart-drawer.is-open, .drawer.is-open')) {
+             // Let theme handle it, or we could redirect
+             // window.location.href = window.Shopify.routes.root + 'cart';
           }
         } else {
           console.error('Failed to add items to cart');
-          this.addToCartBtn.innerText = 'Error';
+          submitBtn.innerHTML = 'Error';
           setTimeout(() => {
-            this.addToCartBtn.innerText = originalText;
-            this.addToCartBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
           }, 2000);
         }
       } catch (error) {
