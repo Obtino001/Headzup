@@ -184,6 +184,20 @@
             "padding_bottom": 16
           }
         },
+        "upsell_addon_xzfLwj": {
+          "type": "upsell_addon",
+          "settings": {
+            "heading": "Ofte kjøpt sammen",
+            "product_list": [
+              "47-anaheim-ducks-mvp-adjustable-cap-bone",
+              "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
+              "47-boston-bruins-mvp-adjustable-cap-black",
+              "47-anaheim-mighty-ducks-mvp-adjustable-cap-sort"
+            ],
+            "accent_color": "#000000",
+            "padding_bottom": 16
+          }
+        },
         "riders_experience_JbEgQC": {
           "type": "riders_experience",
           "name": "Experience",
@@ -280,6 +294,7 @@
         "buttons",
         "onskeskyen_wishlist_button_tfCaQD",
         "countdown_jFJ7N3",
+        "upsell_addon_xzfLwj",
         "riders_experience_JbEgQC",
         "payment_icons_eJiFgw",
         "divider_KFN98n",
