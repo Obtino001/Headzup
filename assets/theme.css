@@ -12833,6 +12833,33 @@ main-search .input-holder {
   }
 }
 
+.product-item__rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--navy);
+  margin-top: 4px;
+  margin-bottom: 6px;
+}
+.product-item--centered .product-item__rating {
+  justify-content: center;
+}
+.product-item__rating-star {
+  color: #ffb800;
+  display: flex;
+  align-items: center;
+}
+.product-item__rating-value {
+  font-weight: 600;
+  line-height: 1;
+}
+.product-item__rating-count {
+  color: var(--grey1);
+  font-size: 12px;
+  line-height: 1;
+}
+
 .product-item__cutline,
 .product-item__price {
   overflow-wrap: break-word;
