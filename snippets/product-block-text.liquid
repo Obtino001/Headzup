@@ -1,7 +1,7 @@
 {% comment %} Text block for product {% endcomment %}
 {%- if block.settings.title != blank or block.settings.text != blank -%}
   {%- assign text_downcase = block.settings.text | downcase -%}
-  {%- if text_downcase contains 'anyday' -%}
+  {%- if text_downcase contains 'anyday' or text_downcase contains 'betalinger' or text_downcase contains 'del dit køb' -%}
     {%- liquid
       assign split_price = product.price | divided_by: 4
       if settings.currency_code_enable
@@ -9,7 +9,7 @@
       else
         assign split_price_money = split_price | money
       endif
-      assign clean_text = block.settings.text | replace: '-Anyday', '' | replace: 'Anyday', '' | replace: '-anyday', ''
+      assign clean_text = block.settings.text | replace: '-Anyday', '' | replace: 'Anyday', '' | replace: '-anyday', '' | strip_html
     -%}
     <div
       class="product__block product__text product__text--anyday-widget block-padding {{ block.settings.text_alignment }}"
