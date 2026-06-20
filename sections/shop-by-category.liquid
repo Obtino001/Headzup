@@ -1,6 +1,6 @@
 {% comment %}
-  Shop by Category – Bosant
-  Plasser i: sections/shop-by-category.liquid
+  Shop by Category – Caps
+  Place in: sections/shop-by-category.liquid
 {% endcomment %}
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -46,15 +46,15 @@
     display: block;
   }
 
-#sbc-{{ section.id }} .sbc-title {
-  font-family: var(--font-heading, var(--font));
-  font-size: clamp(32px, 4vw, 52px);
-  font-weight: 300;
-  color: var(--text);
-  letter-spacing: -0.02em;
-  line-height: 1.1;
-  margin: 0;
-}
+  #sbc-{{ section.id }} .sbc-title {
+    font-family: var(--font-heading, var(--font));
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin: 0;
+  }
 
   #sbc-{{ section.id }} .sbc-arrows {
     display: flex;
@@ -260,10 +260,10 @@
     </div>
 
     <div class="sbc-arrows">
-      <button class="sbc-arrow" id="sbc-prev-{{ section.id }}" aria-label="Forrige">
+      <button class="sbc-arrow" id="sbc-prev-{{ section.id }}" aria-label="Previous">
         <svg viewBox="0 0 16 16"><path d="M10 13L5 8l5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <button class="sbc-arrow" id="sbc-next-{{ section.id }}" aria-label="Neste">
+      <button class="sbc-arrow" id="sbc-next-{{ section.id }}" aria-label="Next">
         <svg viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
@@ -353,7 +353,7 @@
 
   goTo(0);
 
-  /* ── Infinite scroll på mobil ── */
+  /* ── Infinite scroll on mobile ── */
   var isMobile = window.matchMedia('(max-width: 640px)');
 
   function setupMobileScroll() {
@@ -362,10 +362,10 @@
     var origCards = getCards();
     if (!origCards.length) return;
 
-    /* Fjern gamle kloner */
+    /* Remove old clones */
     track.querySelectorAll('.sbc-clone').forEach(function(c) { c.remove(); });
 
-    /* Klon alle kort og legg til etter */
+    /* Clone all cards and append */
     origCards.forEach(function(card) {
       var clone = card.cloneNode(true);
       clone.classList.add('sbc-clone');
@@ -373,7 +373,7 @@
       track.appendChild(clone);
     });
 
-    /* Native scroll med loop */
+    /* Native scroll with loop */
     outer.style.overflowX = 'auto';
     outer.style.webkitOverflowScrolling = 'touch';
     outer.style.scrollbarWidth = 'none';
@@ -384,11 +384,11 @@
 
     outer.addEventListener('scroll', function () {
       var sl = outer.scrollLeft;
-      /* Når du nærmer deg slutten – hopp tilbake til start */
+      /* When nearing the end - jump back to start */
       if (sl >= totalW) {
         outer.scrollLeft = sl - totalW;
       }
-      /* Når du scroller forbi starten bakover */
+      /* When scrolling past start backwards */
       if (sl <= 0) {
         outer.scrollLeft = totalW + sl;
       }
@@ -398,7 +398,7 @@
   setupMobileScroll();
   window.addEventListener('resize', setupMobileScroll);
 
-  /* Touch swipe for desktop-modus */
+  /* Touch swipe for desktop mode */
   var startX = 0;
   var startIndex = 0;
 
@@ -426,19 +426,19 @@
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Liten tekst over overskrift",
-      "default": "Kunders favoritter"
+      "label": "Eyebrow Text (Small text above title)",
+      "default": "Customer Favorites"
     },
     {
       "type": "text",
       "id": "title",
-      "label": "Overskrift",
-      "default": "Handle etter kategori"
+      "label": "Heading",
+      "default": "Shop by Style"
     },
     {
       "type": "range",
       "id": "label_font_size",
-      "label": "Fontstørrelse på kategorinavn",
+      "label": "Category Name Font Size",
       "min": 10,
       "max": 28,
       "step": 1,
@@ -448,7 +448,7 @@
     {
       "type": "range",
       "id": "card_width",
-      "label": "Kortbredde (desktop)",
+      "label": "Card Width (Desktop)",
       "min": 180,
       "max": 400,
       "step": 10,
@@ -458,7 +458,7 @@
     {
       "type": "range",
       "id": "card_height",
-      "label": "Korthøyde (desktop)",
+      "label": "Card Height (Desktop)",
       "min": 200,
       "max": 500,
       "step": 10,
@@ -468,7 +468,7 @@
     {
       "type": "range",
       "id": "border_radius",
-      "label": "Avrunding",
+      "label": "Border Radius",
       "min": 0,
       "max": 24,
       "step": 2,
@@ -478,25 +478,25 @@
     {
       "type": "color",
       "id": "background_color",
-      "label": "Bakgrunnsfarge",
+      "label": "Background Color",
       "default": "#FAF7F3"
     },
     {
       "type": "color",
       "id": "badge_color",
-      "label": "Badge-farge",
+      "label": "Badge Color",
       "default": "#1A1A1A"
     },
     {
       "type": "color",
       "id": "badge_text_color",
-      "label": "Badge-tekstfarge",
+      "label": "Badge Text Color",
       "default": "#FFFFFF"
     },
     {
       "type": "range",
       "id": "padding_top",
-      "label": "Luft over",
+      "label": "Padding Top",
       "min": 0,
       "max": 120,
       "step": 8,
@@ -506,7 +506,7 @@
     {
       "type": "range",
       "id": "padding_bottom",
-      "label": "Luft under",
+      "label": "Padding Bottom",
       "min": 0,
       "max": 120,
       "step": 8,
@@ -517,25 +517,25 @@
   "blocks": [
     {
       "type": "card",
-      "name": "Kategori",
+      "name": "Category",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Bilde"
+          "label": "Image"
         },
         {
           "type": "text",
           "id": "label",
-          "label": "Kategorinavn",
-          "placeholder": "Bambus Sengesett"
+          "label": "Category Name",
+          "placeholder": "Trucker Caps"
         },
         {
           "type": "text",
           "id": "badge",
-          "label": "Badge-tekst (valgfri)",
-          "placeholder": "Opptil 40% rabatt",
-          "info": "Vises som sirkel øverst til høyre"
+          "label": "Badge Text (Optional)",
+          "placeholder": "Up to 40% Off",
+          "info": "Displays as a circle on the top right"
         },
         {
           "type": "url",
@@ -549,11 +549,11 @@
     {
       "name": "Shop by Category",
       "blocks": [
-        { "type": "card", "settings": { "label": "Bambus Sengesett" } },
-        { "type": "card", "settings": { "label": "Pyjamas" } },
-        { "type": "card", "settings": { "label": "Pledd" } },
-        { "type": "card", "settings": { "label": "Laken" } },
-        { "type": "card", "settings": { "label": "Sovemasker" } }
+        { "type": "card", "settings": { "label": "Trucker Caps" } },
+        { "type": "card", "settings": { "label": "Snapbacks" } },
+        { "type": "card", "settings": { "label": "59FIFTY Fitted Caps" } },
+        { "type": "card", "settings": { "label": "Baseball Caps" } },
+        { "type": "card", "settings": { "label": "Women's Caps" } }
       ]
     }
   ]
