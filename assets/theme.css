@@ -13164,10 +13164,18 @@ product-sticky {
   }
 }
 .product__page .form__wrapper.is-sticky {
-  position: sticky;
-  top: var(--sticky-top, 0);
-  z-index: 10;
+  position: static !important;
 }
+
+@media only screen and (min-width: 750px) {
+  product-sticky .product__page > product-images {
+    position: sticky;
+    top: calc(var(--header-height, 0px) + 40px);
+    align-self: start;
+    z-index: 10;
+  }
+}
+
 @media only screen and (max-width: 749px) {
   .product__page .form__wrapper.is-sticky {
     position: static;
