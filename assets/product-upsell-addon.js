@@ -2,11 +2,11 @@ if (!customElements.get('upsell-addon')) {
   customElements.define('upsell-addon', class UpsellAddon extends HTMLElement {
     constructor() {
       super();
-      this.items = this.querySelectorAll('[data-upsell-item]');
-      this.totalPriceEl = this.querySelector('[data-upsell-total]');
     }
 
     connectedCallback() {
+      this.items = this.querySelectorAll('[data-upsell-item]');
+      this.totalPriceEl = this.querySelector('[data-upsell-total]');
       // Attributes are only guaranteed to be available in connectedCallback
       this.mainProductPrice = parseInt(this.getAttribute('data-main-product-price') || 0, 10);
       
