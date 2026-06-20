@@ -27,7 +27,7 @@
   assign show_empty_search_menu = false
   assign show_empty_search_product_list = false
 
-  if empty_search_menu != blank
+  if empty_search_menu != blank and settings.personalized_search_enabled == false
     assign show_empty_search = true
     assign show_empty_search_menu = true
     assign empty_search_product_list_size = empty_search_product_list_size | at_most: 4
@@ -122,6 +122,8 @@
           <div class="wrapper">
             {%- if show_empty_search_menu and show_empty_search_product_list -%}
               <div class="predictive-search__layout">
+            {%- elsif show_empty_search_product_list -%}
+              <div class="predictive-search__layout predictive-search__layout--products-only">
             {%- endif -%}
 
             {%- if show_empty_search_menu -%}
@@ -174,6 +176,8 @@
             {%- endif -%}
 
             {%- if show_empty_search_menu and show_empty_search_product_list -%}
+              </div>
+            {%- elsif show_empty_search_product_list -%}
               </div>
             {%- endif -%}
           </div>

@@ -752,7 +752,8 @@
       {
         "type": "link_list",
         "id": "empty_search_menu",
-        "label": "Menu"
+        "label": "Menu",
+        "info": "Optional quick links shown beside products. Use a small dedicated menu — do not use your main navigation menu."
       },
       {
         "type": "product_list",

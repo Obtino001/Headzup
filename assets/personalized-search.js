@@ -70,6 +70,7 @@
           return;
         }
 
+        this.setGridColumns(this.grid.children.length);
         this.updateHeading(await this.getTopVendor(handles));
         this.container.setAttribute('data-personalized', 'true');
       } catch (error) {
@@ -122,26 +123,19 @@
       const topVendor = Object.entries(vendorCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
       if (!topVendor) return [];
 
+      const topVendorNormalized = topVendor.toLowerCase();
+      const matchesVendor = (vendor) => vendor?.toLowerCase() === topVendorNormalized;
+      const addHandle = (list, handle) => {
+        if (list.length >= limit) return;
+        if (!handle || viewedSet.has(handle) || list.includes(handle)) return;
+        list.push(handle);
+      };
+
       let resultHandles = [];
-      const suggestUrl = `${window.theme.routes.root}search/suggest.json?q=${encodeURIComponent(topVendor)}&resources[type]=product&resources[limit]=15`;
 
-      try {
-        const suggestResponse = await fetch(suggestUrl);
-        if (suggestResponse.ok) {
-          const suggestData = await suggestResponse.json();
-          const suggestedProducts = suggestData?.resources?.results?.products || [];
-
-          resultHandles = suggestedProducts
-            .filter((product) => product.vendor === topVendor && !viewedSet.has(product.handle))
-            .map((product) => product.handle);
-        }
-      } catch (error) {
-        console.warn('Personalized search suggest:', error);
-      }
-
-      if (resultHandles.length < limit && products[0]?.id) {
+      if (products[0]?.id) {
         try {
-          const recommendationsUrl = `${window.theme.routes.product_recommendations_url}?product_id=${products[0].id}&limit=${limit + 3}&intent=related`;
+          const recommendationsUrl = `${window.theme.routes.product_recommendations_url}?product_id=${products[0].id}&limit=${limit + 6}&intent=related`;
           const recommendationsResponse = await fetch(recommendationsUrl);
 
           if (recommendationsResponse.ok) {
@@ -149,12 +143,8 @@
             const recommendedProducts = recommendationsData?.products || [];
 
             recommendedProducts.forEach((product) => {
-              if (resultHandles.length >= limit) return;
-              if (viewedSet.has(product.handle)) return;
-              if (resultHandles.includes(product.handle)) return;
-              if (product.vendor !== topVendor) return;
-
-              resultHandles.push(product.handle);
+              if (!matchesVendor(product.vendor)) return;
+              addHandle(resultHandles, product.handle);
             });
           }
         } catch (error) {
@@ -163,15 +153,37 @@
       }
 
       if (resultHandles.length < limit) {
-        handles.forEach((handle) => {
-          if (resultHandles.length >= limit) return;
-          if (resultHandles.includes(handle)) return;
+        const suggestUrl = `${window.theme.routes.root}search/suggest.json?q=${encodeURIComponent(topVendor)}&resources[type]=product&resources[limit]=20`;
 
-          resultHandles.push(handle);
-        });
+        try {
+          const suggestResponse = await fetch(suggestUrl);
+          if (suggestResponse.ok) {
+            const suggestData = await suggestResponse.json();
+            const suggestedProducts = suggestData?.resources?.results?.products || [];
+
+            suggestedProducts.forEach((product) => {
+              if (!matchesVendor(product.vendor)) return;
+              addHandle(resultHandles, product.handle);
+            });
+          }
+        } catch (error) {
+          console.warn('Personalized search suggest:', error);
+        }
+      }
+
+      if (resultHandles.length < limit) {
+        for (const product of products) {
+          addHandle(resultHandles, product.handle);
+        }
       }
 
       return resultHandles.slice(0, limit);
+    }
+
+    setGridColumns(count) {
+      const columns = Math.min(Math.max(count, 2), 4);
+      this.grid.style.setProperty('--columns', `repeat(${columns}, minmax(0, 1fr))`);
+      this.container.style.setProperty('--columns', `repeat(${columns}, minmax(0, 1fr))`);
     }
 
     async renderProducts(handles) {
