@@ -620,7 +620,7 @@
         "lookbook_item_pwaFVp": {
           "type": "lookbook_item",
           "settings": {
-            "video": "shopify://files/videos/Enigma - opdateret.MOV",
+            "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_1.webp",
             "product": "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
             "fallback_link": "",
             "fallback_text": "View Collection"
@@ -629,7 +629,43 @@
         "lookbook_item_pJUgkF": {
           "type": "lookbook_item",
           "settings": {
-            "video": "shopify://files/videos/Enigma - opdateret.MOV",
+            "image": "shopify://shop_images/2ESEJM6SH6011LFCT-BRNX_1_ca965e83-2bd1-4693-9bbd-6aa18f6fccda.webp",
+            "product": "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
+            "fallback_link": "",
+            "fallback_text": "View Collection"
+          }
+        },
+        "lookbook_item_6hD7ic": {
+          "type": "lookbook_item",
+          "settings": {
+            "image": "shopify://shop_images/2ESEJM6SH6011LFCT-BRNX_1_ca965e83-2bd1-4693-9bbd-6aa18f6fccda.webp",
+            "product": "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
+            "fallback_link": "",
+            "fallback_text": "View Collection"
+          }
+        },
+        "lookbook_item_fwcqQV": {
+          "type": "lookbook_item",
+          "settings": {
+            "image": "shopify://shop_images/2ESEJM6SH6011LFCT-BRNX_1_ca965e83-2bd1-4693-9bbd-6aa18f6fccda.webp",
+            "product": "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
+            "fallback_link": "",
+            "fallback_text": "View Collection"
+          }
+        },
+        "lookbook_item_N6pmXw": {
+          "type": "lookbook_item",
+          "settings": {
+            "image": "shopify://shop_images/2ESEJM6SH6011LFCT-BRNX_1_ca965e83-2bd1-4693-9bbd-6aa18f6fccda.webp",
+            "product": "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
+            "fallback_link": "",
+            "fallback_text": "View Collection"
+          }
+        },
+        "lookbook_item_Lcq3ad": {
+          "type": "lookbook_item",
+          "settings": {
+            "image": "shopify://shop_images/2ESEJM6SH6011LFCT-BRNX_1_ca965e83-2bd1-4693-9bbd-6aa18f6fccda.webp",
             "product": "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
             "fallback_link": "",
             "fallback_text": "View Collection"
@@ -638,7 +674,7 @@
         "lookbook_item_yretaH": {
           "type": "lookbook_item",
           "settings": {
-            "video": "shopify://files/videos/Enigma - opdateret.MOV",
+            "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_2.webp",
             "product": "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
             "fallback_link": "",
             "fallback_text": "View Collection"
@@ -648,6 +684,10 @@
       "block_order": [
         "lookbook_item_pwaFVp",
         "lookbook_item_pJUgkF",
+        "lookbook_item_6hD7ic",
+        "lookbook_item_fwcqQV",
+        "lookbook_item_N6pmXw",
+        "lookbook_item_Lcq3ad",
         "lookbook_item_yretaH"
       ],
       "name": "Video & Image Lookbook",
