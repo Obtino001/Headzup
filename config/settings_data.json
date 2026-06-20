@@ -108,7 +108,7 @@
     "favicon": "shopify://shop_images/H_BALL.png",
     "free_shipping_limit": "449",
     "show_lock_icon": true,
-    "enable_accept_terms": true,
+    "enable_accept_terms": false,
     "accept_terms_text": "<p>Jeg har læst og accepterer handelsbetingelserne</p>",
     "show_empty_cart_menu": false,
     "empty_cart_products": [],
