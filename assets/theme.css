@@ -25288,6 +25288,7 @@ body.chapter-two .product-item__price__holder .old-price {
   color: var(--black);
 }
 
+.search-popdown .predictive-search,
 .search-popdown .predictive-search--empty {
   display: block;
   position: relative;
@@ -25303,12 +25304,12 @@ body.chapter-two .product-item__price__holder .old-price {
   padding: 28px var(--outer) 36px;
 }
 
-.search-popdown .predictive-search__layout--products-only {
+.search-popdown .predictive-search__layout--no-suggestions {
   display: block;
   width: 100%;
 }
 
-.search-popdown .predictive-search__layout--products-only .predictive-search__column {
+.search-popdown .predictive-search__layout--no-suggestions .predictive-search__column {
   margin-bottom: 0;
   width: 100%;
 }
