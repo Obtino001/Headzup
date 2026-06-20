@@ -111,39 +111,53 @@
         "card_6keepA": {
           "type": "card",
           "settings": {
-            "label": "Bambus Sengesett",
+            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
+            "label": "TRUCKER CAPS",
             "badge": "",
             "link": ""
           }
         },
-        "card_pxxRga": {
+        "card_Cr8kec": {
           "type": "card",
           "settings": {
-            "label": "Pyjamas",
+            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
+            "label": "TRUCKER CAPS",
             "badge": "",
             "link": ""
           }
         },
-        "card_9XfJz3": {
+        "card_Bk6ntk": {
           "type": "card",
           "settings": {
-            "label": "Pledd",
+            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
+            "label": "TRUCKER CAPS",
             "badge": "",
             "link": ""
           }
         },
-        "card_C7HBJY": {
+        "card_NVrTfw": {
           "type": "card",
           "settings": {
-            "label": "Laken",
+            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
+            "label": "TRUCKER CAPS",
             "badge": "",
             "link": ""
           }
         },
-        "card_tWim3c": {
+        "card_ymPBdF": {
           "type": "card",
           "settings": {
-            "label": "Sovemasker",
+            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
+            "label": "TRUCKER CAPS",
+            "badge": "",
+            "link": ""
+          }
+        },
+        "card_cpheA9": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
+            "label": "TRUCKER CAPS",
             "badge": "",
             "link": ""
           }
@@ -151,22 +165,23 @@
       },
       "block_order": [
         "card_6keepA",
-        "card_pxxRga",
-        "card_9XfJz3",
-        "card_C7HBJY",
-        "card_tWim3c"
+        "card_Cr8kec",
+        "card_Bk6ntk",
+        "card_NVrTfw",
+        "card_ymPBdF",
+        "card_cpheA9"
       ],
       "name": "Shop by Category",
       "settings": {
-        "eyebrow": "Kunders favoritter",
-        "title": "Handle etter kategori",
+        "eyebrow": "Favorite",
+        "title": "Shop By Category",
         "label_font_size": 14,
         "card_width": 280,
         "card_height": 340,
-        "border_radius": 12,
-        "background_color": "#FAF7F3",
-        "badge_color": "#1A1A1A",
-        "badge_text_color": "#FFFFFF",
+        "border_radius": 0,
+        "background_color": "#FFFFFF",
+        "badge_color": "#1a1a1a",
+        "badge_text_color": "#ffffff",
         "padding_top": 64,
         "padding_bottom": 64
       }
