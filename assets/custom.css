@@ -1,3 +1,7 @@
 .product__trustpilot-wrapper {
     padding-bottom: 15px;
 }
+
+.anyday-widget-custom__content {
+    line-height: 150%;
+}

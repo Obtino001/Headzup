@@ -777,7 +777,7 @@
         "type": "range",
         "id": "personalized_search_limit",
         "min": 3,
-        "max": 5,
+        "max": 10,
         "step": 1,
         "label": "Number of personalized products",
         "default": 4
