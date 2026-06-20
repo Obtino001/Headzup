@@ -55,9 +55,7 @@
     "enable_superscript": false,
     "show_scroll_top_button": false,
     "predictive_search_enabled": true,
-    "personalized_search_enabled": true,
-    "personalized_search_limit": 4,
-    "personalized_search_show_fallback": true,
+    "empty_search_menu": "main-menu",
     "empty_search_product_list": [
       "47-anaheim-ducks-mvp-adjustable-cap-bone-1",
       "47-anaheim-ducks-mvp-adjustable-cap-bone",
@@ -65,6 +63,9 @@
       "47-arizona-coyotes-mvp-adjustable-cap-sort",
       "47-boston-bruins-mvp-adjustable-cap-black"
     ],
+    "personalized_search_enabled": true,
+    "personalized_search_limit": 4,
+    "personalized_search_show_fallback": true,
     "instagram_link": "https://www.instagram.com/headzup.dk",
     "facebook_link": "",
     "tiktok_link": "",
