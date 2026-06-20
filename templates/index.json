@@ -69,7 +69,7 @@
             "score": "4.8",
             "star_bg_color": "#00b67a",
             "star_icon_color": "#ffffff",
-            "subtext": "· 1,200+ reviews"
+            "subtext": ""
           }
         },
         "stats_BTryzQ": {
@@ -83,7 +83,7 @@
         "brand_4i9prx": {
           "type": "brand",
           "settings": {
-            "alignment": "left",
+            "alignment": "right",
             "icon": "<svg width=\"22\" height=\"14\" viewbox=\"0 0 22 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"22\" height=\"14\" fill=\"#C60C30\"></rect><rect x=\"6\" y=\"0\" width=\"3\" height=\"14\" fill=\"white\"></rect><rect x=\"0\" y=\"6\" width=\"22\" height=\"3\" fill=\"white\"></rect></svg>",
             "title": "Danish Brand",
             "subtext": "Premium quality since 2021"
