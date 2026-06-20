@@ -1,0 +1,256 @@
+{% comment %}
+  Lifestyle Video & Image Lookbook Grid
+  Designed for premium cap brands to showcase native videos/UGC and link directly to products.
+{% endcomment %}
+
+{{ 'section-video-lifestyle-lookbook.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="video-lookbook section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient">
+  <div class="page-width">
+    {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
+      <div class="video-lookbook__header title-wrapper title-wrapper--no-top-margin text-{{ section.settings.heading_alignment }}">
+        {%- if section.settings.subtitle != blank -%}
+          <p class="video-lookbook__subtitle inline-richtext font-body-bold">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+        {%- if section.settings.title != blank -%}
+          <h2 class="video-lookbook__title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="video-lookbook__grid grid grid--1-col grid--2-col-tablet grid--{{ section.settings.columns_desktop }}-col-desktop">
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'lookbook_item' -%}
+            <div class="video-lookbook__item grid__item scroll-trigger animate--slide-in" {{ block.shopify_attributes }}>
+              <div class="video-lookbook__card media-aspect-{{ section.settings.card_aspect_ratio }}">
+                
+                {% comment %} Media Container {% endcomment %}
+                <div class="video-lookbook__media-wrapper">
+                  {%- if block.settings.video != blank -%}
+                    {{ block.settings.video | video_tag: 
+                      autoplay: true, 
+                      loop: true, 
+                      muted: true, 
+                      controls: false, 
+                      playsinline: true,
+                      class: 'video-lookbook__media video-lookbook__video' 
+                    }}
+                  {%- elsif block.settings.image != blank -%}
+                    {{ block.settings.image | image_url: width: 800 | image_tag:
+                      loading: 'lazy',
+                      sizes: '(min-width: 1200px) 400px, (min-width: 750px) 50%px, 100vw',
+                      class: 'video-lookbook__media video-lookbook__image'
+                    }}
+                  {%- else -%}
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg video-lookbook__media' }}
+                  {%- endif -%}
+                  <div class="video-lookbook__overlay"></div>
+                </div>
+
+                {% comment %} Bottom Product Link Card {% endcomment %}
+                {%- if block.settings.product != blank -%}
+                  {%- assign card_product = block.settings.product -%}
+                  <a href="{{ card_product.url }}" class="video-lookbook__product-link" aria-label="{{ card_product.title | escape }}">
+                    <div class="video-lookbook__product-card">
+                      <div class="video-lookbook__product-thumb">
+                        {%- if card_product.featured_media != blank -%}
+                          <img src="{{ card_product.featured_media | image_url: width: 120 }}" alt="{{ card_product.featured_media.alt | escape }}" width="60" height="60" loading="lazy">
+                        {%- else -%}
+                          {{ 'product-1' | placeholder_svg_tag }}
+                        {%- endif -%}
+                      </div>
+                      <div class="video-lookbook__product-info">
+                        <span class="video-lookbook__product-vendor">{{ card_product.vendor }}</span>
+                        <h3 class="video-lookbook__product-title">{{ card_product.title | escape }}</h3>
+                        <div class="video-lookbook__product-meta">
+                          <span class="video-lookbook__product-price">{{ card_product.price | money }}</span>
+                          <span class="video-lookbook__action-btn">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                {%- else -%}
+                  {% comment %} Fallback Link if no product is explicitly selected {% endcomment %}
+                  {%- if block.settings.fallback_link != blank -%}
+                    <a href="{{ block.settings.fallback_link }}" class="video-lookbook__product-link">
+                      <div class="video-lookbook__product-card video-lookbook__product-card--fallback">
+                        <h3 class="video-lookbook__product-title">{{ block.settings.fallback_text | default: 'Shop the Look' }}</h3>
+                        <span class="video-lookbook__action-btn">
+                          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </span>
+                      </div>
+                    </a>
+                  {%- endif -%}
+                {%- endif -%}
+
+              </div>
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video & Image Lookbook",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "See It Worn"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Style & Fit Guide"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading Size"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" }
+      ],
+      "default": "center",
+      "label": "Heading Alignment"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3,
+      "label": "Columns on Desktop"
+    },
+    {
+      "type": "select",
+      "id": "card_aspect_ratio",
+      "options": [
+        { "value": "portrait", "label": "Portrait (3:4)" },
+        { "value": "story", "label": "Social Story (9:16)" },
+        { "value": "square", "label": "Square (1:1)" }
+      ],
+      "default": "portrait",
+      "label": "Card Aspect Ratio"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "background-1"
+    },
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "label": "Top Padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36,
+      "label": "Bottom Padding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "lookbook_item",
+      "name": "Lookbook Item",
+      "settings": [
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Lifestyle Video",
+          "info": "Upload a loopable 15-30 second video of the cap being worn. Takes priority over static image."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Fallback/Static Image",
+          "info": "Used if no video is uploaded."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product to Link"
+        },
+        {
+          "type": "header",
+          "content": "Custom Link Fallback",
+          "info": "Used only if no product is selected above."
+        },
+        {
+          "type": "url",
+          "id": "fallback_link",
+          "label": "Link URL"
+        },
+        {
+          "type": "text",
+          "id": "fallback_text",
+          "label": "Link Text",
+          "default": "View Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video & Image Lookbook",
+      "blocks": [
+        { "type": "lookbook_item" },
+        { "type": "lookbook_item" },
+        { "type": "lookbook_item" }
+      ]
+    }
+  ]
+}
+{% endschema %}
