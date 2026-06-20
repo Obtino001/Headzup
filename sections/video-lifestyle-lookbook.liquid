@@ -20,7 +20,6 @@
 {%- endstyle -%}
 
 <div class="video-lookbook section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient">
-  <div class="wrapper--full-padded">
     {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
       <div class="video-lookbook__header grid__heading-holder text-{{ section.settings.heading_alignment }}">
         {%- if section.settings.title != blank -%}
@@ -107,7 +106,6 @@
       {%- endfor -%}
       </div>
     </div>
-  </div>
 </div>
 
 <script>
