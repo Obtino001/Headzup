@@ -193,7 +193,7 @@
 
 [class*="video-lookbook-swiper-"] {
   padding-bottom: 20px;
-  overflow: visible; /* Allows side slides to peek out beautifully */
+  overflow: hidden;
 }
 
 /* Make sure swiper-slide doesn't have grid interference */
