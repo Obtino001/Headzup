@@ -57,7 +57,7 @@
         "show_placeholder": true
       }
     },
-    "trust_banner_xzcnmW": {
+  "trust_banner_xzcnmW": {
       "type": "trust-banner",
       "blocks": {
         "trustpilot_Dcc8Bd": {
@@ -69,24 +69,24 @@
             "score": "4.8",
             "star_bg_color": "#00b67a",
             "star_icon_color": "#ffffff",
-            "subtext": "· 1 200+ anmeldelser"
+            "subtext": "· 1,200+ reviews"
           }
         },
         "stats_BTryzQ": {
           "type": "stats",
           "settings": {
             "alignment": "center",
-            "number": "200 000 +",
-            "subtext": "sengetøy solgt i Norge"
+            "number": "200,000+",
+            "subtext": "caps sold"
           }
         },
         "brand_4i9prx": {
           "type": "brand",
           "settings": {
             "alignment": "left",
-            "icon": "",
-            "title": "Norsk merkevare",
-            "subtext": "Skandinavisk kvalitet siden 2021"
+            "icon": "<svg width=\"22\" height=\"14\" viewBox=\"0 0 22 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"22\" height=\"14\" fill=\"#C60C30\"/><rect x=\"6\" y=\"0\" width=\"3\" height=\"14\" fill=\"white\"/><rect x=\"0\" y=\"6\" width=\"22\" height=\"3\" fill=\"white\"/></svg>",
+            "title": "Danish Brand",
+            "subtext": "Premium quality since 2021"
           }
         }
       },
@@ -105,9 +105,36 @@
         "subtext_color": "#9a9590"
       }
     },
-    "shop_by_category_jDVHfE": {
+"shop_by_category_jDVHfE": {
       "type": "shop-by-category",
       "blocks": {
+        "card_w3gCQE": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/11174264_10152711831686927_7998924455839174750_o_24d8b4c7-5e17-4103-a0ed-89a4685c405b.jpg",
+            "label": "YANKEES CAPS",
+            "badge": "",
+            "link": "shopify://collections/new-york-yankees-caps"
+          }
+        },
+        "card_7mQxiM": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/985b0393fc79733a610bdf0e43b4c14e23cb4111.png",
+            "label": "NEW ERA LIMITED EDITION CAPS",
+            "badge": "",
+            "link": "shopify://collections/limited-editions-caps"
+          }
+        },
+        "card_PkRUHG": {
+          "type": "card",
+          "settings": {
+            "image": "shopify://shop_images/28870879_10155975030226224_716748274115018752_o.jpg",
+            "label": "DAD CAPS",
+            "badge": "",
+            "link": "shopify://collections/dad-caps"
+          }
+        },
         "card_6keepA": {
           "type": "card",
           "settings": {
@@ -146,6 +173,9 @@
         }
       },
       "block_order": [
+        "card_w3gCQE",
+        "card_7mQxiM",
+        "card_PkRUHG",
         "card_6keepA",
         "card_Cr8kec",
         "card_Bk6ntk",
