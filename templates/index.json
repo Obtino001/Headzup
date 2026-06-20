@@ -709,7 +709,7 @@
         "subtitle": "See It Worn",
         "background_color": "#faf7f3",
         "accent_color": "#a0afa0",
-        "border_radius": 14,
+        "border_radius": 0,
         "scroll_speed": 20,
         "pause_on_hover": true
       }
