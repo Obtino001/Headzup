@@ -124,16 +124,7 @@
               <span class="btb-name-{{ section.id }}">{{ block.settings.title }}</span>
               <span class="btb-score-{{ section.id }}">{{ block.settings.score }}</span>
             </div>
-            <div class="btb-row-{{ section.id }}">
-              <div class="btb-stars-{{ section.id }}">
-                {%- for i in (1..5) -%}
-                  <div class="btb-star-{{ section.id }}" style="background: {{ block.settings.star_bg_color }};">
-                    <svg viewBox="0 0 24 24" fill="{{ block.settings.star_icon_color }}" width="8" height="8"><path d="M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z"/></svg>
-                  </div>
-                {%- endfor -%}
-              </div>
-              <span class="btb-sub-{{ section.id }}">{{ block.settings.subtext }}</span>
-            </div>
+           
 
           {%- when 'stats' -%}
             <span class="btb-num-{{ section.id }}">{{ block.settings.number }}</span>
