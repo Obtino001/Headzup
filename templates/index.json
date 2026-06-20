@@ -696,7 +696,7 @@
         "title": "Style & Fit Guide",
         "heading_size": "h1",
         "heading_alignment": "center",
-        "columns_desktop": 3,
+        "columns_desktop": 5,
         "card_aspect_ratio": "portrait",
         "color_scheme": "",
         "padding_top": 36,
