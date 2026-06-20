@@ -10465,8 +10465,9 @@ countdown-timer {
   gap: 0;
 }
 .product__page .countdown-block.text-center {
-  text-align: center;
-  align-items: center;
+    text-align: center;
+    align-items: center;
+    padding-top: 10px;
 }
 .product__page .countdown-block__text p {
   margin-top: 0;
