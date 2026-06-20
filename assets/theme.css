@@ -13516,9 +13516,6 @@ body.has-header-transparent.has-first-section-overlay-header.template-product .p
     overflow-x: hidden;
   }
   .product__wrapper--thumbnails-left .product__thumbs {
-    position: sticky;
-    top: var(--header-sticky-height, 0);
-    overflow: hidden;
     order: -1;
     margin: 0 20px 0 0;
     flex: 0 0 85px;
