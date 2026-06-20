@@ -106,6 +106,22 @@
                       </a>
                       {% for link in link.links %}
                         {% assign collection_icon = link.object.metafields.custom.collection_icon.value %}
+                        {% if collection_icon == blank %}
+                          {% for brand in metaobjects.brands.values %}
+                            {% if brand.link_collection.value.url == link.url %}
+                              {% assign collection_icon = brand.image %}
+                              {% break %}
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                        {% if collection_icon == blank and metaobjects.brands_chapter_two %}
+                          {% for brand in metaobjects.brands_chapter_two.values %}
+                            {% if brand.link_collection.value.url == link.url %}
+                              {% assign collection_icon = brand.image %}
+                              {% break %}
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
                         {%- assign link_title_lowercase = link.title | downcase | strip_html | escape -%}
                         <a
                           href="{{ link.url }}"
@@ -131,6 +147,22 @@
                     {% for link in link.links %}
                       {%- assign link_title_lowercase = link.title | downcase | strip_html | escape -%}
                       {% assign collection_icon = link.object.metafields.custom.collection_icon.value %}
+                      {% if collection_icon == blank %}
+                        {% for brand in metaobjects.brands.values %}
+                          {% if brand.link_collection.value.url == link.url %}
+                            {% assign collection_icon = brand.image %}
+                            {% break %}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                      {% if collection_icon == blank and metaobjects.brands_chapter_two %}
+                        {% for brand in metaobjects.brands_chapter_two.values %}
+                          {% if brand.link_collection.value.url == link.url %}
+                            {% assign collection_icon = brand.image %}
+                            {% break %}
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
                       <a
                         href="{{ link.url }}"
                         data-stagger
