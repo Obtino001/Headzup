@@ -33,7 +33,7 @@
     assign empty_search_product_list_size = empty_search_product_list_size | at_most: 4
   endif
 
-  if empty_search_product_list != blank
+  if empty_search_product_list != blank or settings.personalized_search_enabled
     assign show_empty_search = true
     assign show_empty_search_product_list = true
   endif
@@ -118,7 +118,7 @@
           assign animation_delay = 100
           assign animation_duration = 800
         -%}
-        <div class="predictive-search predictive-search--empty" data-popular-searches data-scroll-lock-scrollable>
+        <div class="predictive-search predictive-search--empty" data-popular-searches data-scroll-lock-scrollable{% if empty_search_menu == blank and empty_search_product_list == blank %} style="display: none;"{% endif %}>
           <div class="wrapper">
             {%- if show_empty_search_menu and show_empty_search_product_list -%}
               <div class="predictive-search__layout">

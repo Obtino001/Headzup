@@ -39,13 +39,30 @@
     }
 
     restoreFallback() {
-      if (!this.grid || !window.theme?.settings?.personalizedSearchShowFallback) return;
+      if (!this.grid || !window.theme?.settings?.personalizedSearchShowFallback) {
+        if (this.fallbackHtml.trim() === '') {
+          const wrapper = this.container?.closest('.predictive-search--empty');
+          if (wrapper && !wrapper.querySelector('.predictive-search__item')) {
+            wrapper.style.display = 'none';
+          }
+        }
+        return;
+      }
 
       this.grid.innerHTML = this.fallbackHtml;
       this.container.removeAttribute('data-personalized');
 
       if (this.heading && this.defaultHeading) {
         this.heading.textContent = this.defaultHeading;
+      }
+
+      if (this.fallbackHtml.trim() === '') {
+        const wrapper = this.container?.closest('.predictive-search--empty');
+        if (wrapper && !wrapper.querySelector('.predictive-search__item')) {
+          wrapper.style.display = 'none';
+        }
+      } else {
+        this.container?.closest('.predictive-search--empty')?.style.removeProperty('display');
       }
     }
 
@@ -73,6 +90,7 @@
         this.setGridColumns(this.grid.children.length);
         this.updateHeading(await this.getTopVendor(handles));
         this.container.setAttribute('data-personalized', 'true');
+        this.container?.closest('.predictive-search--empty')?.style.removeProperty('display');
       } catch (error) {
         console.warn('Personalized search:', error);
         this.restoreFallback();
