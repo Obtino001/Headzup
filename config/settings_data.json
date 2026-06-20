@@ -57,7 +57,7 @@
     "predictive_search_enabled": true,
     "empty_search_product_list": [],
     "personalized_search_enabled": true,
-    "personalized_search_limit": 4,
+    "personalized_search_limit": 5,
     "personalized_search_show_fallback": true,
     "instagram_link": "https://www.instagram.com/headzup.dk",
     "facebook_link": "",
