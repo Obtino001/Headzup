@@ -57,6 +57,17 @@
         "show_placeholder": true
       }
     },
+    "section_custom_code_qaeRf7": {
+      "type": "section-custom-code",
+      "name": "Custom code",
+      "settings": {
+        "code": "",
+        "width": "wrapper",
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
     "section_collection_z9PpK4": {
       "type": "section-collection",
       "name": "Featured collection",
@@ -705,6 +716,7 @@
   },
   "order": [
     "section_hero_MGFqFK",
+    "section_custom_code_qaeRf7",
     "section_collection_z9PpK4",
     "section_collections_list_QpxrYH",
     "section_collections_list_CUrbjK",
