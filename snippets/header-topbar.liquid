@@ -238,23 +238,21 @@
     letter-spacing: 0.8px;
 }
 .header-topbar__tooltip {
-  visibility: hidden;
-  opacity: 0;
+  display: none;
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) translateY(10px);
-  background-color: var(--navy);
-  color: var(--white);
+  transform: translateX(-50%);
+  background-color: var(--navy, #0c2340);
+  color: #fff;
   text-align: center;
   padding: 8px 12px;
   border-radius: 4px;
   white-space: nowrap;
   font-size: 12px;
-  z-index: 9999;
-  transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
-  pointer-events: none;
+  z-index: 999999;
   margin-top: 5px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 .header-topbar__tooltip::after {
   content: "";
@@ -264,11 +262,9 @@
   margin-left: -5px;
   border-width: 5px;
   border-style: solid;
-  border-color: transparent transparent var(--navy) transparent;
+  border-color: transparent transparent var(--navy, #0c2340) transparent;
 }
 .header-topbar__brand--tooltip:hover .header-topbar__tooltip {
-  visibility: visible;
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
+  display: block;
 }
 {% endstyle %}
