@@ -7,7 +7,10 @@
   .preview-title-story{font-size:12px;line-height:16px;max-width:128px !important;font-weight:400;text-align:center;word-wrap:break-word;}
   .video-popup.active{display:flex !important;}
   body:has(.video-popup.active){overflow:hidden;height:100vh;position:fixed;width:100%;}
-  body:has(.video-popup.active) header{display:none !important;}
+  body:has(.video-popup.active) header,
+  body:has(.video-popup.active) header-component,
+  body:has(.video-popup.active) .header__wrapper,
+  body:has(.video-popup.active) .theme__header {display:none !important;}
   body:has(.video-popup.active) .MA-announcement-container{display:none !important;}
   body:has(.video-popup.active) .MA-swiper-header{display:none !important;}
   body:has(.video-popup.active) announcement-bar{display:none !important;}
@@ -269,37 +272,23 @@
           {% if block.settings.use_metafields %}
             {% assign thumbs = product.metafields.custom.video_thumbnails.value %}
             {% for video in thumbs %}
-              {% if video and thumb %}
+              {% if video %}
                 <div class="swiper-slide">
-                  <img
-                    src="{{ thumb | strip }}"
-                    class="popup-thumb"
-                    data-video="{{ video | strip }}"
-                    alt="Thumbnail"
-                    loading="lazy"
-                  >
-                </div>
-              {% endif %}
-              {% if thumb %}
-                <div class="swiper-slide">
-                  <img
-                    src="{{ thumb | strip }}"
-                    class="popup-thumb"
-                    data-video="{{ video_file | file_url }}"
-                    alt="Thumbnail"
-                    loading="lazy"
-                  >
-                </div>
-              {% elsif video %}
-                {% assign thumb_pre = video.preview_image | img_url: '100x' %}
-                <div class="swiper-slide">
-                  <img
-                    src="{{ thumb_pre }}"
-                    class="popup-thumb"
-                    data-video="{{ video_file | file_url }}"
-                    alt="Thumbnail"
-                    loading="lazy"
-                  >
+                  {% if video.preview_image != blank %}
+                    <img
+                      src="{{ video.preview_image | image_url: width: 200 }}"
+                      class="popup-thumb"
+                      alt="Thumbnail"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <img
+                      class="popup-thumb-generated"
+                      data-video="{{ video.sources[0].url }}"
+                      alt="Thumbnail"
+                      loading="lazy"
+                    >
+                  {% endif %}
                 </div>
               {% endif %}
             {% endfor %}
@@ -308,29 +297,34 @@
               {% assign video_key = 'video_' | append: i %}
               {% assign thumb_key = 'thumb_' | append: i %}
               {% assign video_file = block.settings[video_key] %}
-              {% assign mp4_source = video_file.sources | where: 'format', 'mp4' | first %}
               {% assign thumb_image = block.settings[thumb_key] %}
 
-              {% if thumb_image %}
+              {% if thumb_image != blank %}
                 <div class="swiper-slide">
                   <img
-                    src="{{ thumb_image | image_url }}"
+                    src="{{ thumb_image | image_url: width: 200 }}"
                     class="popup-thumb"
-                    data-video="{{ video_file | file_url }}"
                     alt="Thumbnail"
                     loading="lazy"
                   >
                 </div>
-              {% elsif video_file %}
-                {% assign thumb = video_file.preview_image | img_url: '100x' %}
+              {% elsif video_file != blank %}
                 <div class="swiper-slide">
-                  <img
-                    class="popup-thumb-generated"
-                    data-video="{{ thumb }}"
-                    alt="Thumbnail"
-                    loading="lazy"
-                    src="thumb"
-                  >
+                  {% if video_file.preview_image != blank %}
+                    <img
+                      src="{{ video_file.preview_image | image_url: width: 200 }}"
+                      class="popup-thumb"
+                      alt="Thumbnail"
+                      loading="lazy"
+                    >
+                  {% else %}
+                    <img
+                      class="popup-thumb-generated"
+                      data-video="{{ video_file.sources[0].url }}"
+                      alt="Thumbnail"
+                      loading="lazy"
+                    >
+                  {% endif %}
                 </div>
               {% endif %}
             {% endfor %}
