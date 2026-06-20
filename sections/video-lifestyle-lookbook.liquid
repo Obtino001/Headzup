@@ -1,25 +1,28 @@
-
+{% comment %}
+  Get Inspired / Carousel
+  Place in: sections/get-inspired.liquid
+{% endcomment %}
 
 <style>
-  #bli-inspirert-{{ section.id }} {
+  #get-inspired-{{ section.id }} {
     --bg: {{ section.settings.background_color }};
     --text-primary: #1A1A1A;
     --sage: {{ section.settings.accent_color }};
     --radius-img: {{ section.settings.border_radius }}px;
   }
 
-  #bli-inspirert-{{ section.id }} {
+  #get-inspired-{{ section.id }} {
     background: var(--bg);
     padding: 46px 0 80px;
     overflow: hidden;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-header {
+  #get-inspired-{{ section.id }} .insp-header {
     padding: 0 clamp(24px, 6vw, 96px);
     margin-bottom: 52px;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-eyebrow {
+  #get-inspired-{{ section.id }} .insp-eyebrow {
     font-family: var(--font);
     font-size: 11px;
     font-weight: 600;
@@ -30,7 +33,7 @@
     display: block;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-subtitle {
+  #get-inspired-{{ section.id }} .insp-subtitle {
     font-family: var(--font);
     font-size: 15px;
     font-weight: 400;
@@ -39,7 +42,7 @@
     max-width: 480px;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-track-outer {
+  #get-inspired-{{ section.id }} .insp-track-outer {
     position: relative;
     width: 100%;
     overflow: hidden;
@@ -48,10 +51,10 @@
     -webkit-user-select: none;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-track-outer:active { cursor: grabbing; }
+  #get-inspired-{{ section.id }} .insp-track-outer:active { cursor: grabbing; }
 
-  #bli-inspirert-{{ section.id }} .insp-track-outer::before,
-  #bli-inspirert-{{ section.id }} .insp-track-outer::after {
+  #get-inspired-{{ section.id }} .insp-track-outer::before,
+  #get-inspired-{{ section.id }} .insp-track-outer::after {
     content: '';
     position: absolute;
     top: 0; bottom: 0;
@@ -60,17 +63,17 @@
     pointer-events: none;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-track-outer::before {
+  #get-inspired-{{ section.id }} .insp-track-outer::before {
     left: 0;
     background: linear-gradient(to right, var(--bg), transparent);
   }
 
-  #bli-inspirert-{{ section.id }} .insp-track-outer::after {
+  #get-inspired-{{ section.id }} .insp-track-outer::after {
     right: 0;
     background: linear-gradient(to left, var(--bg), transparent);
   }
 
-  #bli-inspirert-{{ section.id }} .insp-track {
+  #get-inspired-{{ section.id }} .insp-track {
     display: flex;
     align-items: center;
     gap: 14px;
@@ -78,7 +81,7 @@
     will-change: transform;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-card {
+  #get-inspired-{{ section.id }} .insp-card {
     flex-shrink: 0;
     width: clamp(200px, 22vw, 300px);
     height: clamp(250px, 27.5vw, 375px);
@@ -89,12 +92,13 @@
     transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-  #bli-inspirert-{{ section.id }} .insp-card:hover {
+  #get-inspired-{{ section.id }} .insp-card:hover {
     transform: translateY(-4px);
   }
 
-  #bli-inspirert-{{ section.id }} .insp-card img,
-  #bli-inspirert-{{ section.id }} .insp-card svg {
+  #get-inspired-{{ section.id }} .insp-card img,
+  #get-inspired-{{ section.id }} .insp-card video,
+  #get-inspired-{{ section.id }} .insp-card svg {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -102,11 +106,12 @@
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-  #bli-inspirert-{{ section.id }} .insp-card:hover img {
+  #get-inspired-{{ section.id }} .insp-card:hover img,
+  #get-inspired-{{ section.id }} .insp-card:hover video {
     transform: scale(1.03);
   }
 
-  #bli-inspirert-{{ section.id }} .insp-caption {
+  #get-inspired-{{ section.id }} .insp-caption {
     position: absolute;
     bottom: 0; left: 0; right: 0;
     z-index: 2;
@@ -119,13 +124,13 @@
     border-radius: 0 0 var(--radius-img) var(--radius-img);
   }
 
-  #bli-inspirert-{{ section.id }} .insp-card:hover .insp-caption {
+  #get-inspired-{{ section.id }} .insp-card:hover .insp-caption {
     opacity: 1;
     transform: translateY(0);
   }
 
   @media (hover: none) {
-    #bli-inspirert-{{ section.id }} .insp-caption {
+    #get-inspired-{{ section.id }} .insp-caption {
       opacity: 1;
       transform: translateY(0);
       padding: 28px 14px 12px;
@@ -133,7 +138,7 @@
     }
   }
 
-  #bli-inspirert-{{ section.id }} .insp-caption-label {
+  #get-inspired-{{ section.id }} .insp-caption-label {
     display: block;
     font-family: var(--font);
     font-size: 10px;
@@ -144,7 +149,7 @@
     margin-bottom: 3px;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-caption-title {
+  #get-inspired-{{ section.id }} .insp-caption-title {
     display: block;
     font-family: var(--font);
     font-size: 13px;
@@ -153,21 +158,21 @@
     line-height: 1.4;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-card a.card-link {
+  #get-inspired-{{ section.id }} .insp-card a.card-link {
     display: block;
     position: absolute;
     inset: 0;
     z-index: 3;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-progress {
+  #get-inspired-{{ section.id }} .insp-progress {
     display: flex;
     align-items: center;
     gap: 6px;
     padding: 28px clamp(24px, 6vw, 96px) 0;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-progress-bar {
+  #get-inspired-{{ section.id }} .insp-progress-bar {
     width: 48px;
     height: 2px;
     background: #E0DAD3;
@@ -175,27 +180,28 @@
     transition: width 0.2s;
   }
 
-  #bli-inspirert-{{ section.id }} .insp-progress-bar.active {
+  #get-inspired-{{ section.id }} .insp-progress-bar.active {
     width: 72px;
     background: var(--sage);
   }
 
   @media (max-width: 640px) {
-    #bli-inspirert-{{ section.id }} { padding: 64px 0 56px; }
-    #bli-inspirert-{{ section.id }} .insp-header { margin-bottom: 36px; }
-    #bli-inspirert-{{ section.id }} .insp-card { width: 68vw; height: 85vw; }
-    #bli-inspirert-{{ section.id }} .insp-track { gap: 10px; }
-    #bli-inspirert-{{ section.id }} .insp-track-outer::before,
-    #bli-inspirert-{{ section.id }} .insp-track-outer::after { width: 16px; }
+    #get-inspired-{{ section.id }} { padding: 64px 0 56px; }
+    #get-inspired-{{ section.id }} .insp-header { margin-bottom: 36px; }
+    #get-inspired-{{ section.id }} .insp-card { width: 68vw; height: 85vw; }
+    #get-inspired-{{ section.id }} .insp-track { gap: 10px; }
+    #get-inspired-{{ section.id }} .insp-track-outer::before,
+    #get-inspired-{{ section.id }} .insp-track-outer::after { width: 16px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    #bli-inspirert-{{ section.id }} .insp-card,
-    #bli-inspirert-{{ section.id }} .insp-card img { transition: none !important; }
+    #get-inspired-{{ section.id }} .insp-card,
+    #get-inspired-{{ section.id }} .insp-card img,
+    #get-inspired-{{ section.id }} .insp-card video { transition: none !important; }
   }
 </style>
 
-<section id="bli-inspirert-{{ section.id }}" aria-label="Bli inspirert – inspirasjonskarusell">
+<section id="get-inspired-{{ section.id }}" aria-label="Get Inspired – Inspiration Carousel">
 
   <div class="insp-header">
     {% if section.settings.eyebrow != blank %}
@@ -212,13 +218,17 @@
   <div class="insp-track-outer" id="insp-outer-{{ section.id }}">
     <div class="insp-track" id="insp-track-{{ section.id }}">
       {% for block in section.blocks %}
-        {% if block.type == 'image' %}
+        {% if block.type == 'media' %}
           <div class="insp-card" {{ block.shopify_attributes }}>
-            {% if block.settings.image != blank %}
+            
+            {% if block.settings.video != blank %}
+              {{ block.settings.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false }}
+            {% elsif block.settings.image != blank %}
               {{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.image.alt | default: block.settings.caption, draggable: 'false' }}
             {% else %}
               {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
             {% endif %}
+
             {% if block.settings.label != blank or block.settings.caption != blank %}
               <div class="insp-caption">
                 {% if block.settings.label != blank %}
@@ -229,8 +239,9 @@
                 {% endif %}
               </div>
             {% endif %}
+            
             {% if block.settings.link != blank %}
-              <a class="card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.caption | default: 'Se produkt' }}"></a>
+              <a class="card-link" href="{{ block.settings.link }}" aria-label="{{ block.settings.caption | default: 'View product' }}"></a>
             {% endif %}
           </div>
         {% endif %}
@@ -238,7 +249,7 @@
     </div>
   </div>
 
-  <div class="insp-progress" id="insp-progress-{{ section.id }}" role="tablist" aria-label="Karusell-navigasjon"></div>
+  <div class="insp-progress" id="insp-progress-{{ section.id }}" role="tablist" aria-label="Carousel Navigation"></div>
 
 </section>
 
@@ -270,7 +281,7 @@
     var bar = document.createElement('div');
     bar.className = 'insp-progress-bar' + (i === 0 ? ' active' : '');
     bar.setAttribute('role', 'tab');
-    bar.setAttribute('aria-label', 'Bilde ' + (i + 1) + ' av ' + totalOriginal);
+    bar.setAttribute('aria-label', 'Item ' + (i + 1) + ' of ' + totalOriginal);
     progressWrap.appendChild(bar);
   });
 
@@ -377,44 +388,44 @@
 
 {% schema %}
 {
-  "name": "Bli inspirert",
+  "name": "Get Inspired",
   "tag": "section",
-  "class": "bli-inspirert-section",
+  "class": "get-inspired-section",
   "settings": [
     {
       "type": "text",
       "id": "eyebrow",
-      "label": "Eyebrow-tekst",
-      "default": "Inspirasjon"
+      "label": "Eyebrow Text",
+      "default": "Inspiration"
     },
     {
       "type": "text",
       "id": "title",
-      "label": "Overskrift",
-      "default": "Bli inspirert"
+      "label": "Heading",
+      "default": "Get Inspired"
     },
     {
       "type": "textarea",
       "id": "subtitle",
-      "label": "Undertittel",
-      "default": "Se hvordan bambus-sengetøyet kan styles i ulike farger, rom og stemninger."
+      "label": "Subtitle",
+      "default": "See how our caps can be styled in different looks and vibes."
     },
     {
       "type": "color",
       "id": "background_color",
-      "label": "Bakgrunnsfarge",
+      "label": "Background Color",
       "default": "#FAF7F3"
     },
     {
       "type": "color",
       "id": "accent_color",
-      "label": "Aksentfarge",
+      "label": "Accent Color",
       "default": "#A0AFA0"
     },
     {
       "type": "range",
       "id": "border_radius",
-      "label": "Avrunding på bilder",
+      "label": "Media Border Radius",
       "min": 0,
       "max": 24,
       "step": 2,
@@ -424,7 +435,7 @@
     {
       "type": "range",
       "id": "scroll_speed",
-      "label": "Scrollehastighet (lavere = saktere)",
+      "label": "Scroll Speed (lower = slower)",
       "min": 20,
       "max": 150,
       "step": 5,
@@ -433,49 +444,55 @@
     {
       "type": "checkbox",
       "id": "pause_on_hover",
-      "label": "Pause ved hover",
+      "label": "Pause on hover",
       "default": true
     }
   ],
   "blocks": [
     {
-      "type": "image",
-      "name": "Bilde",
+      "type": "media",
+      "name": "Media Item",
       "settings": [
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Bilde"
+          "label": "Image"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Autoplays muted. Will override the image if both are selected."
         },
         {
           "type": "text",
           "id": "label",
           "label": "Label",
-          "placeholder": "Sengesett · Skoggrønn"
+          "placeholder": "Cap · Navy"
         },
         {
           "type": "text",
           "id": "caption",
-          "label": "Bildetekst",
-          "placeholder": "Bambus sengesett – 200×200 cm"
+          "label": "Caption",
+          "placeholder": "Classic Snapback – Adjustable"
         },
         {
           "type": "url",
           "id": "link",
-          "label": "Link (valgfri)"
+          "label": "Link (Optional)"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Bli inspirert",
+      "name": "Get Inspired",
       "blocks": [
-        { "type": "image" },
-        { "type": "image" },
-        { "type": "image" },
-        { "type": "image" },
-        { "type": "image" }
+        { "type": "media" },
+        { "type": "media" },
+        { "type": "media" },
+        { "type": "media" },
+        { "type": "media" }
       ]
     }
   ]
