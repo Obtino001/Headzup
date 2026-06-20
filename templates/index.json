@@ -67,8 +67,8 @@
             "main_icon": "<svg width=\"14\" height=\"14\" viewbox=\"0 0 24 24\" fill=\"#00B67A\"><path d=\"M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z\"></path></svg>",
             "title": "TRUSTPILOT",
             "score": "4.4",
-            "star_bg_color": "#00B67A",
-            "star_icon_color": "#FFFFFF",
+            "star_bg_color": "#00b67a",
+            "star_icon_color": "#ffffff",
             "subtext": "· 1 200+ anmeldelser"
           }
         },
@@ -98,11 +98,77 @@
       "name": "Trust Banner",
       "settings": {
         "max_width": 1200,
-        "bg_color": "#FAF8F4",
-        "border_color": "#DDD8CF",
-        "divider_color": "#D0CCC4",
-        "text_color": "#1A1A1A",
-        "subtext_color": "#9A9590"
+        "bg_color": "#faf8f4",
+        "border_color": "#ddd8cf",
+        "divider_color": "#d0ccc4",
+        "text_color": "#1a1a1a",
+        "subtext_color": "#9a9590"
+      }
+    },
+    "shop_by_category_jDVHfE": {
+      "type": "shop-by-category",
+      "blocks": {
+        "card_6keepA": {
+          "type": "card",
+          "settings": {
+            "label": "Bambus Sengesett",
+            "badge": "",
+            "link": ""
+          }
+        },
+        "card_pxxRga": {
+          "type": "card",
+          "settings": {
+            "label": "Pyjamas",
+            "badge": "",
+            "link": ""
+          }
+        },
+        "card_9XfJz3": {
+          "type": "card",
+          "settings": {
+            "label": "Pledd",
+            "badge": "",
+            "link": ""
+          }
+        },
+        "card_C7HBJY": {
+          "type": "card",
+          "settings": {
+            "label": "Laken",
+            "badge": "",
+            "link": ""
+          }
+        },
+        "card_tWim3c": {
+          "type": "card",
+          "settings": {
+            "label": "Sovemasker",
+            "badge": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_6keepA",
+        "card_pxxRga",
+        "card_9XfJz3",
+        "card_C7HBJY",
+        "card_tWim3c"
+      ],
+      "name": "Shop by Category",
+      "settings": {
+        "eyebrow": "Kunders favoritter",
+        "title": "Handle etter kategori",
+        "label_font_size": 14,
+        "card_width": 280,
+        "card_height": 340,
+        "border_radius": 12,
+        "background_color": "#FAF7F3",
+        "badge_color": "#1A1A1A",
+        "badge_text_color": "#FFFFFF",
+        "padding_top": 64,
+        "padding_bottom": 64
       }
     },
     "section_collection_z9PpK4": {
@@ -754,6 +820,7 @@
   "order": [
     "section_hero_MGFqFK",
     "trust_banner_xzcnmW",
+    "shop_by_category_jDVHfE",
     "section_collection_z9PpK4",
     "section_collections_list_QpxrYH",
     "section_collections_list_CUrbjK",
