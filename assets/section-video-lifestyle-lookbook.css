@@ -185,3 +185,33 @@
     font-size: 1.2rem;
   }
 }
+
+/* Swiper Overrides for Continuous Marquee */
+[class*="video-lookbook-swiper-"] .swiper-wrapper {
+  transition-timing-function: linear !important;
+}
+
+[class*="video-lookbook-swiper-"] {
+  padding-bottom: 20px;
+  overflow: visible; /* Allows side slides to peek out beautifully */
+}
+
+/* Make sure swiper-slide doesn't have grid interference */
+.video-lookbook__item.swiper-slide {
+  height: auto;
+  opacity: 0.5; /* Fade out inactive slides on mobile for premium center focus */
+  transition: opacity 0.3s ease;
+}
+
+.video-lookbook__item.swiper-slide-active {
+  opacity: 1; /* Highlight centered slide */
+}
+
+@media screen and (min-width: 750px) {
+  .video-lookbook__item.swiper-slide {
+    opacity: 1; /* All slides visible on desktop */
+  }
+  [class*="video-lookbook-swiper-"] {
+    overflow: hidden;
+  }
+}

@@ -20,23 +20,24 @@
 {%- endstyle -%}
 
 <div class="video-lookbook section-{{ section.id }}-padding color-{{ section.settings.color_scheme }} gradient">
-  <div class="page-width">
+  <div class="wrapper--full-padded">
     {%- if section.settings.title != blank or section.settings.subtitle != blank -%}
-      <div class="video-lookbook__header title-wrapper title-wrapper--no-top-margin text-{{ section.settings.heading_alignment }}">
-        {%- if section.settings.subtitle != blank -%}
-          <p class="video-lookbook__subtitle inline-richtext font-body-bold">{{ section.settings.subtitle }}</p>
-        {%- endif -%}
+      <div class="video-lookbook__header grid__heading-holder text-{{ section.settings.heading_alignment }}">
         {%- if section.settings.title != blank -%}
-          <h2 class="video-lookbook__title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+          <h2 class="video-lookbook__title grid__heading {{ section.settings.heading_size }}">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subtitle != blank -%}
+          <p class="video-lookbook__subtitle body-small" style="margin-top: 10px;">{{ section.settings.subtitle }}</p>
         {%- endif -%}
       </div>
     {%- endif -%}
 
-    <div class="video-lookbook__grid grid grid--1-col grid--2-col-tablet grid--{{ section.settings.columns_desktop }}-col-desktop">
+    <div class="swiper video-lookbook-swiper-{{ section.id }}">
+      <div class="swiper-wrapper">
       {%- for block in section.blocks -%}
         {%- case block.type -%}
           {%- when 'lookbook_item' -%}
-            <div class="video-lookbook__item grid__item scroll-trigger animate--slide-in" {{ block.shopify_attributes }}>
+            <div class="swiper-slide video-lookbook__item" {{ block.shopify_attributes }}>
               <div class="video-lookbook__card media-aspect-{{ section.settings.card_aspect_ratio }}">
                 
                 {% comment %} Media Container {% endcomment %}
@@ -104,9 +105,39 @@
             </div>
         {%- endcase -%}
       {%- endfor -%}
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Swiper !== 'undefined') {
+      new Swiper('.video-lookbook-swiper-{{ section.id }}', {
+        loop: true,
+        speed: 4000,
+        autoplay: {
+          delay: 0,
+          disableOnInteraction: false,
+        },
+        centeredSlides: true,
+        slidesPerView: 1.5,
+        spaceBetween: 16,
+        freeMode: true,
+        breakpoints: {
+          750: {
+            slidesPerView: 3,
+            spaceBetween: 24
+          },
+          1024: {
+            slidesPerView: {{ section.settings.columns_desktop }},
+            spaceBetween: 30
+          }
+        }
+      });
+    }
+  });
+</script>
 
 {% schema %}
 {
