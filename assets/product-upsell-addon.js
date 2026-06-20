@@ -4,6 +4,10 @@ if (!customElements.get('upsell-addon')) {
       super();
       this.items = this.querySelectorAll('[data-upsell-item]');
       this.totalPriceEl = this.querySelector('[data-upsell-total]');
+    }
+
+    connectedCallback() {
+      // Attributes are only guaranteed to be available in connectedCallback
       this.mainProductPrice = parseInt(this.getAttribute('data-main-product-price') || 0, 10);
       
       this.bindEvents();
@@ -22,7 +26,9 @@ if (!customElements.get('upsell-addon')) {
         });
       });
 
-      this.form = this.closest('form[action*="/cart/add"]');
+      // The addon block might not be wrapped inside the <form> element
+      this.productWrapper = this.closest('product-component') || document;
+      this.form = this.productWrapper.querySelector('form[action*="/cart/add"]');
       if (this.form) {
         // Find the main submit button
         const submitBtn = this.form.querySelector('[type="submit"], [name="add"]');
