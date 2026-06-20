@@ -34,7 +34,7 @@
   <div class="{{ section.settings.width }}">
     <div class="visit-store__grid{% if section.settings.reverse_layout %} visit-store__grid--reversed{% endif %}">
       <div class="visit-store__media{% if left_media_type == 'map' %} visit-store__media--map{% endif %}">
-        {%- if left_media_type == 'map' -%}
+        {%- if left_media_type == 'map' or section.settings.map_embed != blank -%}
           {%- if section.settings.map_embed != blank -%}
             <div class="visit-store__map-embed">
               {{ section.settings.map_embed }}
