@@ -1,26 +1,56 @@
 {% comment %} Text block for product {% endcomment %}
 {%- if block.settings.title != blank or block.settings.text != blank -%}
-  <div
-    class="product__block product__text{% if block.settings.layout == "inline" %} product__text--inline{% endif %} block-padding {{ block.settings.text_alignment }}"
-    {{ block.shopify_attributes }}
-    {{ block_style }}
-  >
-    <div class="product__text-content">
-    {%- if block.settings.title != blank -%}
-      <p class="product__heading strong {{ block.settings.heading_font_size }}">
-        {{- block.settings.title -}}
-      </p>
-    {%- endif -%}
-
-    {%- if block.settings.text != blank -%}
-      <div class="product__subheading {{ block.settings.text_font_size }}">
-        {{- block.settings.text -}}
+  {%- assign text_downcase = block.settings.text | downcase -%}
+  {%- if text_downcase contains 'anyday' -%}
+    {%- liquid
+      assign split_price = product.price | divided_by: 4
+      if settings.currency_code_enable
+        assign split_price_money = split_price | money_with_currency
+      else
+        assign split_price_money = split_price | money
+      endif
+      assign clean_text = block.settings.text | replace: '-Anyday', '' | replace: 'Anyday', '' | replace: '-anyday', ''
+    -%}
+    <div
+      class="product__block product__text product__text--anyday-widget block-padding {{ block.settings.text_alignment }}"
+      {{ block.shopify_attributes }}
+      {{ block_style }}
+    >
+      <div class="anyday-widget-custom">
+        <div class="anyday-widget-custom__content">
+          <div class="anyday-widget-custom__text">{{ clean_text }}</div>
+          <div class="anyday-widget-custom__breakdown">
+            F.eks. <strong>{{ split_price_money }}</strong> / md.
+          </div>
+        </div>
+        {%- if block.settings.image_icon != blank -%}
+          <img src="{{ block.settings.image_icon | image_url }}" alt="Anyday" class="anyday-widget-custom__logo" loading="lazy">
+        {%- endif -%}
       </div>
-    {%- endif -%}
-
-    {%- if block.settings.image_icon != blank -%}
-      <img src="{{ block.settings.image_icon | image_url }}" alt="" class="product__text-icon" width="50" height="13" loading="lazy">
-    {%- endif -%}
     </div>
-  </div>
+  {%- else -%}
+    <div
+      class="product__block product__text{% if block.settings.layout == "inline" %} product__text--inline{% endif %} block-padding {{ block.settings.text_alignment }}"
+      {{ block.shopify_attributes }}
+      {{ block_style }}
+    >
+      <div class="product__text-content">
+      {%- if block.settings.title != blank -%}
+        <p class="product__heading strong {{ block.settings.heading_font_size }}">
+          {{- block.settings.title -}}
+        </p>
+      {%- endif -%}
+
+      {%- if block.settings.text != blank -%}
+        <div class="product__subheading {{ block.settings.text_font_size }}">
+          {{- block.settings.text -}}
+        </div>
+      {%- endif -%}
+
+      {%- if block.settings.image_icon != blank -%}
+        <img src="{{ block.settings.image_icon | image_url }}" alt="" class="product__text-icon" width="50" height="13" loading="lazy">
+      {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
 {%- endif -%}

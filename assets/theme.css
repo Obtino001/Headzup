@@ -25499,6 +25499,37 @@ predictive-search[results] ~ .predictive-search--empty {
   position: relative;
 }
 
+.anyday-widget-custom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f7f9fa;
+  border: 1px solid #e1e5e8;
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  gap: 15px;
+  color: #333;
+}
+.anyday-widget-custom__content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.anyday-widget-custom__text {
+  font-size: 13px;
+  line-height: 1.2;
+}
+.anyday-widget-custom__breakdown {
+  font-size: 14px;
+}
+.anyday-widget-custom__logo {
+  max-width: 60px;
+  height: auto;
+  object-fit: contain;
+}
+
 .header__dropdown__image img {
   transition: transform 0.7s ease; 
   will-change: transform; 
