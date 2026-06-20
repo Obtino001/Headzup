@@ -30,17 +30,11 @@
             "btn1_text": "",
             "btn1_link": "",
             "btn2_text": "Add to Cart",
-            "f1_icon": "seat",
             "f1_title": "<strong>New Era New York Yankees</strong>",
-            "f2_icon": "seat",
             "f2_title": "<strong>New Era New York Yankees</strong>",
-            "f3_icon": "shield",
             "f3_title": "<strong>New Era New York Yankees</strong>",
-            "f4_icon": "frame",
             "f4_title": "<strong>New Era New York Yankees</strong>",
-            "f5_icon": "gps",
             "f5_title": "<strong>New Era New York Yankees</strong>",
-            "f6_icon": "brakes",
             "f6_title": "<strong>New Era New York Yankees</strong>"
           }
         },
@@ -103,7 +97,7 @@
             "font_size": 14,
             "date_type": "dynamic",
             "hardcoded_text": "2-3 days",
-            "delivery_days": 9,
+            "delivery_days": 3,
             "padding_bottom": 16
           }
         },
