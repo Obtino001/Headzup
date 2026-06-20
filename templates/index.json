@@ -626,6 +626,15 @@
             "fallback_text": "View Collection"
           }
         },
+        "lookbook_item_3ENghf": {
+          "type": "lookbook_item",
+          "settings": {
+            "image": "shopify://shop_images/2ESHTM6DJ1008RXDN-INDM_1.webp",
+            "product": "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
+            "fallback_link": "",
+            "fallback_text": "View Collection"
+          }
+        },
         "lookbook_item_pJUgkF": {
           "type": "lookbook_item",
           "settings": {
@@ -683,6 +692,7 @@
       },
       "block_order": [
         "lookbook_item_pwaFVp",
+        "lookbook_item_3ENghf",
         "lookbook_item_pJUgkF",
         "lookbook_item_6hD7ic",
         "lookbook_item_fwcqQV",
