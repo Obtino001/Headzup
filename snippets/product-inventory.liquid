@@ -102,6 +102,16 @@
     assign quantity_tracking = true
   endif
 
+  comment
+    Override with fake urgency inventory
+  endcomment
+  assign fake_inventory = current_variant.id | modulo: 8 | plus: 2
+  assign current_inventory = fake_inventory
+  assign show_remaining_class = 'count-is-low'
+  assign quantity_tracking = true
+  assign show_inventory = true
+  assign hide_inventory_count = false
+
   capture in_stock_icon_color
     if in_stock_color != blank and in_stock_color != 'rgba(0,0,0,0)'
       echo ' style="--icon-color: ' | append: in_stock_color | append: '"'
@@ -178,32 +188,8 @@
         {%- liquid
           for variant in product.variants
             assign variant_id = variant.id | json
-
-            if variant.inventory_management and variant.inventory_policy == 'deny'
-              assign quantity = variant.inventory_quantity
-
-              if is_limited_edition
-                assign remaining_value = quantity
-              else
-                assign quantity_capped = quantity | at_most: max_inventory_quantity
-                if hide_inventory_count
-                  if quantity_capped < 1
-                    assign remaining_value = 'out'
-                  elsif quantity_capped > 0 and quantity_capped < max_inventory
-                    assign remaining_value = 'low'
-                  else
-                    assign remaining_value = 'in'
-                  endif
-                else
-                  assign remaining_value = quantity_capped
-                endif
-              endif
-            else
-              assign remaining_value = 'unavailable'
-            endif
-
-            echo '"' | append: variant_id | append: '": "' | append: remaining_value | append: '"'
-
+            assign fake_val = variant.id | modulo: 8 | plus: 2
+            echo '"' | append: variant_id | append: '": "' | append: fake_val | append: '"'
             unless forloop.last
               echo ','
             endunless

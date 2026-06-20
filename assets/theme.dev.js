@@ -6353,13 +6353,13 @@
               if (comparePriceEl) {
                 if (this.productState.onSale || this.productState.planSale) {
                   comparePriceEl.classList.remove(classes$8.hidden);
-                  comparePriceText.classList.remove(classes$8.hidden);
+                  comparePriceText?.classList.remove(classes$8.hidden);
                   productPriceEl.classList.add(classes$8.productPriceSale);
                   if (wasLabelEl) wasLabelEl.classList.remove(classes$8.hidden);
                   if (nowLabelEl) nowLabelEl.classList.remove(classes$8.hidden);
                 } else {
                   comparePriceEl.classList.add(classes$8.hidden);
-                  comparePriceText.classList.add(classes$8.hidden);
+                  comparePriceText?.classList.add(classes$8.hidden);
                   productPriceEl.classList.remove(classes$8.productPriceSale);
                   if (wasLabelEl) wasLabelEl.classList.add(classes$8.hidden);
                   if (nowLabelEl) nowLabelEl.classList.add(classes$8.hidden);
