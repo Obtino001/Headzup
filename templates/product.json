@@ -91,20 +91,6 @@
             "padding_bottom": 16
           }
         },
-        "shipping_info_TzyUL9": {
-          "type": "shipping-info",
-          "settings": {
-            "icon_width": 14,
-            "status_text": "In Stock",
-            "pre_date_text": "Order today and get it by",
-            "text_color": "#333333",
-            "font_size": 14,
-            "date_type": "dynamic",
-            "hardcoded_text": "2-3 days",
-            "delivery_days": 3,
-            "padding_bottom": 16
-          }
-        },
         "ring_size_TVjGKw": {
           "type": "ring_size",
           "name": "Size Guide",
@@ -175,6 +161,20 @@
             "border": "",
             "icon_color": "",
             "data-region": "denmark"
+          }
+        },
+        "shipping_info_TzyUL9": {
+          "type": "shipping-info",
+          "settings": {
+            "icon_width": 14,
+            "status_text": "In Stock",
+            "pre_date_text": "Order today and get it by",
+            "text_color": "#333333",
+            "font_size": 14,
+            "date_type": "dynamic",
+            "hardcoded_text": "2-3 days",
+            "delivery_days": 3,
+            "padding_bottom": 16
           }
         },
         "countdown_jFJ7N3": {
@@ -300,11 +300,11 @@
         "price",
         "text_W4nY4h",
         "inventory_countdown_ePdH6p",
-        "shipping_info_TzyUL9",
         "ring_size_TVjGKw",
         "variants_Lkjwdn",
         "buttons",
         "onskeskyen_wishlist_button_tfCaQD",
+        "shipping_info_TzyUL9",
         "countdown_jFJ7N3",
         "upsell_addon_xzfLwj",
         "riders_experience_JbEgQC",
