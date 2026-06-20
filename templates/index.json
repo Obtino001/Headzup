@@ -544,6 +544,38 @@
         "padding_bottom_mobile": 0
       }
     },
+    "section_visit_store": {
+      "type": "section-visit-store",
+      "name": "Visit our store",
+      "settings": {
+        "left_media_type": "image",
+        "map_address": "Vesterbrogade 95H, 1620 København V, Denmark",
+        "map_zoom": 16,
+        "map_embed": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4500.003985091155!2d12.542478295988237!3d55.671565503577!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465253fb1a1bceb3%3A0xdf242feb9dbebfe1!2sHeadzup!5e0!3m2!1sen!2s!4v1781933869917!5m2!1sen!2s\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>",
+        "reverse_layout": false,
+        "eyebrow": "København V",
+        "heading": "Besøg vores butik",
+        "lead": "Danmarks største udvalg af caps og kasketter — samlet ét sted. Kom forbi, prøv pasformen, og hent din Click & Collect ordre.",
+        "address": "<p>Vesterbrogade 95H<br/>(inde i baggården)<br/>1620 København V</p>",
+        "address_label": "Adresse",
+        "hours": "<p>Man – Tirs: 10:30 – 16:00<br/>Ons – Fre: 10:30 – 18:00<br/>Lør: 11:00 – 14:00<br/>Søn & helligdage: Lukket</p>",
+        "hours_label": "Åbningstider",
+        "phone": "+45 31 32 68 48",
+        "phone_label": "Telefon",
+        "button_text": "Prøv før du køber",
+        "button_link": "shopify://pages/butik",
+        "directions_text": "Find vej",
+        "directions_url": "",
+        "button_type": "btn--primary",
+        "button_size": "",
+        "button_style": "btn--solid",
+        "show_arrow": false,
+        "width": "wrapper--full",
+        "color_scheme": "scheme-7",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
     "section_newsletter_rJmPXq": {
       "type": "section-newsletter",
       "blocks": {
@@ -609,33 +641,6 @@
         "width": "wrapper--full",
         "height": "three-fifty-height-hero",
         "mobile_height": "screen-height-one-half--mobile",
-        "color_scheme": "scheme-7",
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
-    },
-    "section_visit_store": {
-      "type": "section-visit-store",
-      "name": "Visit our store",
-      "settings": {
-        "reverse_layout": false,
-        "eyebrow": "København V",
-        "heading": "Besøg vores butik",
-        "lead": "Danmarks største udvalg af caps og kasketter — samlet ét sted. Kom forbi, prøv pasformen, og hent din Click & Collect ordre.",
-        "address": "<p>Vesterbrogade 95H<br>(inde i baggården)<br>1620 København V</p>",
-        "address_label": "Adresse",
-        "hours": "<p>Man – Tirs: 10:30 – 16:00<br>Ons – Fre: 10:30 – 18:00<br>Lør: 11:00 – 14:00<br>Søn & helligdage: Lukket</p>",
-        "hours_label": "Åbningstider",
-        "phone": "+45 31 32 68 48",
-        "phone_label": "Telefon",
-        "button_text": "Prøv før du køber",
-        "button_link": "shopify://pages/butik",
-        "directions_text": "Find vej",
-        "button_type": "btn--primary",
-        "button_size": "",
-        "button_style": "btn--solid",
-        "show_arrow": false,
-        "width": "wrapper--full",
         "color_scheme": "scheme-7",
         "padding_top": 0,
         "padding_bottom": 0
