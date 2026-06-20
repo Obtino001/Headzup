@@ -8682,6 +8682,9 @@ header-search-popdown.is-open .search-popdown {
 .search-popdown__main {
   width: 100%;
   height: var(--header-height);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: var(--bg);
   transition: transform 0.5s ease;
 }
@@ -25287,11 +25290,6 @@ body.chapter-two .product-item__price__holder .old-price {
 
 .search-popdown .predictive-search,
 .search-popdown .predictive-search--empty {
-  display: block;
-  position: relative;
-  top: auto;
-  max-height: none;
-  overflow: visible;
   background: #F7F7F7;
 }
 
@@ -25323,7 +25321,7 @@ body.chapter-two .product-item__price__holder .old-price {
 }
 
 .search-popdown .predictive-search__products__list .grid {
-  --columns: repeat(4, minmax(0, 1fr));
+  --columns: repeat(5, minmax(0, 1fr));
   gap: 20px !important;
 }
 
