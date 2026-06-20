@@ -400,6 +400,9 @@
                   {%- when 'inventory_countdown' -%}
                     {%- render 'product-inventory', product: product, block: block, block_style: block_style -%}
 
+                  {%- when 'upsell_addon' -%}
+                    {%- render 'product-upsell-addon', block: block, product: product -%}
+
                   {%- when 'upsell' -%}
                     {%- liquid
                       assign upsell_product = product.metafields.theme.upsell.value | default: block.settings.upsell_product
@@ -1787,6 +1790,41 @@
           "step": 2,
           "unit": "px",
           "label": "Bottom",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "upsell_addon",
+      "name": "Upsell Addon (Checkbox)",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Ofte kjøpt sammen"
+        },
+        {
+          "type": "product_list",
+          "id": "product_list",
+          "label": "Product list",
+          "limit": 4
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent Color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom padding",
           "default": 16
         }
       ]
