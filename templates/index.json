@@ -105,7 +105,7 @@
         "subtext_color": "#9a9590"
       }
     },
-    "shop_by_category_jDVHfE": {
+"shop_by_category_jDVHfE": {
       "type": "shop-by-category",
       "blocks": {
         "card_6keepA": {
@@ -114,52 +114,34 @@
             "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
             "label": "TRUCKER CAPS",
             "badge": "",
-            "link": ""
+            "link": "shopify://collections/trucker-cap"
           }
         },
         "card_Cr8kec": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
-            "label": "TRUCKER CAPS",
+            "image": "shopify://shop_images/53778030_10157091101628936_6236777097772138496_o.jpg",
+            "label": "SNAPBACKS",
             "badge": "",
-            "link": ""
+            "link": "shopify://collections/snapback"
           }
         },
         "card_Bk6ntk": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
-            "label": "TRUCKER CAPS",
+            "image": "shopify://shop_images/16463515_1340543819341392_3243282234175088063_o.jpg",
+            "label": "59FIFTY FITTED CAPS",
             "badge": "",
-            "link": ""
+            "link": "shopify://collections/fitted"
           }
         },
         "card_NVrTfw": {
           "type": "card",
           "settings": {
-            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
-            "label": "TRUCKER CAPS",
+            "image": "shopify://shop_images/22426616_10155577904421224_6830338182184172615_o.jpg",
+            "label": "BASEBALL CAPS",
             "badge": "",
-            "link": ""
-          }
-        },
-        "card_ymPBdF": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
-            "label": "TRUCKER CAPS",
-            "badge": "",
-            "link": ""
-          }
-        },
-        "card_cpheA9": {
-          "type": "card",
-          "settings": {
-            "image": "shopify://shop_images/25.04.11_New_Era_Barca_03_055.jpg",
-            "label": "TRUCKER CAPS",
-            "badge": "",
-            "link": ""
+            "link": "shopify://collections/baseball-caps"
           }
         }
       },
@@ -167,9 +149,7 @@
         "card_6keepA",
         "card_Cr8kec",
         "card_Bk6ntk",
-        "card_NVrTfw",
-        "card_ymPBdF",
-        "card_cpheA9"
+        "card_NVrTfw"
       ],
       "name": "Shop by Category",
       "settings": {
