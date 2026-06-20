@@ -22604,15 +22604,14 @@ predictive-search[open=true] .predictive-search {
   padding: var(--outer) 0;
 }
 
-@media only screen and (min-width: 990px) {
+/* @media only screen and (min-width: 990px) {
   .predictive-search__layout {
     --columns: repeat(3, minmax(0, 1fr));
   }
-}
+} */
 @media only screen and (min-width: 750px) {
   .predictive-search__layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
     gap: var(--gutter);
   }
 }
