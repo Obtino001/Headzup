@@ -44,7 +44,7 @@
       {% if collection_icon != blank %}
         {% render 'image', image: collection_icon, width: 10 %}
       {% endif %}
-      {{ link.title | replace: ':highlight-menu', '' | strip_html | escape }}
+      {{ link.title | replace: ':highlight-menu', '' | replace: ':hidden', '' | strip_html | escape }}
     </span>
   {%- else -%}
     <a class="sliderow__title sliderow__title--level-{{ link_level }}{% if secondary_menu %} sliderow__title--secondary{% endif %}{% if highlight_item == link_title_lowercase %} sliderow__title--highlight{% endif %}{% if link.title contains ':highlight-menu' %} navlink--highlight-menu{% endif %}{% if link.title contains ':hidden' %} hidden-title{% endif %}{% if collection_icon != blank %} navlink-collection-icon{% endif %}" href="{{ link.url }}">
@@ -52,7 +52,7 @@
         {% render 'image', image: collection_icon, width: 10 %}
       {% endif %}
       <span class="nav-link-collections{% if should_add_regular_class %} navlink--regular{% endif %}">
-        {{ link.title | replace: ':highlight-menu', '' | strip_html | escape }}
+        {{ link.title | replace: ':highlight-menu', '' | replace: ':hidden', '' | strip_html | escape }}
         {%- if expands or link_level > 0 -%}
           {%- render 'superscript', link_collection: link -%}
         {%- endif -%}
@@ -71,7 +71,7 @@
             {% render 'image', image: collection_icon, width: 10 %}
           {% endif %}
           <span>
-            {{ link.title | replace: ':highlight-menu', '' | strip_html | escape }}
+            {{ link.title | replace: ':highlight-menu', '' | replace: ':hidden', '' | strip_html | escape }}
             {%- if link_level > 0 -%}
               {%- render 'superscript', link_collection: link -%}
             {%- endif -%}

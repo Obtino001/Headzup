@@ -31,10 +31,18 @@
             "show_arrow": false,
             "full_width": false
           }
+        },
+        "text_choose_us": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Denmark's largest cap selection — personal service since [year], 365-day exchanges, and a store you can visit in Copenhagen.<\/p>",
+            "text_font_size": "body-large"
+          }
         }
       },
       "block_order": [
         "heading_rHpwGe",
+        "text_choose_us",
         "button_CedczP"
       ],
       "name": "Image banner",
@@ -55,6 +63,86 @@
         "padding_top": 0,
         "padding_bottom": 0,
         "show_placeholder": true
+      }
+    },
+    "section_trust_icons": {
+      "type": "section-text-row",
+      "blocks": {
+        "icon_1": {
+          "type": "icon",
+          "settings": {
+            "icon_name": "icon-trophy",
+            "icon_size": 30,
+            "icon_color": "",
+            "title": "Largest Selection",
+            "heading_font_size": "heading-small",
+            "text": "",
+            "text_font_size": "body-medium",
+            "heading_tag": "automatic"
+          }
+        },
+        "icon_2": {
+          "type": "icon",
+          "settings": {
+            "icon_name": "icon-recycle",
+            "icon_size": 30,
+            "icon_color": "",
+            "title": "365-Day Exchange",
+            "heading_font_size": "heading-small",
+            "text": "",
+            "text_font_size": "body-medium",
+            "heading_tag": "automatic"
+          }
+        },
+        "icon_3": {
+          "type": "icon",
+          "settings": {
+            "icon_name": "icon-star",
+            "icon_size": 30,
+            "icon_color": "",
+            "title": "Limited Editions",
+            "heading_font_size": "heading-small",
+            "text": "",
+            "text_font_size": "body-medium",
+            "heading_tag": "automatic"
+          }
+        },
+        "icon_4": {
+          "type": "icon",
+          "settings": {
+            "icon_name": "icon-chat",
+            "icon_size": 30,
+            "icon_color": "",
+            "title": "Expert Advice",
+            "heading_font_size": "heading-small",
+            "text": "",
+            "text_font_size": "body-medium",
+            "heading_tag": "automatic"
+          }
+        }
+      },
+      "block_order": [
+        "icon_1",
+        "icon_2",
+        "icon_3",
+        "icon_4"
+      ],
+      "name": "Text columns with icons",
+      "settings": {
+        "title": "",
+        "heading_font_size": "heading-medium",
+        "align_heading": "text-center",
+        "align_text": "text-center",
+        "icon_alignment": "icon--top",
+        "width": "wrapper--full-padded",
+        "align_columns": "flex-align-top",
+        "layout": "grid",
+        "grid": 4,
+        "layout_mobile": "slider",
+        "color_scheme": "scheme-1",
+        "padding_top": 20,
+        "padding_bottom": 20,
+        "heading_tag": "automatic"
       }
     },
     "section_collection_z9PpK4": {
@@ -617,6 +705,7 @@
   },
   "order": [
     "section_hero_MGFqFK",
+    "section_trust_icons",
     "section_collection_z9PpK4",
     "section_collections_list_QpxrYH",
     "section_collections_list_CUrbjK",

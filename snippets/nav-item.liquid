@@ -77,7 +77,7 @@
     data-top-link
     class="navlink navlink--toplevel{% if highlight_item == link_title_lowercase %} navlink--highlight{% endif %}"
   >
-    <span class="navtext">{{ link.title | strip_html | escape }}</span>
+    <span class="navtext">{{ link.title | replace: ':hidden', '' | strip_html | escape }}</span>
   </a>
   {% if expands %}
     <div
@@ -100,7 +100,7 @@
                        
                       >
                         <span class="navtext">
-                          {{ link.title | replace: ':highlight-menu', '' | strip_html | escape }}
+                          {{ link.title | replace: ':highlight-menu', '' | replace: ':hidden', '' | strip_html | escape }}
                           {%- render 'superscript', link_collection: link -%}
                         </span>
                       </a>
@@ -134,7 +134,7 @@
                             </span>
                           {% endif %}
                           <span class="navtext">
-                            {{ link.title | replace: ':highlight-menu', '' | strip_html | escape }}
+                            {{ link.title | replace: ':highlight-menu', '' | replace: ':hidden', '' | strip_html | escape }}
 
                             {%- render 'superscript', link_collection: link -%}
                           </span>
@@ -172,7 +172,7 @@
                           {% render 'image', image: collection_icon, width: 10 %}
                         {% endif %}
                         <span class="navtext">
-                          {{ link.title | replace: ':highlight-menu', '' | strip_html | escape }}
+                          {{ link.title | replace: ':highlight-menu', '' | replace: ':hidden', '' | strip_html | escape }}
 
                           {%- render 'superscript', link_collection: link -%}
                         </span>
@@ -220,7 +220,7 @@
                 class="navlink navlink--child{% if highlight_item == link_title_lowercase %} navlink--highlight{% endif %}"
               >
                 <span class="navtext">
-                  {{ link.title | replace: ':highlight-menu', '' | strip_html | escape }}
+                  {{ link.title | replace: ':highlight-menu', '' | replace: ':hidden', '' | strip_html | escape }}
 
                   {%- render 'superscript', link_collection: link -%}
                 </span>
