@@ -214,7 +214,7 @@
     }
 
     setGridColumns(count) {
-      const columns = Math.min(Math.max(count, 2), 4);
+      const columns = Math.min(Math.max(count, 2), 5);
       this.grid.style.setProperty('--columns', columns);
       this.container.style.setProperty('--columns', columns);
     }
