@@ -102,8 +102,14 @@
 
     async getTopVendor(handles) {
       const products = await this.fetchProductData(handles.slice(0, 5));
-      const vendorCounts = {};
+      const currentHandle = window.location.pathname.match(/\/products\/([^/?#]+)/)?.[1];
+      const currentProduct = currentHandle ? products.find(p => p && p.handle === currentHandle) : null;
 
+      if (currentProduct && currentProduct.vendor) {
+        return currentProduct.vendor;
+      }
+
+      const vendorCounts = {};
       products.forEach((product) => {
         if (!product?.vendor) return;
         vendorCounts[product.vendor] = (vendorCounts[product.vendor] || 0) + 1;
@@ -132,28 +138,37 @@
 
       if (!products.length) return [];
 
-      const vendorCounts = {};
-      products.forEach((product) => {
-        if (!product.vendor) return;
-        vendorCounts[product.vendor] = (vendorCounts[product.vendor] || 0) + 1;
-      });
+      const currentHandle = window.location.pathname.match(/\/products\/([^/?#]+)/)?.[1];
+      const currentProduct = currentHandle ? products.find(p => p && p.handle === currentHandle) : null;
 
-      const topVendor = Object.entries(vendorCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+      let topVendor;
+      if (currentProduct && currentProduct.vendor) {
+        topVendor = currentProduct.vendor;
+      } else {
+        const vendorCounts = {};
+        products.forEach((product) => {
+          if (!product.vendor) return;
+          vendorCounts[product.vendor] = (vendorCounts[product.vendor] || 0) + 1;
+        });
+        topVendor = Object.entries(vendorCounts).sort((a, b) => b[1] - a[1])[0]?.[0];
+      }
+
       if (!topVendor) return [];
 
       const topVendorNormalized = topVendor.toLowerCase();
       const matchesVendor = (vendor) => vendor?.toLowerCase() === topVendorNormalized;
       const addHandle = (list, handle) => {
         if (list.length >= limit) return;
-        if (!handle || viewedSet.has(handle) || list.includes(handle)) return;
+        if (!handle || viewedSet.has(handle) || list.includes(handle) || handle === currentHandle) return;
         list.push(handle);
       };
 
       let resultHandles = [];
+      const baseProduct = currentProduct || products[0];
 
-      if (products[0]?.id) {
+      if (baseProduct?.id) {
         try {
-          const recommendationsUrl = `${window.theme.routes.product_recommendations_url}?product_id=${products[0].id}&limit=${limit + 6}&intent=related`;
+          const recommendationsUrl = `${window.theme.routes.product_recommendations_url}?product_id=${baseProduct.id}&limit=${limit + 6}&intent=related`;
           const recommendationsResponse = await fetch(recommendationsUrl);
 
           if (recommendationsResponse.ok) {
@@ -210,12 +225,10 @@
       const target = 'api-product-grid-item';
       const animationAnchor = this.container.closest('[data-popdown]') ? 'details[open] .search-popdown' : '';
 
-      for (let index = 0; index < handles.length; index++) {
-        const handle = handles[index];
-
+      const fetchPromises = handles.map(async (handle, index) => {
         try {
           const response = await fetch(`${window.theme.routes.root}products/${handle}?section_id=${target}`);
-          if (!response.ok) continue;
+          if (!response.ok) return null;
 
           let productMarkup = await response.text();
           productMarkup = productMarkup.includes('||itemAnimationDelay||')
@@ -225,15 +238,23 @@
             ? productMarkup.replaceAll('||itemAnimationAnchor||', animationAnchor)
             : productMarkup;
 
-          const wrapper = document.createElement('div');
-          wrapper.innerHTML = productMarkup;
-          const content = wrapper.querySelector('[data-api-content]');
-
-          if (content) {
-            this.grid.innerHTML += content.innerHTML;
-          }
+          return productMarkup;
         } catch (error) {
           console.warn('Personalized search product load failed:', handle, error);
+          return null;
+        }
+      });
+
+      const markups = await Promise.all(fetchPromises);
+
+      for (const productMarkup of markups) {
+        if (!productMarkup) continue;
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = productMarkup;
+        const content = wrapper.querySelector('[data-api-content]');
+
+        if (content) {
+          this.grid.innerHTML += content.innerHTML;
         }
       }
     }
