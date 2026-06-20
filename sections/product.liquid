@@ -538,7 +538,8 @@
                     >
                       {{ block.settings.code }}
                     </div>
-
+              {%- when 'shipping-info' -%}
+                {% render 'shipping-info', block: block %}
                   {%- when 'siblings' -%}
                     {%- render 'product-siblings',
                       product: product,
@@ -3278,6 +3279,108 @@
           "step": 2,
           "unit": "px",
           "label": "Bottom",
+          "default": 16
+        }
+      ]
+    },
+        {
+      "type": "shipping-info",
+      "name": "Shipping Info",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Icon Settings"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Custom Icon",
+          "info": "Leave empty to use the default Green Dot."
+        },
+        {
+          "type": "range",
+          "id": "icon_width",
+          "min": 10,
+          "max": 50,
+          "step": 1,
+          "unit": "px",
+          "label": "Icon/Dot Width",
+          "default": 14
+        },
+        {
+          "type": "header",
+          "content": "Text Settings"
+        },
+        {
+          "type": "text",
+          "id": "status_text",
+          "label": "Status Text (Bold)",
+          "default": "In Stock"
+        },
+        {
+          "type": "text",
+          "id": "pre_date_text",
+          "label": "Text Before Date",
+          "default": "Order today and get it by"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#333333"
+        },
+        {
+          "type": "range",
+          "id": "font_size",
+          "min": 10,
+          "max": 24,
+          "step": 1,
+          "unit": "px",
+          "label": "Font Size",
+          "default": 14
+        },
+        {
+          "type": "header",
+          "content": "Date Calculation"
+        },
+        {
+          "type": "radio",
+          "id": "date_type",
+          "label": "Delivery Text Type",
+          "options": [
+            {
+              "value": "dynamic",
+              "label": "Dynamic Calculated Date"
+            },
+            {
+              "value": "hardcoded",
+              "label": "Hardcoded Text"
+            }
+          ],
+          "default": "dynamic"
+        },
+        {
+          "type": "text",
+          "id": "hardcoded_text",
+          "label": "Hardcoded Text",
+          "default": "2-3 days",
+          "info": "Only shows if 'Hardcoded Text' is selected above."
+        },
+        {
+          "type": "number",
+          "id": "delivery_days",
+          "label": "Days until delivery",
+          "default": 9,
+          "info": "Only used if 'Dynamic Calculated Date' is selected."
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom Margin",
           "default": 16
         }
       ]
