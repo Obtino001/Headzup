@@ -171,7 +171,7 @@
 }
 
 /* Responsiveness adjustments */
-@media screen suicide (max-width: 749px) {
+@media screen and (max-width: 749px) {
   .video-lookbook__product-link {
     bottom: 12px;
     left: 12px;
@@ -213,5 +213,39 @@
   }
   [class*="video-lookbook-swiper-"] {
     overflow: hidden;
+  }
+}
+
+/* Fallback Grid Before Swiper Initialises (Prevents FOUC) */
+[class*="video-lookbook-swiper-"]:not(.swiper-initialized) .swiper-wrapper {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+}
+
+[class*="video-lookbook-swiper-"]:not(.swiper-initialized) .swiper-slide {
+  flex: 0 0 65%;
+  width: 65%;
+  opacity: 1;
+}
+
+@media screen and (min-width: 750px) {
+  [class*="video-lookbook-swiper-"]:not(.swiper-initialized) .swiper-wrapper {
+    gap: 24px;
+  }
+  [class*="video-lookbook-swiper-"]:not(.swiper-initialized) .swiper-slide {
+    flex: 0 0 calc(100% / 3 - 24px);
+    width: calc(100% / 3 - 24px);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  [class*="video-lookbook-swiper-"]:not(.swiper-initialized) .swiper-wrapper {
+    gap: 30px;
+  }
+  [class*="video-lookbook-swiper-"]:not(.swiper-initialized) .swiper-slide {
+    flex: 0 0 calc(100% / 5 - 30px);
+    width: calc(100% / 5 - 30px);
   }
 }
