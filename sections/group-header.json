@@ -92,7 +92,7 @@
         "usp_zikpW4": {
           "type": "usp",
           "settings": {
-            "text": "VI BYTTER ALLE ORDRER I 365 DAGE",
+            "text": "HENT, BYT, OG RETURNER I VORES FYSISKE BUTIK",
             "icon": "<svg viewbox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M12 3.5l7 3v5.2c0 4.2-2.8 7.8-7 9.4-4.2-1.6-7-5.2-7-9.4V6.5l7-3Z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"></path><text x=\"12\" y=\"15.4\" text-anchor=\"middle\" font-size=\"8.5\" font-family=\"Arial, sans-serif\" font-weight=\"700\" fill=\"currentColor\">3</text></svg>"
           }
         },
