@@ -25288,9 +25288,6 @@ body.chapter-two .product-item__price__holder .old-price {
   color: var(--black);
 }
 
-<<<<<<< Updated upstream
-.predictive-search.predictive-search--empty {
-=======
 .search-popdown .predictive-search--empty {
   display: block;
   position: relative;
@@ -25350,7 +25347,6 @@ header-search-popdown details[open] predictive-search:not([open]):not([results])
 
 predictive-search[open] ~ .predictive-search--empty,
 predictive-search[results] ~ .predictive-search--empty {
->>>>>>> Stashed changes
   display: none !important;
 }
 
