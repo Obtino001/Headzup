@@ -16010,7 +16010,7 @@ a.review {
     flex: 0 1 100%;
     flex-direction: column;
     align-items: stretch;
-    padding: 10px var(--outer);
+    padding: 10px var(--outer) 70px;
   }
 }
 
