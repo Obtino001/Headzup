@@ -81,7 +81,7 @@ if (!customElements.get('upsell-addon')) {
       }
 
       }
-    }
+
 
     async addMultipleToCart(submitBtn, checkedItems) {
       const mainInput = this.form.querySelector('[name="id"]');
