@@ -57,14 +57,14 @@
         "show_placeholder": true
       }
     },
-  "trust_banner_xzcnmW": {
+    "trust_banner_xzcnmW": {
       "type": "trust-banner",
       "blocks": {
         "trustpilot_Dcc8Bd": {
           "type": "trustpilot",
           "settings": {
             "alignment": "left",
-            "main_icon": "<svg width=\"14\" height=\"14\" viewbox=\"0 0 24 24\" fill=\"#00B67A\"><path d=\"M12 2l2.9 8.9H24l-7.6 5.5 2.9 8.9L12 20l-7.3 5.3 2.9-8.9L0 10.9h9.1z\"></path></svg>",
+            "main_icon": "<svg viewbox=\"0 0 124 24\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" style=\"display: block; width: 124px; height: 24px;\">\n                            <g>\n                              <rect width=\"24\" height=\"24\" rx=\"2\" fill=\"#00B67A\"></rect>\n                              <path d=\"M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z\" fill=\"white\" transform=\"scale(0.8) translate(3, 3)\"></path>\n                            </g>\n                            <g transform=\"translate(25, 0)\">\n                              <rect width=\"24\" height=\"24\" rx=\"2\" fill=\"#00B67A\"></rect>\n                              <path d=\"M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z\" fill=\"white\" transform=\"scale(0.8) translate(3, 3)\"></path>\n                            </g>\n                            <g transform=\"translate(50, 0)\">\n                              <rect width=\"24\" height=\"24\" rx=\"2\" fill=\"#00B67A\"></rect>\n                              <path d=\"M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z\" fill=\"white\" transform=\"scale(0.8) translate(3, 3)\"></path>\n                            </g>\n                            <g transform=\"translate(75, 0)\">\n                              <rect width=\"24\" height=\"24\" rx=\"2\" fill=\"#00B67A\"></rect>\n                              <path d=\"M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z\" fill=\"white\" transform=\"scale(0.8) translate(3, 3)\"></path>\n                            </g>\n                            <g transform=\"translate(100, 0)\">\n                              <rect width=\"24\" height=\"24\" rx=\"2\" fill=\"#00B67A\"></rect>\n                              <path d=\"M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z\" fill=\"white\" transform=\"scale(0.8) translate(3, 3)\"></path>\n                            </g>\n                          </svg>",
             "title": "TRUSTPILOT",
             "score": "4.8",
             "star_bg_color": "#00b67a",
@@ -84,7 +84,7 @@
           "type": "brand",
           "settings": {
             "alignment": "left",
-            "icon": "<svg width=\"22\" height=\"14\" viewBox=\"0 0 22 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"22\" height=\"14\" fill=\"#C60C30\"/><rect x=\"6\" y=\"0\" width=\"3\" height=\"14\" fill=\"white\"/><rect x=\"0\" y=\"6\" width=\"22\" height=\"3\" fill=\"white\"/></svg>",
+            "icon": "<svg width=\"22\" height=\"14\" viewbox=\"0 0 22 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"22\" height=\"14\" fill=\"#C60C30\"></rect><rect x=\"6\" y=\"0\" width=\"3\" height=\"14\" fill=\"white\"></rect><rect x=\"0\" y=\"6\" width=\"22\" height=\"3\" fill=\"white\"></rect></svg>",
             "title": "Danish Brand",
             "subtext": "Premium quality since 2021"
           }
@@ -105,7 +105,7 @@
         "subtext_color": "#9a9590"
       }
     },
-"shop_by_category_jDVHfE": {
+    "shop_by_category_jDVHfE": {
       "type": "shop-by-category",
       "blocks": {
         "card_w3gCQE": {
