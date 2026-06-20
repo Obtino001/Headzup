@@ -214,38 +214,7 @@
         <span class="visually-hidden">{{ 'products.general.see_all' | t }}</span>
       </button>
     </native-scrollbar>
-    
-    <div class="joieem-actions-container">
-      {%- if block.settings.btn1_text != blank -%}
-        <a href="{{ block.settings.btn1_link | default: '#' }}" class="btn btn--outline btn--secondary btn-outline-custom">
-          <span class="btn__text">{{ block.settings.btn1_text }}</span>
-        </a>
-      {%- endif -%}
-      {%- if block.settings.btn2_text != blank -%}
-        <button type="button" class="btn btn--solid btn--primary btn-solid-custom" onclick="
-          var mainBtn = document.querySelector('.product__info-container .product-form__submit') || document.querySelector('.product-form__submit');
-          if(mainBtn) { 
-            mainBtn.click(); 
-            
-            /* Add loading states */
-            this.classList.add('is-loading');
-            
-            /* Remove loading states after a short delay so the button resets */
-            setTimeout(() => {
-              this.classList.remove('is-loading');
-            }, 2000);
-          }
-        ">
-          <span class="btn__text">{{ block.settings.btn2_text }}</span>
-          <span class="btn__loader">
-            <svg height="18" width="18" class="svg-loader">
-              <circle r="7" cx="9" cy="9" />
-              <circle stroke-dasharray="87.96459430051421 87.96459430051421" r="7" cx="9" cy="9" />
-            </svg>
-          </span>
-        </button>
-      {%- endif -%}
-    </div>
+
   </div>
 
   <div class="joieem-content-grid">
