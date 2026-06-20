@@ -64,6 +64,12 @@
         }
 
         await this.renderProducts(productHandles);
+
+        if (!this.grid.children.length) {
+          this.restoreFallback();
+          return;
+        }
+
         this.updateHeading(await this.getTopVendor(handles));
         this.container.setAttribute('data-personalized', 'true');
       } catch (error) {
@@ -229,6 +235,14 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     initPersonalizedSearch();
+
+    document.querySelectorAll('header-search-popdown details').forEach((details) => {
+      details.addEventListener('toggle', () => {
+        if (details.open) {
+          initPersonalizedSearch();
+        }
+      });
+    });
 
     const debounce =
       window.theme?.debounce ||

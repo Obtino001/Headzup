@@ -25268,7 +25268,23 @@ body.chapter-two .product-item__price__holder .old-price {
   color: var(--black);
 }
 
-.predictive-search.predictive-search--empty {
+.search-popdown .predictive-search--empty {
+  display: block;
+  position: relative;
+  top: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+header-search-popdown.is-open predictive-search:not([open]):not([results]) ~ .predictive-search--empty,
+header-search-popdown details[open] predictive-search:not([open]):not([results]) ~ .predictive-search--empty {
+  display: block !important;
+  opacity: 1;
+  visibility: visible;
+}
+
+predictive-search[open] ~ .predictive-search--empty,
+predictive-search[results] ~ .predictive-search--empty {
   display: none !important;
 }
 
@@ -25285,7 +25301,8 @@ body.chapter-two .product-item__price__holder .old-price {
 }
 
 .search-popdown .predictive-search__heading {
-  display: none !important;
+  display: block;
+  margin-bottom: var(--inner);
 }
 
 .search-popdown .predictive-search > .wrapper {
