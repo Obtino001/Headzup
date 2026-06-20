@@ -1,0 +1,153 @@
+{%- style -%}
+  .stock-block-{{ block.id }} {
+    margin-block: {{ block.settings.padding_bottom }}px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: inherit;
+  }
+
+  .stock-block-{{ block.id }} .info-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Tighter gap to match the screenshot */
+  }
+
+  /* Icon wrapper: Scaled 2.5x of the dot width to ensure the pulse halo doesn't get clipped */
+  .stock-block-{{ block.id }} .info-icon {
+    width: calc({{ block.settings.icon_width }}px * 2.5);
+    height: calc({{ block.settings.icon_width }}px * 2.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .stock-block-{{ block.id }} .info-icon img {
+    width: 100%;
+    height: auto;
+    display: block;
+    z-index: 2;
+  }
+
+  /* Inner Solid Green Dot */
+  .green-dot-fallback {
+    width: {{ block.settings.icon_width }}px;
+    height: {{ block.settings.icon_width }}px;
+    background-color: #00c853; /* Match specific green from image */
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Outer Pulsing Halo Animation */
+  .green-dot-fallback::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250%; /* Creates the outer ring */
+    height: 250%;
+    background-color: rgba(0, 200, 83, 0.22); /* Lighter transparent green */
+    border-radius: 50%;
+    z-index: 1;
+    animation: stockPulse-{{ block.id }} 2.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @keyframes stockPulse-{{ block.id }} {
+    0% {
+      transform: translate(-50%, -50%) scale(0.85);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.15);
+      opacity: 1;
+    }
+    100% {
+      transform: translate(-50%, -50%) scale(0.85);
+      opacity: 0.6;
+    }
+  }
+
+  /* Text Styling */
+  .stock-block-{{ block.id }} .info-text {
+    font-size: {{ block.settings.font_size }}px;
+    color: {{ block.settings.text_color }};
+    line-height: 1.2;
+    font-weight: 400; 
+    letter-spacing: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  /* Bold "In Stock" styling */
+  .stock-status-bold {
+    font-weight: 500;
+    color: {{ block.settings.text_color }};
+  }
+
+  .dynamic-date {
+     font-weight: 400;
+  }
+{%- endstyle -%}
+
+<div class="stock-block-{{ block.id }}" {{ block.shopify_attributes }}>
+  <div class="info-row">
+    
+    <div class="info-icon">
+      {%- if block.settings.icon_image != blank -%}
+        {{ block.settings.icon_image | image_url: width: 100 | image_tag: loading: 'lazy' }}
+      {%- else -%}
+        <div class="green-dot-fallback"> </div>
+      {%- endif -%}
+    </div>
+
+    <div class="info-text">
+      <span class="stock-status-bold">{{ block.settings.status_text }}</span> 
+      <span>{{ block.settings.pre_date_text }} 
+      
+      {%- if block.settings.date_type == 'dynamic' -%}
+        <span class="dynamic-date" id="date-{{ block.id }}">...</span>
+      {%- else -%}
+        <span class="dynamic-date">{{ block.settings.hardcoded_text }}</span>
+      {%- endif -%}
+      </span>
+    </div>
+    
+  </div>
+</div>
+
+{%- if block.settings.date_type == 'dynamic' -%}
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const deliveryDaysEnd = parseInt({{ block.settings.delivery_days | default: 8 }}); 
+    const deliveryDaysStart = deliveryDaysEnd - 2; 
+    
+    const today = new Date();
+    
+    // Calculate Start Date
+    const startDate = new Date();
+    startDate.setDate(today.getDate() + deliveryDaysStart);
+    
+    // Calculate End Date
+    const endDate = new Date();
+    endDate.setDate(today.getDate() + deliveryDaysEnd);
+    
+    // Formatting function
+    const formatDate = (date) => date.getDate();
+    const month = endDate.toLocaleString('en-GB', { month: 'short' }).toLowerCase();
+    const year = endDate.getFullYear();
+    
+    const dateElement = document.getElementById("date-{{ block.id }}");
+    
+    if(dateElement) {
+      dateElement.textContent = `${formatDate(startDate)} - ${formatDate(endDate)} ${month}, ${year}`;
+    }
+  });
+</script>
+{%- endif -%}
