@@ -1,0 +1,561 @@
+{% comment %}
+  Shop by Category – Bosant
+  Plasser i: sections/shop-by-category.liquid
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  #sbc-{{ section.id }} {
+    --font: 'DM Sans', 'Inter', system-ui, sans-serif;
+    --bg: {{ section.settings.background_color }};
+    --text: #1A1A1A;
+    --radius: {{ section.settings.border_radius }}px;
+    --card-w: {{ section.settings.card_width }}px;
+    --card-h: {{ section.settings.card_height }}px;
+    --label-size: {{ section.settings.label_font_size }}px;
+  }
+
+  #sbc-{{ section.id }} {
+    background: var(--bg);
+    padding: {{ section.settings.padding_top }}px clamp(16px, 5vw, 80px) {{ section.settings.padding_bottom }}px;
+  }
+
+  #sbc-{{ section.id }} .sbc-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+
+  #sbc-{{ section.id }} .sbc-head-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  #sbc-{{ section.id }} .sbc-eyebrow {
+    font-family: var(--font);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #A0AFA0;
+    display: block;
+  }
+
+#sbc-{{ section.id }} .sbc-title {
+  font-family: var(--font-heading, var(--font));
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 300;
+  color: var(--text);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0;
+}
+
+  #sbc-{{ section.id }} .sbc-arrows {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-bottom: 4px;
+  }
+
+  #sbc-{{ section.id }} .sbc-arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1.5px solid #D8D3CC;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s, background 0.2s;
+    flex-shrink: 0;
+  }
+
+  #sbc-{{ section.id }} .sbc-arrow:hover {
+    border-color: var(--text);
+    background: var(--text);
+  }
+
+  #sbc-{{ section.id }} .sbc-arrow:hover svg path {
+    stroke: #fff;
+  }
+
+  #sbc-{{ section.id }} .sbc-arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  #sbc-{{ section.id }} .sbc-arrow svg path {
+    stroke: #1A1A1A;
+    stroke-width: 1.5;
+    fill: none;
+    transition: stroke 0.2s;
+  }
+
+  #sbc-{{ section.id }} .sbc-arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  #sbc-{{ section.id }} .sbc-arrow:disabled:hover {
+    border-color: #D8D3CC;
+    background: transparent;
+  }
+
+  #sbc-{{ section.id }} .sbc-arrow:disabled:hover svg path {
+    stroke: #1A1A1A;
+  }
+
+  #sbc-{{ section.id }} .sbc-outer {
+    overflow: hidden;
+    width: 100%;
+  }
+
+  #sbc-{{ section.id }} .sbc-track {
+    display: flex;
+    gap: 12px;
+    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  #sbc-{{ section.id }} .sbc-card {
+    flex-shrink: 0;
+    width: var(--card-w);
+    height: var(--card-h);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    display: block;
+    text-decoration: none;
+    background: #EDEAE4;
+  }
+
+  #sbc-{{ section.id }} .sbc-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  #sbc-{{ section.id }} .sbc-card:hover img {
+    transform: scale(1.04);
+  }
+
+  #sbc-{{ section.id }} .sbc-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.52) 0%,
+      rgba(0,0,0,0.08) 55%,
+      rgba(0,0,0,0) 100%
+    );
+    z-index: 1;
+  }
+
+  #sbc-{{ section.id }} .sbc-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    padding: 16px 18px;
+  }
+
+  #sbc-{{ section.id }} .sbc-label-text {
+    font-family: var(--font);
+    font-size: var(--label-size);
+    font-weight: 500;
+    color: #fff;
+    display: block;
+    border-bottom: 1.5px solid rgba(255,255,255,0.6);
+    padding-bottom: 3px;
+    width: fit-content;
+    letter-spacing: 0.01em;
+    transition: border-color 0.2s;
+  }
+
+  #sbc-{{ section.id }} .sbc-card:hover .sbc-label-text {
+    border-color: #fff;
+  }
+
+  #sbc-{{ section.id }} .sbc-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    z-index: 3;
+    background: {{ section.settings.badge_color }};
+    color: {{ section.settings.badge_text_color }};
+    font-family: var(--font);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.3;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 50%;
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #sbc-{{ section.id }} .sbc-placeholder {
+    position: absolute;
+    inset: 0;
+    background: #2A2A2A;
+  }
+
+  #sbc-{{ section.id }} .sbc-placeholder svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.12;
+  }
+
+  @media (max-width: 640px) {
+    #sbc-{{ section.id }} .sbc-card {
+      width: 72vw;
+      height: 88vw;
+    }
+    #sbc-{{ section.id }} .sbc-outer {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    #sbc-{{ section.id }} .sbc-outer::-webkit-scrollbar {
+      display: none;
+    }
+    #sbc-{{ section.id }} .sbc-track {
+      transition: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #sbc-{{ section.id }} .sbc-card img,
+    #sbc-{{ section.id }} .sbc-track {
+      transition: none !important;
+    }
+  }
+</style>
+
+<section id="sbc-{{ section.id }}">
+
+  <div class="sbc-head">
+    <div class="sbc-head-left">
+      {% if section.settings.eyebrow != blank %}
+        <span class="sbc-eyebrow">{{ section.settings.eyebrow }}</span>
+      {% endif %}
+      {% if section.settings.title != blank %}
+        <h2 class="sbc-title">{{ section.settings.title }}</h2>
+      {% endif %}
+    </div>
+
+    <div class="sbc-arrows">
+      <button class="sbc-arrow" id="sbc-prev-{{ section.id }}" aria-label="Forrige">
+        <svg viewBox="0 0 16 16"><path d="M10 13L5 8l5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="sbc-arrow" id="sbc-next-{{ section.id }}" aria-label="Neste">
+        <svg viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="sbc-outer" id="sbc-outer-{{ section.id }}">
+    <div class="sbc-track" id="sbc-track-{{ section.id }}">
+      {% for block in section.blocks %}
+        {% if block.type == 'card' %}
+          <a class="sbc-card"
+             href="{{ block.settings.link | default: '#' }}"
+             {{ block.shopify_attributes }}>
+
+            {% if block.settings.image != blank %}
+              {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', alt: block.settings.image.alt | default: block.settings.label, draggable: 'false' }}
+            {% else %}
+              <div class="sbc-placeholder">
+                {{ 'collection-1' | placeholder_svg_tag }}
+              </div>
+            {% endif %}
+
+            <div class="sbc-overlay"></div>
+
+            {% if block.settings.badge != blank %}
+              <div class="sbc-badge">{{ block.settings.badge }}</div>
+            {% endif %}
+
+            {% if block.settings.label != blank %}
+              <div class="sbc-label">
+                <span class="sbc-label-text">{{ block.settings.label }}</span>
+              </div>
+            {% endif %}
+
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+
+</section>
+
+<script>
+(function () {
+  var id = '{{ section.id }}';
+  var outer = document.getElementById('sbc-outer-' + id);
+  var track = document.getElementById('sbc-track-' + id);
+  var prevBtn = document.getElementById('sbc-prev-' + id);
+  var nextBtn = document.getElementById('sbc-next-' + id);
+
+  if (!track || !outer || !prevBtn || !nextBtn) return;
+
+  var currentIndex = 0;
+
+  function getCards() {
+    return Array.from(track.querySelectorAll('.sbc-card:not(.sbc-clone)'));
+  }
+
+  function getVisible() {
+    var ow = outer.offsetWidth;
+    var cw = getCards()[0] ? getCards()[0].offsetWidth + 12 : 1;
+    return Math.max(1, Math.floor(ow / cw));
+  }
+
+  function getMax() {
+    return Math.max(0, getCards().length - getVisible());
+  }
+
+  function goTo(idx) {
+    var cards = getCards();
+    if (!cards.length) return;
+    var max = getMax();
+    if (idx < 0) idx = max;
+    if (idx > max) idx = 0;
+    currentIndex = idx;
+    var offset = 0;
+    for (var i = 0; i < currentIndex; i++) {
+      offset += cards[i].offsetWidth + 12;
+    }
+    track.style.transform = 'translateX(-' + offset + 'px)';
+    prevBtn.disabled = false;
+    nextBtn.disabled = false;
+  }
+
+  prevBtn.addEventListener('click', function () { goTo(currentIndex - 1); });
+  nextBtn.addEventListener('click', function () { goTo(currentIndex + 1); });
+  window.addEventListener('resize', function () { goTo(currentIndex); });
+
+  goTo(0);
+
+  /* ── Infinite scroll på mobil ── */
+  var isMobile = window.matchMedia('(max-width: 640px)');
+
+  function setupMobileScroll() {
+    if (!isMobile.matches) return;
+
+    var origCards = getCards();
+    if (!origCards.length) return;
+
+    /* Fjern gamle kloner */
+    track.querySelectorAll('.sbc-clone').forEach(function(c) { c.remove(); });
+
+    /* Klon alle kort og legg til etter */
+    origCards.forEach(function(card) {
+      var clone = card.cloneNode(true);
+      clone.classList.add('sbc-clone');
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    });
+
+    /* Native scroll med loop */
+    outer.style.overflowX = 'auto';
+    outer.style.webkitOverflowScrolling = 'touch';
+    outer.style.scrollbarWidth = 'none';
+    track.style.transition = 'none';
+
+    var totalW = 0;
+    origCards.forEach(function(c) { totalW += c.offsetWidth + 12; });
+
+    outer.addEventListener('scroll', function () {
+      var sl = outer.scrollLeft;
+      /* Når du nærmer deg slutten – hopp tilbake til start */
+      if (sl >= totalW) {
+        outer.scrollLeft = sl - totalW;
+      }
+      /* Når du scroller forbi starten bakover */
+      if (sl <= 0) {
+        outer.scrollLeft = totalW + sl;
+      }
+    }, { passive: true });
+  }
+
+  setupMobileScroll();
+  window.addEventListener('resize', setupMobileScroll);
+
+  /* Touch swipe for desktop-modus */
+  var startX = 0;
+  var startIndex = 0;
+
+  track.addEventListener('touchstart', function (e) {
+    if (isMobile.matches) return;
+    startX = e.touches[0].clientX;
+    startIndex = currentIndex;
+  }, { passive: true });
+
+  track.addEventListener('touchend', function (e) {
+    if (isMobile.matches) return;
+    var dx = startX - e.changedTouches[0].clientX;
+    if (Math.abs(dx) > 50) {
+      goTo(dx > 0 ? startIndex + 1 : startIndex - 1);
+    }
+  }, { passive: true });
+})();
+</script>
+{% schema %}
+{
+  "name": "Shop by Category",
+  "tag": "section",
+  "class": "shop-by-category-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Liten tekst over overskrift",
+      "default": "Kunders favoritter"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Overskrift",
+      "default": "Handle etter kategori"
+    },
+    {
+      "type": "range",
+      "id": "label_font_size",
+      "label": "Fontstørrelse på kategorinavn",
+      "min": 10,
+      "max": 28,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Kortbredde (desktop)",
+      "min": 180,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "card_height",
+      "label": "Korthøyde (desktop)",
+      "min": 200,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 340
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Avrunding",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Bakgrunnsfarge",
+      "default": "#FAF7F3"
+    },
+    {
+      "type": "color",
+      "id": "badge_color",
+      "label": "Badge-farge",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "badge_text_color",
+      "label": "Badge-tekstfarge",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Luft over",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Luft under",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Kategori",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Bilde"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Kategorinavn",
+          "placeholder": "Bambus Sengesett"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge-tekst (valgfri)",
+          "placeholder": "Opptil 40% rabatt",
+          "info": "Vises som sirkel øverst til høyre"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by Category",
+      "blocks": [
+        { "type": "card", "settings": { "label": "Bambus Sengesett" } },
+        { "type": "card", "settings": { "label": "Pyjamas" } },
+        { "type": "card", "settings": { "label": "Pledd" } },
+        { "type": "card", "settings": { "label": "Laken" } },
+        { "type": "card", "settings": { "label": "Sovemasker" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
