@@ -193,7 +193,12 @@
     line-height: 1.6;
     color: var(--rsg-text);
     margin-bottom: 16px;
-    white-space: pre-wrap;
+  }
+  .rsg-mono-text p {
+    margin: 0 0 1em 0;
+  }
+  .rsg-mono-text p:last-child {
+    margin-bottom: 0;
   }
 .rsg-diagram-wrapper {
     text-align: center;
@@ -377,7 +382,7 @@
     <div id="rsg-panel1-{{ block.id }}" class="rsg-panel" role="tabpanel" aria-labelledby="rsg-tab1-{{ block.id }}">
       <div class="rsg-panel-content">
         <div class="rsg-section-title">Instruktioner</div>
-        <div class="rsg-mono-text">{{ block.settings.tab1_instructions | newline_to_br }}</div>
+        <div class="rsg-mono-text">{{ block.settings.tab1_instructions }}</div>
         
         <div class="rsg-diagram-wrapper">
           {%- if block.settings.tab1_image != blank -%}
@@ -441,7 +446,7 @@
           {%- if step_text != blank or step_img != blank -%}
             <div class="rsg-step">
               {%- if step_text != blank -%}
-                <div class="rsg-mono-text" style="margin-bottom: 0;">{{ step_text | newline_to_br }}</div>
+                <div class="rsg-mono-text" style="margin-bottom: 0;">{{ step_text }}</div>
               {%- endif -%}
               {%- if step_img != blank -%}
                 {{ step_img | image_url: width: 800 | image_tag: class: 'rsg-step-img', loading: 'lazy' }}

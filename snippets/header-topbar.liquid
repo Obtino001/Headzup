@@ -124,11 +124,17 @@
   font-weight: 400;
   font-size: 1rem;
   justify-content: flex-start;
+}
+.header-topbar__text, .header-topbar__logo {
   opacity: 0.6;
+  transition: opacity 0.2s;
 }
 .header-topbar__brand--active {
   background: #fff;
   color: #222;
+}
+.header-topbar__brand--active .header-topbar__text,
+.header-topbar__brand--active .header-topbar__logo {
   opacity: 1;
 }
 .header-topbar__brand--active::after {
