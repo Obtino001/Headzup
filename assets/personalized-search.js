@@ -182,8 +182,8 @@
 
     setGridColumns(count) {
       const columns = Math.min(Math.max(count, 2), 4);
-      this.grid.style.setProperty('--columns', `repeat(${columns}, minmax(0, 1fr))`);
-      this.container.style.setProperty('--columns', `repeat(${columns}, minmax(0, 1fr))`);
+      this.grid.style.setProperty('--columns', columns);
+      this.container.style.setProperty('--columns', columns);
     }
 
     async renderProducts(handles) {

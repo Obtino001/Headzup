@@ -146,7 +146,7 @@
               <div
                 class="predictive-search__column"
                 data-personalized-search
-                style="--columns: repeat({{ empty_search_product_list_size }}, minmax(0, 1fr));"
+                style="--columns: {{ empty_search_product_list_size }};"
               >
                 <p class="predictive-search__heading" data-personalized-heading>
                   {%- if settings.personalized_search_enabled -%}
