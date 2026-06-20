@@ -60,33 +60,122 @@ Required params:
       data-animation-delay="{{ animation_delay }}"
       data-animation-duration="{{ animation_duration }}"
     {% endif %}>
-    <div class="header__dropdown__brands">
+    <div class="header__dropdown__brands header__dropdown__brands--categorized">
       {% assign brand_metaobject_values = metaobjects.brands.values %}
       {% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %}
         {% assign brand_metaobject_values = metaobjects.brands_chapter_two.values %}
       {% endif %}
       
+      {% assign premium_list = block.settings.premium_brands | downcase | split: ',' %}
+      {% assign streetwear_list = block.settings.streetwear_brands | downcase | split: ',' %}
+      {% assign sports_list = block.settings.sports_brands | downcase | split: ',' %}
+      {% assign lifestyle_list = block.settings.lifestyle_brands | downcase | split: ',' %}
+
+      {% capture premium_html %}{% endcapture %}
+      {% capture streetwear_html %}{% endcapture %}
+      {% capture sports_html %}{% endcapture %}
+      {% capture lifestyle_html %}{% endcapture %}
+      {% capture other_html %}{% endcapture %}
+
       {%- for brand in brand_metaobject_values -%}
-        <div class="brand-item">
-          {%- if brand.link_collection.value.url != blank -%}
-            <a href="{{ brand.link_collection.value.url }}" class="brand-link">
+        {% assign b_name = brand.title | downcase %}
+        {% assign category = 'other' %}
+
+        {% for item in premium_list %}
+          {% assign item_stripped = item | strip %}
+          {% if b_name contains item_stripped and item_stripped != blank %}{% assign category = 'premium' %}{% break %}{% endif %}
+        {% endfor %}
+        
+        {% if category == 'other' %}
+          {% for item in streetwear_list %}
+            {% assign item_stripped = item | strip %}
+            {% if b_name contains item_stripped and item_stripped != blank %}{% assign category = 'streetwear' %}{% break %}{% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if category == 'other' %}
+          {% for item in sports_list %}
+            {% assign item_stripped = item | strip %}
+            {% if b_name contains item_stripped and item_stripped != blank %}{% assign category = 'sports' %}{% break %}{% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% if category == 'other' %}
+          {% for item in lifestyle_list %}
+            {% assign item_stripped = item | strip %}
+            {% if b_name contains item_stripped and item_stripped != blank %}{% assign category = 'lifestyle' %}{% break %}{% endif %}
+          {% endfor %}
+        {% endif %}
+
+        {% capture brand_html %}
+          <div class="brand-item">
+            {%- if brand.link_collection.value.url != blank -%}
+              <a href="{{ brand.link_collection.value.url }}" class="brand-link">
+            {%- else -%}
+              <div class="brand-link">
             {%- endif -%}
-          
-          {%- if brand.image != blank -%}
-            <div class="brand-image">
-              <img src="{{ brand.image | image_url: width: 75 }}" alt="{{ brand.title | escape }}" width="75" height="75">
-            </div>
-          {%- endif -%}
-          
-          {%- if brand.title != blank -%}
-            <h3 class="brand-title">{{ brand.title | escape }}</h3>
-          {%- endif -%}
-          
-          {%- if brand.link_collection.value != blank -%}
-            </a>
-          {%- endif -%}
-        </div>
+            
+            {%- if brand.image != blank -%}
+              <div class="brand-image">
+                <img src="{{ brand.image | image_url: width: 75 }}" alt="{{ brand.title | escape }}" width="75" height="75" loading="lazy">
+              </div>
+            {%- endif -%}
+            
+            {%- if brand.title != blank -%}
+              <h3 class="brand-title">{{ brand.title | escape }}</h3>
+            {%- endif -%}
+            
+            {%- if brand.link_collection.value.url != blank -%}
+              </a>
+            {%- else -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {% endcapture %}
+
+        {% if category == 'premium' %}
+          {% capture premium_html %}{{ premium_html }}{{ brand_html }}{% endcapture %}
+        {% elsif category == 'streetwear' %}
+          {% capture streetwear_html %}{{ streetwear_html }}{{ brand_html }}{% endcapture %}
+        {% elsif category == 'sports' %}
+          {% capture sports_html %}{{ sports_html }}{{ brand_html }}{% endcapture %}
+        {% elsif category == 'lifestyle' %}
+          {% capture lifestyle_html %}{{ lifestyle_html }}{{ brand_html }}{% endcapture %}
+        {% else %}
+          {% capture other_html %}{{ other_html }}{{ brand_html }}{% endcapture %}
+        {% endif %}
       {%- endfor -%}
+
+      {% if premium_html != blank %}
+        <div class="brands-category">
+          <h4 class="brands-category-title">Premium Brands</h4>
+          <div class="brands-category-list">{{ premium_html }}</div>
+        </div>
+      {% endif %}
+      {% if streetwear_html != blank %}
+        <div class="brands-category">
+          <h4 class="brands-category-title">Streetwear Brands</h4>
+          <div class="brands-category-list">{{ streetwear_html }}</div>
+        </div>
+      {% endif %}
+      {% if sports_html != blank %}
+        <div class="brands-category">
+          <h4 class="brands-category-title">Sports/MLB Brands</h4>
+          <div class="brands-category-list">{{ sports_html }}</div>
+        </div>
+      {% endif %}
+      {% if lifestyle_html != blank %}
+        <div class="brands-category">
+          <h4 class="brands-category-title">Lifestyle Brands</h4>
+          <div class="brands-category-list">{{ lifestyle_html }}</div>
+        </div>
+      {% endif %}
+      {% if other_html != blank %}
+        <div class="brands-category">
+          <h4 class="brands-category-title">Other Brands</h4>
+          <div class="brands-category-list">{{ other_html }}</div>
+        </div>
+      {% endif %}
     </div>
   </div>
 {% else %}
