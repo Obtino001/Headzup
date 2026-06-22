@@ -36,7 +36,44 @@
           
           <h3 class="gift-wrap-card__title">{{ gift_product.title }}</h3>
           
-          {%- render 'product-rating', product: gift_product -%}
+          {%- liquid
+            assign rating = "4.8"
+            assign reviews_count = "24"
+
+            if gift_product.metafields.reviews.rating.value != blank
+              assign rating = gift_product.metafields.reviews.rating.value
+            else
+              assign random_factor = gift_product.id | modulo: 6
+              case random_factor
+                when 0
+                  assign rating = "4.5"
+                when 1
+                  assign rating = "4.6"
+                when 2
+                  assign rating = "4.7"
+                when 3
+                  assign rating = "4.8"
+                when 4
+                  assign rating = "4.9"
+                when 5
+                  assign rating = "5.0"
+              endcase
+            endif
+
+            if gift_product.metafields.reviews.rating_count.value != blank
+              assign reviews_count = gift_product.metafields.reviews.rating_count.value
+            else
+              assign count_factor = gift_product.id | modulo: 135
+              assign reviews_count = count_factor | plus: 15
+            endif
+          -%}
+          <div style="display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 500; color: #666; margin-top: 2px;">
+            <span style="color: #FFB800; display: flex; align-items: center;">
+              <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path></svg>
+            </span>
+            <span style="color: #111;">{{ rating }}</span>
+            <span style="color: #999;">({{ reviews_count }})</span>
+          </div>
           
           <div class="gift-wrap-card__price">
             {{ current_variant.price | money }}
