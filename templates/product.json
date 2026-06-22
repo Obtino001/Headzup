@@ -132,6 +132,15 @@
             "padding_bottom": 0
           }
         },
+        "gift_wrap_A7y3DW": {
+          "type": "gift_wrap",
+          "settings": {
+            "gift_product": "giftbox",
+            "accent_color": "#0c2340",
+            "padding_top": 16,
+            "padding_bottom": 16
+          }
+        },
         "buttons": {
           "type": "buttons",
           "settings": {
@@ -299,6 +308,7 @@
         "inventory_countdown_ePdH6p",
         "ring_size_TVjGKw",
         "variants_Lkjwdn",
+        "gift_wrap_A7y3DW",
         "buttons",
         "onskeskyen_wishlist_button_tfCaQD",
         "shipping_info_TzyUL9",
