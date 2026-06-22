@@ -111,13 +111,15 @@ if (!customElements.get('upsell-addon')) {
         });
         
         if (response.ok) {
-          document.dispatchEvent(new CustomEvent('cart:updated'));
-          document.dispatchEvent(new CustomEvent('cart:build'));
-          // Attempt to open standard theme drawers if applicable
+          document.dispatchEvent(new CustomEvent('theme:cart:refresh', { bubbles: true }));
+          document.dispatchEvent(new CustomEvent('theme:product:add', { bubbles: true }));
+          
+          // Revert button state after a short delay
           setTimeout(() => {
+            submitBtn.classList.remove('is-loading');
+            submitBtn.removeAttribute('disabled');
             submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-          }, 1000);
+          }, 500);
           
           if (!document.querySelector('.cart-drawer.is-open, .drawer.is-open')) {
              // Let theme handle it, or we could redirect
