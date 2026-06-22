@@ -179,6 +179,7 @@
         },
         "countdown_jFJ7N3": {
           "type": "countdown",
+          "disabled": true,
           "settings": {
             "end_date": "2026-06-31",
             "end_time": "11:59",
