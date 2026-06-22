@@ -1467,6 +1467,21 @@
         "id": "payment_5",
         "label": "Payment icon 5"
       },
+        {
+        "type": "image_picker",
+        "id": "payment_6",
+        "label": "Payment icon 6"
+      },
+  {
+        "type": "image_picker",
+        "id": "payment_7",
+        "label": "Payment icon 7"
+      },
+        {
+        "type": "image_picker",
+        "id": "payment_8",
+        "label": "Payment icon 8"
+      },
       {
         "type": "checkbox",
         "id": "cart_payment_icons",
