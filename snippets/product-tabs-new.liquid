@@ -29,11 +29,24 @@
     padding-bottom: 0 !important;
   }
 
-  /* Accent yellow underline for active tab */
+  /* Accent underline for hover and active tab */
+  .product-block-{{ block.id }} .tabs > li span:first-of-type {
+    position: relative;
+    display: inline-block;
+  }
   .product-block-{{ block.id }} .tabs > li span:first-of-type::after {
+    content: '';
+    position: absolute;
     background-color: #0c2340;
     height: 3px;
-    bottom: -11px; /* Align to the border bottom */
+    bottom: -16px; /* Align to the border bottom */
+    left: 0;
+    width: 0;
+    transition: width 0.3s ease;
+  }
+  .product-block-{{ block.id }} .tabs > li:hover span:first-of-type::after,
+  .product-block-{{ block.id }} .tabs > li.current span:first-of-type::after {
+    width: 100%;
   }
 
   .product-block-{{ block.id }} .tabs > li.current {
