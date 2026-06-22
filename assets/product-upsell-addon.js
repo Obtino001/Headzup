@@ -26,22 +26,20 @@ if (!customElements.get('upsell-addon')) {
         });
       });
 
-      // The addon block might not be wrapped inside the <form> element
       this.productWrapper = this.closest('product-component') || document;
-      this.form = this.productWrapper.querySelector('form[action*="/cart/add"]');
-      if (this.form) {
-        // Find the main submit button
-        const submitBtn = this.form.querySelector('[type="submit"], [name="add"]');
-        if (submitBtn) {
-          submitBtn.addEventListener('click', (e) => {
-            const checkedItems = this.getCheckedItems();
-            if (checkedItems.length > 0) {
-              e.preventDefault();
-              e.stopPropagation();
-              this.addMultipleToCart(submitBtn, checkedItems);
-            }
-          }, true); // Intercept in capture phase
-        }
+      const submitBtn = this.productWrapper.querySelector('[data-add-to-cart]') || this.productWrapper.querySelector('[type="submit"][name="add"], button[name="add"]');
+      
+      // Save form reference for addMultipleToCart
+      if (submitBtn) {
+        this.form = submitBtn.closest('form');
+        submitBtn.addEventListener('click', (e) => {
+          const checkedItems = this.getCheckedItems();
+          if (checkedItems.length > 0) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.addMultipleToCart(submitBtn, checkedItems);
+          }
+        }, true); // Intercept in capture phase
       }
     }
 
@@ -84,7 +82,19 @@ if (!customElements.get('upsell-addon')) {
 
 
     async addMultipleToCart(submitBtn, checkedItems) {
-      const mainInput = this.form.querySelector('[name="id"]');
+      let mainInput = null;
+      if (this.form) {
+        const formId = this.form.getAttribute('id');
+        if (formId) {
+          mainInput = document.querySelector(`input[name="id"][form="${formId}"]`);
+        }
+        if (!mainInput) {
+          mainInput = this.form.querySelector('[name="id"]');
+        }
+      } else {
+        mainInput = document.querySelector('input[name="id"]');
+      }
+      
       const mainId = mainInput ? parseInt(mainInput.value, 10) : null;
       
       const itemsToAdd = [...checkedItems];

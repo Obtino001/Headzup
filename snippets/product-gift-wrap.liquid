@@ -1,5 +1,5 @@
 {{ 'product-upsell-addon.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'product-upsell-addon.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'product-upsell-addon.js' | asset_url | append: '?v=' | append: shop.metafields.cache.version.value | default: '1' }}" defer="defer"></script>
 
 {%- liquid
   assign gift_product = block.settings.gift_product
