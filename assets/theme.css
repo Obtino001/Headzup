@@ -25393,6 +25393,7 @@ predictive-search[results] ~ .predictive-search--empty {
 
 .predictive-search__products__list .grid {
   gap: 17px !important;
+  --columns: 6 !important;
 }
 
 @media (max-width: 768px) {
