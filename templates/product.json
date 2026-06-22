@@ -46,7 +46,7 @@
         "trustpilot_RcGQRK": {
           "type": "trustpilot",
           "settings": {
-            "trustpilot_text": "4,3 stjerner | Baseret på +575 anmeldelser",
+            "trustpilot_text": "4,8 stjerner | Baseret på +575 anmeldelser",
             "trustpilot_link": "",
             "padding_bottom": 42
           }
@@ -201,12 +201,7 @@
           "type": "upsell_addon",
           "settings": {
             "heading": "Ofte kjøpt sammen",
-            "product_list": [
-              "47-anaheim-ducks-mvp-adjustable-cap-bone",
-              "47-anaheim-mighty-ducks-nhl-clean-up-adjustable-cap-black",
-              "47-boston-bruins-mvp-adjustable-cap-black",
-              "47-anaheim-mighty-ducks-mvp-adjustable-cap-sort"
-            ],
+            "product_list": [],
             "accent_color": "#000000",
             "padding_bottom": 16
           }
@@ -428,7 +423,7 @@
       "name": "Featured collection",
       "settings": {
         "featured_collection": "new-era",
-        "heading": "Mere fra new era",
+        "heading": "Mere fra New Era",
         "heading_font_size": "heading-x-large",
         "description": "",
         "text_font_size": "body-medium",
