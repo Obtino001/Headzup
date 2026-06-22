@@ -5870,8 +5870,8 @@
                 this.remainingJSONWrapper = this.container.querySelector(selectors$9.remainingJSON);
                 this.remainingJSON = null;
 
-                if (this.remainingJSONWrapper && this.remainingJSONWrapper.innerHTML !== '') {
-                  this.remainingJSON = JSON.parse(this.remainingJSONWrapper.innerHTML);
+                if (this.remainingJSONWrapper && this.remainingJSONWrapper.textContent !== '') {
+                  this.remainingJSON = JSON.parse(this.remainingJSONWrapper.textContent);
                 } else {
                   console.warn('Missing product quantity JSON');
                 }
@@ -6134,15 +6134,16 @@
                   this.remainingWrapper.classList.add(classes$8.remainingIn);
                 }
               } else {
-                if (remaining === 'out' || remaining < 1) {
+                let remainingNum = Number(remaining);
+                if (remaining === 'out' || remainingNum < 1) {
                   this.remainingWrapper.classList.add(classes$8.remainingOut);
                 }
 
-                if (remaining === 'in' || remaining >= this.remainingMaxInt) {
+                if (remaining === 'in' || remainingNum >= this.remainingMaxInt) {
                   this.remainingWrapper.classList.add(classes$8.remainingIn);
                 }
 
-                if (remaining === 'low' || (remaining > 0 && remaining < this.remainingMaxInt)) {
+                if (remaining === 'low' || (remainingNum > 0 && remainingNum < this.remainingMaxInt)) {
                   this.remainingWrapper.classList.add(classes$8.remainingLow);
 
                   if (this.remainingCount) {
