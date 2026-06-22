@@ -165,30 +165,36 @@
   <div class="joieem-header-wrapper">
     <native-scrollbar class="tabs__head product-tabs__head joieem-tabs-container">
       <ul class="tabs product-tabs-title" data-scrollbar data-scrollbar-slider>
+        {%- assign first_tab = true -%}
         {%- if block.settings.tab_1 != blank -%}
-          <li class="tab-link tab-link-0 current" data-tab="0" tabindex="0">
+          <li class="tab-link tab-link-0 {% if first_tab %}current{% endif %}" data-tab="0" tabindex="0">
             <span>{{ block.settings.tab_1 }}</span>
           </li>
+          {%- assign first_tab = false -%}
         {%- endif -%}
         {%- if block.settings.tab_2 != blank -%}
-          <li class="tab-link tab-link-1" data-tab="1" tabindex="0">
+          <li class="tab-link tab-link-1 {% if first_tab %}current{% endif %}" data-tab="1" tabindex="0">
             <span>{{ block.settings.tab_2 }}</span>
           </li>
+          {%- assign first_tab = false -%}
         {%- endif -%}
         {%- if block.settings.tab_3 != blank -%}
-          <li class="tab-link tab-link-2" data-tab="2" tabindex="0">
+          <li class="tab-link tab-link-2 {% if first_tab %}current{% endif %}" data-tab="2" tabindex="0">
             <span>{{ block.settings.tab_3 }}</span>
           </li>
+          {%- assign first_tab = false -%}
         {%- endif -%}
         {%- if block.settings.tab_4 != blank -%}
-          <li class="tab-link tab-link-3" data-tab="3" tabindex="0">
+          <li class="tab-link tab-link-3 {% if first_tab %}current{% endif %}" data-tab="3" tabindex="0">
             <span>{{ block.settings.tab_4 }}</span>
           </li>
+          {%- assign first_tab = false -%}
         {%- endif -%}
         {%- if block.settings.tab_5 != blank -%}
-          <li class="tab-link tab-link-4" data-tab="4" tabindex="0">
+          <li class="tab-link tab-link-4 {% if first_tab %}current{% endif %}" data-tab="4" tabindex="0">
             <span>{{ block.settings.tab_5 }}</span>
           </li>
+          {%- assign first_tab = false -%}
         {%- endif -%}
       </ul>
 
@@ -216,8 +222,9 @@
   <div class="joieem-content-grid">
     
     <div class="joieem-text-column">
+      {%- assign first_tab = true -%}
       {%- if block.settings.tab_1 != blank -%}
-        <div class="tab-content tab-content-0 current rte">
+        <div class="tab-content tab-content-0 {% if first_tab %}current{% endif %} rte">
           <div class="joieem-features-grid">
             {%- for i in (1..6) -%}
               {%- assign img_key = 'f' | append: i | append: '_image' -%}
@@ -241,30 +248,35 @@
             {%- endfor -%}
           </div>
         </div>
+        {%- assign first_tab = false -%}
       {%- endif -%}
 
       {%- if block.settings.tab_2 != blank -%}
-        <div class="tab-content tab-content-1 rte">
+        <div class="tab-content tab-content-1 {% if first_tab %}current{% endif %} rte">
           <div class="joieem-text-area">{{ block.settings.tab_2_content }}</div>
         </div>
+        {%- assign first_tab = false -%}
       {%- endif -%}
 
       {%- if block.settings.tab_3 != blank -%}
-        <div class="tab-content tab-content-2 rte">
+        <div class="tab-content tab-content-2 {% if first_tab %}current{% endif %} rte">
           <div class="joieem-text-area">{{ block.settings.tab_3_content }}</div>
         </div>
+        {%- assign first_tab = false -%}
       {%- endif -%}
 
       {%- if block.settings.tab_4 != blank -%}
-        <div class="tab-content tab-content-3 rte">
+        <div class="tab-content tab-content-3 {% if first_tab %}current{% endif %} rte">
           <div class="joieem-text-area">{{ block.settings.tab_4_content }}</div>
         </div>
+        {%- assign first_tab = false -%}
       {%- endif -%}
 
       {%- if block.settings.tab_5 != blank -%}
-        <div class="tab-content tab-content-4 rte">
+        <div class="tab-content tab-content-4 {% if first_tab %}current{% endif %} rte">
           <div class="joieem-text-area">{{ block.settings.tab_5_content }}</div>
         </div>
+        {%- assign first_tab = false -%}
       {%- endif -%}
     </div>
 
