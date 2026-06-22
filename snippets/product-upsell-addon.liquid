@@ -3,7 +3,13 @@
 
 {%- liquid
   assign heading = block.settings.heading | default: "Ofte kjøpt sammen"
-  assign upsell_products = block.settings.product_list
+  
+  if product.metafields.custom.upsell_products.value != blank
+    assign upsell_products = product.metafields.custom.upsell_products.value
+  else
+    assign upsell_products = block.settings.product_list
+  endif
+
   assign accent_color = block.settings.accent_color | default: "#000000"
   assign padding_bottom = block.settings.padding_bottom | default: 16
 -%}
