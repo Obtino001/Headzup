@@ -69,10 +69,7 @@
 
   /* --- Main Content Layout --- */
   .joieem-content-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 8rem;
-    align-items: start;
+    display: block;
   }
 
   .joieem-text-column {
@@ -97,7 +94,7 @@
 
   .joieem-features-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     row-gap: 4rem;
     column-gap: 3rem;
     padding-block: 3rem;
@@ -135,9 +132,8 @@
 
   /* --- Mobile Responsiveness --- */
   @media screen and (max-width: 989px) {
-    .joieem-content-grid {
-      grid-template-columns: 1fr;
-      gap: 5rem;
+    .joieem-features-grid {
+      grid-template-columns: 1fr 1fr;
     }
   }
 
@@ -222,8 +218,27 @@
     <div class="joieem-text-column">
       {%- if block.settings.tab_1 != blank -%}
         <div class="tab-content tab-content-0 current rte">
-          <div class="joieem-text-area">
-            {{ block.settings.description | default: product.description }}
+          <div class="joieem-features-grid">
+            {%- for i in (1..6) -%}
+              {%- assign img_key = 'f' | append: i | append: '_image' -%}
+              {%- assign icon_key = 'f' | append: i | append: '_icon' -%}
+              {%- assign title_key = 'f' | append: i | append: '_title' -%}
+              
+              {%- assign f_image = block.settings[img_key] -%}
+              {%- assign f_icon = block.settings[icon_key] -%}
+              {%- assign f_title = block.settings[title_key] -%}
+
+              {%- if f_title != blank -%}
+                <div class="joieem-feature-block">
+                  <div class="joieem-feature-icon">
+                    {%- if f_image != blank -%}
+                      {{ f_image | image_url: width: 64 | image_tag: loading: 'lazy' }}
+                    {%- endif -%}
+                  </div>
+                  <div class="joieem-feature-text">{{ f_title }}</div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
           </div>
         </div>
       {%- endif -%}
@@ -251,29 +266,6 @@
           <div class="joieem-text-area">{{ block.settings.tab_5_content }}</div>
         </div>
       {%- endif -%}
-    </div>
-
-    <div class="joieem-features-grid">
-      {%- for i in (1..6) -%}
-        {%- assign img_key = 'f' | append: i | append: '_image' -%}
-        {%- assign icon_key = 'f' | append: i | append: '_icon' -%}
-        {%- assign title_key = 'f' | append: i | append: '_title' -%}
-        
-        {%- assign f_image = block.settings[img_key] -%}
-        {%- assign f_icon = block.settings[icon_key] -%}
-        {%- assign f_title = block.settings[title_key] -%}
-
-        {%- if f_title != blank -%}
-          <div class="joieem-feature-block">
-            <div class="joieem-feature-icon">
-              {%- if f_image != blank -%}
-                {{ f_image | image_url: width: 64 | image_tag: loading: 'lazy' }}
-              {%- endif -%}
-            </div>
-            <div class="joieem-feature-text">{{ f_title }}</div>
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
     </div>
 
   </div>
