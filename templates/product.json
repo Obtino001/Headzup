@@ -14,11 +14,12 @@
       "blocks": {
         "product_tabs_new_RDHRJa": {
           "type": "product_tabs-new",
+          "name": "Features",
           "settings": {
             "padding_top": 36,
             "padding_bottom": 36,
             "description": "",
-            "tab_1": "Description",
+            "tab_1": "",
             "tab_2": "Features",
             "tab_2_content": "<p>Baseball cap fra '47. Deres MVP kasket er en traditionel baseball cap med struktureret front, og velcro lukning bagpå.</p><p>Anaheim Ducks er altid populære grundet deres tidligere opmærksomhed omkring Mighty Ducks.</p>",
             "tab_3": "",
