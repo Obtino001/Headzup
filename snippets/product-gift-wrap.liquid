@@ -13,20 +13,20 @@
   {%- if current_variant.available -%}
     <upsell-addon class="product__block gift-wrap-addon-container" style="--upsell-accent: {{ accent_color }}; padding-top: {{ padding_top }}px; padding-bottom: {{ padding_bottom }}px;" {{ block.shopify_attributes }}>
       
-      <div class="gift-wrap-card is-unchecked" data-upsell-item data-selected-variant-id="{{ current_variant.id }}" data-selected-price="{{ current_variant.price }}" data-selected-compare="{{ current_variant.compare_at_price | default: current_variant.price }}">
+      <div class="gift-wrap-card upsell-addon__item is-unchecked" data-upsell-item data-selected-variant-id="{{ current_variant.id }}" data-selected-price="{{ current_variant.price }}" data-selected-compare="{{ current_variant.compare_at_price | default: current_variant.price }}">
         
+        <div class="upsell-addon__checkbox-wrapper">
+          <div class="upsell-addon__checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+        </div>
+
         <div class="gift-wrap-card__image-wrapper">
           {%- if gift_product.featured_image != blank -%}
-            <img src="{{ gift_product.featured_image | image_url: width: 600 }}" alt="{{ gift_product.title | escape }}" class="gift-wrap-card__image" loading="lazy">
+            <img src="{{ gift_product.featured_image | image_url: width: 100 }}" alt="{{ gift_product.title | escape }}" class="gift-wrap-card__image" loading="lazy">
           {%- else -%}
             <div class="gift-wrap-card__image placeholder-bg"></div>
           {%- endif -%}
-          
-          <div class="upsell-addon__checkbox-wrapper gift-wrap-card__checkbox">
-            <div class="upsell-addon__checkbox">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            </div>
-          </div>
         </div>
 
         <div class="gift-wrap-card__details">
@@ -35,45 +35,6 @@
           {%- endif -%}
           
           <h3 class="gift-wrap-card__title">{{ gift_product.title }}</h3>
-          
-          {%- liquid
-            assign rating = "4.8"
-            assign reviews_count = "24"
-
-            if gift_product.metafields.reviews.rating.value != blank
-              assign rating = gift_product.metafields.reviews.rating.value
-            else
-              assign random_factor = gift_product.id | modulo: 6
-              case random_factor
-                when 0
-                  assign rating = "4.5"
-                when 1
-                  assign rating = "4.6"
-                when 2
-                  assign rating = "4.7"
-                when 3
-                  assign rating = "4.8"
-                when 4
-                  assign rating = "4.9"
-                when 5
-                  assign rating = "5.0"
-              endcase
-            endif
-
-            if gift_product.metafields.reviews.rating_count.value != blank
-              assign reviews_count = gift_product.metafields.reviews.rating_count.value
-            else
-              assign count_factor = gift_product.id | modulo: 135
-              assign reviews_count = count_factor | plus: 15
-            endif
-          -%}
-          <div style="display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 500; color: #666; margin-top: 2px;">
-            <span style="color: #FFB800; display: flex; align-items: center;">
-              <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path></svg>
-            </span>
-            <span style="color: #111;">{{ rating }}</span>
-            <span style="color: #999;">({{ reviews_count }})</span>
-          </div>
           
           <div class="gift-wrap-card__price">
             {{ current_variant.price | money }}
@@ -91,39 +52,38 @@
       }
       .gift-wrap-card {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+        gap: 15px;
         background: #fff;
         cursor: pointer;
         transition: all 0.2s ease;
-        position: relative;
-      }
-      .gift-wrap-card__image-wrapper {
-        position: relative;
-        width: 100%;
+        padding: 10px;
         border: 1px solid #e1e5e8;
         border-radius: 4px;
+      }
+      .gift-wrap-card__image-wrapper {
+        flex-shrink: 0;
+        width: 50px;
+        height: 50px;
+        border-radius: 4px;
         overflow: hidden;
-        margin-bottom: 15px;
+        border: 1px solid #eee;
       }
       .gift-wrap-card__image {
         width: 100%;
-        height: auto;
-        display: block;
+        height: 100%;
         object-fit: cover;
-      }
-      .gift-wrap-card__checkbox {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        z-index: 2;
+        display: block;
       }
       .gift-wrap-card__details {
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        justify-content: center;
+        gap: 2px;
       }
       .gift-wrap-card__vendor {
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 700;
         text-transform: uppercase;
         color: #888;
@@ -131,28 +91,22 @@
         margin: 0;
       }
       .gift-wrap-card__title {
-        font-size: 16px;
-        font-weight: 500;
+        font-size: 14px;
+        font-weight: 600;
         color: #0c2340;
         margin: 0;
       }
       .gift-wrap-card__price {
-        font-size: 14px;
+        font-size: 13px;
+        font-weight: 500;
         color: #0c2340;
-        margin-top: 4px;
+        margin-top: 2px;
       }
       
       /* Toggle Styles */
-      .gift-wrap-card.is-checked .gift-wrap-card__image-wrapper {
+      .gift-wrap-card.is-checked {
         border-color: var(--upsell-accent);
-        box-shadow: 0 0 0 1px var(--upsell-accent);
-      }
-      .gift-wrap-card.is-checked .upsell-addon__checkbox {
-        background-color: var(--upsell-accent);
-        border-color: var(--upsell-accent);
-      }
-      .gift-wrap-card.is-checked .upsell-addon__checkbox svg {
-        opacity: 1;
+        background-color: #fafafa;
       }
     </style>
   {%- endif -%}
