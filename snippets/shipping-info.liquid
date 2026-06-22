@@ -96,7 +96,7 @@
   }
 {%- endstyle -%}
 
-<div class="stock-block-{{ block.id }}" {{ block.shopify_attributes }}>
+<div class="shipping-info-block stock-block-{{ block.id }}" {% unless product.selected_or_first_available_variant.available %}style="display: none;"{% endunless %} {{ block.shopify_attributes }}>
   <div class="info-row">
     
     <div class="info-icon">

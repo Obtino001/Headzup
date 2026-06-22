@@ -105,7 +105,11 @@
   comment
     Override with fake urgency inventory
   endcomment
-  assign fake_inventory = current_variant.id | modulo: 8 | plus: 2
+  if current_variant.available
+    assign fake_inventory = current_variant.id | modulo: 8 | plus: 2
+  else
+    assign fake_inventory = 'out'
+  endif
   assign current_inventory = fake_inventory
   assign show_remaining_class = 'count-is-low'
   assign quantity_tracking = true
@@ -140,6 +144,7 @@
     data-remaining-max="{{ max_inventory }}"
     data-remaining-show-notice="{{ show_notice }}"
     data-remaining-wrapper
+    {% if current_inventory == 'out' %}style="display: none;"{% endif %}
     {% if is_limited_edition %}
       data-limited-edition="true"
       data-size-option-index="{{ size_option_index }}"
@@ -188,7 +193,11 @@
         {%- liquid
           for variant in product.variants
             assign variant_id = variant.id | json
-            assign fake_val = variant.id | modulo: 8 | plus: 2
+            if variant.available
+              assign fake_val = variant.id | modulo: 8 | plus: 2
+            else
+              assign fake_val = 'out'
+            endif
             echo '"' | append: variant_id | append: '": "' | append: fake_val | append: '"'
             unless forloop.last
               echo ','

@@ -6135,8 +6135,13 @@
                 }
               } else {
                 let remainingNum = Number(remaining);
-                if (remaining === 'out' || remainingNum < 1) {
+                let isOut = (remaining === 'out' || remainingNum < 1);
+
+                if (isOut) {
                   this.remainingWrapper.classList.add(classes$8.remainingOut);
+                  this.remainingWrapper.style.display = 'none';
+                } else {
+                  this.remainingWrapper.style.display = '';
                 }
 
                 if (remaining === 'in' || remainingNum >= this.remainingMaxInt) {
@@ -6147,8 +6152,15 @@
                   this.remainingWrapper.classList.add(classes$8.remainingLow);
 
                   if (this.remainingCount) {
-                    this.remainingCount.innerHTML = remaining;
+                    const randomNum = Math.floor(Math.random() * 8) + 2;
+                    this.remainingCount.innerHTML = randomNum;
                   }
+                }
+                
+                // Hide shipping info if out of stock
+                const shippingInfo = this.container.querySelector('.shipping-info-block');
+                if (shippingInfo) {
+                  shippingInfo.style.display = isOut ? 'none' : '';
                 }
               }
             } else if (!variant && this.remainingWrapper) {
