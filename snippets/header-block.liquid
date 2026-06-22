@@ -148,31 +148,31 @@ Required params:
 
       {% if premium_html != blank %}
         <div class="brands-category">
-          <h4 class="brands-category-title">Premium Brands</h4>
+          <h4 class="brands-category-title">{{ block.settings.premium_heading | default: "Premium Brands" }}</h4>
           <div class="brands-category-list">{{ premium_html }}</div>
         </div>
       {% endif %}
       {% if streetwear_html != blank %}
         <div class="brands-category">
-          <h4 class="brands-category-title">Streetwear Brands</h4>
+          <h4 class="brands-category-title">{{ block.settings.streetwear_heading | default: "Streetwear Brands" }}</h4>
           <div class="brands-category-list">{{ streetwear_html }}</div>
         </div>
       {% endif %}
       {% if sports_html != blank %}
         <div class="brands-category">
-          <h4 class="brands-category-title">Sports/MLB Brands</h4>
+          <h4 class="brands-category-title">{{ block.settings.sports_heading | default: "Sports/MLB Brands" }}</h4>
           <div class="brands-category-list">{{ sports_html }}</div>
         </div>
       {% endif %}
       {% if lifestyle_html != blank %}
         <div class="brands-category">
-          <h4 class="brands-category-title">Lifestyle Brands</h4>
+          <h4 class="brands-category-title">{{ block.settings.lifestyle_heading | default: "Lifestyle Brands" }}</h4>
           <div class="brands-category-list">{{ lifestyle_html }}</div>
         </div>
       {% endif %}
       {% if other_html != blank %}
         <div class="brands-category">
-          <h4 class="brands-category-title">Other Brands</h4>
+          <h4 class="brands-category-title">{{ block.settings.other_heading | default: "Other Brands" }}</h4>
           <div class="brands-category-list">{{ other_html }}</div>
         </div>
       {% endif %}

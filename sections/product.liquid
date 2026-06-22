@@ -402,6 +402,8 @@
 
                   {%- when 'upsell_addon' -%}
                     {%- render 'product-upsell-addon', block: block, product: product -%}
+                  {%- when 'gift_wrap' -%}
+                    {%- render 'product-gift-wrap', block: block, product: product -%}
 
                   {%- when 'upsell' -%}
                     {%- liquid
@@ -1817,6 +1819,44 @@
           "id": "accent_color",
           "label": "Accent Color",
           "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Bottom padding",
+          "default": 16
+        }
+      ]
+    },
+    {
+      "type": "gift_wrap",
+      "name": "Gift Wrap Box",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "product",
+          "id": "gift_product",
+          "label": "Gift Wrap Product"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Accent Color",
+          "default": "#0c2340"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 50,
+          "step": 2,
+          "unit": "px",
+          "label": "Top padding",
+          "default": 16
         },
         {
           "type": "range",

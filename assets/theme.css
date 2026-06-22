@@ -25466,16 +25466,22 @@ predictive-search[results] ~ .predictive-search--empty {
     padding: 16px;
     justify-content: start;
   }
+  .header__dropdown__brands--categorized {
+    flex-direction: column;
+    gap: 30px;
+  }
 }
 
 .header__dropdown__brands--categorized {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 30px;
   width: 100%;
 }
 .brands-category {
-  width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
 }
 .brands-category-title {
   font-size: var(--text-base, 16px);
@@ -25487,9 +25493,9 @@ predictive-search[results] ~ .predictive-search--empty {
   padding-bottom: 8px;
 }
 .brands-category-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
 }
 
 .header__dropdown__image {
