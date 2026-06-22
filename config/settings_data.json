@@ -117,6 +117,7 @@
     "payment_2": "shopify://shop_images/dk.svg",
     "payment_3": "shopify://shop_images/mastercard.svg",
     "payment_4": "shopify://shop_images/Mobilepay.svg",
+    "payment_5": "shopify://shop_images/Frame_3.svg",
     "currency_code_enable": false,
     "header_link_hover": "#AB8C52",
     "show_logo_bg": false,
