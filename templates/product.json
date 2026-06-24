@@ -15,6 +15,7 @@
         "product_tabs_new_RDHRJa": {
           "type": "product_tabs-new",
           "name": "Features",
+          "disabled": true,
           "settings": {
             "padding_top": 36,
             "padding_bottom": 36,
@@ -297,6 +298,21 @@
             "icon_color": "",
             "padding_bottom": 0
           }
+        },
+        "accordion_yAqWjK": {
+          "type": "accordion",
+          "settings": {
+            "show_description": false,
+            "show_read_more": false,
+            "default_open": true,
+            "heading": "BESKRIVELSE",
+            "text": "{{ product.description }}",
+            "show_icon": false,
+            "icon_name": "icon-award",
+            "icon_size": 20,
+            "icon_color": "",
+            "padding_bottom": 0
+          }
         }
       },
       "block_order": [
@@ -320,7 +336,8 @@
         "pickup",
         "divider_ibTNJA",
         "icon_6TgNRf",
-        "accordion_jN8rDH"
+        "accordion_jN8rDH",
+        "accordion_yAqWjK"
       ],
       "settings": {
         "product_sticky_enable": true,
