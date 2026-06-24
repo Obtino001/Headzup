@@ -1,67 +1,63 @@
 {{ 'product-upsell-addon.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-upsell-addon.js' | asset_url | append: '?v=' | append: shop.metafields.cache.version.value | default: '1' }}" defer="defer"></script>
+<script src="{{ 'complementary-products.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
   assign heading = block.settings.heading | default: "Ofte kjøpt sammen"
-  
-  if product.metafields.custom.upsell_products.value != blank
-    assign upsell_products = product.metafields.custom.upsell_products.value
-  else
-    assign upsell_products = block.settings.product_list
-  endif
-
   assign accent_color = block.settings.accent_color | default: "#000000"
   assign padding_bottom = block.settings.padding_bottom | default: 16
 -%}
 
-{%- if upsell_products != blank -%}
-  <upsell-addon class="product__block upsell-addon block-padding" data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}" style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;" {{ block.shopify_attributes }}>
-    {%- if heading != blank -%}
-      <h3 class="upsell-addon__heading">{{ heading }}</h3>
-    {%- endif -%}
+<complementary-products class="complementary-products" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=4&intent=related">
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <upsell-addon class="product__block upsell-addon block-padding" data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}" style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;" {{ block.shopify_attributes }}>
+      {%- if heading != blank -%}
+        <h3 class="upsell-addon__heading">{{ heading }}</h3>
+      {%- endif -%}
 
-    <div class="upsell-addon__list">
-      {%- for upsell_product in upsell_products -%}
-        {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-        {%- if current_variant.available -%}
-          <div class="upsell-addon__item is-unchecked" data-upsell-item data-selected-variant-id="{{ current_variant.id }}" data-selected-price="{{ current_variant.price }}" data-selected-compare="{{ current_variant.compare_at_price | default: current_variant.price }}">
-            <div class="upsell-addon__checkbox-wrapper">
-              <div class="upsell-addon__checkbox">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      <div class="upsell-addon__list">
+        {%- for upsell_product in recommendations.products limit: 4 -%}
+          {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
+          {%- if current_variant.available -%}
+            <div class="upsell-addon__item is-unchecked" data-upsell-item data-selected-variant-id="{{ current_variant.id }}" data-selected-price="{{ current_variant.price }}" data-selected-compare="{{ current_variant.compare_at_price | default: current_variant.price }}">
+              <div class="upsell-addon__checkbox-wrapper">
+                <div class="upsell-addon__checkbox">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                </div>
+              </div>
+
+              {%- if upsell_product.featured_image != blank -%}
+                <img src="{{ upsell_product.featured_image | image_url: width: 120 }}" alt="{{ upsell_product.title | escape }}" class="upsell-addon__image" width="60" height="60" loading="lazy">
+              {%- else -%}
+                <div class="upsell-addon__image placeholder-bg"></div>
+              {%- endif -%}
+
+              <div class="upsell-addon__details">
+                <p class="upsell-addon__title">{{ upsell_product.title }}</p>
+                {%- unless upsell_product.has_only_default_variant -%}
+                  <p class="upsell-addon__variant-title">{{ current_variant.title }}</p>
+                {%- endunless -%}
+                
+                <div class="upsell-addon__price-row">
+                  <span class="upsell-addon__price">{{ current_variant.price | money }}</span>
+                  {%- if current_variant.compare_at_price > current_variant.price -%}
+                    <span class="upsell-addon__compare-price">{{ current_variant.compare_at_price | money }}</span>
+                  {%- endif -%}
+                </div>
+                
+                <a href="{{ upsell_product.url }}" class="upsell-addon__read-more">Les mer</a>
               </div>
             </div>
-
-            {%- if upsell_product.featured_image != blank -%}
-              <img src="{{ upsell_product.featured_image | image_url: width: 120 }}" alt="{{ upsell_product.title | escape }}" class="upsell-addon__image" width="60" height="60" loading="lazy">
-            {%- else -%}
-              <div class="upsell-addon__image placeholder-bg"></div>
-            {%- endif -%}
-
-            <div class="upsell-addon__details">
-              <p class="upsell-addon__title">{{ upsell_product.title }}</p>
-              {%- unless upsell_product.has_only_default_variant -%}
-                <p class="upsell-addon__variant-title">{{ current_variant.title }}</p>
-              {%- endunless -%}
-              
-              <div class="upsell-addon__price-row">
-                <span class="upsell-addon__price">{{ current_variant.price | money }}</span>
-                {%- if current_variant.compare_at_price > current_variant.price -%}
-                  <span class="upsell-addon__compare-price">{{ current_variant.compare_at_price | money }}</span>
-                {%- endif -%}
-              </div>
-              
-              <a href="{{ upsell_product.url }}" class="upsell-addon__read-more">Les mer</a>
-            </div>
-          </div>
-        {%- endif -%}
-      {%- endfor -%}
-    </div>
-
-    <div class="upsell-addon__footer">
-      <div class="upsell-addon__total-price-wrapper">
-        <span>Totalt:</span>
-        <span data-upsell-total>0,00 kr</span>
+          {%- endif -%}
+        {%- endfor -%}
       </div>
-    </div>
-  </upsell-addon>
-{%- endif -%}
+
+      <div class="upsell-addon__footer">
+        <div class="upsell-addon__total-price-wrapper">
+          <span>Totalt:</span>
+          <span data-upsell-total>0,00 kr</span>
+        </div>
+      </div>
+    </upsell-addon>
+  {%- endif -%}
+</complementary-products>
