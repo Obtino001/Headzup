@@ -86,7 +86,7 @@
           "type": "usp",
           "settings": {
             "text": "VI BYTTER ALLE ORDRER I 365 DAGE",
-            "icon": "<svg viewbox=\"0 0 24 24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M3.5 7H14v9H3.5V7Z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"></path><path d=\"M14 10h3.6l2.9 3v3H14v-6Z\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linejoin=\"round\"></path><circle cx=\"7.2\" cy=\"17.2\" r=\"1.8\" stroke=\"currentColor\" stroke-width=\"1.8\"></circle><circle cx=\"17.3\" cy=\"17.2\" r=\"1.8\" stroke=\"currentColor\" stroke-width=\"1.8\"></circle></svg>"
+            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewbox=\"0 0 24 24\" fill=\"none\">\n<path d=\"M8 10H20L16 6\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n<path d=\"M16 14L4 14L8 18\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>"
           }
         },
         "usp_zikpW4": {
