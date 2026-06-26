@@ -193,6 +193,51 @@
         "padding_bottom": 70
       }
     },
+    "faq_group": {
+      "type": "section-accordion-group",
+      "blocks": {
+        "faq_heading": {
+          "type": "heading",
+          "settings": {
+            "title": "FAQ"
+          }
+        },
+        "faq_q1": {
+          "type": "question",
+          "settings": {
+            "default_open": false,
+            "title": "What are the shipping times?",
+            "content": "<p>We typically ship within 1-3 business days.</p>",
+            "show_icon": true,
+            "icon_name": "icon-truck"
+          }
+        },
+        "faq_q2": {
+          "type": "question",
+          "settings": {
+            "default_open": false,
+            "title": "What is the return policy?",
+            "content": "<p>We offer 365 days return policy on unused items.</p>",
+            "show_icon": true,
+            "icon_name": "icon-recycle"
+          }
+        }
+      },
+      "block_order": [
+        "faq_heading",
+        "faq_q1",
+        "faq_q2"
+      ],
+      "settings": {
+        "heading_font_size": "heading-medium",
+        "question_font_size": "heading-small",
+        "width": "wrapper",
+        "columns": "1",
+        "color_scheme": "scheme_1",
+        "padding_top": 50,
+        "padding_bottom": 50
+      }
+    },
     "shipping": {
       "type": "section-accordion",
       "blocks": {
@@ -368,6 +413,7 @@
   },
   "order": [
     "main",
+    "faq_group",
     "shipping",
     "section_divider_BiCLfQ",
     "section_collection_VEA6fx",
