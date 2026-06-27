@@ -82,6 +82,7 @@
         },
         "inventory_countdown_ePdH6p": {
           "type": "inventory_countdown",
+          "disabled": true,
           "settings": {
             "show_notice": "low-inventory",
             "max_inventory": 10,
