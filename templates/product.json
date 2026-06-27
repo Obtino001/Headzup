@@ -396,7 +396,7 @@
       ],
       "settings": {
         "heading_font_size": "heading-medium",
-        "question_font_size": "heading-small",
+        "question_font_size": "heading-medium",
         "width": "wrapper",
         "columns": "1",
         "color_scheme": "scheme_1",
