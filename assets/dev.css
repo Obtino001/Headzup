@@ -1355,7 +1355,15 @@ a[href="/collections/bandana"] .nav-link-collections {
     margin-bottom: 10px !important;
     justify-content: center;
 }
-
+.supporting-menu__inner  .payment-icons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    margin-bottom: 0px !important;
+    justify-content: end;
+}
 /* Remove default bullet points and margins from the list items */
 .payment-icons li {
     list-style-type: none;
