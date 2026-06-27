@@ -104,6 +104,7 @@
           {% comment %} <li data-powered-link>{{ powered_by_link }}</li> {% endcomment %}
           <!-- Do not delete below this line -->
         </ul>
+        {%- render 'product-payment-icons' -%}
       </div>
     </div>
 
@@ -128,6 +129,7 @@
       }
     </style>
 
+    {% comment %}
     {%- if section.settings.footer_payment_enable -%}
       {%- unless shop.enabled_payment_types == empty -%}
         <div class="supporting-menu__item supporting-menu__item--payment">
@@ -139,6 +141,7 @@
         </div>
       {%- endunless -%}
     {%- endif -%}
+    {% endcomment %}
   </div>
 </section>
 
