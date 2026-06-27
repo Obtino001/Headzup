@@ -61,11 +61,18 @@ Required params:
       data-animation-duration="{{ animation_duration }}"
     {% endif %}>
     <style>
+      .menu__blocks-brands,
+      .menu__block-brands {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 1 1 100% !important;
+      }
       .header__dropdown__brands--grouped {
         display: grid;
         grid-template-columns: 1fr;
         gap: 30px;
         padding-top: 10px;
+        width: 100%;
       }
       .brands-category--grouped {
         margin-bottom: 20px;
