@@ -121,6 +121,13 @@
 
     --swatch-size: var(--swatch-size-product);
   }
+
+  @media only screen and (max-width: 749px) {
+    .desktop-breadcrumb-wrapper { display: none !important; }
+  }
+  @media only screen and (min-width: 750px) {
+    .mobile-breadcrumb-wrapper { display: none !important; }
+  }
 {%- endstyle -%}
 
 <script src="{{ 'product.js' | asset_url }}" defer="defer"></script>

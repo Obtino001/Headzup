@@ -104,9 +104,29 @@
           {% comment %} <li data-powered-link>{{ powered_by_link }}</li> {% endcomment %}
           <!-- Do not delete below this line -->
         </ul>
-        {%- render 'product-payment-icons' -%}
       </div>
     </div>
+
+    <style>
+      .supporting-menu__copyright-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 20px;
+        justify-content: center;
+      }
+      @media only screen and (min-width: 750px) {
+        .supporting-menu__copyright-wrapper {
+          justify-content: flex-start;
+        }
+        .supporting-menu__inner {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          width: 100%;
+        }
+      }
+    </style>
 
     {%- if section.settings.footer_payment_enable -%}
       {%- unless shop.enabled_payment_types == empty -%}
