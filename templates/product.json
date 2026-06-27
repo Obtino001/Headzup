@@ -82,6 +82,7 @@
         },
         "inventory_countdown_ePdH6p": {
           "type": "inventory_countdown",
+          "disabled": true,
           "settings": {
             "show_notice": "low-inventory",
             "max_inventory": 10,
@@ -210,7 +211,7 @@
         "upsell_addon_xzfLwj": {
           "type": "upsell_addon",
           "settings": {
-            "heading": "Ofte kjøpt sammen",
+            "heading": "Ofte købt sammen",
             "product_list": [],
             "accent_color": "#000000",
             "padding_bottom": 16
@@ -349,7 +350,7 @@
         "enable_video_looping": false,
         "image_layout": "thumbnails-left",
         "image_size": "normal",
-        "mobile_image_style": "slider",
+        "mobile_image_style": "thumbs",
         "color_scheme": "scheme-7",
         "padding_top": 35,
         "padding_bottom": 20
@@ -371,7 +372,9 @@
             "title": "What are the shipping times?",
             "content": "<p>We typically ship within 1-3 business days.</p>",
             "show_icon": true,
-            "icon_name": "icon-truck"
+            "icon_name": "icon-truck",
+            "icon_size": 20,
+            "icon_color": ""
           }
         },
         "faq_q2": {
@@ -381,7 +384,9 @@
             "title": "What is the return policy?",
             "content": "<p>We offer 365 days return policy on unused items.</p>",
             "show_icon": true,
-            "icon_name": "icon-recycle"
+            "icon_name": "icon-recycle",
+            "icon_size": 20,
+            "icon_color": ""
           }
         }
       },
@@ -392,7 +397,7 @@
       ],
       "settings": {
         "heading_font_size": "heading-medium",
-        "question_font_size": "heading-small",
+        "question_font_size": "heading-medium",
         "width": "wrapper",
         "columns": "1",
         "color_scheme": "scheme_1",

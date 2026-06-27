@@ -737,9 +737,6 @@ body.chapter-two .tab-link span {
   padding-bottom: 2px;
 }
 
-.product__block.product__text {
-  padding-bottom: 35px;
-}
 
 .form__wrapper--classic .radio__legend {
   margin-bottom: 8px;
@@ -1347,4 +1344,29 @@ a[href="/collections/bandana"] .nav-link-collections {
 }
 .price-label-now {
   margin-left: 2px;
+}
+
+/* Container styling to align icons in a row */
+.payment-icons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px; /* Adjust this value to change spacing between icons */
+    padding: 0;
+    margin: 0;
+}
+
+/* Remove default bullet points and margins from the list items */
+.payment-icons li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+}
+
+/* Optional: Ensure images don't have strange default borders or spacing */
+.payment-icons img {
+    display: block;
+    max-width: 100%;
+    height: auto;
 }

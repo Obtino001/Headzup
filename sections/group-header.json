@@ -93,7 +93,7 @@
           "type": "usp",
           "settings": {
             "text": "HENT, BYT, OG RETURNER I VORES FYSISKE BUTIK",
-            "icon": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewbox=\"0 0 24 24\" fill=\"none\">\n<path d=\"M8 10H20L16 6\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n<path d=\"M16 14L4 14L8 18\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>"
+            "icon": "<svg aria-hidden=\"true\" focusable=\"false\" role=\"presentation\" class=\"icon icon-recycle\" viewbox=\"0 0 24 24\" xmlns=\"http://www.w3.org/2000/svg\" style=\"stroke:#fff !important; fill:none !important; color:#fff !important;\">\n  <path d=\"M21.168 8A10.003 10.003 0 0 0 12 2c-5.185 0-9.45 3.947-9.95 9\" style=\"stroke:#fff !important; fill:none !important;\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M17 8h4.4a.6.6 0 0 0 .6-.6V3\" style=\"stroke:#fff !important; fill:none !important;\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M2.881 16c1.544 3.532 5.068 6 9.168 6 5.186 0 9.45-3.947 9.951-9\" style=\"stroke:#fff !important; fill:none !important;\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n  <path d=\"M7.05 16h-4.4a.6.6 0 0 0-.6.6V21\" style=\"stroke:#fff !important; fill:none !important;\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>"
           }
         },
         "usp_6fV83k": {
