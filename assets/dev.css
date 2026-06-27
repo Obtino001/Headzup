@@ -1346,14 +1346,14 @@ a[href="/collections/bandana"] .nav-link-collections {
   margin-left: 2px;
 }
 
-/* Container styling to align icons in a row */
 .payment-icons {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px; /* Adjust this value to change spacing between icons */
+    gap: 8px;
     padding: 0;
-    margin: 0;
+    margin-bottom: 10px !important;
+    justify-content: center;
 }
 
 /* Remove default bullet points and margins from the list items */
