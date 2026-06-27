@@ -103,6 +103,7 @@
         "icon_3",
         "icon_4"
       ],
+      "disabled": true,
       "settings": {
         "bg_color": "#faf8f4",
         "text_color": "#1a1a1a",
