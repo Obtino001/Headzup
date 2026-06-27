@@ -398,7 +398,10 @@
                     {%- render 'product-description', product: product, block: block, block_style: block_style -%}
 
                   {%- when 'inventory_countdown' -%}
-                    {%- render 'product-inventory', product: product, block: block, block_style: block_style -%}
+                    {%- assign product_vendor_downcase = product.vendor | downcase -%}
+                    {%- unless product_vendor_downcase == 'pasteelo' -%}
+                      {%- render 'product-inventory', product: product, block: block, block_style: block_style -%}
+                    {%- endunless -%}
 
                   {%- when 'upsell_addon' -%}
                     {%- render 'product-upsell-addon', block: block, product: product -%}
