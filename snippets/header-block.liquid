@@ -60,122 +60,54 @@ Required params:
       data-animation-delay="{{ animation_delay }}"
       data-animation-duration="{{ animation_duration }}"
     {% endif %}>
-    <div class="header__dropdown__brands header__dropdown__brands--categorized">
-      {% assign brand_metaobject_values = metaobjects.brands.values %}
+    <div class="header__dropdown__brands header__dropdown__brands--alphabetical" style="padding-top: 10px;">
+      {% assign brand_metaobject_values = metaobjects.brands.values | sort: 'title' %}
       {% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %}
-        {% assign brand_metaobject_values = metaobjects.brands_chapter_two.values %}
+        {% assign brand_metaobject_values = metaobjects.brands_chapter_two.values | sort: 'title' %}
       {% endif %}
       
-      {% assign premium_list = block.settings.premium_brands | downcase | split: ',' %}
-      {% assign streetwear_list = block.settings.streetwear_brands | downcase | split: ',' %}
-      {% assign sports_list = block.settings.sports_brands | downcase | split: ',' %}
-      {% assign lifestyle_list = block.settings.lifestyle_brands | downcase | split: ',' %}
-
-      {% capture premium_html %}{% endcapture %}
-      {% capture streetwear_html %}{% endcapture %}
-      {% capture sports_html %}{% endcapture %}
-      {% capture lifestyle_html %}{% endcapture %}
-      {% capture other_html %}{% endcapture %}
-
+      {% assign current_letter = '' %}
+      
       {%- for brand in brand_metaobject_values -%}
-        {% assign b_name = brand.title | downcase %}
-        {% assign category = 'other' %}
-
-        {% for item in premium_list %}
-          {% assign item_stripped = item | strip %}
-          {% if b_name contains item_stripped and item_stripped != blank %}{% assign category = 'premium' %}{% break %}{% endif %}
-        {% endfor %}
+        {% assign first_letter = brand.title | slice: 0, 1 | upcase %}
         
-        {% if category == 'other' %}
-          {% for item in streetwear_list %}
-            {% assign item_stripped = item | strip %}
-            {% if b_name contains item_stripped and item_stripped != blank %}{% assign category = 'streetwear' %}{% break %}{% endif %}
-          {% endfor %}
-        {% endif %}
-
-        {% if category == 'other' %}
-          {% for item in sports_list %}
-            {% assign item_stripped = item | strip %}
-            {% if b_name contains item_stripped and item_stripped != blank %}{% assign category = 'sports' %}{% break %}{% endif %}
-          {% endfor %}
-        {% endif %}
-
-        {% if category == 'other' %}
-          {% for item in lifestyle_list %}
-            {% assign item_stripped = item | strip %}
-            {% if b_name contains item_stripped and item_stripped != blank %}{% assign category = 'lifestyle' %}{% break %}{% endif %}
-          {% endfor %}
-        {% endif %}
-
-        {% capture brand_html %}
-          <div class="brand-item">
-            {%- if brand.link_collection.value.url != blank -%}
-              <a href="{{ brand.link_collection.value.url }}" class="brand-link">
-            {%- else -%}
-              <div class="brand-link">
-            {%- endif -%}
-            
-            {%- if brand.image != blank -%}
-              <div class="brand-image">
-                <img src="{{ brand.image | image_url: width: 75 }}" alt="{{ brand.title | escape }}" width="75" height="75" loading="lazy">
-              </div>
-            {%- endif -%}
-            
-            {%- if brand.title != blank -%}
-              <h3 class="brand-title">{{ brand.title | escape }}</h3>
-            {%- endif -%}
-            
-            {%- if brand.link_collection.value.url != blank -%}
-              </a>
-            {%- else -%}
-              </div>
-            {%- endif -%}
-          </div>
-        {% endcapture %}
-
-        {% if category == 'premium' %}
-          {% capture premium_html %}{{ premium_html }}{{ brand_html }}{% endcapture %}
-        {% elsif category == 'streetwear' %}
-          {% capture streetwear_html %}{{ streetwear_html }}{{ brand_html }}{% endcapture %}
-        {% elsif category == 'sports' %}
-          {% capture sports_html %}{{ sports_html }}{{ brand_html }}{% endcapture %}
-        {% elsif category == 'lifestyle' %}
-          {% capture lifestyle_html %}{{ lifestyle_html }}{{ brand_html }}{% endcapture %}
-        {% else %}
-          {% capture other_html %}{{ other_html }}{{ brand_html }}{% endcapture %}
-        {% endif %}
+        {%- if first_letter != current_letter -%}
+          {%- if current_letter != '' -%}
+            </div></div>
+          {%- endif -%}
+          <div class="brands-category brands-category--alphabetical">
+            <h4 class="brands-category-title" style="margin-top: 20px; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;">{{ first_letter }}</h4>
+            <div class="brands-category-list" style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+          {% assign current_letter = first_letter %}
+        {%- endif -%}
+        
+        <div class="brand-item">
+          {%- if brand.link_collection.value.url != blank -%}
+            <a href="{{ brand.link_collection.value.url }}" class="brand-link" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;">
+          {%- else -%}
+            <div class="brand-link" style="display: flex; align-items: center; gap: 15px;">
+          {%- endif -%}
+          
+          {%- if brand.image != blank -%}
+            <div class="brand-image" style="width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+              <img src="{{ brand.image | image_url: width: 90 }}" alt="{{ brand.title | escape }}" width="45" height="45" loading="lazy" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            </div>
+          {%- endif -%}
+          
+          {%- if brand.title != blank -%}
+            <h3 class="brand-title" style="margin: 0; font-size: 14px; font-weight: 500;">{{ brand.title | escape }}</h3>
+          {%- endif -%}
+          
+          {%- if brand.link_collection.value.url != blank -%}
+            </a>
+          {%- else -%}
+            </div>
+          {%- endif -%}
+        </div>
       {%- endfor -%}
-
-      {% if premium_html != blank %}
-        <div class="brands-category">
-          <h4 class="brands-category-title">{{ block.settings.premium_heading | default: "Premium Brands" }}</h4>
-          <div class="brands-category-list">{{ premium_html }}</div>
-        </div>
-      {% endif %}
-      {% if streetwear_html != blank %}
-        <div class="brands-category">
-          <h4 class="brands-category-title">{{ block.settings.streetwear_heading | default: "Streetwear Brands" }}</h4>
-          <div class="brands-category-list">{{ streetwear_html }}</div>
-        </div>
-      {% endif %}
-      {% if sports_html != blank %}
-        <div class="brands-category">
-          <h4 class="brands-category-title">{{ block.settings.sports_heading | default: "Sports/MLB Brands" }}</h4>
-          <div class="brands-category-list">{{ sports_html }}</div>
-        </div>
-      {% endif %}
-      {% if lifestyle_html != blank %}
-        <div class="brands-category">
-          <h4 class="brands-category-title">{{ block.settings.lifestyle_heading | default: "Lifestyle Brands" }}</h4>
-          <div class="brands-category-list">{{ lifestyle_html }}</div>
-        </div>
-      {% endif %}
-      {% if other_html != blank %}
-        <div class="brands-category">
-          <h4 class="brands-category-title">{{ block.settings.other_heading | default: "Other Brands" }}</h4>
-          <div class="brands-category-list">{{ other_html }}</div>
-        </div>
-      {% endif %}
+      {%- if current_letter != '' -%}
+        </div></div>
+      {%- endif -%}
     </div>
   </div>
 {% else %}

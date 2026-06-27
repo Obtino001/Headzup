@@ -145,6 +145,22 @@
   <{{ wrapper_tag }} class="product__wrapper {{ product_wrapper_modifier }}" data-product>
     <div class="product__wrapper__inner">
       <div class="product__page">
+        {%- assign title_block = section.blocks | where: "type", "title" | first -%}
+        {%- if title_block -%}
+          <div class="mobile-breadcrumb-wrapper" style="padding: 15px var(--inner) 0;">
+            {%- case title_block.settings.subheading_option -%}
+              {%- when 'collection' -%}
+                {%- if collection or product.collections.size > 0 -%}
+                  {%- assign current_collection = collection | default: product.collections[0] -%}
+                  <nav class="breadcrumbs breadcrumbs--no-padding product__breadcrumbs">
+                    <a href="{{ current_collection.url }}">{{ current_collection.title }}</a>
+                  </nav>
+                {%- endif -%}
+              {%- when 'breadcrumb' -%}
+                {% render 'breadcrumbs' breadcrumbs_modifier: 'breadcrumbs--no-padding product__breadcrumbs' %}
+            {%- endcase -%}
+          </div>
+        {%- endif -%}
         <product-images
           class="{{ product_images_classlist }}"
           data-active-media="{{ section.id }}-{{ featured_media.id }}"

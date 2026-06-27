@@ -139,8 +139,12 @@
     endDate.setDate(today.getDate() + deliveryDaysEnd);
     
     // Formatting function
+    const locale = "{{ request.locale.iso_code }}";
     const formatDate = (date) => date.getDate();
-    const month = endDate.toLocaleString('en-GB', { month: 'short' }).toLowerCase();
+    let month = endDate.toLocaleString(locale, { month: 'short' }).toLowerCase();
+    if (month.endsWith('.')) {
+      month = month.slice(0, -1);
+    }
     const year = endDate.getFullYear();
     
     const dateElement = document.getElementById("date-{{ block.id }}");
