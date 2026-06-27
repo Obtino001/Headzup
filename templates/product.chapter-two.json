@@ -213,7 +213,7 @@
         "enable_video_looping": false,
         "image_layout": "grid-2",
         "image_size": "normal",
-        "mobile_image_style": "slider",
+        "mobile_image_style": "thumbs",
         "color_scheme": "scheme-7",
         "padding_top": 35,
         "padding_bottom": 70
