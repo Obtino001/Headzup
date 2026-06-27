@@ -61,42 +61,53 @@ Required params:
       data-animation-duration="{{ animation_duration }}"
     {% endif %}>
     <style>
-      .header__dropdown__brands--alphabetical {
-        display: block !important;
-        column-count: 1;
-        column-gap: 30px;
+      .header__dropdown__brands--grouped {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
         padding-top: 10px;
       }
-      .brands-category--alphabetical {
-        break-inside: avoid;
-        page-break-inside: avoid;
+      .brands-category--grouped {
         margin-bottom: 20px;
       }
       @media only screen and (min-width: 750px) {
-        .header__dropdown__brands--alphabetical {
-          column-count: 4;
+        .header__dropdown__brands--grouped {
+          grid-template-columns: repeat(5, 1fr);
         }
       }
     </style>
-    <div class="header__dropdown__brands header__dropdown__brands--alphabetical">
+    <div class="header__dropdown__brands header__dropdown__brands--grouped">
       {% assign brand_metaobject_values = metaobjects.brands.values | sort: 'title' %}
       {% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %}
         {% assign brand_metaobject_values = metaobjects.brands_chapter_two.values | sort: 'title' %}
       {% endif %}
       
-      {% assign current_letter = '' %}
+      {% assign current_group = '' %}
       
       {%- for brand in brand_metaobject_values -%}
         {% assign first_letter = brand.title | slice: 0, 1 | upcase %}
+        {% assign group_name = '# & Other' %}
+
+        {% if 'A,B,C,D' contains first_letter %}
+          {% assign group_name = 'A - D' %}
+        {% elsif 'E,F,G,H,I' contains first_letter %}
+          {% assign group_name = 'E - I' %}
+        {% elsif 'J,K,L,M,N' contains first_letter %}
+          {% assign group_name = 'J - N' %}
+        {% elsif 'O,P,Q,R,S' contains first_letter %}
+          {% assign group_name = 'O - S' %}
+        {% elsif 'T,U,V,W,X,Y,Z' contains first_letter %}
+          {% assign group_name = 'T - Z' %}
+        {% endif %}
         
-        {%- if first_letter != current_letter -%}
-          {%- if current_letter != '' -%}
+        {%- if group_name != current_group -%}
+          {%- if current_group != '' -%}
             </div></div>
           {%- endif -%}
-          <div class="brands-category brands-category--alphabetical">
-            <h4 class="brands-category-title" style="margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;">{{ first_letter }}</h4>
+          <div class="brands-category brands-category--grouped">
+            <h4 class="brands-category-title" style="margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;">{{ group_name }}</h4>
             <div class="brands-category-list" style="display: grid; grid-template-columns: 1fr; gap: 15px;">
-          {% assign current_letter = first_letter %}
+          {% assign current_group = group_name %}
         {%- endif -%}
         
         <div class="brand-item">
