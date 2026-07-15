@@ -407,7 +407,7 @@
       assign savings_amount = product.compare_at_price | minus: product.price
       assign savings_percent = savings_amount | times: 100 | divided_by: product.compare_at_price | round
     -%}
-    <span class="sale-box {{ badge_alignment }}"
+    <span class="badge-box sale-box {{ badge_alignment }}"
       data-aos="fade"
       data-aos-delay="{{ aos_delay }}"
       data-aos-duration="{{ aos_duration }}"

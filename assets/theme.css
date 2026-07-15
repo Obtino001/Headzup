@@ -25262,7 +25262,8 @@ body.chapter-two .product-item__price .new-price {
   color: var(--black);
 }
 
-body.chapter-two .badge-box {
+body.chapter-two .badge-box,
+body.chapter-two .sale-box {
   background-color: var(--white);
   border-top: 1px solid var(--grey-0);
   border-bottom: 1px solid var(--grey-0);

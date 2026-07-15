@@ -1138,7 +1138,8 @@ body.chapter-two .btn--solid.btn--primary, .btn--solid .btn--primary.shopify-pay
   flex-direction: column;
 }
 
-span.badge-box {
+span.badge-box,
+span.sale-box {
   text-transform: capitalize;
   font-weight: 700;
   font-size: var(--text-sm);
