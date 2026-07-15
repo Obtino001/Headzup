@@ -3,7 +3,7 @@
 <script src="{{ 'complementary-products.js' | asset_url }}" defer="defer"></script>
 
 {%- liquid
-  assign heading = block.settings.heading | default: "Ofte kjøpt sammen"
+  assign heading = block.settings.heading | default: "Ofte købt sammen"
   assign accent_color = block.settings.accent_color | default: "#000000"
   assign padding_bottom = block.settings.padding_bottom | default: 16
 -%}
@@ -45,7 +45,7 @@
                   {%- endif -%}
                 </div>
                 
-                <a href="{{ upsell_product.url }}" class="upsell-addon__read-more">Les mer</a>
+                <a href="{{ upsell_product.url }}" class="upsell-addon__read-more">Læs mere</a>
               </div>
             </div>
           {%- endif -%}
@@ -54,7 +54,7 @@
 
       <div class="upsell-addon__footer">
         <div class="upsell-addon__total-price-wrapper">
-          <span>Totalt:</span>
+          <span>I alt:</span>
           <span data-upsell-total>0,00 kr</span>
         </div>
       </div>

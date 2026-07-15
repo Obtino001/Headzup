@@ -98,7 +98,7 @@ Required params:
       
       {%- for brand in brand_metaobject_values -%}
         {% assign first_letter = brand.title | slice: 0, 1 | upcase %}
-        {% assign group_name = '# & Other' %}
+        {% assign group_name = '# & Andre' %}
 
         {% if 'A,B,C,D' contains first_letter %}
           {% assign group_name = 'A - D' %}

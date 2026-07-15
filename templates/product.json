@@ -100,7 +100,7 @@
           "settings": {
             "trigger_text": "Størrelsestabel+",
             "modal_heading": "Størrelsestabel",
-            "tab1_title": "MEASURE MY OWN SIZE",
+            "tab1_title": "MÅL DIN EGEN STØRRELSE",
             "tab1_instructions": "<p>Hos Headz Up tilbyder vi et bredt udvalg af caps og hatte i forskellige størrelser. Det er vigtigt at finde den rette størrelse for at opnå den perfekte pasform og komfort. Her får du nogle nyttige tips til at finde din cap størrelse.</p><p>Først og fremmest er der forskel på hvilken type kasket man prøver. Baseball caps med rund skygge (buet skygge) er ofte lavere i fronten, og smallere i siden. Derfor kan en fitted cap, eller snapback med flad skygge virke højere og bredere. Faktisk er de fleste kasketter mulige at justere. Du kan enten bøje skyggen lidt ud eller ind, og derved også se at kasketten former sig konstruktionsmæssigt. Hvis du ønsker en fladere kasket så kan du med fordel bøje den lidt. Det samme gør sig gældende hvis du ønsker en bredere cap. </p><p><strong>- Mål dit hovede!</strong></p><p>Du kan med fordel finde et fleksibelt målebånd og måle fra panden og hele vejen rundt. Placer båndet der hvor du forestiller dig at kasketten skal sidde. De fleste har deres kasket siddende lige over ørene. Noter dig målene i centimer. Det kan også være at du har en studenter hue som har et mål indeni.  </p><p> </p><p><strong>- Prøv dig frem hos os!</strong></p><p>Du er altid velkommen i vores butik/showroom på Vesterbrogade 95 i København. Her kan du både prøve de forskellige størrelser, og spørge om råd og vejledning. Du kan både afhente dine pakker hos os, eller købe direkte i vores butik. </p><p>Hvis du har mulighed for at prøve din kasket på først. Så kan du prøve dig frem og på den måde lokalisere hvilken type kasket der passer bedst til dit hovede.</p><p> </p><p><strong>- Undersøg om du har en kasket derhjemme i forvejen som passer godt</strong></p><p>Det kan fx være at du allerede har en kasket derhjemme som passer godt, og så kan du tage udgangspunkt i den. Ofte sidder de på samme både indenfor de samme brands, og modeller. Men det kan også være du har en derhjemme som ikke passer så godt, og så er det et ligeså godt udgangspunkt for at se på om den skal være mindre eller større. Måske skal det være en helt anden pasform. </p><p><strong>Se vores sizeguide fra New Era</strong></p><p>Ønsker du stadig at måle dit hovede og finde din pasform, så se vores størrelsesguide herunder! Vi har har medregnet nogle forskellige sizeguides fra New Era, Yupoong og Flexfit. + en video.</p><p>Skulle du alligevel være i tvivl, så tag endelig fat i os på <a href=\"https://www.facebook.com/headzupshop\" target=\"_blank\"><strong>Facebook</strong></a>, <a href=\"https://www.instagram.com/headzup.dk/\" target=\"_blank\"><strong>Instagram</strong></a>, <strong>info@headzup.dk</strong> eller på telefon: <strong>31326848</strong>.</p><p> Se size guide video fra New Era herunder:</p>",
             "tab1_image": "shopify://shop_images/new-era-sizeguide_1.webp",
             "t1_col1_heading": "CM",
@@ -108,7 +108,7 @@
             "t1_col3_heading": "FITTED",
             "t1_col4_heading": "",
             "tab1_rows": "54.9, 21 5/8, 6 7/8 || 55.8, 22, 7 || 56.8, 22 3/8, 7 1/8 || 57.7, 22 3/4, 7 1/4 || 58.7, 23 1/8, 7 3/8 || 59.6, 23 1/2, 7 1/2 || 60.6, 23 7/8, 7 5/8 || 61.5, 24 1/4, 7 3/4 || 62.5, 24 5/8, 7 7/8 || 63.5, 25, 8 || 64.5, 25 3/8, 8 1/8 || 65.4, 25 3/4, 8 1/4",
-            "tab2_title": "Measure My Video",
+            "tab2_title": "Videoguide til måling",
             "tab2_video_youtube": "https://www.youtube.com/watch?v=shjGEdbKjDo",
             "tab2_step1_text": "",
             "tab2_step2_text": "",
@@ -118,12 +118,12 @@
             "t2_col3_heading": "FITTED",
             "t2_col4_heading": "",
             "tab2_rows": "54.9, 21 5/8, 6 7/8 || 55.8, 22, 7 || 56.8, 22 3/8, 7 1/8 || 57.7, 22 3/4, 7 1/4 || 58.7, 23 1/8, 7 3/8 || 59.6, 23 1/2, 7 1/2 || 60.6, 23 7/8, 7 5/8 || 61.5, 24 1/4, 7 3/4 || 62.5, 24 5/8, 7 7/8 || 63.5, 25, 8 || 64.5, 25 3/8, 8 1/8 || 65.4, 25 3/4, 8 1/4",
-            "table_heading": "Use the size chart to determine your cap size.",
-            "footer_heading": "Need help finding your cap size? Let us help.",
+            "table_heading": "Brug størrelsesguiden til at finde din cap-størrelse.",
+            "footer_heading": "Brug for hjælp til at finde din cap-størrelse? Vi sidder klar til at hjælpe.",
             "footer_email": "info@headzup.dk",
             "footer_phone": "+45 31 32 68 48",
-            "footer_phone_subtext": "Denmark",
-            "footer_store_text": "Visit a Store",
+            "footer_phone_subtext": "Danmark",
+            "footer_store_text": "Besøg en butik",
             "footer_store_url": ""
           }
         },
@@ -221,7 +221,7 @@
           "type": "riders_experience",
           "name": "Experience",
           "settings": {
-            "Heading": "Experience",
+            "Heading": "Oplevelser",
             "video_margin_top": 20,
             "video_margin_bottom": 20,
             "use_metafields": false,

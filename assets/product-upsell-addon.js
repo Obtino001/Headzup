@@ -107,7 +107,7 @@ if (!customElements.get('upsell-addon')) {
       }
 
       const originalText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<span class="btn__loader"><svg height="18" width="18" class="svg-loader"><circle r="7" cx="9" cy="9" /><circle stroke-dasharray="87.96459430051421 87.96459430051421" r="7" cx="9" cy="9" /></svg></span> Legger til...';
+      submitBtn.innerHTML = '<span class="btn__loader"><svg height="18" width="18" class="svg-loader"><circle r="7" cx="9" cy="9" /><circle stroke-dasharray="87.96459430051421 87.96459430051421" r="7" cx="9" cy="9" /></svg></span> Tilføjer...';
       submitBtn.disabled = true;
 
       try {
@@ -137,7 +137,7 @@ if (!customElements.get('upsell-addon')) {
           }
         } else {
           console.error('Failed to add items to cart');
-          submitBtn.innerHTML = 'Error';
+          submitBtn.innerHTML = 'Fejl';
           setTimeout(() => {
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
