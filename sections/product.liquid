@@ -700,17 +700,17 @@
                       {{ block.shopify_attributes }}
                       {{ block_style }}
                     >
-                      {%- if badge != '' and block.settings.product_badges -%}
-                        <span class="badge-box">{{ badge }}</span>
+                      {%- if on_sale and sold_out == false and block.settings.sale_badge -%}
+                        {%- assign savings_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round -%}
+                        <span class="sale-box">Spar {{ savings_percent }}%</span>
+                      {%- elsif badge != '' and block.settings.product_badges -%}
+                        {%- unless badge | downcase == 'sale' or badge | downcase == 'on sale' or badge | downcase == 'til salg' -%}
+                          <span class="badge-box">{{ badge }}</span>
+                        {%- endunless -%}
                       {%- endif -%}
 
                       {%- if preorder and sold_out == false and block.settings.product_badges -%}
                         <span class="preorder-box">{{ 'products.product.pre_order' | t }}</span>
-                      {%- endif -%}
-
-                      {%- if on_sale and sold_out == false and block.settings.sale_badge -%}
-                        {%- assign savings_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round -%}
-                        <span class="sale-box">{{ 'products.product.save' | t }} {{ savings_percent }}%</span>
                       {%- endif -%}
                     </div>
 

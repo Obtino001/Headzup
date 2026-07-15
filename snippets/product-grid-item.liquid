@@ -396,26 +396,12 @@
     endif
   -%}
 
-  {%- if badge != '' or badge_new != '' or badge_soldout != '' -%}
+  {%- if badge_soldout != '' -%}
     <span class="badge-box {{ badge_alignment }}"
       data-aos="fade"
       data-aos-delay="{{ aos_delay }}"
       data-aos-duration="{{ aos_duration }}"
-      data-aos-anchor="{{ aos_anchor }}">
-      {%- if badge_soldout != '' -%}
-        {{ badge_soldout }}
-      {%- elsif badge_new != '' -%}
-        {{ badge_new }}
-      {%- else -%}
-        {{ badge }}
-      {%- endif -%}
-    </span>
-  {%- elsif preorder and sold_out == false -%}
-    <span class="preorder-box {{ badge_alignment }}"
-      data-aos="fade"
-      data-aos-delay="{{ aos_delay }}"
-      data-aos-duration="{{ aos_duration }}"
-      data-aos-anchor="{{ aos_anchor }}">{{ 'products.product.pre_order' | t }}</span>
+      data-aos-anchor="{{ aos_anchor }}">{{ badge_soldout }}</span>
   {%- elsif on_sale and sold_out == false -%}
     {%- liquid
       assign savings_amount = product.compare_at_price | minus: product.price
@@ -425,7 +411,27 @@
       data-aos="fade"
       data-aos-delay="{{ aos_delay }}"
       data-aos-duration="{{ aos_duration }}"
-      data-aos-anchor="{{ aos_anchor }}">{{ 'products.product.save' | t }} {{ savings_percent }}%</span>
+      data-aos-anchor="{{ aos_anchor }}">Spar {{ savings_percent }}%</span>
+  {%- elsif badge != '' or badge_new != '' -%}
+    {%- unless badge | downcase == 'sale' or badge | downcase == 'on sale' or badge | downcase == 'til salg' -%}
+      <span class="badge-box {{ badge_alignment }}"
+        data-aos="fade"
+        data-aos-delay="{{ aos_delay }}"
+        data-aos-duration="{{ aos_duration }}"
+        data-aos-anchor="{{ aos_anchor }}">
+        {%- if badge_new != '' -%}
+          {{ badge_new }}
+        {%- else -%}
+          {{ badge }}
+        {%- endif -%}
+      </span>
+    {%- endunless -%}
+  {%- elsif preorder and sold_out == false -%}
+    <span class="preorder-box {{ badge_alignment }}"
+      data-aos="fade"
+      data-aos-delay="{{ aos_delay }}"
+      data-aos-duration="{{ aos_duration }}"
+      data-aos-anchor="{{ aos_anchor }}">{{ 'products.product.pre_order' | t }}</span>
   {%- endif -%}
 
   {%- if settings.quickview_enable and current_variant -%}
