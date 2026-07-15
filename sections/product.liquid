@@ -704,7 +704,8 @@
                         {%- assign savings_percent = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round -%}
                         <span class="sale-box">Spar {{ savings_percent }}%</span>
                       {%- elsif badge != '' and block.settings.product_badges -%}
-                        {%- unless badge | downcase == 'sale' or badge | downcase == 'on sale' or badge | downcase == 'til salg' -%}
+                        {%- assign badge_clean = badge | strip | downcase -%}
+                        {%- unless badge_clean == 'sale' or badge_clean == 'on sale' or badge_clean == 'til salg' or badge_clean == 'udsalg' -%}
                           <span class="badge-box">{{ badge }}</span>
                         {%- endunless -%}
                       {%- endif -%}

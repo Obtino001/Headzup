@@ -372,7 +372,7 @@
       assign preorder = true
     endif
 
-    if product.compare_at_price > product.price and settings.sale_tags_enable
+    if product.compare_at_price > product.price
       assign on_sale = true
     endif
 
@@ -413,7 +413,8 @@
       data-aos-duration="{{ aos_duration }}"
       data-aos-anchor="{{ aos_anchor }}">Spar {{ savings_percent }}%</span>
   {%- elsif badge != '' or badge_new != '' -%}
-    {%- unless badge | downcase == 'sale' or badge | downcase == 'on sale' or badge | downcase == 'til salg' -%}
+    {%- assign badge_clean = badge | strip | downcase -%}
+    {%- unless badge_clean == 'sale' or badge_clean == 'on sale' or badge_clean == 'til salg' or badge_clean == 'udsalg' -%}
       <span class="badge-box {{ badge_alignment }}"
         data-aos="fade"
         data-aos-delay="{{ aos_delay }}"

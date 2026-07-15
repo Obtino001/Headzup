@@ -74,7 +74,7 @@
     "image_hover_limit": 2,
     "product_grid_aspect_ratio": 1,
     "chapter_two_product_grid_aspect_ratio": 1.2,
-    "sale_tags_enable": false,
+    "sale_tags_enable": true,
     "sale_bg_color": "#e5f2e2",
     "sale_text_color": "#000000",
     "badge_bg_color": "#0c2340",
