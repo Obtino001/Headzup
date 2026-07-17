@@ -371,7 +371,7 @@
             "default_open": false,
             "title": "Hvordan finder jeg den rigtige størrelse og pasform?",
             "content": "<p>Den rigtige størrelse afhænger af, hvilken type cap du vælger.<br/>Fitted caps har ingen justerbar lukning og fås derfor i faste størrelser. Her anbefaler vi, at du måler dit hoved med et målebånd cirka én centimeter over øjenbrynene og sammenligner målet med vores størrelsesguide.<br/>Snapbacks, baseball caps, dad caps og trucker caps er som regel justerbare bagpå og passer derfor de fleste voksne. Pasformen kan dog variere fra model til model. Nogle caps sidder højt og struktureret, mens andre har en lavere og mere afslappet pasform.<br/>På den enkelte produktside kan du se oplysninger om størrelse, pasform og lukning.<br/>Er du stadig i tvivl, hjælper vi dig gerne på <strong>info@headzup.dk</strong> eller <strong>+45 31 32 68 48.</strong></p>",
-            "show_icon": true,
+            "show_icon": false,
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": ""
@@ -383,7 +383,7 @@
             "default_open": false,
             "title": "Hvad er forskellen på de forskellige typer caps?",
             "content": "<p>Forskellen ligger primært i pasform, form, skygge og lukning.<br/>Fitted caps har en lukket bagside og fås i faste størrelser. De giver en tætsiddende og klassisk pasform.<br/>Snapbacks har typisk en højere og mere struktureret front samt en justerbar plastiklukning bagpå.<br/>Baseball caps har ofte en buet skygge, en klassisk sporty form og en justerbar lukning.<br/>Dad caps har en blødere og mere afslappet konstruktion med en lavere krone og buet skygge.<br/>Trucker caps har mesh-paneler bagpå, som giver ekstra ventilation, og har ofte en mere markant front.<br/>Flexfit caps har elastik indbygget i kanten og giver en fleksibel pasform uden en traditionel justerbar lukning.<br/>Du kan se cap-typen og de præcise detaljer på den enkelte produktside. Har du brug for hjælp til at vælge, kan du kontakte os på<strong> info@headzup.dk</strong> eller <strong>+45 31 32 68 48.</strong><br/> </p>",
-            "show_icon": true,
+            "show_icon": false,
             "icon_name": "icon-recycle",
             "icon_size": 20,
             "icon_color": ""
@@ -395,7 +395,7 @@
             "default_open": false,
             "title": "Hvor hurtigt bliver min ordre sendt?",
             "content": "<p>Vi ved, at det er svært at vente på en ny cap. Derfor pakker og sender vi ordrer hver dag fra mandag til lørdag.<br/>Så snart din ordre er pakket og sendt, modtager du en mail med tracking, så du kan følge pakken hele vejen.<br/>Langt de fleste ordrer bliver afsendt hurtigt, men i ekstra travle perioder, ved store lanceringer eller omkring helligdage kan der forekomme lidt længere behandlingstid.<br/>Har du spørgsmål til din ordre, er du altid velkommen til at skrive til <strong>info@headzup.dk</strong> eller ringe på <strong>+45 31 32 68 48</strong>. Husk gerne at oplyse dit ordrenummer, så vi hurtigt kan hjælpe dig.</p>",
-            "show_icon": true,
+            "show_icon": false,
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": ""
@@ -407,7 +407,7 @@
             "default_open": false,
             "title": "Kan jeg returnere eller bytte min ordre?",
             "content": "<p>Ja. Du har 365 dages retur- og bytteret, så længe varen er ubrugt, i original stand og stadig har mærkerne på.<br/>Du kan nemt vælge, om du ønsker at:<br/>•\tBytte til en anden størrelse<br/>•\tBytte til en anden vare<br/>•\tModtage et tilgodebevis/gavekort<br/>•\tReturnere varen og få pengene tilbage<br/>Det hele oprettes direkte gennem vores returportal:<br/>Opret en returnering eller ombytning<br/>Du behøver altså ikke nødvendigvis at lægge en ny ordre, hvis du blot ønsker at bytte varen.<br/>Har du spørgsmål til din retur eller ombytning, kan du kontakte os på <strong>info@headzup.dk.</strong></p>",
-            "show_icon": true,
+            "show_icon": false,
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": ""
@@ -419,7 +419,7 @@
             "default_open": false,
             "title": "Er en udsolgt cap væk for altid?",
             "content": "<p>Ikke nødvendigvis. Nogle modeller bliver genbestilt og kommer på lager igen, mens andre er limited editions, sæsonvarer eller udgåede modeller, som ikke bliver produceret igen.<br/>Hvis det er muligt, kan du vælge din størrelse på produktsiden og tilmelde dig at få en notifikation. Så får du automatisk en mail, hvis varen kommer tilbage.<br/>Vi kan desværre ikke garantere, at en bestemt model eller størrelse bliver genbestilt.<br/>Du er velkommen til at kontakte os på <strong>info@headzup.dk </strong>eller <strong>+45 31 32 68 48</strong>, hvis du vil høre nærmere om en bestemt model.</p>",
-            "show_icon": true,
+            "show_icon": false,
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": ""
@@ -430,8 +430,8 @@
           "settings": {
             "default_open": false,
             "title": "Har I de samme varer i butikken som på webshoppen?",
-            "content": "<p>Størstedelen af vores sortiment kan findes både online og i vores fysiske butik, men lagerbeholdningen kan variere.<br/>En vare kan derfor være tilgængelig online, selvom den ikke står fremme i butikken – og omvendt. Nogle varer kan også befinde sig på vores lager og skal derfor findes frem til dig.<br/>Leder du efter en bestemt model, farve eller størrelse, anbefaler vi, at du kontakter os inden dit besøg på info@headzup.dk eller +45 31 32 68 48. Så undersøger vi lagerstatus for dig.</p>",
-            "show_icon": true,
+            "content": "<p>Størstedelen af vores sortiment kan findes både online og i vores fysiske butik, men lagerbeholdningen kan variere.<br/>En vare kan derfor være tilgængelig online, selvom den ikke står fremme i butikken – og omvendt. Nogle varer kan også befinde sig på vores lager og skal derfor findes frem til dig.<br/>Leder du efter en bestemt model, farve eller størrelse, anbefaler vi, at du kontakter os inden dit besøg på <strong>info@headzup.</strong>dk eller <strong>+45 31 32 68 48.</strong> Så undersøger vi lagerstatus for dig.</p>",
+            "show_icon": false,
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": ""
@@ -442,8 +442,8 @@
           "settings": {
             "default_open": false,
             "title": "Kan jeg bestille online og hente i butikken?",
-            "content": "<p>Ja. Vælg Click & Collect/Afhent i butik som leveringsmulighed, når du gennemfører din ordre.<br/>Du modtager en besked fra os, så snart ordren er pakket og klar til afhentning. Vent derfor med at komme forbi, til du har modtaget bekræftelsen.<br/>Din Click & Collect-ordre kan afhentes i hele butikkens normale åbningstid. Medbring gerne din ordrebekræftelse, når du henter pakken.<br/>Se butikkens adresse og aktuelle åbningstider<br/>Har du spørgsmål til afhentningen, kan du kontakte os på +45 31 32 68 48.</p>",
-            "show_icon": true,
+            "content": "<p>Ja. Vælg Click & Collect/Afhent i butik som leveringsmulighed, når du gennemfører din ordre.<br/>Du modtager en besked fra os, så snart ordren er pakket og klar til afhentning. Vent derfor med at komme forbi, til du har modtaget bekræftelsen.<br/>Din Click & Collect-ordre kan afhentes i hele butikkens normale åbningstid. Medbring gerne din ordrebekræftelse, når du henter pakken.<br/>Se butikkens adresse og aktuelle åbningstider<br/>Har du spørgsmål til afhentningen, kan du kontakte os på <strong>+45 31 32 68 48.</strong></p>",
+            "show_icon": false,
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": ""
@@ -454,8 +454,8 @@
           "settings": {
             "default_open": false,
             "title": "Hvordan rengør jeg min cap?",
-            "content": "<p>Vi anbefaler som udgangspunkt, at du rengør din cap forsigtigt i hånden.<br/>Brug en blød, fugtig klud, lunkent vand og eventuelt en lille smule mild sæbe. Undgå at gennemvæde cap’en, og vær ekstra forsigtig omkring broderier, mærker og skyggen.<br/>Undgå vaskemaskine, opvaskemaskine og tørretumbler, da det kan ødelægge cap’ens form, materialer og farver. Lad den i stedet lufttørre i sin naturlige form og væk fra direkte varme.<br/>Vi fører også et stort udvalg af renseprodukter og komplette rensekits fra blandt andre Jason Markk, som gør det nemmere at rense og vedligeholde dine caps korrekt.<br/>Er du i tvivl om, hvilket renseprodukt der passer til din cap, hjælper vi dig gerne på info@headzup.dk eller +45 31 32 68 48.</p>",
-            "show_icon": true,
+            "content": "<p>Vi anbefaler som udgangspunkt, at du rengør din cap forsigtigt i hånden.<br/>Brug en blød, fugtig klud, lunkent vand og eventuelt en lille smule mild sæbe. Undgå at gennemvæde cap’en, og vær ekstra forsigtig omkring broderier, mærker og skyggen.<br/>Undgå vaskemaskine, opvaskemaskine og tørretumbler, da det kan ødelægge cap’ens form, materialer og farver. Lad den i stedet lufttørre i sin naturlige form og væk fra direkte varme.<br/>Vi fører også et stort udvalg af renseprodukter og komplette rensekits fra blandt andre Jason Markk, som gør det nemmere at rense og vedligeholde dine caps korrekt.<br/>Er du i tvivl om, hvilket renseprodukt der passer til din cap, hjælper vi dig gerne på <strong>info@headzup.dk</strong> eller <strong>+45 31 32 68 48.</strong></p>",
+            "show_icon": false,
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": ""
@@ -466,8 +466,8 @@
           "settings": {
             "default_open": false,
             "title": "Kan jeg købe gavekort til Headz Up?",
-            "content": "<p>Ja, du kan købe gavekort til Headz Up både online og i vores fysiske butik.<br/>Gavekort købt online er elektroniske og bliver sendt på mail kort efter købet. De er derfor perfekte som gave – også hvis du er ude i sidste øjeblik.<br/>Gavekort købt i vores fysiske butik er fysiske gavekort, som du kan tage med og give personligt.<br/>Gavekortet giver modtageren mulighed for selv at vælge den rigtige cap, størrelse, farve eller et andet produkt fra vores sortiment.<br/>Køb et elektronisk gavekort til Headz Up<br/>Har du spørgsmål til gavekort, kan du kontakte os på info@headzup.dk eller +45 31 32 68 48.</p>",
-            "show_icon": true,
+            "content": "<p>Ja, du kan købe gavekort til Headz Up både online og i vores fysiske butik.<br/>Gavekort købt online er elektroniske og bliver sendt på mail kort efter købet. De er derfor perfekte som gave – også hvis du er ude i sidste øjeblik.<br/>Gavekort købt i vores fysiske butik er fysiske gavekort, som du kan tage med og give personligt.<br/>Gavekortet giver modtageren mulighed for selv at vælge den rigtige cap, størrelse, farve eller et andet produkt fra vores sortiment.<br/>Køb et elektronisk gavekort til Headz Up<br/>Har du spørgsmål til gavekort, kan du kontakte os på <strong>info@headzup.dk </strong>eller <strong>+45 31 32 68 48.</strong></p>",
+            "show_icon": false,
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": ""
@@ -478,7 +478,7 @@
           "settings": {
             "default_open": false,
             "title": "Hvad gør jeg, hvis der er fejl på min vare?",
-            "content": "<p>Kontakt os hurtigst muligt, hvis du har modtaget en forkert, beskadiget eller defekt vare.<br/>Send en mail til info@headzup.dk med:<br/>•\tDit ordrenummer<br/>•\tEn kort beskrivelse af problemet<br/>•\tTydelige billeder af varen og fejlen<br/>Så undersøger vi sagen og finder den bedst mulige løsning så hurtigt som muligt.<br/>Du kan også ringe til os på +45 31 32 68 48, hvis du har brug for hjælp.<br/>Almindelig slitage, forkert behandling eller skader, der er opstået efter modtagelsen, betragtes ikke nødvendigvis som en reklamation.</p>",
+            "content": "<p>Kontakt os hurtigst muligt, hvis du har modtaget en forkert, beskadiget eller defekt vare.<br/>Send en mail til<strong> info@headzup.dk</strong> med:<br/>•\tDit ordrenummer<br/>•\tEn kort beskrivelse af problemet<br/>•\tTydelige billeder af varen og fejlen<br/>Så undersøger vi sagen og finder den bedst mulige løsning så hurtigt som muligt.<br/>Du kan også ringe til os på <strong>+45 31 32 68 48</strong>, hvis du har brug for hjælp.<br/>Almindelig slitage, forkert behandling eller skader, der er opstået efter modtagelsen, betragtes ikke nødvendigvis som en reklamation.</p>",
             "show_icon": true,
             "icon_name": "icon-truck",
             "icon_size": 20,
