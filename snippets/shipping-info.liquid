@@ -134,7 +134,9 @@
     const saturdayCutoff = parseInt({{ block.settings.cutoff_saturday | default: 14 }});
     const enableSmartCutoff = {{ block.settings.smart_cutoff_text | default: true }};
     
-    const now = new Date();
+    // Get exact current date & time in Denmark (Europe/Copenhagen) regardless of user's local device timezone
+    const copenhagenTimeStr = new Date().toLocaleString("en-US", { timeZone: "Europe/Copenhagen" });
+    const now = new Date(copenhagenTimeStr);
     const day = now.getDay(); // 0: Sun, 1-5: Mon-Fri, 6: Sat
     const hour = now.getHours();
     
@@ -165,15 +167,15 @@
       dispatchDaysAdd = 1;
     }
     
-    // Calculate Dispatch Date
-    const dispatchDate = new Date();
+    // Calculate Dispatch Date using exact Copenhagen base date
+    const dispatchDate = new Date(now.getTime());
     dispatchDate.setDate(now.getDate() + dispatchDaysAdd);
     
     // Calculate Start & End Date based on dispatch date + transit days
-    const startDate = new Date(dispatchDate);
+    const startDate = new Date(dispatchDate.getTime());
     startDate.setDate(dispatchDate.getDate() + deliveryDaysStart);
     
-    const endDate = new Date(dispatchDate);
+    const endDate = new Date(dispatchDate.getTime());
     endDate.setDate(dispatchDate.getDate() + deliveryDaysEnd);
     
     // Formatting function
