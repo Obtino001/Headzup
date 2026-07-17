@@ -221,7 +221,7 @@
           "type": "riders_experience",
           "name": "Experience",
           "settings": {
-            "Heading": "Oplevelser",
+            "Heading": "Inspiration",
             "video_margin_top": 20,
             "video_margin_bottom": 20,
             "use_metafields": false,
