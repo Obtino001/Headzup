@@ -108,7 +108,13 @@
     </div>
 
     <div class="info-text">
-      <span class="stock-status-bold">{{ block.settings.status_text }}</span> 
+      <span class="stock-status-bold" id="stock-status-{{ block.id }}">
+        {%- if request.locale.iso_code == 'da' and block.settings.status_text == 'In Stock' -%}
+          På lager
+        {%- else -%}
+          {{ block.settings.status_text }}
+        {%- endif -%}
+      </span> 
       <span id="pre-date-{{ block.id }}">
         {%- if block.settings.pre_date_text != blank -%}
           • {{ block.settings.pre_date_text }}
@@ -191,6 +197,11 @@
     
     const dateElement = document.getElementById("date-{{ block.id }}");
     const preDateElement = document.getElementById("pre-date-{{ block.id }}");
+    const stockStatusElement = document.getElementById("stock-status-{{ block.id }}");
+    
+    if (stockStatusElement && isDanish && stockStatusElement.textContent.trim().toLowerCase() === "in stock") {
+      stockStatusElement.textContent = "På lager";
+    }
     
     if (dateElement) {
       if (isDanish) {
