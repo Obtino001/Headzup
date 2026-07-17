@@ -9,9 +9,9 @@
 
   .stock-block-{{ block.id }} .info-row {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px; /* Tighter gap to match the screenshot */
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 8px;
   }
 
   /* Icon wrapper: Scaled 2.5x of the dot width to ensure the pulse halo doesn't get clipped */
@@ -23,6 +23,7 @@
     justify-content: center;
     flex-shrink: 0;
     position: relative;
+    margin-top: -1px; /* Perfectly aligns dot with the first line of text */
   }
 
   .stock-block-{{ block.id }} .info-icon img {
@@ -76,13 +77,15 @@
   .stock-block-{{ block.id }} .info-text {
     font-size: {{ block.settings.font_size }}px;
     color: {{ block.settings.text_color }};
-    line-height: 1.2;
+    line-height: 1.35;
     font-weight: 400; 
     letter-spacing: 0;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 4px;
+    display: block;
+    word-break: normal;
+  }
+
+  .stock-block-{{ block.id }} .info-text span {
+    display: inline;
   }
   
   /* Bold "In Stock" styling */
