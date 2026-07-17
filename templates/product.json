@@ -159,7 +159,7 @@
           }
         },
         "onskeskyen_wishlist_button_tfCaQD": {
-          "type": "shopify://apps/onskeskyen/blocks/wishlist-button/be6e5a80-54ea-40af-aa80-5746282173b8",
+          "type": "shopify://apps/oenskeskyen/blocks/wishlist-button/be6e5a80-54ea-40af-aa80-5746282173b8",
           "settings": {
             "text": "TILFØJ TIL ØNSKESKYEN",
             "rounded": "none",
@@ -362,15 +362,15 @@
         "faq_heading": {
           "type": "heading",
           "settings": {
-            "title": "FAQ"
+            "title": "Ofte stillede spørgsmål"
           }
         },
         "faq_q1": {
           "type": "question",
           "settings": {
             "default_open": false,
-            "title": "What are the shipping times?",
-            "content": "<p>We typically ship within 1-3 business days.</p>",
+            "title": "Hvordan finder jeg den rigtige størrelse og pasform?",
+            "content": "<p>Den rigtige størrelse afhænger af, hvilken type cap du vælger.<br/>Fitted caps har ingen justerbar lukning og fås derfor i faste størrelser. Her anbefaler vi, at du måler dit hoved med et målebånd cirka én centimeter over øjenbrynene og sammenligner målet med vores størrelsesguide.<br/>Snapbacks, baseball caps, dad caps og trucker caps er som regel justerbare bagpå og passer derfor de fleste voksne. Pasformen kan dog variere fra model til model. Nogle caps sidder højt og struktureret, mens andre har en lavere og mere afslappet pasform.<br/>På den enkelte produktside kan du se oplysninger om størrelse, pasform og lukning.<br/>Er du stadig i tvivl, hjælper vi dig gerne på <strong>info@headzup.dk</strong> eller <strong>+45 31 32 68 48.</strong></p>",
             "show_icon": true,
             "icon_name": "icon-truck",
             "icon_size": 20,
