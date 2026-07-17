@@ -179,8 +179,8 @@
           "type": "shipping-info",
           "settings": {
             "icon_width": 14,
-            "status_text": "In Stock",
-            "pre_date_text": "Order today and get it by",
+            "status_text": "På lager",
+            "pre_date_text": "klar til levering",
             "text_color": "#333333",
             "font_size": 14,
             "date_type": "dynamic",
