@@ -878,9 +878,9 @@
       ],
       "name": "Video & Image Lookbook",
       "settings": {
-        "eyebrow": "Inspirasjon",
-        "title": "Style & Fit Guide",
-        "subtitle": "See It Worn",
+        "eyebrow": "",
+        "title": "Inspiration",
+        "subtitle": "Bliv inspireret af vores univers.",
         "background_color": "#ffffff",
         "accent_color": "#a0afa0",
         "border_radius": 0,
