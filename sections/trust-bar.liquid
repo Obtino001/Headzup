@@ -226,13 +226,26 @@
   }
 {%- endstyle -%}
 
+{%- liquid
+  assign current_day_tb = 'now' | date: '%u' | plus: 0
+  assign current_hour_tb = 'now' | date: '%H' | plus: 0
+  assign current_minute_tb = 'now' | date: '%M' | plus: 0
+  assign current_time_mins_tb = current_hour_tb | times: 60 | plus: current_minute_tb
+  assign start_mins_tb = 600
+  assign end_mins_tb = 1050
+  
+  assign show_phone_tb = true
+  if current_day_tb == 7 or current_time_mins_tb < start_mins_tb or current_time_mins_tb > end_mins_tb
+    assign show_phone_tb = false
+  endif
+-%}
 <div class="iwao-trust-bar-{{ section.id }}" data-iwao-trust-bar="">
   <div class="iwao-trust-bar__inner">
     
     <!-- DESKTOP -->
     <div class="iwao-trust-bar__desktop">
       {%- if section.settings.phone_text != blank -%}
-        <a class="iwao-trust-bar__phone" href="{{ section.settings.phone_url }}" aria-label="{{ section.settings.phone_text }}">
+        <a class="iwao-trust-bar__phone" href="{{ section.settings.phone_url }}" aria-label="{{ section.settings.phone_text }}" {% unless show_phone_tb %}style="display: none !important;"{% endunless %} data-smart-phone-cutoff>
           <div class="iwao-trust-bar__icon">
             {{ section.settings.phone_icon }}
           </div>
@@ -276,7 +289,7 @@
       </div>
       
       {%- if section.settings.phone_text != blank -%}
-        <a class="iwao-trust-bar__mobile-phone" href="{{ section.settings.phone_url }}" aria-label="{{ section.settings.phone_text }}">
+        <a class="iwao-trust-bar__mobile-phone" href="{{ section.settings.phone_url }}" aria-label="{{ section.settings.phone_text }}" {% unless show_phone_tb %}style="display: none !important;"{% endunless %} data-smart-phone-cutoff>
           <div class="iwao-trust-bar__icon">
             {{ section.settings.phone_icon }}
           </div>
@@ -287,6 +300,51 @@
 
   </div>
 </div>
+<script>
+(function() {
+  function checkTrustBarPhoneHours() {
+    try {
+      var now = new Date();
+      var formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Copenhagen',
+        weekday: 'short',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: false
+      });
+      var parts = formatter.formatToParts(now);
+      var weekday = '', hour = 0, minute = 0;
+      for (var i = 0; i < parts.length; i++) {
+        if (parts[i].type === 'weekday') weekday = parts[i].value;
+        if (parts[i].type === 'hour') hour = parseInt(parts[i].value, 10);
+        if (parts[i].type === 'minute') minute = parseInt(parts[i].value, 10);
+      }
+      var isSunday = (weekday === 'Sun');
+      var currentMinutes = (hour * 60) + minute;
+      var startMinutes = 10 * 60; // 10:00 -> 600 mins
+      var endMinutes = 17 * 60 + 30; // 17:30 -> 1050 mins
+      var isOpen = !isSunday && (currentMinutes >= startMinutes && currentMinutes <= endMinutes);
+      
+      var phones = document.querySelectorAll('.iwao-trust-bar-{{ section.id }} [data-smart-phone-cutoff]');
+      for (var j = 0; j < phones.length; j++) {
+        if (isOpen) {
+          phones[j].style.setProperty('display', 'inline-flex', 'important');
+        } else {
+          phones[j].style.setProperty('display', 'none', 'important');
+        }
+      }
+    } catch (e) {
+      console.error('Error checking trust bar phone cutoff:', e);
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkTrustBarPhoneHours);
+  } else {
+    checkTrustBarPhoneHours();
+  }
+  setInterval(checkTrustBarPhoneHours, 60000);
+})();
+</script>
 
 {% schema %}
 {
