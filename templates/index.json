@@ -23,7 +23,7 @@
         "text_subheading": {
           "type": "text",
           "settings": {
-            "text": "<p>Danmarks største udvalg af caps — personlig service siden 2021, 365 dages bytteservice, og en fysisk butik i København</p>",
+            "text": "<p>Danmarks bedste udvalg. Personlig service siden 2020. 365 dages bytteservice, og fysisk butik i København. </p>",
             "text_font_size": "body-x-large"
           }
         },
@@ -133,8 +133,8 @@
           "type": "stats",
           "settings": {
             "alignment": "center",
-            "number": "200,000+",
-            "subtext": "caps sold"
+            "number": "150,000+",
+            "subtext": "caps solgt"
           }
         },
         "brand_4i9prx": {
@@ -142,8 +142,8 @@
           "settings": {
             "alignment": "right",
             "icon": "<svg width=\"22\" height=\"14\" viewbox=\"0 0 22 14\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"><rect width=\"22\" height=\"14\" fill=\"#C60C30\"></rect><rect x=\"6\" y=\"0\" width=\"3\" height=\"14\" fill=\"white\"></rect><rect x=\"0\" y=\"6\" width=\"22\" height=\"3\" fill=\"white\"></rect></svg>",
-            "title": "Danish Brand",
-            "subtext": "Premium quality since 2021"
+            "title": "Dansk brand",
+            "subtext": "Siden 2020"
           }
         }
       },
@@ -878,9 +878,9 @@
       ],
       "name": "Video & Image Lookbook",
       "settings": {
-        "eyebrow": "Inspirasjon",
-        "title": "Style & Fit Guide",
-        "subtitle": "See It Worn",
+        "eyebrow": "",
+        "title": "Inspiration",
+        "subtitle": "Bliv inspireret af vores univers.",
         "background_color": "#ffffff",
         "accent_color": "#a0afa0",
         "border_radius": 0,
