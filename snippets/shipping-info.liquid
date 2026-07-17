@@ -9,9 +9,9 @@
 
   .stock-block-{{ block.id }} .info-row {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
-    gap: 8px;
+    gap: 6px;
   }
 
   /* Icon wrapper: Scaled 2.5x of the dot width to ensure the pulse halo doesn't get clipped */
@@ -23,7 +23,16 @@
     justify-content: center;
     flex-shrink: 0;
     position: relative;
-    margin-top: -1px; /* Perfectly aligns dot with the first line of text */
+    margin-left: calc(-0.75 * {{ block.settings.icon_width }}px); /* Aligns green dot flush with left edge of buttons / headings on desktop */
+  }
+
+  @media (max-width: 767px) {
+    .stock-block-{{ block.id }} .info-row {
+      align-items: flex-start;
+    }
+    .stock-block-{{ block.id }} .info-icon {
+      margin-top: 1px;
+    }
   }
 
   .stock-block-{{ block.id }} .info-icon img {
@@ -122,9 +131,7 @@
         {%- if block.settings.pre_date_text != blank -%}
           • {{ block.settings.pre_date_text }}
         {%- endif -%}
-      </span> 
-      
-      {%- if block.settings.date_type == 'dynamic' -%}
+      </span>&nbsp;{%- if block.settings.date_type == 'dynamic' -%}
         <span class="dynamic-date" id="date-{{ block.id }}">...</span>
       {%- else -%}
         <span class="dynamic-date">{{ block.settings.hardcoded_text }}</span>
@@ -218,19 +225,19 @@
       if (isDanish) {
         if (isBeforeCutoff) {
           if (day === 6) {
-            preDateElement.textContent = `• Bestil inden kl. ${saturdayCutoff}.00 i dag – forventet levering:`;
+            preDateElement.textContent = `• Bestil inden kl. ${saturdayCutoff}.00 i dag – forventet levering: `;
           } else {
-            preDateElement.textContent = `• Bestil inden kl. ${weekdayCutoff}.00 i dag – forventet levering:`;
+            preDateElement.textContent = `• Bestil inden kl. ${weekdayCutoff}.00 i dag – forventet levering: `;
           }
         } else {
-          preDateElement.textContent = `• Bestil nu – forventet levering:`;
+          preDateElement.textContent = `• Bestil nu – forventet levering: `;
         }
       } else {
         if (isBeforeCutoff) {
           const cutoffFormatted = day === 6 ? saturdayCutoff : weekdayCutoff;
-          preDateElement.textContent = `• Order before ${cutoffFormatted}:00 today and get it by`;
+          preDateElement.textContent = `• Order before ${cutoffFormatted}:00 today and get it by `;
         } else {
-          preDateElement.textContent = `• Order now and get it by`;
+          preDateElement.textContent = `• Order now and get it by `;
         }
       }
     } else if (preDateElement && preDateElement.textContent.trim().length > 0) {
