@@ -381,8 +381,8 @@
           "type": "question",
           "settings": {
             "default_open": false,
-            "title": "What is the return policy?",
-            "content": "<p>We offer 365 days return policy on unused items.</p>",
+            "title": "Hvad er forskellen på de forskellige typer caps?",
+            "content": "<p>Forskellen ligger primært i pasform, form, skygge og lukning.<br/>Fitted caps har en lukket bagside og fås i faste størrelser. De giver en tætsiddende og klassisk pasform.<br/>Snapbacks har typisk en højere og mere struktureret front samt en justerbar plastiklukning bagpå.<br/>Baseball caps har ofte en buet skygge, en klassisk sporty form og en justerbar lukning.<br/>Dad caps har en blødere og mere afslappet konstruktion med en lavere krone og buet skygge.<br/>Trucker caps har mesh-paneler bagpå, som giver ekstra ventilation, og har ofte en mere markant front.<br/>Flexfit caps har elastik indbygget i kanten og giver en fleksibel pasform uden en traditionel justerbar lukning.<br/>Du kan se cap-typen og de præcise detaljer på den enkelte produktside. Har du brug for hjælp til at vælge, kan du kontakte os på<strong> info@headzup.dk</strong> eller <strong>+45 31 32 68 48.</strong><br/> </p>",
             "show_icon": true,
             "icon_name": "icon-recycle",
             "icon_size": 20,
