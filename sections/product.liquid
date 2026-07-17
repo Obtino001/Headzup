@@ -3383,7 +3383,7 @@
           "type": "text",
           "id": "pre_date_text",
           "label": "Text Before Date",
-          "default": "Bestil i dag og modtag den senest"
+          "default": "Bestil inden kl. 15 i dag – forventet levering:"
         },
         {
           "type": "color",
@@ -3422,6 +3422,25 @@
           "default": "dynamic"
         },
         {
+          "type": "checkbox",
+          "id": "smart_cutoff_text",
+          "label": "Enable Smart Cut-off Text (kl. 15 / kl. 14)",
+          "default": true,
+          "info": "Automatically adjusts text based on whether it is before cutoff on weekdays (15:00) or Saturday (14:00)."
+        },
+        {
+          "type": "number",
+          "id": "cutoff_weekday",
+          "label": "Weekday Cutoff Hour (0-23)",
+          "default": 15
+        },
+        {
+          "type": "number",
+          "id": "cutoff_saturday",
+          "label": "Saturday Cutoff Hour (0-23)",
+          "default": 14
+        },
+        {
           "type": "text",
           "id": "hardcoded_text",
           "label": "Hardcoded Text",
@@ -3432,7 +3451,7 @@
           "type": "number",
           "id": "delivery_days",
           "label": "Days until delivery",
-          "default": 9,
+          "default": 3,
           "info": "Only used if 'Dynamic Calculated Date' is selected."
         },
         {

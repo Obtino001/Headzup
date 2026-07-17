@@ -109,14 +109,17 @@
 
     <div class="info-text">
       <span class="stock-status-bold">{{ block.settings.status_text }}</span> 
-      <span>{{ block.settings.pre_date_text }} 
+      <span id="pre-date-{{ block.id }}">
+        {%- if block.settings.pre_date_text != blank -%}
+          • {{ block.settings.pre_date_text }}
+        {%- endif -%}
+      </span> 
       
       {%- if block.settings.date_type == 'dynamic' -%}
         <span class="dynamic-date" id="date-{{ block.id }}">...</span>
       {%- else -%}
         <span class="dynamic-date">{{ block.settings.hardcoded_text }}</span>
       {%- endif -%}
-      </span>
     </div>
     
   </div>
@@ -125,22 +128,59 @@
 {%- if block.settings.date_type == 'dynamic' -%}
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    const deliveryDaysEnd = parseInt({{ block.settings.delivery_days | default: 8 }}); 
-    const deliveryDaysStart = deliveryDaysEnd - 2; 
+    const deliveryDaysEnd = parseInt({{ block.settings.delivery_days | default: 3 }}); 
+    const deliveryDaysStart = Math.max(1, deliveryDaysEnd - 2); 
+    const weekdayCutoff = parseInt({{ block.settings.cutoff_weekday | default: 15 }});
+    const saturdayCutoff = parseInt({{ block.settings.cutoff_saturday | default: 14 }});
+    const enableSmartCutoff = {{ block.settings.smart_cutoff_text | default: true }};
     
-    const today = new Date();
+    const now = new Date();
+    const day = now.getDay(); // 0: Sun, 1-5: Mon-Fri, 6: Sat
+    const hour = now.getHours();
     
-    // Calculate Start Date
-    const startDate = new Date();
-    startDate.setDate(today.getDate() + deliveryDaysStart);
+    let isBeforeCutoff = false;
+    let dispatchDaysAdd = 0;
     
-    // Calculate End Date
-    const endDate = new Date();
-    endDate.setDate(today.getDate() + deliveryDaysEnd);
+    if (day >= 1 && day <= 5) {
+      if (hour < weekdayCutoff) {
+        isBeforeCutoff = true;
+        dispatchDaysAdd = 0; // Ships today
+      } else if (day === 5) {
+        // Friday after 15:00 -> Ships Saturday (since shipping is Mon-Sat)
+        dispatchDaysAdd = 1;
+      } else {
+        // Mon-Thu after 15:00 -> Ships tomorrow
+        dispatchDaysAdd = 1;
+      }
+    } else if (day === 6) {
+      if (hour < saturdayCutoff) {
+        isBeforeCutoff = true;
+        dispatchDaysAdd = 0; // Ships today Saturday
+      } else {
+        // Saturday after 14:00 -> Ships Monday (skip Sunday)
+        dispatchDaysAdd = 2;
+      }
+    } else {
+      // Sunday -> Ships Monday
+      dispatchDaysAdd = 1;
+    }
+    
+    // Calculate Dispatch Date
+    const dispatchDate = new Date();
+    dispatchDate.setDate(now.getDate() + dispatchDaysAdd);
+    
+    // Calculate Start & End Date based on dispatch date + transit days
+    const startDate = new Date(dispatchDate);
+    startDate.setDate(dispatchDate.getDate() + deliveryDaysStart);
+    
+    const endDate = new Date(dispatchDate);
+    endDate.setDate(dispatchDate.getDate() + deliveryDaysEnd);
     
     // Formatting function
-    const locale = "{{ request.locale.iso_code }}";
-    const formatDate = (date) => date.getDate();
+    const locale = "{{ request.locale.iso_code }}".toLowerCase();
+    const isDanish = locale.startsWith("da");
+    
+    const formatDate = (date) => isDanish ? `${date.getDate()}.` : date.getDate();
     let month = endDate.toLocaleString(locale, { month: 'short' }).toLowerCase();
     if (month.endsWith('.')) {
       month = month.slice(0, -1);
@@ -148,9 +188,40 @@
     const year = endDate.getFullYear();
     
     const dateElement = document.getElementById("date-{{ block.id }}");
+    const preDateElement = document.getElementById("pre-date-{{ block.id }}");
     
-    if(dateElement) {
-      dateElement.textContent = `${formatDate(startDate)} - ${formatDate(endDate)} ${month}, ${year}`;
+    if (dateElement) {
+      if (isDanish) {
+        dateElement.textContent = `${formatDate(startDate)} - ${formatDate(endDate)} ${month}. ${year}`;
+      } else {
+        dateElement.textContent = `${formatDate(startDate)} - ${formatDate(endDate)} ${month}, ${year}`;
+      }
+    }
+    
+    if (enableSmartCutoff && preDateElement) {
+      if (isDanish) {
+        if (isBeforeCutoff) {
+          if (day === 6) {
+            preDateElement.textContent = `• Bestil inden kl. ${saturdayCutoff}.00 i dag – forventet levering:`;
+          } else {
+            preDateElement.textContent = `• Bestil inden kl. ${weekdayCutoff}.00 i dag – forventet levering:`;
+          }
+        } else {
+          preDateElement.textContent = `• Bestil nu – forventet levering:`;
+        }
+      } else {
+        if (isBeforeCutoff) {
+          const cutoffFormatted = day === 6 ? saturdayCutoff : weekdayCutoff;
+          preDateElement.textContent = `• Order before ${cutoffFormatted}:00 today and get it by`;
+        } else {
+          preDateElement.textContent = `• Order now and get it by`;
+        }
+      }
+    } else if (preDateElement && preDateElement.textContent.trim().length > 0) {
+      const currentText = preDateElement.textContent.trim();
+      if (!currentText.startsWith('•')) {
+        preDateElement.textContent = `• ${currentText}`;
+      }
     }
   });
 </script>
