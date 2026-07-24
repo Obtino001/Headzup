@@ -16037,7 +16037,10 @@ a.review {
     flex: 0 1 100%;
     flex-direction: column;
     align-items: stretch;
-    padding: 10px var(--outer) 70px;
+    padding: 10px var(--outer) calc(10px + env(safe-area-inset-bottom));
+  }
+  .cart-bar__info {
+    display: none !important;
   }
 }
 
@@ -21805,7 +21808,7 @@ recently-viewed {
 }
 
 .pswp {
-  z-index: 6000;
+  z-index: 999999;
 }
 
 .pswp__bg {
