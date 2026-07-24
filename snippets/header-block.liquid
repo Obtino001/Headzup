@@ -98,55 +98,117 @@ Required params:
       
       {%- for brand in brand_metaobject_values -%}
         {% assign first_letter = brand.title | slice: 0, 1 | upcase %}
-        {% assign group_name = '# & Andre' %}
+        {% assign is_alpha = false %}
 
         {% if 'A,B,C,D' contains first_letter %}
           {% assign group_name = 'A - D' %}
+          {% assign is_alpha = true %}
         {% elsif 'E,F,G,H,I' contains first_letter %}
           {% assign group_name = 'E - I' %}
+          {% assign is_alpha = true %}
         {% elsif 'J,K,L,M,N' contains first_letter %}
           {% assign group_name = 'J - N' %}
+          {% assign is_alpha = true %}
         {% elsif 'O,P,Q,R,S' contains first_letter %}
           {% assign group_name = 'O - S' %}
+          {% assign is_alpha = true %}
         {% elsif 'T,U,V,W,X,Y,Z' contains first_letter %}
           {% assign group_name = 'T - Z' %}
+          {% assign is_alpha = true %}
         {% endif %}
         
-        {%- if group_name != current_group -%}
-          {%- if current_group != '' -%}
-            </div></div>
-          {%- endif -%}
-          <div class="brands-category brands-category--grouped">
-            <h4 class="brands-category-title" style="margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;">{{ group_name }}</h4>
-            <div class="brands-category-list--grouped">
-          {% assign current_group = group_name %}
-        {%- endif -%}
-        
-        <div class="brand-item">
-          {%- if brand.link_collection.value.url != blank -%}
-            <a href="{{ brand.link_collection.value.url }}" class="brand-link" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;">
-          {%- else -%}
-            <div class="brand-link" style="display: flex; align-items: center; gap: 15px;">
+        {% if is_alpha %}
+          {%- if group_name != current_group -%}
+            {%- if current_group != '' -%}
+              </div></div>
+            {%- endif -%}
+            <div class="brands-category brands-category--grouped">
+              <h4 class="brands-category-title" style="margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;">{{ group_name }}</h4>
+              <div class="brands-category-list--grouped">
+            {% assign current_group = group_name %}
           {%- endif -%}
           
-          {%- if brand.image != blank -%}
-            <div class="brand-image" style="width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-              <img src="{{ brand.image | image_url: width: 90 }}" alt="{{ brand.title | escape }}" width="45" height="45" loading="lazy" style="max-width: 100%; max-height: 100%; object-fit: contain;">
-            </div>
-          {%- endif -%}
-          
-          {%- if brand.title != blank -%}
-            <h3 class="brand-title" style="margin: 0; font-size: 14px; font-weight: 500;">{{ brand.title | escape }}</h3>
-          {%- endif -%}
-          
-          {%- if brand.link_collection.value.url != blank -%}
-            </a>
-          {%- else -%}
-            </div>
-          {%- endif -%}
-        </div>
+          <div class="brand-item">
+            {%- if brand.link_collection.value.url != blank -%}
+              <a href="{{ brand.link_collection.value.url }}" class="brand-link" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;">
+            {%- else -%}
+              <div class="brand-link" style="display: flex; align-items: center; gap: 15px;">
+            {%- endif -%}
+            
+            {%- if brand.image != blank -%}
+              <div class="brand-image" style="width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                <img src="{{ brand.image | image_url: width: 90 }}" alt="{{ brand.title | escape }}" width="45" height="45" loading="lazy" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+              </div>
+            {%- endif -%}
+            
+            {%- if brand.title != blank -%}
+              <h3 class="brand-title" style="margin: 0; font-size: 14px; font-weight: 500;">{{ brand.title | escape }}</h3>
+            {%- endif -%}
+            
+            {%- if brand.link_collection.value.url != blank -%}
+              </a>
+            {%- else -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {% endif %}
       {%- endfor -%}
-      {%- if current_letter != '' -%}
+
+      {%- for brand in brand_metaobject_values -%}
+        {% assign first_letter = brand.title | slice: 0, 1 | upcase %}
+        {% assign is_alpha = false %}
+
+        {% if 'A,B,C,D' contains first_letter %}
+          {% assign is_alpha = true %}
+        {% elsif 'E,F,G,H,I' contains first_letter %}
+          {% assign is_alpha = true %}
+        {% elsif 'J,K,L,M,N' contains first_letter %}
+          {% assign is_alpha = true %}
+        {% elsif 'O,P,Q,R,S' contains first_letter %}
+          {% assign is_alpha = true %}
+        {% elsif 'T,U,V,W,X,Y,Z' contains first_letter %}
+          {% assign is_alpha = true %}
+        {% endif %}
+        
+        {% unless is_alpha %}
+          {% assign group_name = '# & Andre' %}
+          {%- if group_name != current_group -%}
+            {%- if current_group != '' -%}
+              </div></div>
+            {%- endif -%}
+            <div class="brands-category brands-category--grouped">
+              <h4 class="brands-category-title" style="margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;">{{ group_name }}</h4>
+              <div class="brands-category-list--grouped">
+            {% assign current_group = group_name %}
+          {%- endif -%}
+          
+          <div class="brand-item">
+            {%- if brand.link_collection.value.url != blank -%}
+              <a href="{{ brand.link_collection.value.url }}" class="brand-link" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;">
+            {%- else -%}
+              <div class="brand-link" style="display: flex; align-items: center; gap: 15px;">
+            {%- endif -%}
+            
+            {%- if brand.image != blank -%}
+              <div class="brand-image" style="width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                <img src="{{ brand.image | image_url: width: 90 }}" alt="{{ brand.title | escape }}" width="45" height="45" loading="lazy" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+              </div>
+            {%- endif -%}
+            
+            {%- if brand.title != blank -%}
+              <h3 class="brand-title" style="margin: 0; font-size: 14px; font-weight: 500;">{{ brand.title | escape }}</h3>
+            {%- endif -%}
+            
+            {%- if brand.link_collection.value.url != blank -%}
+              </a>
+            {%- else -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {% endunless %}
+      {%- endfor -%}
+
+      {%- if current_group != '' -%}
         </div></div>
       {%- endif -%}
     </div>

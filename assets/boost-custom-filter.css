@@ -874,15 +874,19 @@
     align-items: center;
     gap: 6px;
     --link: var(--text);
-    display: flex;
-    background-color: var(--bg-accent);
-    padding: 8px 7px 8px 14px;
-    margin: 0 7px 7px 0;
+    background-color: var(--bg-accent, #f5f5f5);
+    padding: 8px 10px 8px 14px;
+    margin: 0;
     font-size: 12px;
     text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
 }
 .boost-active-tag svg {
     flex-shrink: 0;
+    width: 14px;
+    height: 14px;
 }
 
 .boost-clear-all-btn {

@@ -88,13 +88,20 @@
   
   @media screen and (max-width: 640px) {
     .btb-{{ section.id }} {
-      overflow-x: auto;
+      padding: 12px 10px;
     }
     .btb-i-{{ section.id }} {
-      min-width: 600px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px 20px;
     }
     .btb-col-{{ section.id }} {
-      padding: 0 14px;
+      padding: 0;
+      flex: 0 0 auto;
+      align-items: center !important;
+    }
+    .btb-line-{{ section.id }} {
+      display: none;
     }
   }
 {%- endstyle -%}
