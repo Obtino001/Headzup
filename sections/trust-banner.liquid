@@ -88,18 +88,36 @@
   
   @media screen and (max-width: 640px) {
     .btb-{{ section.id }} {
-      padding: 12px 10px;
+      padding: 10px 5px;
+      overflow: hidden;
     }
     .btb-i-{{ section.id }} {
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px 20px;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: 2px;
     }
     .btb-col-{{ section.id }} {
       padding: 0;
-      flex: 0 0 auto;
+      flex: 1;
       align-items: center !important;
+      text-align: center;
+      gap: 3px;
     }
+    .btb-row-{{ section.id }} {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3px;
+      white-space: normal;
+    }
+    .btb-row-{{ section.id }} svg {
+      max-width: 65px;
+      height: auto !important;
+    }
+    .btb-name-{{ section.id }} { font-size: 8px; }
+    .btb-score-{{ section.id }} { font-size: 12px; }
+    .btb-num-{{ section.id }} { font-size: 13px; }
+    .btb-italic-{{ section.id }} { font-size: 11px; }
+    .btb-sub-{{ section.id }} { font-size: 7px; white-space: normal; line-height: 1.1; }
     .btb-line-{{ section.id }} {
       display: none;
     }
