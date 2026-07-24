@@ -48,64 +48,50 @@
   }
 
   #sbc-{{ section.id }} .sbc-arrow {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1.5px solid #D8D3CC;
     background: transparent;
+    border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: border-color 0.2s, background 0.2s;
-    flex-shrink: 0;
+    transition: opacity 0.2s;
+    width: 32px;
+    height: 32px;
+    padding: 0;
   }
 
   #sbc-{{ section.id }} .sbc-arrow:hover {
-    border-color: var(--text);
-    background: var(--text);
-  }
-
-  #sbc-{{ section.id }} .sbc-arrow:hover svg path {
-    stroke: #fff;
+    opacity: 0.6;
   }
 
   #sbc-{{ section.id }} .sbc-arrow svg {
-    width: 16px;
-    height: 16px;
+    width: 24px;
+    height: 24px;
   }
 
-  #sbc-{{ section.id }} .sbc-arrow svg path {
-    stroke: #1A1A1A;
-    stroke-width: 1.5;
-    fill: none;
-    transition: stroke 0.2s;
-  }
-
-  #sbc-{{ section.id }} .sbc-arrow:disabled {
+  #sbc-{{ section.id }} .sbc-arrow.swiper-button-disabled {
     opacity: 0.3;
     cursor: default;
   }
 
-  #sbc-{{ section.id }} .sbc-arrow:disabled:hover {
-    border-color: #D8D3CC;
-    background: transparent;
-  }
-
-  #sbc-{{ section.id }} .sbc-arrow:disabled:hover svg path {
-    stroke: #1A1A1A;
-  }
-
   #sbc-{{ section.id }} .sbc-outer {
-    overflow: hidden;
     width: 100%;
   }
 
-  #sbc-{{ section.id }} .sbc-track {
+  /* Clean fast fallback before swiper kicks in */
+  #sbc-swiper-{{ section.id }}:not(.swiper-initialized) .swiper-wrapper {
     display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
     gap: 12px;
-    transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform;
+  }
+  #sbc-swiper-{{ section.id }}:not(.swiper-initialized) .swiper-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+  #sbc-swiper-{{ section.id }}:not(.swiper-initialized) .swiper-slide {
+    width: var(--card-w);
+    flex-shrink: 0;
   }
 
   #sbc-{{ section.id }} .sbc-card {
@@ -206,31 +192,20 @@
   }
 
   @media (max-width: 640px) {
-    #sbc-{{ section.id }} .sbc-card {
+    #sbc-{{ section.id }} .sbc-card, #sbc-swiper-{{ section.id }}:not(.swiper-initialized) .swiper-slide {
       width: 72vw;
       height: 88vw;
     }
     #sbc-{{ section.id }} .sbc-outer {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      width: auto;
       margin-left: calc(-1 * clamp(16px, 5vw, 40px));
       margin-right: calc(-1 * clamp(16px, 5vw, 40px));
       padding-left: clamp(16px, 5vw, 40px);
       padding-right: clamp(16px, 5vw, 40px);
     }
-    #sbc-{{ section.id }} .sbc-outer::-webkit-scrollbar {
-      display: none;
-    }
-    #sbc-{{ section.id }} .sbc-track {
-      transition: none;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    #sbc-{{ section.id }} .sbc-card img,
-    #sbc-{{ section.id }} .sbc-track {
+    #sbc-{{ section.id }} .sbc-card img {
       transition: none !important;
     }
   }
@@ -250,19 +225,19 @@
 
     <div class="sbc-arrows">
       <button class="sbc-arrow" id="sbc-prev-{{ section.id }}" aria-label="Previous">
-        <svg viewBox="0 0 16 16"><path d="M10 13L5 8l5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        {% render 'icon-arrow-left' %}
       </button>
       <button class="sbc-arrow" id="sbc-next-{{ section.id }}" aria-label="Next">
-        <svg viewBox="0 0 16 16"><path d="M6 3l5 5-5 5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-arrow-right" viewBox="0 0 24 24"><path d="M5.5 12h12m0 0-6-6m6 6-6 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
     </div>
   </div>
 
-  <div class="sbc-outer" id="sbc-outer-{{ section.id }}">
-    <div class="sbc-track" id="sbc-track-{{ section.id }}">
+  <div class="sbc-outer swiper" id="sbc-swiper-{{ section.id }}">
+    <div class="swiper-wrapper">
       {% for block in section.blocks %}
         {% if block.type == 'card' %}
-          <a class="sbc-card"
+          <a class="sbc-card swiper-slide"
              href="{{ block.settings.link | default: '#' }}"
              {{ block.shopify_attributes }}>
 
@@ -296,114 +271,27 @@
 
 <script>
 (function () {
-  var id = '{{ section.id }}';
-  var outer = document.getElementById('sbc-outer-' + id);
-  var track = document.getElementById('sbc-track-' + id);
-  var prevBtn = document.getElementById('sbc-prev-' + id);
-  var nextBtn = document.getElementById('sbc-next-' + id);
-
-  if (!track || !outer || !prevBtn || !nextBtn) return;
-
-  var currentIndex = 0;
-
-  function getCards() {
-    return Array.from(track.querySelectorAll('.sbc-card:not(.sbc-clone)'));
-  }
-
-  function getVisible() {
-    var ow = outer.offsetWidth;
-    var cw = getCards()[0] ? getCards()[0].offsetWidth + 12 : 1;
-    return Math.max(1, Math.floor(ow / cw));
-  }
-
-  function getMax() {
-    return Math.max(0, getCards().length - getVisible());
-  }
-
-  function goTo(idx) {
-    var cards = getCards();
-    if (!cards.length) return;
-    var max = getMax();
-    if (idx < 0) idx = max;
-    if (idx > max) idx = 0;
-    currentIndex = idx;
-    var offset = 0;
-    for (var i = 0; i < currentIndex; i++) {
-      offset += cards[i].offsetWidth + 12;
+  function initSwiper() {
+    if (typeof Swiper !== 'undefined') {
+      new Swiper('#sbc-swiper-{{ section.id }}', {
+        slidesPerView: 'auto',
+        spaceBetween: 12,
+        navigation: {
+          nextEl: '#sbc-next-{{ section.id }}',
+          prevEl: '#sbc-prev-{{ section.id }}',
+        },
+        grabCursor: true,
+      });
+    } else {
+      setTimeout(initSwiper, 100);
     }
-    track.style.transform = 'translateX(-' + offset + 'px)';
-    prevBtn.disabled = false;
-    nextBtn.disabled = false;
   }
-
-  prevBtn.addEventListener('click', function () { goTo(currentIndex - 1); });
-  nextBtn.addEventListener('click', function () { goTo(currentIndex + 1); });
-  window.addEventListener('resize', function () { goTo(currentIndex); });
-
-  goTo(0);
-
-  /* ── Infinite scroll on mobile ── */
-  var isMobile = window.matchMedia('(max-width: 640px)');
-
-  function setupMobileScroll() {
-    if (!isMobile.matches) return;
-
-    var origCards = getCards();
-    if (!origCards.length) return;
-
-    /* Remove old clones */
-    track.querySelectorAll('.sbc-clone').forEach(function(c) { c.remove(); });
-
-    /* Clone all cards and append */
-    origCards.forEach(function(card) {
-      var clone = card.cloneNode(true);
-      clone.classList.add('sbc-clone');
-      clone.setAttribute('aria-hidden', 'true');
-      track.appendChild(clone);
-    });
-
-    /* Native scroll with loop */
-    outer.style.overflowX = 'auto';
-    outer.style.webkitOverflowScrolling = 'touch';
-    outer.style.scrollbarWidth = 'none';
-    track.style.transition = 'none';
-
-    var totalW = 0;
-    origCards.forEach(function(c) { totalW += c.offsetWidth + 12; });
-
-    outer.addEventListener('scroll', function () {
-      var sl = outer.scrollLeft;
-      /* When nearing the end - jump back to start */
-      if (sl >= totalW) {
-        outer.scrollLeft = sl - totalW;
-      }
-      /* When scrolling past start backwards */
-      if (sl <= 0) {
-        outer.scrollLeft = totalW + sl;
-      }
-    }, { passive: true });
+  
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSwiper);
+  } else {
+    initSwiper();
   }
-
-  setupMobileScroll();
-  window.addEventListener('resize', setupMobileScroll);
-
-  /* Touch swipe for desktop mode */
-  var startX = 0;
-  var startIndex = 0;
-
-  track.addEventListener('touchstart', function (e) {
-    if (isMobile.matches) return;
-    startX = e.touches[0].clientX;
-    startIndex = currentIndex;
-  }, { passive: true });
-
-  track.addEventListener('touchend', function (e) {
-    if (isMobile.matches) return;
-    var dx = startX - e.changedTouches[0].clientX;
-    if (Math.abs(dx) > 50) {
-      goTo(dx > 0 ? startIndex + 1 : startIndex - 1);
-    }
-  }, { passive: true });
 })();
 </script>
 {% schema %}
