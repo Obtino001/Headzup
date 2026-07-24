@@ -6404,7 +6404,7 @@ toggle-ellipsis {
 .cart__item {
   position: relative;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: flex-start;
   align-items: center;
   padding: var(--inner);
@@ -9224,7 +9224,7 @@ ticker-bar[paused] .ticker--animated {
 
 .breadcrumbs {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: flex-start;
   align-items: center;
   padding: 0 var(--outer);
@@ -9837,7 +9837,7 @@ p a:hover::after {
 .hero__button-group {
   margin: 0 -8px calc(var(--line) - 8px);
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: var(--alignment-justify-content, center);
 }
 .text-left .hero__button-group {
@@ -10187,7 +10187,7 @@ body.has-line-design.grid-compact .section-columns .grid--slider .grid-item {
   .multicolumn {
     --gap-offset: calc(var(--gap) / -2);
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
     gap: 0;
     margin: 0 var(--gap-offset);
   }
@@ -11962,7 +11962,7 @@ main-search .input-holder {
   min-width: 0;
   width: 100%;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   align-items: center;
   padding: 0 calc(var(--inner) / 2);
   background-color: var(--bg);
@@ -13629,7 +13629,7 @@ body.has-header-transparent.has-first-section-overlay-header.template-product .p
 
 .product__thumb__link {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: center;
   align-items: center;
   width: 75px;
@@ -13981,7 +13981,7 @@ product-modal {
   max-width: 600px;
   width: 100%;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: center;
   align-items: center;
   padding: var(--outer);
@@ -14092,7 +14092,7 @@ dialog[closing] .product-modal__outer {
 
 .block__icon__row {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   align-items: flex-start;
 }
 
@@ -15750,7 +15750,7 @@ a.review {
 /*====== Free shipping ======*/
 .free-shipping {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: flex-start;
   align-items: center;
   padding-top: var(--inner);
@@ -16009,7 +16009,7 @@ a.review {
   .cart-bar {
     display: flex;
     align-items: center;
-    min-height: 120px;
+    min-height: 0;
     height: auto;
   }
   .cart-bar::after {
@@ -16037,7 +16037,7 @@ a.review {
     flex: 0 1 100%;
     flex-direction: column;
     align-items: stretch;
-    padding: 10px var(--outer) calc(10px + env(safe-area-inset-bottom));
+    padding: 10px var(--outer);
   }
   .cart-bar__info {
     display: none !important;
@@ -16301,7 +16301,7 @@ a.review {
 
 .cart__content {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
@@ -16546,7 +16546,7 @@ a.review {
 .cart__total {
   position: relative;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: space-between;
   align-items: center;
   font-size: var(--font-body-x-small);
@@ -16613,7 +16613,7 @@ a.review {
 
 .cart__buttons-wrapper {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: space-between;
   width: 100%;
 }
@@ -16956,7 +16956,7 @@ input.cart__acceptance__input {
 }
 
 .cart__message--custom {
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   padding: var(--inner);
   background: var(--bg-accent);
   margin: 15px 0 0;
@@ -17806,7 +17806,7 @@ body.has-line-design .blog-listing .article__image {
 
 .article__meta {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   margin-bottom: 16px;
   font-size: var(--font-body-x-small);
   line-height: 1.4;
@@ -18334,7 +18334,7 @@ body.has-header-transparent .section-overlay-header:first-of-type .article__hero
   justify-content: flex-start;
   text-align: left;
   position: relative;
-  min-height: 120px;
+  min-height: 0;
   margin-bottom: 30px;
   transition: box-shadow 0.3s ease-out;
   border: 1px solid var(--border);
@@ -19933,7 +19933,7 @@ body.is-focused .subcollection__item:focus-within .image-overlay-bottom {
 }
 @media only screen and (min-width: 750px) {
   .footer__blocks {
-    flex-flow: row wrap;
+    flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   }
 }
 @media only screen and (max-width: 749px) {
@@ -22764,7 +22764,7 @@ predictive-search[open=true] .predictive-search {
   --text: var(--text-dark);
   position: relative;
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: flex-start;
   align-items: stretch;
   background-color: var(--bg);
@@ -23318,7 +23318,7 @@ dialog.is-loading .loader {
 /*====== FAQ List ======*/
 .faq-list {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: space-between;
   align-items: flex-start;
 }
@@ -23611,7 +23611,7 @@ dialog.is-loading .loader {
 }
 .text-promo .hero__content {
   padding: var(--inner) var(--outer);
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   align-items: center;
   justify-content: center;
 }
@@ -23621,7 +23621,7 @@ dialog.is-loading .loader {
 
 .text-promo-inner {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -25546,3 +25546,4 @@ predictive-search[results] ~ .predictive-search--empty {
 .header__dropdown__image:hover img {
   transform: scale(1.05); 
 }
+.breadcrumbs::-webkit-scrollbar { display: none; }

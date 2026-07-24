@@ -70,7 +70,7 @@
     <div class="cart-bar__form">
       <div class="cart-bar__submit product__submit product__submit--spb">
         <button type="button"
-          class="btn btn--primary btn--outline product__submit__add{% unless button_add %} product__submit__add--default{% endunless %}"
+          class="btn btn--primary  product__submit__add{% unless button_add %} product__submit__add--default{% endunless %}"
           {% if button_add %} data-add-to-cart-bar{% elsif any_variant_available %} data-cart-bar-scroll{% endif %}
           {% if any_variant_available == false or button_add and current_variant.available != true %} disabled="disabled"{% endif %}>
           <span class="btn__text"{% if button_add %} data-add-to-cart-text{% endif %}>
@@ -114,7 +114,7 @@
           {%- assign button_text = 'products.product.sold_out' | t | append: ' - ' | append: newsletter_text -%}
 
           <button type="button"
-            class="btn btn--primary btn--outline product__submit__add product__submit__add--default product__cart-bar-notification-button"
+            class="btn btn--primary  product__submit__add product__submit__add--default product__cart-bar-notification-button"
             data-cart-bar-product-notification>
             <span class="btn__text">{{ button_text }}</span>
           </button>
