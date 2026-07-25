@@ -1,4 +1,4 @@
-/* Theme cart drawer fully disabled — Rebuy Smart Cart only */
+/* Theme cart drawer OFF — Assortion is the live cart app */
 html body cart-drawer,
 html body #cart-drawer,
 html body .drawer--cart,
@@ -15,11 +15,8 @@ html body .drawer--cart.is-closing {
   pointer-events: none !important;
   width: 0 !important;
   height: 0 !important;
-  max-width: 0 !important;
-  max-height: 0 !important;
   overflow: hidden !important;
   z-index: -9999 !important;
-  transform: none !important;
   position: fixed !important;
   left: -9999px !important;
 }
@@ -27,55 +24,17 @@ html body .drawer--cart.is-closing {
 html body cart-drawer .drawer__underlay,
 html body .drawer--cart .drawer__underlay,
 html body .drawer--cart .underlay,
-html body cart-drawer .underlay,
-html body .drawer--cart .underlay--visible,
-html body cart-drawer .underlay--visible {
+html body cart-drawer .underlay {
   display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
   pointer-events: none !important;
 }
 
+/* Hide Rebuy cart if embed still loads — Assortion is primary */
 #rebuy-cart,
-.rebuy-cart,
-.rebuy-cart__flyout,
-.rebuy-cart__background {
-  z-index: 99999 !important;
-}
-
-/* When Rebuy is closed, fully remove it from the page layer */
-#rebuy-cart:not(.is-visible),
-.rebuy-cart:not(.is-visible) {
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-#rebuy-cart:not(.is-visible) .rebuy-cart__background,
-.rebuy-cart:not(.is-visible) .rebuy-cart__background,
-#rebuy-cart[aria-hidden="true"] .rebuy-cart__background,
-.rebuy-cart[aria-hidden="true"] .rebuy-cart__background,
-#rebuy-cart:not(.is-visible) .rebuy-cart__flyout,
-.rebuy-cart:not(.is-visible) .rebuy-cart__flyout,
-#rebuy-cart[aria-hidden="true"] .rebuy-cart__flyout {
+.rebuy-cart {
   display: none !important;
-  opacity: 0 !important;
   visibility: hidden !important;
   pointer-events: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-#rebuy-cart:not(.is-visible) *,
-.rebuy-cart:not(.is-visible) * {
-  pointer-events: none !important;
-}
-
-@media screen and (max-width: 768px) {
-  .rebuy-cart__flyout {
-    width: 100% !important;
-    max-width: 100% !important;
-  }
 }
 
 :root {

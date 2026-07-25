@@ -1,61 +1,27 @@
 /**
- * Gift box + "Ofte købt sammen" addons share this component.
- * When any checkbox is checked, we intercept ATC once, add all items together,
- * open Rebuy only — never refresh/open the theme cart drawer (that left the blur overlay).
+ * Gift box + Ofte købt sammen addons.
+ * Adds items via cart/add.js then opens Assortion cart (NOT Rebuy / theme drawer).
  */
 (function () {
   const ATC_SELECTOR = '[data-add-to-cart], [type="submit"][name="add"], button[name="add"]';
 
-  function hideThemeCart() {
-    document.querySelectorAll('cart-drawer, .drawer--cart, #cart-drawer').forEach((drawer) => {
-      drawer.classList.remove('is-open', 'is-closing');
-      drawer.setAttribute('aria-hidden', 'true');
-      drawer.style.setProperty('display', 'none', 'important');
-    });
-    document.querySelectorAll('.drawer__underlay, .underlay--visible').forEach((el) => {
-      if (el.closest('#rebuy-cart, .rebuy-cart')) return;
-      el.classList.remove('underlay--visible');
-      el.style.setProperty('display', 'none', 'important');
-      el.style.setProperty('pointer-events', 'none', 'important');
-    });
-    document.dispatchEvent(new CustomEvent('theme:scroll:unlock', { bubbles: true }));
-  }
-
-  function openRebuy() {
-    hideThemeCart();
-    const smartCart = window.Rebuy?.SmartCart;
-    if (!smartCart || typeof smartCart.show !== 'function') return false;
-    smartCart.skip_open = false;
-    smartCart.show();
-    return true;
-  }
-
-  function openRebuyWithRetry() {
-    if (openRebuy()) return;
-    let attempts = 0;
-    const retry = setInterval(() => {
-      attempts += 1;
-      if (openRebuy() || attempts >= 12) clearInterval(retry);
-    }, 200);
-  }
-
   function collectCheckedItems() {
     const items = [];
     const seen = new Set();
-
     document.querySelectorAll('upsell-addon [data-upsell-item].is-checked').forEach((item) => {
       const variantId = parseInt(item.getAttribute('data-selected-variant-id') || '', 10);
       if (!variantId || seen.has(variantId)) return;
       seen.add(variantId);
       items.push({ id: variantId, quantity: 1 });
     });
-
     return items;
   }
 
   function getMainVariantId(form) {
     if (!form) {
-      const input = document.querySelector('product-form input[name="id"], form[action*="/cart/add"] input[name="id"]');
+      const input = document.querySelector(
+        'product-form input[name="id"], form[action*="/cart/add"] input[name="id"]'
+      );
       return input ? parseInt(input.value, 10) : null;
     }
     const formId = form.getAttribute('id');
@@ -66,12 +32,21 @@
 
   function formatMoney(cents) {
     if (window.Shopify?.formatMoney) {
-      return Shopify.formatMoney(
-        cents,
-        window.theme?.moneyFormat || '{{amount_no_decimals}} kr'
-      );
+      return Shopify.formatMoney(cents, window.theme?.moneyFormat || '{{amount_no_decimals}} kr');
     }
     return (cents / 100).toFixed(2) + ' kr';
+  }
+
+  function openAppCart() {
+    if (window.HeadzupCart?.openWithRetry) {
+      window.HeadzupCart.openWithRetry();
+      return;
+    }
+    if (window.HeadzupCart?.open) {
+      window.HeadzupCart.open();
+      return;
+    }
+    document.dispatchEvent(new CustomEvent('theme:product:added', { bubbles: true }));
   }
 
   async function addBundleToCart(submitBtn, checkedItems) {
@@ -82,7 +57,6 @@
     if (mainId && !itemsToAdd.some((item) => item.id === mainId)) {
       itemsToAdd.unshift({ id: mainId, quantity: 1 });
     }
-
     if (!itemsToAdd.length) return;
 
     const originalText = submitBtn.innerHTML;
@@ -100,12 +74,9 @@
         body: JSON.stringify({ items: itemsToAdd }),
       });
 
-      if (!response.ok) {
-        throw new Error('Add to cart failed');
-      }
+      if (!response.ok) throw new Error('Add to cart failed');
 
-      // Do NOT dispatch theme:cart:refresh — that rebuilds theme cart + underlay ghost.
-      // Tell listeners product was added; custom.js / Rebuy open the app cart.
+      // Do not refresh theme cart. Assortion listens to cart/add network calls.
       document.dispatchEvent(
         new CustomEvent('theme:product:added', {
           bubbles: true,
@@ -113,7 +84,6 @@
         })
       );
 
-      // Refresh header count without opening theme drawer
       fetch(window.Shopify.routes.root + 'cart.js')
         .then((r) => r.json())
         .then((cart) => {
@@ -126,8 +96,7 @@
         })
         .catch(() => {});
 
-      hideThemeCart();
-      openRebuyWithRetry();
+      openAppCart();
 
       setTimeout(() => {
         submitBtn.classList.remove('is-loading');
@@ -144,16 +113,15 @@
     }
   }
 
-  // One capture listener for the whole page — merges gift box + addon checkboxes
   document.addEventListener(
     'click',
     (event) => {
       const submitBtn = event.target.closest(ATC_SELECTOR);
       if (!submitBtn) return;
-      if (submitBtn.closest('.rebuy-cart, #rebuy-cart, cart-drawer')) return;
+      if (submitBtn.closest('cart-drawer')) return;
 
       const checkedItems = collectCheckedItems();
-      if (!checkedItems.length) return; // normal ATC (no gift/addons)
+      if (!checkedItems.length) return;
 
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -180,7 +148,6 @@
               if (e.target.closest('a')) return;
               item.classList.toggle('is-checked');
               item.classList.toggle('is-unchecked');
-              // Recalc totals on every upsell-addon that has a total row
               document.querySelectorAll('upsell-addon').forEach((el) => {
                 if (typeof el.calculateTotal === 'function') el.calculateTotal();
               });
@@ -190,13 +157,10 @@
 
         calculateTotal() {
           if (!this.totalPriceEl) return;
-
           let total = this.mainProductPrice || 0;
-          // Include every checked addon on the page in "I alt" when this block shows total
           document.querySelectorAll('upsell-addon [data-upsell-item].is-checked').forEach((item) => {
             total += parseInt(item.getAttribute('data-selected-price') || 0, 10);
           });
-
           this.totalPriceEl.innerHTML = formatMoney(total);
         }
       }

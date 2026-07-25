@@ -1,374 +1,168 @@
 /*
-* Broadcast Theme
-*
-* Use this file to add custom Javascript to Broadcast.  Keeping your custom
-* Javascript in this fill will make it easier to update Broadcast. In order
-* to use this file you will need to open layout/theme.liquid and uncomment
-* the custom.js script import line near the bottom of the file.
-*/
+ * Broadcast Theme — custom.js
+ * Cart: Assortion app drawer only. Theme cart drawer stays OFF.
+ * Do NOT open Rebuy — store uses Assortion.
+ */
 
+(function () {
+  function killThemeCartDrawer() {
+    document
+      .querySelectorAll(
+        'cart-drawer, #cart-drawer, .drawer--cart, [data-section-type="cart-drawer"], .shopify-section:has(cart-drawer)'
+      )
+      .forEach((node) => node.remove());
 
-(function() {
-  function openRebuySmartCart() {
-    const smartCart = window.Rebuy?.SmartCart;
-    if (!smartCart || typeof smartCart.show !== 'function') return false;
-
-    // Ensure Rebuy is allowed to open after ATC
-    smartCart.skip_open = false;
-    smartCart.show();
-    return true;
-  }
-
-  function hideThemeCartDrawer() {
-    // Remove theme cart from the page entirely
-    document.querySelectorAll(
-      'cart-drawer, #cart-drawer, .drawer--cart, [data-section-type="cart-drawer"], .shopify-section:has(cart-drawer)'
-    ).forEach((node) => {
-      node.remove();
-    });
-
-    // Only cart underlays — do not touch mobile nav / search underlays
-    document.querySelectorAll(
-      'cart-drawer .underlay, .drawer--cart .underlay, .drawer--cart .drawer__underlay, cart-drawer .drawer__underlay'
-    ).forEach((underlay) => underlay.remove());
+    document
+      .querySelectorAll(
+        'cart-drawer .underlay, .drawer--cart .underlay, .drawer--cart .drawer__underlay, cart-drawer .drawer__underlay'
+      )
+      .forEach((el) => el.remove());
 
     document.dispatchEvent(new CustomEvent('theme:scroll:unlock', { bubbles: true }));
   }
 
-  function watchThemeCartDrawer() {
-    const kill = () => hideThemeCartDrawer();
-    kill();
+  function openAssortionCart() {
+    killThemeCartDrawer();
 
-    const observer = new MutationObserver(() => {
-      if (document.querySelector('cart-drawer, .drawer--cart, [data-section-type="cart-drawer"]')) {
-        kill();
+    // Assortion / common app APIs
+    try {
+      if (typeof window.Assortion?.openCart === 'function') {
+        window.Assortion.openCart();
+        return true;
       }
-    });
+      if (typeof window.Assortion?.Cart?.open === 'function') {
+        window.Assortion.Cart.open();
+        return true;
+      }
+      if (typeof window.AST?.openCart === 'function') {
+        window.AST.openCart();
+        return true;
+      }
+      if (typeof window.AST?.Cart?.open === 'function') {
+        window.AST.Cart.open();
+        return true;
+      }
+      if (typeof window.assortion?.openCart === 'function') {
+        window.assortion.openCart();
+        return true;
+      }
+    } catch (e) {
+      console.warn('Assortion openCart error', e);
+    }
 
-    observer.observe(document.documentElement, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['class', 'aria-hidden', 'style']
-    });
-  }
+    // Shopify standard action (Assortion may hook this)
+    try {
+      if (window.Shopify?.actions?.openCart) {
+        window.Shopify.actions.openCart();
+        return true;
+      }
+    } catch (e) {}
 
-  function initRebuyCartOpenOnAdd() {
-    document.addEventListener('theme:product:added', () => {
-      hideThemeCartDrawer();
+    // Events Assortion-style carts often listen for
+    document.dispatchEvent(new CustomEvent('assortion:cart:open', { bubbles: true }));
+    document.dispatchEvent(new CustomEvent('ast:cart:open', { bubbles: true }));
+    document.dispatchEvent(new CustomEvent('cart:open', { bubbles: true }));
 
-      // Small delay so Rebuy can sync cart state first
-      setTimeout(() => {
-        hideThemeCartDrawer();
-        if (openRebuySmartCart()) return;
-
-        // Retry briefly if Rebuy is still booting (common on mobile)
-        let attempts = 0;
-        const retry = setInterval(() => {
-          attempts += 1;
-          hideThemeCartDrawer();
-          if (openRebuySmartCart() || attempts >= 10) {
-            clearInterval(retry);
-          }
-        }, 200);
-      }, 150);
-    });
-
-    // Some custom add flows fire the singular event name
-    document.addEventListener('theme:product:add', () => {
-      hideThemeCartDrawer();
-      setTimeout(() => {
-        hideThemeCartDrawer();
-        openRebuySmartCart();
-      }, 150);
-    });
-  }
-
-  function initCartIconOpensRebuy() {
-    document.addEventListener(
-      'click',
-      (event) => {
-        const cartToggle = event.target.closest(
-          '[data-cart-toggle], .header-topbar__icon--cart, a[href="/cart"], a[href$="/cart"]'
-        );
-        if (!cartToggle) return;
-
-        // Don't intercept quick-add / product forms
-        if (event.target.closest('[data-add-to-cart], [data-quick-add-btn], .quick-add__holder, form[action*="/cart/add"]')) {
-          return;
-        }
-
-        if (cartToggle.closest('.rebuy-cart, #rebuy-cart')) return;
-
-        event.preventDefault();
-        event.stopPropagation();
-        hideThemeCartDrawer();
-        openRebuySmartCart();
-      },
-      true
+    // Click Assortion cart UI if present
+    const trigger = document.querySelector(
+      [
+        '[data-assortion-open-cart]',
+        '[data-ast-open-cart]',
+        '.ast-cart-toggle',
+        '#ast-cart-icon',
+        '.assortion-cart-button',
+        '[data-assortion-cart]',
+      ].join(', ')
     );
-
-    document.addEventListener('theme:cart-drawer:show', (event) => {
-      event.stopImmediatePropagation();
-      hideThemeCartDrawer();
-      openRebuySmartCart();
-    });
-
-    document.addEventListener('theme:cart:toggle', (event) => {
-      event.stopImmediatePropagation();
-      hideThemeCartDrawer();
-      openRebuySmartCart();
-    });
-  }
-
-  function unlockPageAfterCartClose() {
-    hideThemeCartDrawer();
-
-    document.dispatchEvent(new CustomEvent('theme:scroll:unlock', { bubbles: true }));
-    document.documentElement.classList.remove('no-scroll', 'overflow-hidden');
-    document.body.classList.remove('no-scroll', 'overflow-hidden', 'scroll-locked');
-    document.body.style.removeProperty('overflow');
-    document.documentElement.style.removeProperty('overflow');
-    document.body.style.removeProperty('padding-right');
-
-    // Clear leftover theme cart only — leave mobile nav / search underlays alone
-    hideThemeCartDrawer();
-
-    // Force Rebuy backdrop off when cart is not visible
-    const rebuyCart = document.querySelector('#rebuy-cart, .rebuy-cart');
-    if (rebuyCart && !rebuyCart.classList.contains('is-visible')) {
-      rebuyCart.querySelectorAll('.rebuy-cart__background').forEach((bg) => {
-        bg.style.setProperty('display', 'none', 'important');
-        bg.style.setProperty('opacity', '0', 'important');
-        bg.style.setProperty('pointer-events', 'none', 'important');
-      });
+    if (trigger) {
+      trigger.click();
+      return true;
     }
+
+    return false;
   }
 
-  function initRebuyCart() {
-    document.addEventListener("rebuy:smartcart.ready", (e) => {
-      const cart = e.detail.smartcart.cart;
-      showPaymentIcons();
-      freeShippingLimit(cart);
-      hideThemeCartDrawer();
-
-      // Make sure theme drawer never blocks Rebuy on mobile
-      if (window.Rebuy?.SmartCart) {
-        window.Rebuy.SmartCart.skip_open = false;
-      }
-    });
-  
-    document.addEventListener("rebuy:cart.change", (e) => {
-      const cart = e.detail.cart.cart;
-      showPaymentIcons();
-      freeShippingLimit(cart);
-      hideThemeCartDrawer();
-    });
-
-    document.addEventListener('rebuy:smartcart.hide', () => {
-      unlockPageAfterCartClose();
-      // Rebuy sometimes leaves backdrop for a tick
-      setTimeout(unlockPageAfterCartClose, 50);
-      setTimeout(unlockPageAfterCartClose, 300);
-    });
-
-    document.addEventListener('rebuy:smartcart.show', () => {
-      hideThemeCartDrawer();
-      const rebuyCart = document.querySelector('#rebuy-cart, .rebuy-cart');
-      rebuyCart?.querySelectorAll('.rebuy-cart__background').forEach((bg) => {
-        bg.style.removeProperty('display');
-        bg.style.removeProperty('opacity');
-        bg.style.removeProperty('pointer-events');
-      });
-    });
-
-    initRebuyCartOpenOnAdd();
-    initCartIconOpensRebuy();
-    watchThemeCartDrawer();
-    hideThemeCartDrawer();
+  function openAssortionWithRetry() {
+    if (openAssortionCart()) return;
+    let attempts = 0;
+    const id = setInterval(() => {
+      attempts += 1;
+      if (openAssortionCart() || attempts >= 12) clearInterval(id);
+    }, 200);
   }
-  
-  function showPaymentIcons() {
+
+  // After ATC — open Assortion, never theme / Rebuy
+  document.addEventListener('theme:product:added', () => {
+    killThemeCartDrawer();
     setTimeout(() => {
-      const paymentIcons = document.querySelector(".cart__drawer__payment__icons");
-      const checkoutArea = document.querySelector('div[data-rebuy-component="checkout-area"]');
-  
-      if (!paymentIcons || !checkoutArea || checkoutArea.querySelector(".cloned-payment-icons")) {
+      killThemeCartDrawer();
+      openAssortionWithRetry();
+    }, 150);
+  });
+
+  document.addEventListener('theme:product:add', () => {
+    killThemeCartDrawer();
+    setTimeout(() => {
+      killThemeCartDrawer();
+      openAssortionWithRetry();
+    }, 150);
+  });
+
+  // Cart icon → Assortion (do not open Rebuy / theme)
+  document.addEventListener(
+    'click',
+    (event) => {
+      const cartToggle = event.target.closest(
+        '[data-cart-toggle], .header-topbar__icon--cart, a[href="/cart"], a[href$="/cart"]'
+      );
+      if (!cartToggle) return;
+      if (event.target.closest('[data-add-to-cart], [data-quick-add-btn], .quick-add__holder, form[action*="/cart/add"]')) {
         return;
       }
-  
-      const clonedPaymentIcons = paymentIcons.cloneNode(true);
-      clonedPaymentIcons.classList.add("cloned-payment-icons"); 
-      checkoutArea.appendChild(clonedPaymentIcons);
-    }, 500);
-  }
-
-  function freeShippingLimit(cart) {
-    const selectors = {
-      finalAmount: ".rebuy-cart__flyout-subtotal .rebuy-cart__flyout-subtotal-final-amount span:last-child",
-      compareAmount: ".rebuy-cart__flyout-subtotal .rebuy-cart__flyout-subtotal-compare-amount span:last-child",
-      freeShippingLimit: ".cart__drawer__free-shipping-limit",
-      checkoutArea: 'div[data-rebuy-component="cart-subtotal"]',
-      shippingCost: ".cart__drawer__free-shipping-limit__amount"
-    };
-    const translations = {
-      freeShipping: "Free",
-    }
-
-    function calculate() {
-      const originalFinalAmount = getRebuyHtmlPrice(selectors.finalAmount);
-      const originalCompareAmount = getRebuyHtmlPrice(selectors.compareAmount);
-      const currency = cart.currency.toLowerCase();
-      const freeShippingLimit = window.theme.settings[`freeShippingLimit_${currency}`] ? Number(window.theme.settings[`freeShippingLimit_${currency}`]) * 100 : null;
-      const shippingCost = window.theme.settings[`shippingPrice_${currency}`] ? Number(window.theme.settings[`shippingPrice_${currency}`]) * 100 : null;
-
-      let total = originalFinalAmount;
-      let totalCompare = originalCompareAmount;
-      let hasFreeShipping = true;
-
-      if(total <= freeShippingLimit) {
-        total += shippingCost;
-        totalCompare += shippingCost;
-
-        hasFreeShipping = false;
-      }
-
-      total = total / 100;
-      totalCompare = totalCompare / 100;
-
-      return { total, totalCompare, shippingCost, hasFreeShipping };
-    }
-
-    function formatPrice(price) {
-      return price.toLocaleString('en-US', { style: 'currency', currency: cart.currency, minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function getRebuyHtmlPrice(selector) {
-      const value = document.querySelector(selector)?.innerText;
-  
-      if(!value) {
-        return null;
-      }
-  
-      let price = value.replace(/[^\d.]/g, '');
-      return parseFloat(price);;
-    }
-
-    function setInnerText(selector, value) {
-      const el = document.querySelector(selector);
-
-      if(el) {
-        el.innerText = value;
-      }
-    }
-
-    function addOrUpdateShippingPrice(shippingCost, hasFreeShipping) {
-      const cartSubtotalEl = document.querySelector('[data-rebuy-component="cart-subtotal"]');
-      
-      if (!cartSubtotalEl) {
+      // Let Assortion's own buttons work
+      if (cartToggle.closest('[class*="ast-"], [id*="ast-"], [class*="assortion"], [id*="assortion"]')) {
         return;
       }
 
-      // Create subtotal HTML structure
-      const subtotalHTML = `
-        <div class="rebuy-cart__flyout-shipping-price">
-          <div class="rebuy-cart__flyout-subtotal-shipping-label">
-            <span>Fragt</span>
-          </div>
-          <div class="rebuy-cart__flyout-subtotal-shipping">
-            <span>
-              <span class="rebuy-cart__flyout-subtotal-final-shipping">
-                <span>${hasFreeShipping ? translations.freeShipping : formatPrice(shippingCost / 100)}</span>
-              </span>
-            </span>
-          </div>
-        </div>
-      `;
+      event.preventDefault();
+      event.stopPropagation();
+      killThemeCartDrawer();
+      openAssortionCart();
+    },
+    true
+  );
 
-      // Create a temporary container
-      const tempContainer = document.createElement('div');
-      tempContainer.innerHTML = subtotalHTML;
+  document.addEventListener('theme:cart-drawer:show', (event) => {
+    event.stopImmediatePropagation();
+    killThemeCartDrawer();
+    openAssortionCart();
+  });
 
-      // Remove existing shipping price element if it exists
-      const existingShippingPrice = cartSubtotalEl.querySelector('.rebuy-cart__flyout-shipping-price');
-      if (existingShippingPrice) {
-        existingShippingPrice.remove();
-      }
+  document.addEventListener('theme:cart:toggle', (event) => {
+    event.stopImmediatePropagation();
+    killThemeCartDrawer();
+    openAssortionCart();
+  });
 
-      // Append the new element
-      cartSubtotalEl.appendChild(tempContainer.firstElementChild);
+  // Watcher: if theme cart ever appears, delete it
+  const observer = new MutationObserver(() => {
+    if (document.querySelector('cart-drawer, .drawer--cart, [data-section-type="cart-drawer"]')) {
+      killThemeCartDrawer();
     }
+  });
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class'],
+  });
 
-    function addOrUpdateEstimatedDelivery() {
-      const cartSubtotalEl = document.querySelector('[data-rebuy-component="cart-subtotal"]');
-      const estimatedDelivery = document.querySelector(".estimated-delivery");
+  killThemeCartDrawer();
 
-      if (estimatedDelivery && cartSubtotalEl) {
-        const existingEstimatedDelivery = cartSubtotalEl.querySelector(".estimated-delivery");
-        if (existingEstimatedDelivery) {
-          existingEstimatedDelivery.remove();
-        }
-
-        const clonedEstimatedDelivery = estimatedDelivery.cloneNode(true);
-        cartSubtotalEl.appendChild(clonedEstimatedDelivery);
-      }
-    }
-
-    setTimeout(() => {
-      const { total, totalCompare, shippingCost, hasFreeShipping } = calculate();
-
-      setInnerText(selectors.finalAmount, formatPrice(total));
-      setInnerText(selectors.compareAmount, formatPrice(totalCompare));
-      
-      addOrUpdateShippingPrice(shippingCost, hasFreeShipping);
-      addOrUpdateEstimatedDelivery();
-    });
-  }  
-  
-  initRebuyCart();
-
-  class HeaderState {
-    constructor() {
-      this.header = document.querySelector('header-component');
-      this.drawerBody = document.querySelector('.drawer__body');
-      this.isStuck = false;
-
-      this.init();
-    }
-
-    init() {
-      if (!this.header || !this.drawerBody) return;
-
-      this.updateState();
-      this.updateDrawerMargin();
-
-      this.observer = new MutationObserver(() => {
-        this.updateState();
-        this.updateDrawerMargin();
-      });
-      
-      this.observer.observe(this.header, {
-        attributes: true,
-        attributeFilter: ['class']
-      });
-
-      window.addEventListener('scroll', () => {
-        this.updateState();
-        this.updateDrawerMargin();
-      });
-    }
-
-    updateState() {
-      this.isStuck = this.header.classList.contains('js__header__stuck');
-    }
-
-    updateDrawerMargin() {
-      this.drawerBody.style.marginTop = this.isStuck ? '30px' : '60px';
-    }
-  }
-  new HeaderState();
-
-
-  // ^^ Keep your scripts inside this IIFE function call to 
-  // avoid leaking your variables into the global scope.
+  // Expose for gift/addon script
+  window.HeadzupCart = {
+    open: openAssortionCart,
+    openWithRetry: openAssortionWithRetry,
+    killTheme: killThemeCartDrawer,
+  };
 })();

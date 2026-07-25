@@ -1610,7 +1610,7 @@
                 );
               }
 
-              // Rebuy only — never refresh/open theme cart drawer UI
+              // Assortion cart app — do not open theme drawer or Rebuy
               document.dispatchEvent(
                 new CustomEvent('theme:product:added', {
                   bubbles: true,
@@ -1618,9 +1618,8 @@
                 })
               );
 
-              if (window.Rebuy?.SmartCart && typeof window.Rebuy.SmartCart.show === 'function') {
-                window.Rebuy.SmartCart.skip_open = false;
-                window.Rebuy.SmartCart.show();
+              if (window.HeadzupCart?.openWithRetry) {
+                window.HeadzupCart.openWithRetry();
                 return;
               }
 
@@ -1653,9 +1652,8 @@
                 })
               );
 
-              if (window.Rebuy?.SmartCart && typeof window.Rebuy.SmartCart.show === 'function') {
-                window.Rebuy.SmartCart.skip_open = false;
-                window.Rebuy.SmartCart.show();
+              if (window.HeadzupCart?.openWithRetry) {
+                window.HeadzupCart.openWithRetry();
                 return;
               }
 
@@ -2450,10 +2448,9 @@
        */
 
       toggleCartDrawer() {
-        // DISABLED — open Rebuy instead
-        if (window.Rebuy?.SmartCart && typeof window.Rebuy.SmartCart.show === 'function') {
-          window.Rebuy.SmartCart.skip_open = false;
-          window.Rebuy.SmartCart.show();
+        // Theme cart disabled — Assortion handles cart UI
+        if (window.HeadzupCart?.open) {
+          window.HeadzupCart.open();
         }
         return;
       }
@@ -3323,18 +3320,13 @@
               button.addEventListener('click', (e) => {
                 e.preventDefault();
 
-                // Prefer Rebuy Smart Cart when available
-                if (window.Rebuy?.SmartCart && typeof window.Rebuy.SmartCart.show === 'function') {
-                  window.Rebuy.SmartCart.skip_open = false;
-                  window.Rebuy.SmartCart.show();
+                // Assortion cart — never theme drawer / Rebuy
+                if (window.HeadzupCart?.open) {
+                  window.HeadzupCart.open();
                   return;
                 }
 
-                const cartDrawer = document.querySelector(selectors$m.cartDrawer);
-                if (cartDrawer) {
-                  cartDrawer.dispatchEvent(new CustomEvent('theme:cart-drawer:show'));
-                  window.a11y.lastElement = button;
-                }
+                document.dispatchEvent(new CustomEvent('theme:cart:toggle', {bubbles: true}));
               });
             });
           }
