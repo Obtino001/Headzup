@@ -1610,8 +1610,21 @@
                 );
               }
 
-              // Never hard-redirect when Rebuy Smart Cart is available
-              if (theme.settings.cartType === 'page' && !(window.Rebuy?.SmartCart)) {
+              // Rebuy only — never refresh/open theme cart drawer UI
+              document.dispatchEvent(
+                new CustomEvent('theme:product:added', {
+                  bubbles: true,
+                  detail: {response: response},
+                })
+              );
+
+              if (window.Rebuy?.SmartCart && typeof window.Rebuy.SmartCart.show === 'function') {
+                window.Rebuy.SmartCart.skip_open = false;
+                window.Rebuy.SmartCart.show();
+                return;
+              }
+
+              if (theme.settings.cartType === 'page') {
                 window.location = theme.routes.cart_url;
                 return;
               }
@@ -2327,35 +2340,22 @@
       }
 
       connectedCallback() {
+        // Theme cart drawer is fully disabled — remove from DOM, Rebuy only.
         const drawerSection = this.closest(selectors$r.shopifySection);
+        this.style.setProperty('display', 'none', 'important');
+        this.setAttribute('aria-hidden', 'true');
+        this.cartDrawerIsOpen = false;
 
-        /* Prevent duplicated cart drawers */
-        if (window.theme.hasCartDrawer) {
-          if (!window.Shopify.designMode) {
-            drawerSection.remove();
-            return;
-          } else {
-            const errorMessage = document.createElement('div');
-            errorMessage.classList.add(classes$m.drawerEditorError);
-            errorMessage.innerText = 'Cart drawer section already exists.';
+        // Still register cart-items helper for ATC without a visible drawer
+        appendCartItems();
 
-            if (!this.querySelector(`.${classes$m.drawerEditorError}`)) {
-              this.querySelector(selectors$r.cartDrawerInner).append(errorMessage);
-            }
-
-            this.classList.add(classes$m.duplicate);
-          }
+        // Do not listen for open events — never show theme cart
+        if (drawerSection && !window.Shopify.designMode) {
+          drawerSection.remove();
+          return;
         }
 
-        window.theme.hasCartDrawer = true;
-
-        this.addEventListener('theme:cart-drawer:show', this.openCartDrawer);
-        document.addEventListener('theme:cart:toggle', this.toggleCartDrawer);
-        document.addEventListener('theme:quick-add:open', this.closeCartDrawer);
-        document.addEventListener('theme:product:added', this.openCartDrawerOnProductAdded);
-        document.addEventListener('shopify:block:select', this.openCartDrawerOnSelect);
-        document.addEventListener('shopify:section:select', this.openCartDrawerOnSelect);
-        document.addEventListener('shopify:section:deselect', this.closeCartDrawerOnDeselect);
+        window.theme.hasCartDrawer = false;
       }
 
       disconnectedCallback() {
@@ -2379,9 +2379,8 @@
        * @return  {Void}
        */
       openCartDrawerOnProductAdded() {
-        if (!this.cartDrawerIsOpen) {
-          this.openCartDrawer();
-        }
+        // DISABLED — never open theme cart on ATC
+        return;
       }
 
       /**
@@ -2415,9 +2414,11 @@
        */
 
       openCartDrawer(forceOpen = false) {
-        // Theme cart drawer disabled — Rebuy Smart Cart is used instead.
+        // COMPLETELY DISABLED — Rebuy Smart Cart only. Never open theme drawer.
         this.classList.remove(classes$m.open, classes$m.closing);
         this.cartDrawerIsOpen = false;
+        this.setAttribute('aria-hidden', 'true');
+        this.style.setProperty('display', 'none', 'important');
         return;
       }
 
@@ -2428,12 +2429,10 @@
        */
 
       closeCartDrawer() {
-        if (!this.classList.contains(classes$m.open)) return;
-
-        this.classList.add(classes$m.closing);
-        this.classList.remove(classes$m.open);
-
+        this.classList.remove(classes$m.open, classes$m.closing);
         this.cartDrawerIsOpen = false;
+        this.setAttribute('aria-hidden', 'true');
+        this.style.setProperty('display', 'none', 'important');
 
         document.dispatchEvent(
           new CustomEvent('theme:cart-drawer:close', {
@@ -2441,15 +2440,7 @@
           })
         );
 
-        this.a11y.removeTrapFocus();
-        this.a11y.autoFocusLastElement();
-
-        document.body.removeEventListener('click', this.onBodyClickEvent);
         document.dispatchEvent(new CustomEvent('theme:scroll:unlock', {bubbles: true}));
-
-        window.theme.waitForAnimationEnd(this.cartDrawerInner).then(() => {
-          this.classList.remove(classes$m.closing);
-        });
       }
 
       /**
@@ -2459,11 +2450,12 @@
        */
 
       toggleCartDrawer() {
-        if (!this.cartDrawerIsOpen) {
-          this.openCartDrawer();
-        } else {
-          this.closeCartDrawer();
+        // DISABLED — open Rebuy instead
+        if (window.Rebuy?.SmartCart && typeof window.Rebuy.SmartCart.show === 'function') {
+          window.Rebuy.SmartCart.skip_open = false;
+          window.Rebuy.SmartCart.show();
         }
+        return;
       }
 
       /**

@@ -20,38 +20,33 @@
   }
 
   function hideThemeCartDrawer() {
-    document.querySelectorAll('cart-drawer, .drawer--cart, #cart-drawer').forEach((drawer) => {
-      drawer.classList.remove('is-open', 'is-closing');
-      drawer.setAttribute('aria-hidden', 'true');
-      drawer.style.setProperty('display', 'none', 'important');
-      drawer.style.setProperty('visibility', 'hidden', 'important');
-      drawer.style.setProperty('pointer-events', 'none', 'important');
-      drawer.style.setProperty('opacity', '0', 'important');
+    // Remove theme cart from the page entirely
+    document.querySelectorAll(
+      'cart-drawer, #cart-drawer, .drawer--cart, [data-section-type="cart-drawer"], .shopify-section:has(cart-drawer)'
+    ).forEach((node) => {
+      node.remove();
     });
 
+    // Only cart underlays — do not touch mobile nav / search underlays
     document.querySelectorAll(
-      '.drawer--cart .drawer__underlay, cart-drawer .drawer__underlay, .drawer--cart .underlay, cart-drawer .underlay'
-    ).forEach((underlay) => {
-      underlay.classList.remove('underlay--visible');
-      underlay.style.setProperty('display', 'none', 'important');
-      underlay.style.setProperty('opacity', '0', 'important');
-      underlay.style.setProperty('visibility', 'hidden', 'important');
-    });
+      'cart-drawer .underlay, .drawer--cart .underlay, .drawer--cart .drawer__underlay, cart-drawer .drawer__underlay'
+    ).forEach((underlay) => underlay.remove());
+
+    document.dispatchEvent(new CustomEvent('theme:scroll:unlock', { bubbles: true }));
   }
 
   function watchThemeCartDrawer() {
-    const killOpen = () => hideThemeCartDrawer();
-
-    killOpen();
+    const kill = () => hideThemeCartDrawer();
+    kill();
 
     const observer = new MutationObserver(() => {
-      const openDrawer = document.querySelector(
-        'cart-drawer.is-open, .drawer--cart.is-open, cart-drawer.is-closing, .drawer--cart.is-closing'
-      );
-      if (openDrawer) killOpen();
+      if (document.querySelector('cart-drawer, .drawer--cart, [data-section-type="cart-drawer"]')) {
+        kill();
+      }
     });
 
     observer.observe(document.documentElement, {
+      childList: true,
       subtree: true,
       attributes: true,
       attributeFilter: ['class', 'aria-hidden', 'style']
@@ -136,14 +131,8 @@
     document.documentElement.style.removeProperty('overflow');
     document.body.style.removeProperty('padding-right');
 
-    // Clear any leftover theme underlays outside Rebuy
-    document.querySelectorAll('.underlay--visible, .drawer__underlay').forEach((underlay) => {
-      if (underlay.closest('#rebuy-cart, .rebuy-cart')) return;
-      underlay.classList.remove('underlay--visible');
-      underlay.style.setProperty('display', 'none', 'important');
-      underlay.style.setProperty('opacity', '0', 'important');
-      underlay.style.setProperty('pointer-events', 'none', 'important');
-    });
+    // Clear leftover theme cart only — leave mobile nav / search underlays alone
+    hideThemeCartDrawer();
 
     // Force Rebuy backdrop off when cart is not visible
     const rebuyCart = document.querySelector('#rebuy-cart, .rebuy-cart');
