@@ -1,170 +1,172 @@
 /*
- * Assortion = cart UI. Theme cart-drawer = hidden AJAX stub only.
- * Do not force-open Assortion after ATC (app opens via network intercept).
- * Cart icon: open Assortion without navigating to /cart.
+ * Assortion cart UI. Theme cart-drawer = hidden AJAX stub.
+ * Mobile often auto-opens; desktop often needs an explicit nudge.
  */
 
 (function () {
+  const OPEN_CLASSES = ['open', 'is-open', 'active', 'is-active', 'visible', 'is-visible', 'show', 'is-show'];
+
   function isThemeStub(node) {
     return !!(node?.hasAttribute?.('data-headzup-cart-stub') || node?.closest?.('[data-headzup-cart-stub]'));
   }
 
   function killThemeStubOnly() {
-    document.querySelectorAll('[data-headzup-cart-stub], cart-drawer#cart-drawer').forEach((drawer) => {
-      if (!isThemeStub(drawer) && drawer.id === 'cart-drawer' && !drawer.hasAttribute('data-headzup-cart-stub')) {
-        // Don't touch a non-stub #cart-drawer if Assortion reused the id
-        if (!drawer.closest('[data-section-type="cart-drawer"]')) return;
-      }
+    document.querySelectorAll('[data-headzup-cart-stub]').forEach((drawer) => {
       drawer.classList.remove('is-open', 'is-closing');
       drawer.setAttribute('aria-hidden', 'true');
       drawer.style.setProperty('display', 'none', 'important');
     });
   }
 
-  function findAssortionApi() {
-    const paths = [
-      ['Assortion', 'openCart'],
-      ['Assortion', 'Cart', 'open'],
-      ['Assortion', 'cart', 'open'],
-      ['Assortion', 'open'],
-      ['AST', 'openCart'],
-      ['AST', 'Cart', 'open'],
-      ['AST', 'open'],
-      ['assortion', 'openCart'],
-      ['assortion', 'open'],
-      ['AssortionCart', 'open'],
-      ['AssortionCart', 'show'],
-      ['AssortionCart', 'openCart'],
-    ];
+  function walk(node, fn) {
+    if (!node) return;
+    fn(node);
+    if (node.shadowRoot) walk(node.shadowRoot, fn);
+    const children = node.children || [];
+    for (let i = 0; i < children.length; i++) walk(children[i], fn);
+  }
 
-    for (const path of paths) {
-      let ctx = window;
-      let fn = null;
-      for (let i = 0; i < path.length; i++) {
-        ctx = ctx?.[path[i]];
-        if (ctx == null) break;
-        if (i === path.length - 1 && typeof ctx === 'function') fn = ctx;
+  function looksLikeAssortionCart(el) {
+    if (!el || el.nodeType !== 1 || isThemeStub(el)) return false;
+    if (el.closest?.('header, .header-topbar, nav')) return false;
+
+    const id = (el.id || '').toLowerCase();
+    const cls = (typeof el.className === 'string' ? el.className : el.className?.baseVal || '').toLowerCase();
+    const tag = (el.tagName || '').toLowerCase();
+    const attrs = `${el.getAttribute('data-testid') || ''} ${el.getAttribute('role') || ''}`.toLowerCase();
+
+    if (/rebuy/.test(id + cls + tag)) return false;
+    if (tag === 'cart-drawer' || tag === 'cart-items') return false;
+
+    if (/assort|ast-cart|ast_cart|astcart/.test(id + cls + tag + attrs)) return true;
+    if (el.getAttribute('data-assortion-cart') != null) return true;
+    if (el.getAttribute('data-ast-cart') != null) return true;
+
+    const text = (el.textContent || '').slice(0, 500).toLowerCase();
+    if (text.includes('indkøbskurv') || text.includes('indkobskurv')) return true;
+
+    return false;
+  }
+
+  function collectAssortionNodes() {
+    const found = [];
+    walk(document.body, (el) => {
+      if (looksLikeAssortionCart(el)) found.push(el);
+    });
+    return found;
+  }
+
+  function isVisibleCart(el) {
+    if (!el) return false;
+    const style = window.getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
+    const rect = el.getBoundingClientRect();
+    if (rect.width < 80 || rect.height < 80) return false;
+    // Closed drawers often sit off-screen to the right
+    if (rect.left > window.innerWidth - 40) return false;
+    if (style.transform && /translateX\((100%|[1-9]\d{2,}px)\)/.test(style.transform)) return false;
+    return true;
+  }
+
+  function isAssortionOpen() {
+    return collectAssortionNodes().some(isVisibleCart);
+  }
+
+  function revealNode(el) {
+    if (!el || isThemeStub(el)) return;
+    OPEN_CLASSES.forEach((c) => el.classList.add(c));
+    el.removeAttribute('hidden');
+    el.setAttribute('aria-hidden', 'false');
+    el.style.removeProperty('display');
+    el.style.removeProperty('visibility');
+    el.style.removeProperty('opacity');
+    el.style.removeProperty('pointer-events');
+    el.style.setProperty('transform', 'translateX(0)', 'important');
+    el.style.setProperty('right', '0', 'important');
+    el.style.setProperty('z-index', '2147483000', 'important');
+    el.style.setProperty('pointer-events', 'auto', 'important');
+    if (typeof el.open === 'function') {
+      try {
+        el.open();
+      } catch (e) {}
+    }
+    if ('open' in el && typeof el.open === 'boolean') {
+      try {
+        el.open = true;
+      } catch (e) {}
+    }
+  }
+
+  function findAssortionApi() {
+    const keys = Object.keys(window).filter((k) => /ast|assort/i.test(k));
+    for (const key of keys) {
+      const val = window[key];
+      if (!val) continue;
+      if (typeof val === 'function' && /open|cart/i.test(key)) {
+        try {
+          return val.bind(window);
+        } catch (e) {}
       }
-      if (fn) {
-        const owner = path.length > 1 ? path.slice(0, -1).reduce((o, k) => o?.[k], window) : window;
-        return fn.bind(owner || window);
+      if (typeof val !== 'object') continue;
+      for (const method of ['openCart', 'open', 'show', 'toggle', 'showCart', 'openDrawer']) {
+        if (typeof val[method] === 'function') return val[method].bind(val);
+        if (val.Cart && typeof val.Cart[method] === 'function') return val.Cart[method].bind(val.Cart);
+        if (val.cart && typeof val.cart[method] === 'function') return val.cart[method].bind(val.cart);
+        if (val.drawer && typeof val.drawer[method] === 'function') return val.drawer[method].bind(val.drawer);
       }
     }
-
-    try {
-      for (const key of Object.keys(window)) {
-        if (!/^(ast|assort)/i.test(key)) continue;
-        const val = window[key];
-        if (!val || typeof val !== 'object') continue;
-        for (const method of ['openCart', 'open', 'show', 'toggle']) {
-          if (typeof val[method] === 'function') return val[method].bind(val);
-          if (val.Cart && typeof val.Cart[method] === 'function') return val.Cart[method].bind(val.Cart);
-          if (val.cart && typeof val.cart[method] === 'function') return val.cart[method].bind(val.cart);
-        }
-      }
-    } catch (e) {}
-
     return null;
   }
 
-  function isAssortionDrawer(el) {
-    if (!el || isThemeStub(el)) return false;
-    if (el.matches?.('[data-headzup-cart-stub]')) return false;
-    const id = (el.id || '').toLowerCase();
-    const cls = (typeof el.className === 'string' ? el.className : '').toLowerCase();
-    const tag = (el.tagName || '').toLowerCase();
-    return (
-      /assort|ast-cart|ast_cart/.test(id) ||
-      /assort|ast-cart|ast_cart/.test(cls) ||
-      tag.includes('assort') ||
-      el.getAttribute?.('data-assortion-cart') != null ||
-      el.getAttribute?.('data-ast-cart') != null
-    );
-  }
-
-  function openAssortionDrawerDom() {
-    const candidates = document.querySelectorAll(
-      [
-        '[data-assortion-cart]',
-        '[data-ast-cart]',
-        '[data-assortion-cart-drawer]',
-        '[data-ast-cart-drawer]',
-        '#assortion-cart',
-        '#ast-cart',
-        '#ast-cart-drawer',
-        'assortion-cart',
-        'ast-cart-drawer',
-        '[id*="assortion" i]',
-        '[class*="assortion-cart" i]',
-        '[class*="ast-cart" i]',
-      ].join(', ')
-    );
-
-    let opened = false;
-    candidates.forEach((drawer) => {
-      if (!isAssortionDrawer(drawer) && !drawer.matches?.('[data-assortion-cart], [data-ast-cart], assortion-cart, ast-cart-drawer')) {
-        // allow id/class matches
-        if (!/assort|ast-cart/i.test(drawer.id + drawer.className)) return;
-      }
-      if (drawer.closest('header') && drawer.tagName === 'A') return;
-
-      drawer.classList.add('open', 'is-open', 'active', 'is-active', 'visible', 'is-visible');
-      drawer.removeAttribute('hidden');
-      drawer.setAttribute('aria-hidden', 'false');
-      drawer.style.removeProperty('display');
-      drawer.style.removeProperty('visibility');
-      drawer.style.removeProperty('opacity');
-      drawer.style.pointerEvents = 'auto';
-      if (typeof drawer.open === 'function') {
-        try {
-          drawer.open();
-        } catch (e) {}
-      }
-      opened = true;
+  function dispatchOpenEvents() {
+    const names = [
+      'assortion:cart:open',
+      'ast:cart:open',
+      'ast:open-cart',
+      'assortion:open',
+      'cart:open',
+      'open-cart',
+    ];
+    names.forEach((name) => {
+      document.dispatchEvent(new CustomEvent(name, { bubbles: true }));
+      window.dispatchEvent(new CustomEvent(name));
     });
-
-    return opened;
-  }
-
-  function clickAssortionOpenControls() {
-    const btn = document.querySelector(
-      [
-        '[data-assortion-open-cart]',
-        '[data-ast-open-cart]',
-        'button[aria-label*="cart" i][class*="assort" i]',
-        'button[class*="assort"][class*="cart" i]',
-        'a[class*="assort"][class*="cart" i]',
-      ].join(', ')
-    );
-    if (btn) {
-      btn.click();
-      return true;
-    }
-    return false;
+    try {
+      window.postMessage({ type: 'assortion:cart:open' }, '*');
+      window.postMessage({ source: 'assortion', action: 'openCart' }, '*');
+    } catch (e) {}
   }
 
   function openAssortionCart() {
     killThemeStubOnly();
+    if (isAssortionOpen()) return true;
 
     const api = findAssortionApi();
     if (api) {
       try {
         api();
-        return true;
+        if (isAssortionOpen()) return true;
       } catch (e) {
         console.warn('[HeadzupCart] Assortion API failed', e);
       }
     }
 
-    if (clickAssortionOpenControls()) return true;
-    if (openAssortionDrawerDom()) return true;
+    dispatchOpenEvents();
 
-    document.dispatchEvent(new CustomEvent('assortion:cart:open', { bubbles: true }));
-    document.dispatchEvent(new CustomEvent('ast:cart:open', { bubbles: true }));
-    document.dispatchEvent(new CustomEvent('ast:open-cart', { bubbles: true }));
-    window.dispatchEvent(new CustomEvent('assortion:cart:open'));
+    const nodes = collectAssortionNodes();
+    nodes.forEach(revealNode);
+    // Also reveal likely parents (flyout wrappers)
+    nodes.forEach((node) => {
+      let p = node.parentElement;
+      for (let i = 0; i < 4 && p; i++) {
+        if (looksLikeAssortionCart(p) || /assort|ast-cart/i.test((p.id || '') + (p.className || ''))) {
+          revealNode(p);
+        }
+        p = p.parentElement;
+      }
+    });
 
-    return openAssortionDrawerDom();
+    return isAssortionOpen() || nodes.length > 0;
   }
 
   function openAssortionWithRetry() {
@@ -172,11 +174,21 @@
     let attempts = 0;
     const id = setInterval(() => {
       attempts += 1;
-      if (openAssortionCart() || attempts >= 8) clearInterval(id);
-    }, 250);
+      if (isAssortionOpen() || openAssortionCart() || attempts >= 12) clearInterval(id);
+    }, 200);
   }
 
-  // Cart icon → Assortion (do not leave this to theme stub / /cart page)
+  // After ATC: Assortion may auto-open (mobile). If not, force on desktop.
+  function afterProductAdded() {
+    killThemeStubOnly();
+    setTimeout(() => {
+      if (!isAssortionOpen()) openAssortionWithRetry();
+    }, 250);
+    setTimeout(() => {
+      if (!isAssortionOpen()) openAssortionWithRetry();
+    }, 800);
+  }
+
   function bindCartIcon() {
     document.querySelectorAll('[data-cart-toggle], a[href="/cart"], a[href$="/cart"]').forEach((link) => {
       if (link.dataset.headzupCartBound === '1') return;
@@ -184,7 +196,6 @@
       link.addEventListener(
         'click',
         (e) => {
-          // Block /cart page nav only — do not stopPropagation so Assortion can hear the click too
           e.preventDefault();
           killThemeStubOnly();
           openAssortionWithRetry();
@@ -194,7 +205,19 @@
     });
   }
 
-  // Block native form POST to /cart/add (full page refresh) — theme uses AJAX click path
+  // Watch Assortion mount late, then ensure cart icon is bound
+  const observer = new MutationObserver(() => {
+    const openStub = document.querySelector('[data-headzup-cart-stub].is-open');
+    if (openStub) killThemeStubOnly();
+    bindCartIcon();
+  });
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class', 'href', 'style'],
+  });
+
   document.addEventListener(
     'submit',
     (event) => {
@@ -202,7 +225,6 @@
       if (!(form instanceof HTMLFormElement)) return;
       const action = (form.getAttribute('action') || '').toLowerCase();
       if (!action.includes('/cart/add')) return;
-      // Let theme AJAX / Assortion handle — only block real navigations
       if (form.closest('product-form') || form.querySelector('[data-add-to-cart]')) {
         event.preventDefault();
       }
@@ -210,14 +232,13 @@
     true
   );
 
-  // After ATC: only kill theme stub — Assortion opens itself
-  document.addEventListener('theme:product:added', () => {
-    killThemeStubOnly();
-  });
+  document.addEventListener('theme:product:added', afterProductAdded);
+  document.addEventListener('theme:product:add', afterProductAdded);
 
   document.addEventListener('theme:cart-drawer:show', (event) => {
     event.stopImmediatePropagation();
     killThemeStubOnly();
+    openAssortionWithRetry();
   });
 
   document.addEventListener('theme:cart:toggle', (event) => {
@@ -226,19 +247,23 @@
     openAssortionWithRetry();
   });
 
-  const observer = new MutationObserver(() => {
-    const openStub = document.querySelector(
-      'cart-drawer[data-headzup-cart-stub].is-open, .drawer--cart[data-headzup-cart-stub].is-open'
-    );
-    if (openStub) killThemeStubOnly();
-    bindCartIcon();
-  });
-  observer.observe(document.documentElement, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ['class', 'href'],
-  });
+  // If Assortion uses fetch interception, also nudge after our own ATC fetches settle
+  const originalFetch = window.fetch;
+  if (typeof originalFetch === 'function') {
+    window.fetch = function () {
+      const args = arguments;
+      const input = args[0];
+      const url = typeof input === 'string' ? input : input?.url || '';
+      return originalFetch.apply(this, args).then((response) => {
+        if (/\/cart\/(add|change|update)/.test(url)) {
+          setTimeout(() => {
+            if (!isAssortionOpen()) openAssortionWithRetry();
+          }, 300);
+        }
+        return response;
+      });
+    };
+  }
 
   killThemeStubOnly();
   bindCartIcon();
@@ -248,5 +273,6 @@
     open: openAssortionCart,
     openWithRetry: openAssortionWithRetry,
     killTheme: killThemeStubOnly,
+    isOpen: isAssortionOpen,
   };
 })();

@@ -1610,14 +1610,16 @@
                 );
               }
 
-              // Stay on page — Assortion opens from its cart/add network intercept.
-              // Do NOT call HeadzupCart.open here (it was closing Assortion on PDP).
+              // Stay on page. Assortion may auto-open; custom.js nudges if it doesn't (desktop).
               document.dispatchEvent(
                 new CustomEvent('theme:product:added', {
                   bubbles: true,
                   detail: {response: response},
                 })
               );
+              if (window.HeadzupCart?.openWithRetry) {
+                setTimeout(() => window.HeadzupCart.openWithRetry(), 300);
+              }
               return;
             } else {
               // No theme cart element — stay on page (never redirect to /cart)
@@ -1641,6 +1643,9 @@
                   detail: {response: response},
                 })
               );
+              if (window.HeadzupCart?.openWithRetry) {
+                setTimeout(() => window.HeadzupCart.openWithRetry(), 300);
+              }
               return;
             }
           })

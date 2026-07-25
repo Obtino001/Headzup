@@ -22,6 +22,32 @@ html body .drawer--cart[data-headzup-cart-stub] .underlay {
   pointer-events: none !important;
 }
 
+/* Ensure Assortion cart is never clipped/hidden by theme rules on desktop */
+[id*='assortion' i],
+[class*='assortion' i],
+[id*='ast-cart' i],
+[class*='ast-cart' i],
+assortion-cart,
+ast-cart-drawer {
+  max-width: 100vw;
+}
+
+/* Keep Assortion above theme chrome on desktop when open */
+[id*='assortion' i].open,
+[id*='assortion' i].is-open,
+[id*='assortion' i].active,
+[class*='assortion' i].open,
+[class*='assortion' i].is-open,
+[class*='assortion' i].active,
+[id*='ast-cart' i].open,
+[id*='ast-cart' i].is-open,
+[class*='ast-cart' i].is-open {
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 2147483000 !important;
+}
+
 /* Hide Rebuy cart if embed still loads — Assortion is primary */
 #rebuy-cart,
 .rebuy-cart {
