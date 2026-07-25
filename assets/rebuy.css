@@ -43,6 +43,29 @@ html body cart-drawer .underlay--visible {
   z-index: 99999 !important;
 }
 
+/* When Rebuy is closed, kill background blur so page is clickable again */
+#rebuy-cart:not(.is-visible),
+.rebuy-cart:not(.is-visible) {
+  pointer-events: none !important;
+}
+
+#rebuy-cart:not(.is-visible) .rebuy-cart__background,
+.rebuy-cart:not(.is-visible) .rebuy-cart__background,
+#rebuy-cart[aria-hidden="true"] .rebuy-cart__background,
+.rebuy-cart[aria-hidden="true"] .rebuy-cart__background {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  backdrop-filter: none !important;
+}
+
+#rebuy-cart:not(.is-visible) .rebuy-cart__flyout,
+.rebuy-cart:not(.is-visible) .rebuy-cart__flyout,
+#rebuy-cart[aria-hidden="true"] .rebuy-cart__flyout {
+  pointer-events: none !important;
+}
+
 @media screen and (max-width: 768px) {
   .rebuy-cart__flyout {
     width: 100% !important;

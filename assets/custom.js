@@ -126,6 +126,36 @@
     });
   }
 
+  function unlockPageAfterCartClose() {
+    hideThemeCartDrawer();
+
+    document.dispatchEvent(new CustomEvent('theme:scroll:unlock', { bubbles: true }));
+    document.documentElement.classList.remove('no-scroll', 'overflow-hidden');
+    document.body.classList.remove('no-scroll', 'overflow-hidden', 'scroll-locked');
+    document.body.style.removeProperty('overflow');
+    document.documentElement.style.removeProperty('overflow');
+    document.body.style.removeProperty('padding-right');
+
+    // Clear any leftover theme underlays outside Rebuy
+    document.querySelectorAll('.underlay--visible, .drawer__underlay').forEach((underlay) => {
+      if (underlay.closest('#rebuy-cart, .rebuy-cart')) return;
+      underlay.classList.remove('underlay--visible');
+      underlay.style.setProperty('display', 'none', 'important');
+      underlay.style.setProperty('opacity', '0', 'important');
+      underlay.style.setProperty('pointer-events', 'none', 'important');
+    });
+
+    // Force Rebuy backdrop off when cart is not visible
+    const rebuyCart = document.querySelector('#rebuy-cart, .rebuy-cart');
+    if (rebuyCart && !rebuyCart.classList.contains('is-visible')) {
+      rebuyCart.querySelectorAll('.rebuy-cart__background').forEach((bg) => {
+        bg.style.setProperty('display', 'none', 'important');
+        bg.style.setProperty('opacity', '0', 'important');
+        bg.style.setProperty('pointer-events', 'none', 'important');
+      });
+    }
+  }
+
   function initRebuyCart() {
     document.addEventListener("rebuy:smartcart.ready", (e) => {
       const cart = e.detail.smartcart.cart;
@@ -144,6 +174,23 @@
       showPaymentIcons();
       freeShippingLimit(cart);
       hideThemeCartDrawer();
+    });
+
+    document.addEventListener('rebuy:smartcart.hide', () => {
+      unlockPageAfterCartClose();
+      // Rebuy sometimes leaves backdrop for a tick
+      setTimeout(unlockPageAfterCartClose, 50);
+      setTimeout(unlockPageAfterCartClose, 300);
+    });
+
+    document.addEventListener('rebuy:smartcart.show', () => {
+      hideThemeCartDrawer();
+      const rebuyCart = document.querySelector('#rebuy-cart, .rebuy-cart');
+      rebuyCart?.querySelectorAll('.rebuy-cart__background').forEach((bg) => {
+        bg.style.removeProperty('display');
+        bg.style.removeProperty('opacity');
+        bg.style.removeProperty('pointer-events');
+      });
     });
 
     initRebuyCartOpenOnAdd();
