@@ -1609,44 +1609,13 @@
                   })
                 );
               }
-
-              // Stay on page. Assortion may auto-open; custom.js nudges if it doesn't (desktop).
-              document.dispatchEvent(
-                new CustomEvent('theme:product:added', {
-                  bubbles: true,
-                  detail: {response: response},
-                })
-              );
-              if (window.HeadzupCart?.openWithRetry) {
-                setTimeout(() => window.HeadzupCart.openWithRetry(), 300);
+              if (theme.settings.cartType === 'page') {
+                window.location = theme.routes.cart_url;
               }
-              return;
+              this.getCart();
             } else {
-              // No theme cart element — stay on page (never redirect to /cart)
-              if (button) {
-                button.classList.remove(classes$n.loading);
-                button.classList.add(classes$n.added);
-                button.dispatchEvent(
-                  new CustomEvent('theme:product:add', {
-                    detail: {
-                      response: response,
-                      button: button,
-                    },
-                    bubbles: true,
-                  })
-                );
-              }
-
-              document.dispatchEvent(
-                new CustomEvent('theme:product:added', {
-                  bubbles: true,
-                  detail: {response: response},
-                })
-              );
-              if (window.HeadzupCart?.openWithRetry) {
-                setTimeout(() => window.HeadzupCart.openWithRetry(), 300);
-              }
-              return;
+              // Redirect to cart page if "Add to cart" is successful
+              window.location = theme.routes.cart_url;
             }
           })
           .catch((error) => {
@@ -2323,21 +2292,39 @@
         this.cartDrawerSection = this.closest(selectors$r.shopifySection);
         this.a11y = window.theme.a11y;
 
-        // Stub has no close button — skip listeners that crash on null
-        if (this.cartDrawerClose) {
-          this.closeCartEvents();
-        }
+        this.closeCartEvents();
       }
 
       connectedCallback() {
-        // Theme cart UI disabled — keep stub for AJAX ATC, never open drawer
-        this.style.setProperty('display', 'none', 'important');
-        this.setAttribute('aria-hidden', 'true');
-        this.cartDrawerIsOpen = false;
-        this.setAttribute('data-headzup-cart-stub', '');
-        appendCartItems();
-        // Keep true so ATC AJAX path treats cart as available (no /cart redirect)
+        const drawerSection = this.closest(selectors$r.shopifySection);
+
+        /* Prevent duplicated cart drawers */
+        if (window.theme.hasCartDrawer) {
+          if (!window.Shopify.designMode) {
+            drawerSection.remove();
+            return;
+          } else {
+            const errorMessage = document.createElement('div');
+            errorMessage.classList.add(classes$m.drawerEditorError);
+            errorMessage.innerText = 'Cart drawer section already exists.';
+
+            if (!this.querySelector(`.${classes$m.drawerEditorError}`)) {
+              this.querySelector(selectors$r.cartDrawerInner).append(errorMessage);
+            }
+
+            this.classList.add(classes$m.duplicate);
+          }
+        }
+
         window.theme.hasCartDrawer = true;
+
+        this.addEventListener('theme:cart-drawer:show', this.openCartDrawer);
+        document.addEventListener('theme:cart:toggle', this.toggleCartDrawer);
+        document.addEventListener('theme:quick-add:open', this.closeCartDrawer);
+        document.addEventListener('theme:product:added', this.openCartDrawerOnProductAdded);
+        document.addEventListener('shopify:block:select', this.openCartDrawerOnSelect);
+        document.addEventListener('shopify:section:select', this.openCartDrawerOnSelect);
+        document.addEventListener('shopify:section:deselect', this.closeCartDrawerOnDeselect);
       }
 
       disconnectedCallback() {
@@ -2355,47 +2342,132 @@
         appendCartItems();
       }
 
+      /**
+       * Open cart drawer when product is added to cart
+       *
+       * @return  {Void}
+       */
       openCartDrawerOnProductAdded() {
-        // Assortion opens itself via network intercept — do not force-open
-        return;
+        if (!this.cartDrawerIsOpen) {
+          this.openCartDrawer();
+        }
       }
 
+      /**
+       * Open cart drawer on block or section select
+       *
+       * @return  {Void}
+       */
       openCartDrawerOnSelect(e) {
-        return;
+        const cartDrawerSection = e.target.querySelector(selectors$r.shopifySection) || e.target.closest(selectors$r.shopifySection) || e.target;
+
+        if (cartDrawerSection === this.cartDrawerSection) {
+          this.openCartDrawer(true);
+        }
       }
 
+      /**
+       * Close cart drawer on section deselect
+       *
+       * @return  {Void}
+       */
       closeCartDrawerOnDeselect() {
-        return;
+        if (this.cartDrawerIsOpen) {
+          this.closeCartDrawer();
+        }
       }
+
+      /**
+       * Open cart drawer and add class on body
+       *
+       * @return  {Void}
+       */
 
       openCartDrawer(forceOpen = false) {
-        // Theme stub never opens — Assortion is the cart UI
-        this.classList.remove(classes$m.open, classes$m.closing);
-        this.cartDrawerIsOpen = false;
-        this.setAttribute('aria-hidden', 'true');
-        this.style.setProperty('display', 'none', 'important');
-        return;
+        // if (!forceOpen && this.classList.contains(classes$m.duplicate)) return;
+
+        // this.cartDrawerIsOpen = true;
+        // this.onBodyClickEvent = this.onBodyClickEvent || this.onBodyClick.bind(this);
+        // document.body.addEventListener('click', this.onBodyClickEvent);
+
+        // document.dispatchEvent(
+        //   new CustomEvent('theme:cart-drawer:open', {
+        //     detail: {
+        //       target: this,
+        //     },
+        //     bubbles: true,
+        //   })
+        // );
+        // document.dispatchEvent(new CustomEvent('theme:scroll:lock', {bubbles: true}));
+
+        // this.classList.add(classes$m.open);
+
+        // // Observe Additional Checkout Buttons
+        // this.observeAdditionalCheckoutButtons();
+
+        // window.theme.waitForAnimationEnd(this.cartDrawerInner).then(() => {
+        //   this.a11y.trapFocus(this, {
+        //     elementToFocus: this.querySelector(selectors$r.cartDrawerClose),
+        //   });
+        // });
       }
+
+      /**
+       * Close cart drawer and remove class on body
+       *
+       * @return  {Void}
+       */
 
       closeCartDrawer() {
-        this.classList.remove(classes$m.open, classes$m.closing);
+        if (!this.classList.contains(classes$m.open)) return;
+
+        this.classList.add(classes$m.closing);
+        this.classList.remove(classes$m.open);
+
         this.cartDrawerIsOpen = false;
-        this.setAttribute('aria-hidden', 'true');
-        this.style.setProperty('display', 'none', 'important');
+
+        document.dispatchEvent(
+          new CustomEvent('theme:cart-drawer:close', {
+            bubbles: true,
+          })
+        );
+
+        this.a11y.removeTrapFocus();
+        this.a11y.autoFocusLastElement();
+
+        document.body.removeEventListener('click', this.onBodyClickEvent);
+        document.dispatchEvent(new CustomEvent('theme:scroll:unlock', {bubbles: true}));
+
+        window.theme.waitForAnimationEnd(this.cartDrawerInner).then(() => {
+          this.classList.remove(classes$m.closing);
+        });
       }
+
+      /**
+       * Toggle cart drawer
+       *
+       * @return  {Void}
+       */
 
       toggleCartDrawer() {
-        // Cart icon is handled in custom.js → Assortion
-        return;
+        if (!this.cartDrawerIsOpen) {
+          this.openCartDrawer();
+        } else {
+          this.closeCartDrawer();
+        }
       }
 
+      /**
+       * Event click to element to close cart drawer
+       *
+       * @return  {Void}
+       */
+
       closeCartEvents() {
-        if (this.cartDrawerClose) {
-          this.cartDrawerClose.addEventListener('click', (e) => {
-            e.preventDefault();
-            this.closeCartDrawer();
-          });
-        }
+        this.cartDrawerClose.addEventListener('click', (e) => {
+          e.preventDefault();
+          this.closeCartDrawer();
+        });
 
         this.addEventListener('keyup', (e) => {
           if (e.code === 'Escape') {
@@ -2409,7 +2481,22 @@
       }
 
       observeAdditionalCheckoutButtons() {
-        return;
+        // identify an element to observe
+        const additionalCheckoutButtons = this.querySelector(selectors$r.additionalCheckoutButtons);
+        if (additionalCheckoutButtons) {
+          // create a new instance of `MutationObserver` named `observer`,
+          // passing it a callback function
+          const observer = new MutationObserver(() => {
+            this.a11y.trapFocus(this, {
+              elementToFocus: this.querySelector(selectors$r.cartDrawerClose),
+            });
+            observer.disconnect();
+          });
+
+          // call `observe()` on that MutationObserver instance,
+          // passing it the element to observe, and the options object
+          observer.observe(additionalCheckoutButtons, {subtree: true, childList: true});
+        }
       }
     }
 
@@ -3231,9 +3318,19 @@
           }
 
           cartToggleEvent() {
-            // Do NOT intercept cart icon clicks.
-            // Assortion (or the /cart link) must receive the native click.
-            // Theme drawer opens are blocked in CartDrawer.openCartDrawer instead.
+            if (theme.settings.cartType !== 'drawer') return;
+
+            this.querySelectorAll(selectors$m.cartToggleButton)?.forEach((button) => {
+              button.addEventListener('click', (e) => {
+                const cartDrawer = document.querySelector(selectors$m.cartDrawer);
+
+                if (cartDrawer) {
+                  e.preventDefault();
+                  cartDrawer.dispatchEvent(new CustomEvent('theme:cart-drawer:show'));
+                  window.a11y.lastElement = button;
+                }
+              });
+            });
           }
 
           toggleButtonClick(e) {
@@ -5057,7 +5154,7 @@
               return;
             }
 
-            fetch(`${theme.routes.predictive_search_url}?q=${encodeURIComponent(searchTerm)}&resources[options][fields]=title,product_type,variants.title,vendor,variants.sku&section_id=predictive-search`, {signal: this.abortController.signal})
+            fetch(`${theme.routes.predictive_search_url}?q=${encodeURIComponent(searchTerm)}&section_id=predictive-search`, {signal: this.abortController.signal})
               .then((response) => {
                 if (!response.ok) {
                   var error = new Error(response.status);
