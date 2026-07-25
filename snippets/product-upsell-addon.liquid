@@ -109,6 +109,39 @@
       {%- endfor -%}
     {%- endif -%}
 
+    {%- comment -%} Fill from brand metaobjects — guaranteed different brands {%- endcomment -%}
+    {%- if shown_count < upsell_limit and metaobjects.brands.values != blank -%}
+      {%- for brand in metaobjects.brands.values -%}
+        {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
+
+        {%- assign brand_collection = brand.link_collection.value -%}
+        {%- if brand_collection == blank -%}{%- continue -%}{%- endif -%}
+
+        {%- for upsell_product in brand_collection.products limit: 8 -%}
+          {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
+
+          {%- assign id_check = ',' | append: upsell_product.id | append: ',' -%}
+          {%- if shown_ids contains id_check or upsell_product.available == false -%}{%- continue -%}{%- endif -%}
+
+          {%- assign upsell_vendor = upsell_product.vendor | downcase | strip -%}
+          {%- if upsell_vendor == blank -%}{%- continue -%}{%- endif -%}
+          {%- if main_vendor != blank and upsell_vendor == main_vendor -%}{%- continue -%}{%- endif -%}
+
+          {%- assign vendor_check = ',' | append: upsell_vendor | append: ',' -%}
+          {%- if shown_vendors contains vendor_check -%}{%- continue -%}{%- endif -%}
+
+          {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
+          {%- if current_variant.available -%}
+            {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
+            {%- assign shown_count = shown_count | plus: 1 -%}
+            {%- assign shown_ids = shown_ids | append: upsell_product.id | append: ',' -%}
+            {%- assign shown_vendors = shown_vendors | append: upsell_vendor | append: ',' -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    {%- endif -%}
+
     {%- comment -%} Fill from catalog — 1 per brand across whole shop {%- endcomment -%}
     {%- if shown_count < upsell_limit and collections.all != blank -%}
       {%- for upsell_product in collections.all.products -%}
