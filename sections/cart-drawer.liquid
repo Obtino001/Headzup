@@ -1,7 +1,6 @@
 {%- comment -%}
-  Theme cart drawer UI is disabled — Rebuy Smart Cart is the only cart.
-  We keep an empty <cart-drawer> stub so theme ATC JS still finds this.cart
-  and does not redirect to /cart. No underlay = no ghost blur after closing Rebuy.
+  Theme cart UI disabled (Rebuy only). Keep cart-drawer + cart-items stubs so
+  normal ATC JS still works — but NO underlay (that caused blur after gift/addon ATC).
 {%- endcomment -%}
 {%- if template.name != 'cart' -%}
   <div
@@ -9,14 +8,16 @@
     data-section-type="cart-drawer"
     hidden
     aria-hidden="true"
-    style="display: none !important;"
+    style="display: none !important; position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none;"
   >
     <cart-drawer
       class="drawer drawer--cart is-empty"
       id="cart-drawer"
       aria-hidden="true"
       style="display: none !important;"
-    ></cart-drawer>
+    >
+      <cart-items style="display: none !important;"></cart-items>
+    </cart-drawer>
   </div>
 {%- endif -%}
 
@@ -26,7 +27,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Theme cart drawer UI is disabled. Rebuy Smart Cart handles the cart. Keep this section enabled so add-to-cart works without page refresh."
+      "content": "Theme cart UI is disabled. Rebuy Smart Cart is used. Keep this section on so add-to-cart works."
     },
     {
       "type": "color_scheme",
