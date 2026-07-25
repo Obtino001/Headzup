@@ -22,10 +22,11 @@ html body .drawer--cart[data-headzup-cart-stub] .underlay {
   pointer-events: none !important;
 }
 
-/* Assortion cart — open class is .ast-open */
+/* Assortion cart open state — force visible on PDP/desktop */
 .ast-cart.ast-open,
 html.ast-cart-open .ast-cart,
 body.ast-cart-open .ast-cart {
+  display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
@@ -33,8 +34,11 @@ body.ast-cart-open .ast-cart {
 }
 
 .ast-cart.ast-open .ast-cart__content {
+  display: flex !important;
   visibility: visible !important;
+  opacity: 1 !important;
   pointer-events: auto !important;
+  transform: translate3d(0, 0, 0) !important;
 }
 
 /* Hide Rebuy cart if embed still loads — Assortion is primary */

@@ -163,11 +163,11 @@
         "disabled": false,
         "settings": {
           "locale": "",
-          "auto_open": true,
+          "auto_open": false,
           "clear_cart_on_start": true,
           "custom_css_page": "html,body {\noverflow: auto !important;\n}\n.rebuy-cart__flyout {\ndisplay: none !important;\n}\n.header-topbar__cart-count-badge {\nfont-size: 0px !important;\n}\n#rebuy-cart .rebuy-cart__background:empty {\ndisplay: none !important;\n}",
           "custom_css_overlay": "",
-          "cart_activator_selector": "[href$=\"/cart\"]",
+          "cart_activator_selector": "[data-returnflows-open]",
           "override_scroll_blocking": false,
           "network_interception_method": "fetch",
           "monitor_network_overwrites": false,

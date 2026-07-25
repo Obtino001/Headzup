@@ -2296,35 +2296,14 @@
       }
 
       connectedCallback() {
-        const drawerSection = this.closest(selectors$r.shopifySection);
-
-        /* Prevent duplicated cart drawers */
-        if (window.theme.hasCartDrawer) {
-          if (!window.Shopify.designMode) {
-            drawerSection.remove();
-            return;
-          } else {
-            const errorMessage = document.createElement('div');
-            errorMessage.classList.add(classes$m.drawerEditorError);
-            errorMessage.innerText = 'Cart drawer section already exists.';
-
-            if (!this.querySelector(`.${classes$m.drawerEditorError}`)) {
-              this.querySelector(selectors$r.cartDrawerInner).append(errorMessage);
-            }
-
-            this.classList.add(classes$m.duplicate);
-          }
-        }
-
+        // Theme cart UI disabled — keep stub for AJAX ATC, never open drawer
+        this.style.setProperty('display', 'none', 'important');
+        this.setAttribute('aria-hidden', 'true');
+        this.cartDrawerIsOpen = false;
+        this.setAttribute('data-headzup-cart-stub', '');
+        appendCartItems();
+        // Keep true so ATC AJAX path treats cart as available (no /cart redirect)
         window.theme.hasCartDrawer = true;
-
-        this.addEventListener('theme:cart-drawer:show', this.openCartDrawer);
-        document.addEventListener('theme:cart:toggle', this.toggleCartDrawer);
-        document.addEventListener('theme:quick-add:open', this.closeCartDrawer);
-        document.addEventListener('theme:product:added', this.openCartDrawerOnProductAdded);
-        document.addEventListener('shopify:block:select', this.openCartDrawerOnSelect);
-        document.addEventListener('shopify:section:select', this.openCartDrawerOnSelect);
-        document.addEventListener('shopify:section:deselect', this.closeCartDrawerOnDeselect);
       }
 
       disconnectedCallback() {
