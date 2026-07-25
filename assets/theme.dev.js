@@ -3246,18 +3246,27 @@
           }
 
           cartToggleEvent() {
+            // Assortion owns the cart drawer. Only stop /cart page navigation;
+            // then ask Assortion to open (do not open theme drawer).
             this.querySelectorAll(selectors$m.cartToggleButton)?.forEach((button) => {
-              button.addEventListener('click', (e) => {
-                e.preventDefault();
-
-                // Assortion cart — never theme drawer / Rebuy
-                if (window.HeadzupCart?.open) {
-                  window.HeadzupCart.open();
-                  return;
-                }
-
-                document.dispatchEvent(new CustomEvent('theme:cart:toggle', {bubbles: true}));
-              });
+              button.addEventListener(
+                'click',
+                (e) => {
+                  e.preventDefault();
+                  if (window.HeadzupCart?.killTheme) {
+                    window.HeadzupCart.killTheme();
+                  }
+                  // Prefer Assortion open after the click stack finishes
+                  setTimeout(() => {
+                    if (window.HeadzupCart?.open) {
+                      window.HeadzupCart.open();
+                    } else {
+                      document.dispatchEvent(new CustomEvent('theme:cart:toggle', {bubbles: true}));
+                    }
+                  }, 0);
+                },
+                false
+              );
             });
           }
 

@@ -52,16 +52,50 @@
         window.assortion.openCart();
         return true;
       }
+      // Some Assortion builds expose these
+      if (typeof window.openAssortionCart === 'function') {
+        window.openAssortionCart();
+        return true;
+      }
+      if (window.AssortionCart?.open) {
+        window.AssortionCart.open();
+        return true;
+      }
     } catch (e) {
       console.warn('Assortion openCart error', e);
     }
-
-    // NEVER Shopify.actions.openCart() — redirects to /cart when no theme drawer
 
     document.dispatchEvent(new CustomEvent('assortion:cart:open', { bubbles: true }));
     document.dispatchEvent(new CustomEvent('ast:cart:open', { bubbles: true }));
     document.dispatchEvent(new CustomEvent('cart:open', { bubbles: true }));
     document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true }));
+
+    // Open Assortion drawer DOM if present
+    const drawer = document.querySelector(
+      [
+        '#assortion-cart',
+        '#ast-cart',
+        '#astCartDrawer',
+        '.assortion-cart-drawer',
+        '.ast-cart-drawer',
+        '[data-assortion-cart-drawer]',
+        '[class*="AssortionCart"]',
+        'assortion-cart',
+      ].join(', ')
+    );
+    if (drawer) {
+      drawer.classList.add('open', 'is-open', 'active', 'is-active', 'visible', 'is-visible');
+      drawer.style.removeProperty('display');
+      drawer.setAttribute('aria-hidden', 'false');
+      const backdrop = document.querySelector(
+        '.assortion-cart-backdrop, .ast-cart-backdrop, [data-assortion-backdrop]'
+      );
+      if (backdrop) {
+        backdrop.classList.add('open', 'is-open', 'active', 'visible');
+        backdrop.style.removeProperty('display');
+      }
+      return true;
+    }
 
     const trigger = document.querySelector(
       [
@@ -74,11 +108,11 @@
       ].join(', ')
     );
     if (trigger) {
-      trigger.click();
+      trigger.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
       return true;
     }
 
-    return true; // Assortion usually auto-opens from /cart/add.js
+    return false;
   }
 
   function openAssortionWithRetry() {
@@ -122,6 +156,8 @@
     }, 100);
   });
 
+  // Cart icon: stop /cart page navigation, but do NOT stopPropagation —
+  // Assortion must receive the click to open its drawer.
   document.addEventListener(
     'click',
     (event) => {
@@ -137,12 +173,11 @@
         return;
       }
 
-      event.preventDefault();
-      event.stopPropagation();
+      event.preventDefault(); // block navigation to /cart page only
       killThemeCartUI();
       openAssortionCart();
     },
-    true
+    false // bubble — Assortion capture listeners run first
   );
 
   document.addEventListener('theme:cart-drawer:show', (event) => {
