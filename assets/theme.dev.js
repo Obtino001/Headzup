@@ -1610,7 +1610,7 @@
                 );
               }
 
-              // Assortion cart app — do not open theme drawer or Rebuy
+              // Assortion cart app — never redirect to /cart page
               document.dispatchEvent(
                 new CustomEvent('theme:product:added', {
                   bubbles: true,
@@ -1620,17 +1620,11 @@
 
               if (window.HeadzupCart?.openWithRetry) {
                 window.HeadzupCart.openWithRetry();
-                return;
               }
-
-              if (theme.settings.cartType === 'page') {
-                window.location = theme.routes.cart_url;
-                return;
-              }
-
-              this.getCart();
+              // Stay on page — Assortion opens from cart/add network intercept
+              return;
             } else {
-              // No theme cart element — still stay on page if Rebuy handles the cart
+              // No theme cart element — stay on page, open Assortion
               if (button) {
                 button.classList.remove(classes$n.loading);
                 button.classList.add(classes$n.added);
@@ -1654,10 +1648,9 @@
 
               if (window.HeadzupCart?.openWithRetry) {
                 window.HeadzupCart.openWithRetry();
-                return;
               }
-
-              window.location = theme.routes.cart_url;
+              // NEVER redirect to /cart — that was causing the page refresh
+              return;
             }
           })
           .catch((error) => {
@@ -2338,22 +2331,14 @@
       }
 
       connectedCallback() {
-        // Theme cart drawer is fully disabled — remove from DOM, Rebuy only.
-        const drawerSection = this.closest(selectors$r.shopifySection);
+        // Theme cart UI disabled — keep stub for AJAX ATC, never open drawer
         this.style.setProperty('display', 'none', 'important');
         this.setAttribute('aria-hidden', 'true');
         this.cartDrawerIsOpen = false;
-
-        // Still register cart-items helper for ATC without a visible drawer
+        this.setAttribute('data-headzup-cart-stub', '');
         appendCartItems();
-
-        // Do not listen for open events — never show theme cart
-        if (drawerSection && !window.Shopify.designMode) {
-          drawerSection.remove();
-          return;
-        }
-
         window.theme.hasCartDrawer = false;
+        // Do NOT register open listeners
       }
 
       disconnectedCallback() {

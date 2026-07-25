@@ -1,20 +1,27 @@
 /*
  * Broadcast Theme — custom.js
- * Cart: Assortion app drawer only. Theme cart drawer stays OFF.
- * Do NOT open Rebuy — store uses Assortion.
+ * Assortion = cart UI. Theme drawer hidden stub only (no refresh to /cart).
  */
 
 (function () {
-  function killThemeCartDrawer() {
-    document
-      .querySelectorAll(
-        'cart-drawer, #cart-drawer, .drawer--cart, [data-section-type="cart-drawer"], .shopify-section:has(cart-drawer)'
-      )
-      .forEach((node) => node.remove());
+  function isCartStub(node) {
+    return node?.hasAttribute?.('data-headzup-cart-stub') || node?.closest?.('[data-headzup-cart-stub]');
+  }
+
+  function killThemeCartUI() {
+    // Never remove the AJAX stub — only kill real theme drawer UI / open state
+    document.querySelectorAll('cart-drawer, .drawer--cart').forEach((drawer) => {
+      drawer.classList.remove('is-open', 'is-closing');
+      drawer.setAttribute('aria-hidden', 'true');
+      drawer.style.setProperty('display', 'none', 'important');
+      if (!isCartStub(drawer) && !drawer.querySelector('cart-items')) {
+        drawer.remove();
+      }
+    });
 
     document
       .querySelectorAll(
-        'cart-drawer .underlay, .drawer--cart .underlay, .drawer--cart .drawer__underlay, cart-drawer .drawer__underlay'
+        '.drawer--cart:not([data-headzup-cart-stub]) .underlay, .drawer--cart:not([data-headzup-cart-stub]) .drawer__underlay'
       )
       .forEach((el) => el.remove());
 
@@ -22,9 +29,8 @@
   }
 
   function openAssortionCart() {
-    killThemeCartDrawer();
+    killThemeCartUI();
 
-    // Assortion / common app APIs
     try {
       if (typeof window.Assortion?.openCart === 'function') {
         window.Assortion.openCart();
@@ -50,20 +56,13 @@
       console.warn('Assortion openCart error', e);
     }
 
-    // Shopify standard action (Assortion may hook this)
-    try {
-      if (window.Shopify?.actions?.openCart) {
-        window.Shopify.actions.openCart();
-        return true;
-      }
-    } catch (e) {}
+    // NEVER Shopify.actions.openCart() — redirects to /cart when no theme drawer
 
-    // Events Assortion-style carts often listen for
     document.dispatchEvent(new CustomEvent('assortion:cart:open', { bubbles: true }));
     document.dispatchEvent(new CustomEvent('ast:cart:open', { bubbles: true }));
     document.dispatchEvent(new CustomEvent('cart:open', { bubbles: true }));
+    document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true }));
 
-    // Click Assortion cart UI if present
     const trigger = document.querySelector(
       [
         '[data-assortion-open-cart]',
@@ -79,36 +78,50 @@
       return true;
     }
 
-    return false;
+    return true; // Assortion usually auto-opens from /cart/add.js
   }
 
   function openAssortionWithRetry() {
-    if (openAssortionCart()) return;
+    openAssortionCart();
     let attempts = 0;
     const id = setInterval(() => {
       attempts += 1;
-      if (openAssortionCart() || attempts >= 12) clearInterval(id);
-    }, 200);
+      openAssortionCart();
+      if (attempts >= 8) clearInterval(id);
+    }, 250);
   }
 
-  // After ATC — open Assortion, never theme / Rebuy
+  // Block native form POST to /cart/add (causes full page refresh)
+  document.addEventListener(
+    'submit',
+    (event) => {
+      const form = event.target;
+      if (!(form instanceof HTMLFormElement)) return;
+      const action = (form.getAttribute('action') || '').toLowerCase();
+      if (action.includes('/cart/add')) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+    true
+  );
+
   document.addEventListener('theme:product:added', () => {
-    killThemeCartDrawer();
+    killThemeCartUI();
     setTimeout(() => {
-      killThemeCartDrawer();
+      killThemeCartUI();
       openAssortionWithRetry();
-    }, 150);
+    }, 100);
   });
 
   document.addEventListener('theme:product:add', () => {
-    killThemeCartDrawer();
+    killThemeCartUI();
     setTimeout(() => {
-      killThemeCartDrawer();
+      killThemeCartUI();
       openAssortionWithRetry();
-    }, 150);
+    }, 100);
   });
 
-  // Cart icon → Assortion (do not open Rebuy / theme)
   document.addEventListener(
     'click',
     (event) => {
@@ -116,17 +129,17 @@
         '[data-cart-toggle], .header-topbar__icon--cart, a[href="/cart"], a[href$="/cart"]'
       );
       if (!cartToggle) return;
-      if (event.target.closest('[data-add-to-cart], [data-quick-add-btn], .quick-add__holder, form[action*="/cart/add"]')) {
-        return;
-      }
-      // Let Assortion's own buttons work
-      if (cartToggle.closest('[class*="ast-"], [id*="ast-"], [class*="assortion"], [id*="assortion"]')) {
+      if (
+        event.target.closest(
+          '[data-add-to-cart], [data-quick-add-btn], .quick-add__holder, form[action*="/cart/add"]'
+        )
+      ) {
         return;
       }
 
       event.preventDefault();
       event.stopPropagation();
-      killThemeCartDrawer();
+      killThemeCartUI();
       openAssortionCart();
     },
     true
@@ -134,21 +147,21 @@
 
   document.addEventListener('theme:cart-drawer:show', (event) => {
     event.stopImmediatePropagation();
-    killThemeCartDrawer();
+    killThemeCartUI();
     openAssortionCart();
   });
 
   document.addEventListener('theme:cart:toggle', (event) => {
     event.stopImmediatePropagation();
-    killThemeCartDrawer();
+    killThemeCartUI();
     openAssortionCart();
   });
 
-  // Watcher: if theme cart ever appears, delete it
   const observer = new MutationObserver(() => {
-    if (document.querySelector('cart-drawer, .drawer--cart, [data-section-type="cart-drawer"]')) {
-      killThemeCartDrawer();
-    }
+    const openTheme = document.querySelector(
+      'cart-drawer.is-open:not([data-headzup-cart-stub]), .drawer--cart.is-open:not([data-headzup-cart-stub])'
+    );
+    if (openTheme) killThemeCartUI();
   });
   observer.observe(document.documentElement, {
     childList: true,
@@ -157,12 +170,11 @@
     attributeFilter: ['class'],
   });
 
-  killThemeCartDrawer();
+  killThemeCartUI();
 
-  // Expose for gift/addon script
   window.HeadzupCart = {
     open: openAssortionCart,
     openWithRetry: openAssortionWithRetry,
-    killTheme: killThemeCartDrawer,
+    killTheme: killThemeCartUI,
   };
 })();

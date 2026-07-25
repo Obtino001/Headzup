@@ -13,7 +13,7 @@
   "sections": {
     "cart-drawer": {
       "type": "cart-drawer",
-      "disabled": true,
+      "disabled": false,
       "blocks": {
         "title": {
           "type": "title",
@@ -134,6 +134,7 @@
     }
   },
   "order": [
+    "cart-drawer",
     "cap_guide_drawer"
   ]
 }
