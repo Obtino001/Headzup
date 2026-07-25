@@ -416,6 +416,39 @@
   box-shadow: none; 
 }
 
+/*
+ * Mobile menu drawer sits BELOW announcement + topbar + header.
+ * Without this, CAPS/first items paint under the sticky header chrome.
+ */
+@media only screen and (max-width: 768px) {
+  #header-menu.drawer--header .drawer__inner {
+    top: calc(
+      var(--announcement-height, 0px) + var(--header-topbar-height, 0px) +
+        var(--header-height, 0px)
+    );
+    height: calc(
+      100% - var(--announcement-height, 0px) - var(--header-topbar-height, 0px) -
+        var(--header-height, 0px)
+    );
+    max-height: calc(
+      100dvh - var(--announcement-height, 0px) - var(--header-topbar-height, 0px) -
+        var(--header-height, 0px)
+    );
+    overflow: hidden;
+  }
+
+  /* Site header hamburger already toggles to X — avoid a second navy bar */
+  #header-menu.drawer--header .drawer__head {
+    display: none;
+  }
+
+  #header-menu.drawer--header .drawer__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
 .sliderule__wrapper.sliderule__wrapper--level-0{
   border-bottom: 1px solid var(--grey-0);
 }
@@ -429,14 +462,6 @@
   color: var(--navy);
 }
 
-/* Keep drawer logo bar above menu — do not let rows paint under the head */
-.drawer--header .drawer__head {
-  position: relative;
-  z-index: 60;
-  background-color: var(--bg, var(--navy-0));
-}
-
-/* Level-0 rows stay in normal flow (no overflow:visible — that hid items under header) */
 #header-menu .sliderule__wrapper--level-0 > .sliderow,
 #header-menu .sliderule__wrapper--level-0 > mobile-sliderule > .sliderow,
 #header-menu .sliderow--level-0 > .sliderow__title--level-0,
