@@ -192,13 +192,34 @@
         "disabled": false,
         "settings": {}
       },
-      "10641372206048101839": {
-        "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-global-embed/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
-        "disabled": true,
-        "settings": {}
-      },
       "855628211100114053": {
         "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
+        "disabled": false,
+        "settings": {}
+      },
+      "2255739061241852371": {
+        "type": "shopify://apps/power-tools-filter-menu/blocks/drawer/6ae6bf19-7d76-44e9-9e0e-5df155960acd",
+        "disabled": true,
+        "settings": {
+          "pt_enable_drawer_mobile_only": false,
+          "color_pt_drawer_bg": "#fff",
+          "pt_drawer_padding": 15,
+          "pt_drawer_btn_padding": 5,
+          "color_pt_drawer_btn_border": "#000",
+          "pt_drawer_btn_radius": 3,
+          "color_pt_drawer_btn_background": "#fff",
+          "color_pt_drawer_btn_hover_bg": "#000",
+          "color_pt_drawer_btn_text": "#000",
+          "color_pt_drawer_btn_hover": "#fff",
+          "pt_drawer_btn_size": 13,
+          "pt_drawer_btn_uppercase": true,
+          "pt_drawer_btn_font_override": false,
+          "pt_drawer_btn_font": "work_sans_n6",
+          "pt_drawer_btn_weight": "300"
+        }
+      },
+      "10641372206048101839": {
+        "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-global-embed/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
         "disabled": false,
         "settings": {}
       }
