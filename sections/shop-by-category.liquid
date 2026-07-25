@@ -14,7 +14,7 @@
   #sbc-{{ section.id }} {
     background: var(--bg);
     padding: {{ section.settings.padding_top }}px clamp(16px, 5vw, 40px) {{ section.settings.padding_bottom }}px;
-    overflow: hidden;
+    overflow: visible;
   }
 
   #sbc-{{ section.id }} .sbc-head {
@@ -77,6 +77,7 @@
 
   #sbc-{{ section.id }} .sbc-outer {
     width: 100%;
+    max-width: 100%;
     overflow: hidden;
   }
 
@@ -194,15 +195,27 @@
   }
 
   @media (max-width: 640px) {
-    #sbc-{{ section.id }} .sbc-card, #sbc-swiper-{{ section.id }}:not(.swiper-initialized) .swiper-slide {
+    #sbc-{{ section.id }} {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    #sbc-{{ section.id }} .sbc-head {
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+
+    #sbc-{{ section.id }} .sbc-card,
+    #sbc-swiper-{{ section.id }}:not(.swiper-initialized) .swiper-slide {
       width: 72vw;
       height: 88vw;
     }
+
     #sbc-{{ section.id }} .sbc-outer {
-      margin-left: calc(-1 * clamp(16px, 5vw, 40px));
-      margin-right: calc(-1 * clamp(16px, 5vw, 40px));
-      padding-left: clamp(16px, 5vw, 40px);
-      padding-right: clamp(16px, 5vw, 40px);
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 16px;
+      padding-right: 16px;
     }
   }
 

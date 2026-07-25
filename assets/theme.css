@@ -3712,6 +3712,7 @@ html {
   font-size: var(--FONT-SIZE-BASE);
   scroll-behavior: smooth;
   --scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -3721,6 +3722,8 @@ body {
   font-size: var(--FONT-SIZE-BASE);
   text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 body * {
   -webkit-font-smoothing: antialiased;
@@ -3732,7 +3735,6 @@ body * {
   display: block;
   width: 100%;
   min-height: 100%;
-  overflow-x: hidden;
 }
 
 /**
@@ -3742,9 +3744,9 @@ body * {
   margin: 0;
   padding: 0;
   min-width: 100%;
+  max-width: 100%;
   display: block;
   min-height: var(--content-min);
-  overflow-x: hidden;
 }
 
 .wrapper {

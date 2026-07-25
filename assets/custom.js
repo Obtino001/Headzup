@@ -9,11 +9,44 @@
 
 
 (function() {
+  function openRebuySmartCart() {
+    const smartCart = window.Rebuy?.SmartCart;
+    if (!smartCart || typeof smartCart.show !== 'function') return false;
+
+    // Ensure Rebuy is allowed to open after ATC
+    smartCart.skip_open = false;
+    smartCart.show();
+    return true;
+  }
+
+  function initRebuyCartOpenOnAdd() {
+    document.addEventListener('theme:product:added', () => {
+      // Small delay so Rebuy can sync cart state first
+      setTimeout(() => {
+        if (openRebuySmartCart()) return;
+
+        // Retry briefly if Rebuy is still booting (common on mobile)
+        let attempts = 0;
+        const retry = setInterval(() => {
+          attempts += 1;
+          if (openRebuySmartCart() || attempts >= 10) {
+            clearInterval(retry);
+          }
+        }, 200);
+      }, 150);
+    });
+  }
+
   function initRebuyCart() {
     document.addEventListener("rebuy:smartcart.ready", (e) => {
       const cart = e.detail.smartcart.cart;
       showPaymentIcons();
       freeShippingLimit(cart);
+
+      // Make sure theme drawer never blocks Rebuy on mobile
+      if (window.Rebuy?.SmartCart) {
+        window.Rebuy.SmartCart.skip_open = false;
+      }
     });
   
     document.addEventListener("rebuy:cart.change", (e) => {
@@ -21,6 +54,8 @@
       showPaymentIcons();
       freeShippingLimit(cart);
     });
+
+    initRebuyCartOpenOnAdd();
   }
   
   function showPaymentIcons() {

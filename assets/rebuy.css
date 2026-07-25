@@ -2,6 +2,20 @@ cart-drawer {
   display: none !important;
 }
 
+#rebuy-cart,
+.rebuy-cart,
+.rebuy-cart__flyout,
+.rebuy-cart__background {
+  z-index: 99999 !important;
+}
+
+@media screen and (max-width: 768px) {
+  .rebuy-cart__flyout {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
 :root {
   --cart-bg: rgba(0, 0, 0, 0.2);
   --cart-blur: 4px;
