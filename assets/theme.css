@@ -3732,6 +3732,7 @@ body * {
   display: block;
   width: 100%;
   min-height: 100%;
+  overflow-x: hidden;
 }
 
 /**
@@ -3743,6 +3744,7 @@ body * {
   min-width: 100%;
   display: block;
   min-height: var(--content-min);
+  overflow-x: hidden;
 }
 
 .wrapper {
