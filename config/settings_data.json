@@ -220,7 +220,7 @@
       },
       "10301360418704718919": {
         "type": "shopify://apps/assortion/blocks/app-embed/5588d7f9-a5bc-4f4a-9c54-39b7e081dd23",
-        "disabled": true,
+        "disabled": false,
         "settings": {
           "disabled_templates": ""
         }
