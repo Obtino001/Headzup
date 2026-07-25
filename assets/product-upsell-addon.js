@@ -122,18 +122,18 @@ if (!customElements.get('upsell-addon')) {
         
         if (response.ok) {
           document.dispatchEvent(new CustomEvent('theme:cart:refresh', { bubbles: true }));
-          document.dispatchEvent(new CustomEvent('theme:product:add', { bubbles: true }));
-          
-          // Revert button state after a short delay
+          document.dispatchEvent(new CustomEvent('theme:product:added', { bubbles: true }));
+
           setTimeout(() => {
             submitBtn.classList.remove('is-loading');
             submitBtn.removeAttribute('disabled');
             submitBtn.innerHTML = originalText;
           }, 500);
-          
-          if (!document.querySelector('.cart-drawer.is-open, .drawer.is-open')) {
-             // Let theme handle it, or we could redirect
-             // window.location.href = window.Shopify.routes.root + 'cart';
+
+          // Always open Rebuy — never the theme cart drawer
+          if (window.Rebuy?.SmartCart && typeof window.Rebuy.SmartCart.show === 'function') {
+            window.Rebuy.SmartCart.skip_open = false;
+            window.Rebuy.SmartCart.show();
           }
         } else {
           console.error('Failed to add items to cart');

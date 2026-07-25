@@ -1,25 +1,35 @@
 /* Theme cart drawer fully disabled — Rebuy Smart Cart only */
-cart-drawer,
-#cart-drawer,
-.drawer--cart,
-[data-section-type="cart-drawer"],
-.shopify-section:has(> [data-section-type="cart-drawer"]),
-.shopify-section:has(cart-drawer) {
+html body cart-drawer,
+html body #cart-drawer,
+html body .drawer--cart,
+html body [data-section-type="cart-drawer"],
+html body .shopify-section:has(> [data-section-type="cart-drawer"]),
+html body .shopify-section:has(cart-drawer),
+html body cart-drawer.is-open,
+html body .drawer--cart.is-open,
+html body cart-drawer.is-closing,
+html body .drawer--cart.is-closing {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
   pointer-events: none !important;
   width: 0 !important;
   height: 0 !important;
+  max-width: 0 !important;
+  max-height: 0 !important;
   overflow: hidden !important;
-  z-index: -1 !important;
+  z-index: -9999 !important;
+  transform: none !important;
+  position: fixed !important;
+  left: -9999px !important;
 }
 
-cart-drawer .drawer__underlay,
-.drawer--cart .drawer__underlay,
-.drawer--cart .underlay,
-cart-drawer.is-open,
-.drawer--cart.is-open {
+html body cart-drawer .drawer__underlay,
+html body .drawer--cart .drawer__underlay,
+html body .drawer--cart .underlay,
+html body cart-drawer .underlay,
+html body .drawer--cart .underlay--visible,
+html body cart-drawer .underlay--visible {
   display: none !important;
   opacity: 0 !important;
   visibility: hidden !important;

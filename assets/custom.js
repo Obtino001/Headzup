@@ -20,14 +20,41 @@
   }
 
   function hideThemeCartDrawer() {
-    document.querySelectorAll('cart-drawer, .drawer--cart').forEach((drawer) => {
+    document.querySelectorAll('cart-drawer, .drawer--cart, #cart-drawer').forEach((drawer) => {
       drawer.classList.remove('is-open', 'is-closing');
       drawer.setAttribute('aria-hidden', 'true');
+      drawer.style.setProperty('display', 'none', 'important');
+      drawer.style.setProperty('visibility', 'hidden', 'important');
+      drawer.style.setProperty('pointer-events', 'none', 'important');
+      drawer.style.setProperty('opacity', '0', 'important');
     });
 
-    document.querySelectorAll('.drawer--cart .drawer__underlay, cart-drawer .drawer__underlay').forEach((underlay) => {
+    document.querySelectorAll(
+      '.drawer--cart .drawer__underlay, cart-drawer .drawer__underlay, .drawer--cart .underlay, cart-drawer .underlay'
+    ).forEach((underlay) => {
       underlay.classList.remove('underlay--visible');
-      underlay.style.display = 'none';
+      underlay.style.setProperty('display', 'none', 'important');
+      underlay.style.setProperty('opacity', '0', 'important');
+      underlay.style.setProperty('visibility', 'hidden', 'important');
+    });
+  }
+
+  function watchThemeCartDrawer() {
+    const killOpen = () => hideThemeCartDrawer();
+
+    killOpen();
+
+    const observer = new MutationObserver(() => {
+      const openDrawer = document.querySelector(
+        'cart-drawer.is-open, .drawer--cart.is-open, cart-drawer.is-closing, .drawer--cart.is-closing'
+      );
+      if (openDrawer) killOpen();
+    });
+
+    observer.observe(document.documentElement, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'aria-hidden', 'style']
     });
   }
 
@@ -51,13 +78,24 @@
         }, 200);
       }, 150);
     });
+
+    // Some custom add flows fire the singular event name
+    document.addEventListener('theme:product:add', () => {
+      hideThemeCartDrawer();
+      setTimeout(() => {
+        hideThemeCartDrawer();
+        openRebuySmartCart();
+      }, 150);
+    });
   }
 
   function initCartIconOpensRebuy() {
     document.addEventListener(
       'click',
       (event) => {
-        const cartToggle = event.target.closest('[data-cart-toggle], .header-topbar__icon--cart');
+        const cartToggle = event.target.closest(
+          '[data-cart-toggle], .header-topbar__icon--cart, a[href="/cart"], a[href$="/cart"]'
+        );
         if (!cartToggle) return;
 
         // Don't intercept quick-add / product forms
@@ -110,6 +148,7 @@
 
     initRebuyCartOpenOnAdd();
     initCartIconOpensRebuy();
+    watchThemeCartDrawer();
     hideThemeCartDrawer();
   }
   
