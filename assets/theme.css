@@ -13206,14 +13206,25 @@ product-sticky {
 }
 
 @media only screen and (min-width: 750px) {
-  /* Sticky product gallery — needs Product pages → Enable sticky form ON */
-  product-sticky,
-  product-sticky .product__wrapper__inner,
-  product-sticky .product__page {
+  /* overflow-x:hidden on html/body breaks position:sticky — use clip on PDP */
+  html:has(body.template-product),
+  body.template-product {
+    overflow-x: clip;
+  }
+
+  .template-product .main-content,
+  .template-product .shopify-section.index-product,
+  .template-product product-component,
+  .template-product product-sticky,
+  .template-product .product__wrapper,
+  .template-product .product__wrapper__inner,
+  .template-product .product__page {
     overflow: visible !important;
   }
 
   product-sticky .product__page {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     align-items: start;
   }
 
@@ -13223,6 +13234,11 @@ product-sticky {
     align-self: start !important;
     z-index: 5;
     max-height: calc(100vh - var(--header-sticky-height, var(--header-height, 0px)) - 48px);
+  }
+
+  /* Gallery sticks; buy-box scrolls */
+  product-sticky .product__page .form__wrapper.is-sticky {
+    position: static !important;
   }
 }
 

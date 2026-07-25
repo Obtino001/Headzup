@@ -67,4 +67,17 @@
   .mobile-breadcrumb-wrapper {
     display: none !important;
   }
+
+  /* PDP sticky gallery fix — overflow-x:hidden on body breaks sticky */
+  html:has(body.template-product),
+  body.template-product {
+    overflow-x: clip !important;
+  }
+
+  body.template-product product-sticky .product__page > product-images.product__images {
+    position: sticky !important;
+    top: calc(var(--header-sticky-height, var(--header-height, 0px)) + 24px) !important;
+    align-self: start !important;
+    z-index: 5;
+  }
 }
