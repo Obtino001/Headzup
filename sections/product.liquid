@@ -378,10 +378,12 @@
                     -%}
 
                   {%- when 'cap_guide' -%}
-                    {%- render 'product-cap-guide',
-                      block: block,
-                      block_style: block_style
-                    -%}
+                    {%- unless product.has_only_default_variant -%}
+                      {%- render 'product-cap-guide',
+                        block: block,
+                        block_style: block_style
+                      -%}
+                    {%- endunless -%}
 
                 {%- when 'variants' -%}
                     {%- render 'product-variant-options',
@@ -394,9 +396,11 @@
                     -%}
 
                     {%- when 'ring_size' -%}
-                    <div class="rsg-inline-wrapper" style="margin-top: 5px; margin-bottom: 15px;">
-                    {%- render 'size-guide', block: block -%}
-                    </div>
+                    {%- unless product.has_only_default_variant -%}
+                      <div class="rsg-inline-wrapper" style="margin-top: 5px; margin-bottom: 15px;">
+                        {%- render 'size-guide', block: block -%}
+                      </div>
+                    {%- endunless -%}
 
                   {%- when 'buttons' -%}
                     {%- render 'product-buttons',
