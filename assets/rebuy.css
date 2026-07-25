@@ -22,8 +22,10 @@ html body .drawer--cart[data-headzup-cart-stub] .underlay {
   pointer-events: none !important;
 }
 
-/* Assortion cart — real open class is .ast-open */
-.ast-cart.ast-open {
+/* Assortion cart — open class is .ast-open */
+.ast-cart.ast-open,
+html.ast-cart-open .ast-cart,
+body.ast-cart-open .ast-cart {
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
