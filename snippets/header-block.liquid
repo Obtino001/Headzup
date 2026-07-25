@@ -71,16 +71,30 @@ Required params:
         display: grid;
         grid-template-columns: 1fr;
         gap: 30px;
-        padding-top: 10px;
+        padding-top: 16px;
+        padding-bottom: 16px;
         width: 100%;
       }
       .brands-category--grouped {
         margin-bottom: 20px;
       }
+      .brands-category--grouped:first-child .brands-category-title {
+        margin-top: 0;
+      }
       .brands-category-list--grouped {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 15px;
+      }
+      .header__dropdown__brands--grouped .brand-item {
+        width: 100%;
+        min-width: 0;
+      }
+      @media only screen and (max-width: 749px) {
+        .header__dropdown__brands--grouped {
+          padding-top: 20px;
+          padding-bottom: 24px;
+        }
       }
       @media only screen and (min-width: 750px) {
         .header__dropdown__brands--grouped {

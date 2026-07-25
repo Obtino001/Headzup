@@ -25535,12 +25535,16 @@ predictive-search[results] ~ .predictive-search--empty {
 @media (max-width: 768px) {
   .header__dropdown__brands {
     background: var(--white);
-    padding: 16px;
+    padding: 20px 16px 24px;
     justify-content: start;
   }
   .header__dropdown__brands--categorized {
     flex-direction: column;
     gap: 30px;
+  }
+  .header__dropdown__brands .brand-item {
+    width: 100%;
+    min-width: 0;
   }
 }
 
