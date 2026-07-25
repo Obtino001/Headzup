@@ -187,11 +187,6 @@
           "account_param": ""
         }
       },
-      "10301360418704718919": {
-        "type": "shopify://apps/assortion/blocks/app-embed/5588d7f9-a5bc-4f4a-9c54-39b7e081dd23",
-        "disabled": false,
-        "settings": {}
-      },
       "855628211100114053": {
         "type": "shopify://apps/klaviyo-email-marketing-sms/blocks/klaviyo-onsite-embed/2632fe16-c075-4321-a88b-50b567f42507",
         "disabled": false,
@@ -222,6 +217,13 @@
         "type": "shopify://apps/rebuy-personalization-engine/blocks/rebuy-global-embed/a26ae9b9-933b-40bf-bbc6-bf1220bbc4dc",
         "disabled": false,
         "settings": {}
+      },
+      "10301360418704718919": {
+        "type": "shopify://apps/assortion/blocks/app-embed/5588d7f9-a5bc-4f4a-9c54-39b7e081dd23",
+        "disabled": false,
+        "settings": {
+          "disabled_templates": ""
+        }
       }
     },
     "color_schemes": {

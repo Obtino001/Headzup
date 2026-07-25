@@ -1,5 +1,52 @@
-cart-drawer {
+/* Theme cart STUB only — never hide Assortion / other app carts */
+html body cart-drawer[data-headzup-cart-stub],
+html body #cart-drawer[data-headzup-cart-stub],
+html body .drawer--cart[data-headzup-cart-stub],
+html body [data-section-type="cart-drawer"]:has([data-headzup-cart-stub]) {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  position: absolute !important;
+  left: -9999px !important;
+}
+
+html body cart-drawer[data-headzup-cart-stub] .drawer__underlay,
+html body cart-drawer[data-headzup-cart-stub] .underlay,
+html body .drawer--cart[data-headzup-cart-stub] .drawer__underlay,
+html body .drawer--cart[data-headzup-cart-stub] .underlay {
+  display: none !important;
+  pointer-events: none !important;
+}
+
+/* Assortion cart open state — force visible on PDP/desktop */
+.ast-cart.ast-open,
+html.ast-cart-open .ast-cart,
+body.ast-cart-open .ast-cart {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  z-index: 2147483000 !important;
+}
+
+.ast-cart.ast-open .ast-cart__content {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+/* Hide Rebuy cart if embed still loads — Assortion is primary */
+#rebuy-cart,
+.rebuy-cart {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 :root {
