@@ -13685,8 +13685,7 @@ body.has-header-transparent.has-first-section-overlay-header.template-product .p
   gap: 0;
   width: 100%;
   max-width: 100%;
-  margin: 0 0 12px;
-  padding-bottom: 4px;
+  margin: 0 0 0.5em;
   overflow: hidden;
   white-space: nowrap;
 }
