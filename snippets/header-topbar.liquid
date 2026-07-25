@@ -33,7 +33,10 @@
   endcapture
 
   assign is_chapter_two = false
-  if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two
+  capture chapter_two_flag
+    render 'chapter-two-flag'
+  endcapture
+  if chapter_two_flag != blank
     assign is_chapter_two = true
   endif
 -%}
@@ -62,7 +65,7 @@
             <span class="header-topbar__search-text">{{ 'layout.header.search' | t }}</span>
         </div>
       {%- endif -%}
-      {% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %}
+      {% if is_chapter_two %}
         <a href="{{ routes.cart_url }}" class="header-topbar__icon header-topbar__icon--cart navlink chapter-two {{ navlink_cart_classes }}" title="{{ 'cart.general.title' | t }}" data-cart-toggle>
           <div class="header-topbar__icon navlink {% if show_icons == false %} navlink--toplevel{% endif %}" aria-haspopup="dialog" title="{{ 'general.search.search' | t }}">
             <span class="header-topbar__cart-text">{{ 'cart.general.title' | t }}</span>

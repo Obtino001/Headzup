@@ -32,7 +32,10 @@
   endif
 
   assign variant_lines_setting = settings.variant_lines
-  if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two
+  capture chapter_two_flag
+    render 'chapter-two-flag'
+  endcapture
+  if chapter_two_flag != blank
     assign variant_lines_setting = settings.variant_lines_chapter_two
   endif
 -%}

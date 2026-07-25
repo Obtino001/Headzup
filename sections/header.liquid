@@ -4,6 +4,14 @@
   assign animation_delay = 0
   assign animation_delay_increment = 50
 
+  capture chapter_two_flag
+    render 'chapter-two-flag'
+  endcapture
+  assign is_chapter_two = false
+  if chapter_two_flag != blank
+    assign is_chapter_two = true
+  endif
+
   assign toolbar_block = section.blocks | where: 'type', 'toolbar'
   assign toolbar_block = toolbar_block[0]
   assign show_toolbar_socials = false
@@ -64,7 +72,7 @@
     assign logo = transparent_logo
   endif
 
-  if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two and chapter_two_logo != blank
+  if is_chapter_two and chapter_two_logo != blank
     assign logo = chapter_two_logo
   endif
 
@@ -220,7 +228,7 @@
     {%- assign has_transparent_logo = true -%}
   {%- endif -%}
   <div class="header__logo{% if logo %} header__logo--image{% endif %}{% if has_transparent_logo %} header__logo--has-transparent{% endif %}">
-    <a class="header__logo__link" href="{% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %}/pages/chapter-two{% else %}{{ routes.root_url }}{% endif %}" data-logo-link>
+    <a class="header__logo__link" href="{% if is_chapter_two %}/pages/chapter-two{% else %}{{ routes.root_url }}{% endif %}" data-logo-link>
       {%- if logo != blank -%}
         {%- liquid
           assign alt = logo.alt | default: shop.name | strip_html | escape
@@ -464,7 +472,7 @@
 
 {%- capture menu -%}
   <nav class="header__menu{% if settings.type_nav_caps %} caps{% endif %}" {{ highlight_style }}>
-    {%- if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two -%}
+    {%- if is_chapter_two -%}
       {%- for link in linklists[chapter_two_main_menu_linklist].links -%}
         {%- render 'nav-item', link: link, index: forloop.index, highlight_item: highlight_item -%}
       {%- endfor -%}
@@ -496,10 +504,10 @@
           aria-controls="header-menu">
           {%- render 'icon-cancel' -%}
         </button>
-        {%- if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two -%}
+        {%- if is_chapter_two -%}
           <a
           class="header__logo__link header__logo__link--drawer"
-          href="{{ routes.root_url }}"
+          href="/pages/chapter-two"
           data-logo-link> 
           {%- liquid
             render 'image', image: section.settings.chapter_two_logo, width: section.settings.logo_max_limit, sizes: section.settings.logo_max_limit, widths: logo_widths, show_backfill: false, loading: 'lazy', fetchpriority: 'high'
@@ -530,7 +538,7 @@
 
               {%- if has_mobile_menu -%}
                 <div class="drawer__main-menu drawer__main-menu--mobile">
-                  {%- if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two -%}
+                  {%- if is_chapter_two -%}
                     {%- for link in linklists[chapter_two_mobile_menu_linklist].links -%}
                       {%- assign item_animation_delay = animation_delay_increment | times: forloop.index | plus: animation_delay -%}
                       {%- render 'nav-item-mobile', link: link, index: forloop.index, forloop_index: forloop.index, highlight_item: highlight_item, animation_delay: item_animation_delay, unique: 'mobile-menu--mobile' -%}

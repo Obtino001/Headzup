@@ -33,7 +33,7 @@
 {%- endstyle -%}
 
 <footer
-  class="site-footer-wrapper section-padding {% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %} {{ chapter_two_color_scheme }} {% else %} {{ color_scheme }} {% endif %}"
+  class="site-footer-wrapper section-padding {% capture chapter_two_flag %}{% render 'chapter-two-flag' %}{% endcapture %}{% if chapter_two_flag != blank %} {{ chapter_two_color_scheme }} {% else %} {{ color_scheme }} {% endif %}"
   data-section-id="{{ section.id }}"
   data-section-type="footer"
 >

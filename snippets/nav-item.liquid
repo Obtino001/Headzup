@@ -56,7 +56,10 @@
   endif
 
   assign is_chapter_two = false
-  if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two
+  capture chapter_two_flag
+    render 'chapter-two-flag'
+  endcapture
+  if chapter_two_flag != blank
     assign is_chapter_two = true
   endif
 -%}

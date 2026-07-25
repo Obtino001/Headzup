@@ -19,16 +19,32 @@
     return true;
   }
 
+  function hideThemeCartDrawer() {
+    document.querySelectorAll('cart-drawer, .drawer--cart').forEach((drawer) => {
+      drawer.classList.remove('is-open', 'is-closing');
+      drawer.setAttribute('aria-hidden', 'true');
+    });
+
+    document.querySelectorAll('.drawer--cart .drawer__underlay, cart-drawer .drawer__underlay').forEach((underlay) => {
+      underlay.classList.remove('underlay--visible');
+      underlay.style.display = 'none';
+    });
+  }
+
   function initRebuyCartOpenOnAdd() {
     document.addEventListener('theme:product:added', () => {
+      hideThemeCartDrawer();
+
       // Small delay so Rebuy can sync cart state first
       setTimeout(() => {
+        hideThemeCartDrawer();
         if (openRebuySmartCart()) return;
 
         // Retry briefly if Rebuy is still booting (common on mobile)
         let attempts = 0;
         const retry = setInterval(() => {
           attempts += 1;
+          hideThemeCartDrawer();
           if (openRebuySmartCart() || attempts >= 10) {
             clearInterval(retry);
           }
@@ -37,11 +53,44 @@
     });
   }
 
+  function initCartIconOpensRebuy() {
+    document.addEventListener(
+      'click',
+      (event) => {
+        const cartToggle = event.target.closest('[data-cart-toggle], .header-topbar__icon--cart, a[href$="/cart"]');
+        if (!cartToggle) return;
+
+        // Let checkout / real cart page links alone if explicitly needed
+        if (cartToggle.closest('.rebuy-cart, #rebuy-cart')) return;
+
+        event.preventDefault();
+        event.stopPropagation();
+        hideThemeCartDrawer();
+        openRebuySmartCart();
+      },
+      true
+    );
+
+    // If theme somehow opens its drawer, force-close it and show Rebuy
+    document.addEventListener('theme:cart-drawer:show', (event) => {
+      event.stopImmediatePropagation();
+      hideThemeCartDrawer();
+      openRebuySmartCart();
+    });
+
+    document.addEventListener('theme:cart:toggle', (event) => {
+      event.stopImmediatePropagation();
+      hideThemeCartDrawer();
+      openRebuySmartCart();
+    });
+  }
+
   function initRebuyCart() {
     document.addEventListener("rebuy:smartcart.ready", (e) => {
       const cart = e.detail.smartcart.cart;
       showPaymentIcons();
       freeShippingLimit(cart);
+      hideThemeCartDrawer();
 
       // Make sure theme drawer never blocks Rebuy on mobile
       if (window.Rebuy?.SmartCart) {
@@ -53,9 +102,12 @@
       const cart = e.detail.cart.cart;
       showPaymentIcons();
       freeShippingLimit(cart);
+      hideThemeCartDrawer();
     });
 
     initRebuyCartOpenOnAdd();
+    initCartIconOpensRebuy();
+    hideThemeCartDrawer();
   }
   
   function showPaymentIcons() {

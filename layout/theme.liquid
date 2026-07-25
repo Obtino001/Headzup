@@ -23,7 +23,7 @@ var S=(f,T,m)=>new Promise((q,v)=>{var x=y=>{try{h(m.next(y))}catch(E){v(E)}},I=
 
   <body
     id="{{ page_title | handle }}"
-    class="template-{{ template.name | handle }} grid-{{ settings.grid_style }}{% if customer %} customer-logged-in{% endif %}{% if settings.animations_enable %} aos-initialized{% endif %}{% if settings.product_grid_outline %} has-line-design{% endif %}{% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %} chapter-two{% endif %} "
+    class="template-{{ template.name | handle }} grid-{{ settings.grid_style }}{% if customer %} customer-logged-in{% endif %}{% if settings.animations_enable %} aos-initialized{% endif %}{% if settings.product_grid_outline %} has-line-design{% endif %}{% capture chapter_two_flag %}{% render 'chapter-two-flag' %}{% endcapture %}{% if chapter_two_flag != blank %} chapter-two{% endif %}"
     data-animations="{{ settings.animations_enable }}"
   >
     {%- render 'loading' -%}

@@ -1,5 +1,29 @@
-cart-drawer {
+/* Theme cart drawer fully disabled — Rebuy Smart Cart only */
+cart-drawer,
+#cart-drawer,
+.drawer--cart,
+[data-section-type="cart-drawer"],
+.shopify-section:has(> [data-section-type="cart-drawer"]),
+.shopify-section:has(cart-drawer) {
   display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  z-index: -1 !important;
+}
+
+cart-drawer .drawer__underlay,
+.drawer--cart .drawer__underlay,
+.drawer--cart .underlay,
+cart-drawer.is-open,
+.drawer--cart.is-open {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 #rebuy-cart,

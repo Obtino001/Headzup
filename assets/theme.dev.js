@@ -2384,32 +2384,10 @@
        */
 
       openCartDrawer(forceOpen = false) {
-        // if (!forceOpen && this.classList.contains(classes$m.duplicate)) return;
-
-        // this.cartDrawerIsOpen = true;
-        // this.onBodyClickEvent = this.onBodyClickEvent || this.onBodyClick.bind(this);
-        // document.body.addEventListener('click', this.onBodyClickEvent);
-
-        // document.dispatchEvent(
-        //   new CustomEvent('theme:cart-drawer:open', {
-        //     detail: {
-        //       target: this,
-        //     },
-        //     bubbles: true,
-        //   })
-        // );
-        // document.dispatchEvent(new CustomEvent('theme:scroll:lock', {bubbles: true}));
-
-        // this.classList.add(classes$m.open);
-
-        // // Observe Additional Checkout Buttons
-        // this.observeAdditionalCheckoutButtons();
-
-        // window.theme.waitForAnimationEnd(this.cartDrawerInner).then(() => {
-        //   this.a11y.trapFocus(this, {
-        //     elementToFocus: this.querySelector(selectors$r.cartDrawerClose),
-        //   });
-        // });
+        // Theme cart drawer disabled — Rebuy Smart Cart is used instead.
+        this.classList.remove(classes$m.open, classes$m.closing);
+        this.cartDrawerIsOpen = false;
+        return;
       }
 
       /**
@@ -3318,17 +3296,19 @@
           }
 
           cartToggleEvent() {
-            if (theme.settings.cartType !== 'drawer') return;
-
             this.querySelectorAll(selectors$m.cartToggleButton)?.forEach((button) => {
               button.addEventListener('click', (e) => {
-                const cartDrawer = document.querySelector(selectors$m.cartDrawer);
+                e.preventDefault();
 
-                if (cartDrawer) {
-                  e.preventDefault();
-                  cartDrawer.dispatchEvent(new CustomEvent('theme:cart-drawer:show'));
-                  window.a11y.lastElement = button;
+                // Prefer Rebuy Smart Cart when available
+                if (window.Rebuy?.SmartCart && typeof window.Rebuy.SmartCart.show === 'function') {
+                  window.Rebuy.SmartCart.skip_open = false;
+                  window.Rebuy.SmartCart.show();
+                  return;
                 }
+
+                // Theme drawer fallback disabled — go to cart page
+                window.location.href = theme.routes.cart_url || '/cart';
               });
             });
           }

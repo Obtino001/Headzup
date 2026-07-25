@@ -106,8 +106,10 @@
   assign widths = '136, 160, 180, 220, 254, 284, 292, 320, 480, 528, 640, 720, 960, 1080, 1296, 1512, 1728, 1950'
   assign aspect_ratio = 1 | divided_by: settings.product_grid_aspect_ratio
   assign chapter_two_aspect_ratio = 1.2 | divided_by: settings.chapter_two_product_grid_aspect_ratio
-
-  if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two
+  capture chapter_two_flag
+    render 'chapter-two-flag'
+  endcapture
+  if chapter_two_flag != blank
     assign aspect_ratio = chapter_two_aspect_ratio
   endif
 

@@ -1,0 +1,70 @@
+{%- comment -%}
+  Outputs "true" when the current context belongs to Chapter Two.
+  Usage:
+    {% capture chapter_two_flag %}{% render 'chapter-two-flag' %}{% endcapture %}
+    {% if chapter_two_flag != blank %} ... {% endif %}
+{%- endcomment -%}
+{%- liquid
+  assign chapter_two_match = false
+
+  if template.suffix == 'chapter-two'
+    assign chapter_two_match = true
+  endif
+
+  if chapter_two_match == false and product.metafields.custom.chapter_two.value == true
+    assign chapter_two_match = true
+  endif
+
+  if chapter_two_match == false and collection.metafields.custom.chapter_two.value == true
+    assign chapter_two_match = true
+  endif
+
+  if chapter_two_match == false and page.metafields.custom.chapter_two.value == true
+    assign chapter_two_match = true
+  endif
+
+  comment
+    Product page: also treat as Chapter Two if the product sits in a Chapter Two collection
+  endcomment
+  if chapter_two_match == false and product != blank
+    for product_collection in product.collections
+      if product_collection.metafields.custom.chapter_two.value == true
+        assign chapter_two_match = true
+        break
+      endif
+
+      assign collection_handle = product_collection.handle | downcase
+      if collection_handle contains 'chapter-two' or collection_handle contains 'chapter_two'
+        assign chapter_two_match = true
+        break
+      endif
+    endfor
+  endif
+
+  comment
+    Product tags fallback (tag products with chapter-two)
+  endcomment
+  if chapter_two_match == false and product != blank
+    if product.tags contains 'chapter-two' or product.tags contains 'chapter_two' or product.tags contains 'Chapter Two'
+      assign chapter_two_match = true
+    endif
+  endif
+
+  comment
+    Page handle fallback (e.g. /pages/chapter-two)
+  endcomment
+  if chapter_two_match == false and page.handle == 'chapter-two'
+    assign chapter_two_match = true
+  endif
+
+  comment
+    Request path fallback
+  endcomment
+  if chapter_two_match == false
+    assign request_path = request.path | downcase
+    if request_path contains '/pages/chapter-two' or request_path contains '/collections/chapter-two'
+      assign chapter_two_match = true
+    endif
+  endif
+-%}
+{%- if chapter_two_match -%}true{%- endif -%}

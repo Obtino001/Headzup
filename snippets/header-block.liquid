@@ -90,7 +90,8 @@ Required params:
     </style>
     <div class="header__dropdown__brands header__dropdown__brands--grouped">
       {% assign brand_metaobject_values = metaobjects.brands.values | sort: 'title' %}
-      {% if page.metafields.custom.chapter_two or product.metafields.custom.chapter_two or collection.metafields.custom.chapter_two %}
+      {% capture chapter_two_flag %}{% render 'chapter-two-flag' %}{% endcapture %}
+      {% if chapter_two_flag != blank %}
         {% assign brand_metaobject_values = metaobjects.brands_chapter_two.values | sort: 'title' %}
       {% endif %}
       
