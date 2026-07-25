@@ -1,14 +1,8 @@
-/* Theme cart drawer OFF — Assortion is the live cart app */
-html body cart-drawer,
-html body #cart-drawer,
-html body .drawer--cart,
-html body [data-section-type="cart-drawer"],
-html body .shopify-section:has(> [data-section-type="cart-drawer"]),
-html body .shopify-section:has(cart-drawer),
-html body cart-drawer.is-open,
-html body .drawer--cart.is-open,
-html body cart-drawer.is-closing,
-html body .drawer--cart.is-closing {
+/* Theme cart STUB only — never hide Assortion / other app carts */
+html body cart-drawer[data-headzup-cart-stub],
+html body #cart-drawer[data-headzup-cart-stub],
+html body .drawer--cart[data-headzup-cart-stub],
+html body [data-section-type="cart-drawer"]:has([data-headzup-cart-stub]) {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
@@ -16,15 +10,14 @@ html body .drawer--cart.is-closing {
   width: 0 !important;
   height: 0 !important;
   overflow: hidden !important;
-  z-index: -9999 !important;
-  position: fixed !important;
+  position: absolute !important;
   left: -9999px !important;
 }
 
-html body cart-drawer .drawer__underlay,
-html body .drawer--cart .drawer__underlay,
-html body .drawer--cart .underlay,
-html body cart-drawer .underlay {
+html body cart-drawer[data-headzup-cart-stub] .drawer__underlay,
+html body cart-drawer[data-headzup-cart-stub] .underlay,
+html body .drawer--cart[data-headzup-cart-stub] .drawer__underlay,
+html body .drawer--cart[data-headzup-cart-stub] .underlay {
   display: none !important;
   pointer-events: none !important;
 }

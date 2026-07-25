@@ -1610,21 +1610,17 @@
                 );
               }
 
-              // Assortion cart app — never redirect to /cart page
+              // Stay on page — Assortion opens from its cart/add network intercept.
+              // Do NOT call HeadzupCart.open here (it was closing Assortion on PDP).
               document.dispatchEvent(
                 new CustomEvent('theme:product:added', {
                   bubbles: true,
                   detail: {response: response},
                 })
               );
-
-              if (window.HeadzupCart?.openWithRetry) {
-                window.HeadzupCart.openWithRetry();
-              }
-              // Stay on page — Assortion opens from cart/add network intercept
               return;
             } else {
-              // No theme cart element — stay on page, open Assortion
+              // No theme cart element — stay on page (never redirect to /cart)
               if (button) {
                 button.classList.remove(classes$n.loading);
                 button.classList.add(classes$n.added);
@@ -1645,11 +1641,6 @@
                   detail: {response: response},
                 })
               );
-
-              if (window.HeadzupCart?.openWithRetry) {
-                window.HeadzupCart.openWithRetry();
-              }
-              // NEVER redirect to /cart — that was causing the page refresh
               return;
             }
           })
@@ -2360,12 +2351,7 @@
       }
 
       openCartDrawerOnProductAdded() {
-        // Never open theme drawer — Assortion handles cart UI
-        if (window.HeadzupCart?.openWithRetry) {
-          window.HeadzupCart.openWithRetry();
-        } else if (window.HeadzupCart?.open) {
-          window.HeadzupCart.open();
-        }
+        // Assortion opens itself via network intercept — do not force-open
         return;
       }
 
@@ -2378,13 +2364,11 @@
       }
 
       openCartDrawer(forceOpen = false) {
+        // Theme stub never opens — Assortion is the cart UI
         this.classList.remove(classes$m.open, classes$m.closing);
         this.cartDrawerIsOpen = false;
         this.setAttribute('aria-hidden', 'true');
         this.style.setProperty('display', 'none', 'important');
-        if (window.HeadzupCart?.open) {
-          window.HeadzupCart.open();
-        }
         return;
       }
 
@@ -2393,14 +2377,10 @@
         this.cartDrawerIsOpen = false;
         this.setAttribute('aria-hidden', 'true');
         this.style.setProperty('display', 'none', 'important');
-        document.dispatchEvent(new CustomEvent('theme:cart-drawer:close', { bubbles: true }));
-        document.dispatchEvent(new CustomEvent('theme:scroll:unlock', { bubbles: true }));
       }
 
       toggleCartDrawer() {
-        if (window.HeadzupCart?.open) {
-          window.HeadzupCart.open();
-        }
+        // Cart icon is handled in custom.js → Assortion
         return;
       }
 
@@ -3246,28 +3226,9 @@
           }
 
           cartToggleEvent() {
-            // Assortion owns the cart drawer. Only stop /cart page navigation;
-            // then ask Assortion to open (do not open theme drawer).
-            this.querySelectorAll(selectors$m.cartToggleButton)?.forEach((button) => {
-              button.addEventListener(
-                'click',
-                (e) => {
-                  e.preventDefault();
-                  if (window.HeadzupCart?.killTheme) {
-                    window.HeadzupCart.killTheme();
-                  }
-                  // Prefer Assortion open after the click stack finishes
-                  setTimeout(() => {
-                    if (window.HeadzupCart?.open) {
-                      window.HeadzupCart.open();
-                    } else {
-                      document.dispatchEvent(new CustomEvent('theme:cart:toggle', {bubbles: true}));
-                    }
-                  }, 0);
-                },
-                false
-              );
-            });
+            // Do NOT intercept cart icon clicks.
+            // Assortion (or the /cart link) must receive the native click.
+            // Theme drawer opens are blocked in CartDrawer.openCartDrawer instead.
           }
 
           toggleButtonClick(e) {

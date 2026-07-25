@@ -38,15 +38,11 @@
   }
 
   function openAppCart() {
-    if (window.HeadzupCart?.openWithRetry) {
-      window.HeadzupCart.openWithRetry();
-      return;
-    }
-    if (window.HeadzupCart?.open) {
-      window.HeadzupCart.open();
-      return;
-    }
-    document.dispatchEvent(new CustomEvent('theme:product:added', { bubbles: true }));
+    // Assortion auto-opens on cart/add; only nudge if icon open helper exists
+    if (window.HeadzupCart?.killTheme) window.HeadzupCart.killTheme();
+    setTimeout(() => {
+      if (window.HeadzupCart?.open) window.HeadzupCart.open();
+    }, 300);
   }
 
   async function addBundleToCart(submitBtn, checkedItems) {
