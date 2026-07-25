@@ -1,15 +1,9 @@
 /*
- * Assortion cart UI. Theme cart-drawer = hidden AJAX stub.
- * Mobile often auto-opens; desktop often needs an explicit nudge.
+ * Assortion cart: .ast-cart + .ast-open
+ * Theme cart-drawer stub stays hidden for AJAX ATC only.
  */
 
 (function () {
-  const OPEN_CLASSES = ['open', 'is-open', 'active', 'is-active', 'visible', 'is-visible', 'show', 'is-show'];
-
-  function isThemeStub(node) {
-    return !!(node?.hasAttribute?.('data-headzup-cart-stub') || node?.closest?.('[data-headzup-cart-stub]'));
-  }
-
   function killThemeStubOnly() {
     document.querySelectorAll('[data-headzup-cart-stub]').forEach((drawer) => {
       drawer.classList.remove('is-open', 'is-closing');
@@ -18,155 +12,34 @@
     });
   }
 
-  function walk(node, fn) {
-    if (!node) return;
-    fn(node);
-    if (node.shadowRoot) walk(node.shadowRoot, fn);
-    const children = node.children || [];
-    for (let i = 0; i < children.length; i++) walk(children[i], fn);
-  }
-
-  function looksLikeAssortionCart(el) {
-    if (!el || el.nodeType !== 1 || isThemeStub(el)) return false;
-    if (el.closest?.('header, .header-topbar, nav')) return false;
-
-    const id = (el.id || '').toLowerCase();
-    const cls = (typeof el.className === 'string' ? el.className : el.className?.baseVal || '').toLowerCase();
-    const tag = (el.tagName || '').toLowerCase();
-    const attrs = `${el.getAttribute('data-testid') || ''} ${el.getAttribute('role') || ''}`.toLowerCase();
-
-    if (/rebuy/.test(id + cls + tag)) return false;
-    if (tag === 'cart-drawer' || tag === 'cart-items') return false;
-
-    if (/assort|ast-cart|ast_cart|astcart/.test(id + cls + tag + attrs)) return true;
-    if (el.getAttribute('data-assortion-cart') != null) return true;
-    if (el.getAttribute('data-ast-cart') != null) return true;
-
-    const text = (el.textContent || '').slice(0, 500).toLowerCase();
-    if (text.includes('indkøbskurv') || text.includes('indkobskurv')) return true;
-
-    return false;
-  }
-
-  function collectAssortionNodes() {
-    const found = [];
-    walk(document.body, (el) => {
-      if (looksLikeAssortionCart(el)) found.push(el);
-    });
-    return found;
-  }
-
-  function isVisibleCart(el) {
-    if (!el) return false;
-    const style = window.getComputedStyle(el);
-    if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') return false;
-    const rect = el.getBoundingClientRect();
-    if (rect.width < 80 || rect.height < 80) return false;
-    // Closed drawers often sit off-screen to the right
-    if (rect.left > window.innerWidth - 40) return false;
-    if (style.transform && /translateX\((100%|[1-9]\d{2,}px)\)/.test(style.transform)) return false;
-    return true;
+  function getAstCart() {
+    return document.querySelector('.ast-cart');
   }
 
   function isAssortionOpen() {
-    return collectAssortionNodes().some(isVisibleCart);
-  }
-
-  function revealNode(el) {
-    if (!el || isThemeStub(el)) return;
-    OPEN_CLASSES.forEach((c) => el.classList.add(c));
-    el.removeAttribute('hidden');
-    el.setAttribute('aria-hidden', 'false');
-    el.style.removeProperty('display');
-    el.style.removeProperty('visibility');
-    el.style.removeProperty('opacity');
-    el.style.removeProperty('pointer-events');
-    el.style.setProperty('transform', 'translateX(0)', 'important');
-    el.style.setProperty('right', '0', 'important');
-    el.style.setProperty('z-index', '2147483000', 'important');
-    el.style.setProperty('pointer-events', 'auto', 'important');
-    if (typeof el.open === 'function') {
-      try {
-        el.open();
-      } catch (e) {}
-    }
-    if ('open' in el && typeof el.open === 'boolean') {
-      try {
-        el.open = true;
-      } catch (e) {}
-    }
-  }
-
-  function findAssortionApi() {
-    const keys = Object.keys(window).filter((k) => /ast|assort/i.test(k));
-    for (const key of keys) {
-      const val = window[key];
-      if (!val) continue;
-      if (typeof val === 'function' && /open|cart/i.test(key)) {
-        try {
-          return val.bind(window);
-        } catch (e) {}
-      }
-      if (typeof val !== 'object') continue;
-      for (const method of ['openCart', 'open', 'show', 'toggle', 'showCart', 'openDrawer']) {
-        if (typeof val[method] === 'function') return val[method].bind(val);
-        if (val.Cart && typeof val.Cart[method] === 'function') return val.Cart[method].bind(val.Cart);
-        if (val.cart && typeof val.cart[method] === 'function') return val.cart[method].bind(val.cart);
-        if (val.drawer && typeof val.drawer[method] === 'function') return val.drawer[method].bind(val.drawer);
-      }
-    }
-    return null;
-  }
-
-  function dispatchOpenEvents() {
-    const names = [
-      'assortion:cart:open',
-      'ast:cart:open',
-      'ast:open-cart',
-      'assortion:open',
-      'cart:open',
-      'open-cart',
-    ];
-    names.forEach((name) => {
-      document.dispatchEvent(new CustomEvent(name, { bubbles: true }));
-      window.dispatchEvent(new CustomEvent(name));
-    });
-    try {
-      window.postMessage({ type: 'assortion:cart:open' }, '*');
-      window.postMessage({ source: 'assortion', action: 'openCart' }, '*');
-    } catch (e) {}
+    const cart = getAstCart();
+    return !!(cart && cart.classList.contains('ast-open'));
   }
 
   function openAssortionCart() {
     killThemeStubOnly();
-    if (isAssortionOpen()) return true;
 
-    const api = findAssortionApi();
-    if (api) {
-      try {
-        api();
-        if (isAssortionOpen()) return true;
-      } catch (e) {
-        console.warn('[HeadzupCart] Assortion API failed', e);
-      }
-    }
+    const cart = getAstCart();
+    if (!cart) return false;
 
-    dispatchOpenEvents();
+    cart.classList.add('ast-open');
+    cart.removeAttribute('hidden');
+    cart.setAttribute('aria-hidden', 'false');
 
-    const nodes = collectAssortionNodes();
-    nodes.forEach(revealNode);
-    // Also reveal likely parents (flyout wrappers)
-    nodes.forEach((node) => {
-      let p = node.parentElement;
-      for (let i = 0; i < 4 && p; i++) {
-        if (looksLikeAssortionCart(p) || /assort|ast-cart/i.test((p.id || '') + (p.className || ''))) {
-          revealNode(p);
-        }
-        p = p.parentElement;
-      }
-    });
+    // Clear any leftover theme overrides that could hide it
+    cart.style.removeProperty('display');
+    cart.style.removeProperty('visibility');
+    cart.style.removeProperty('opacity');
+    cart.style.removeProperty('pointer-events');
+    cart.style.removeProperty('transform');
+    cart.style.removeProperty('z-index');
 
-    return isAssortionOpen() || nodes.length > 0;
+    return cart.classList.contains('ast-open');
   }
 
   function openAssortionWithRetry() {
@@ -174,19 +47,22 @@
     let attempts = 0;
     const id = setInterval(() => {
       attempts += 1;
-      if (isAssortionOpen() || openAssortionCart() || attempts >= 12) clearInterval(id);
+      if (openAssortionCart() || attempts >= 15) clearInterval(id);
     }, 200);
   }
 
-  // After ATC: Assortion may auto-open (mobile). If not, force on desktop.
   function afterProductAdded() {
     killThemeStubOnly();
+    // Assortion may auto-open; if not (common on PDP), force .ast-open
     setTimeout(() => {
       if (!isAssortionOpen()) openAssortionWithRetry();
-    }, 250);
+    }, 150);
     setTimeout(() => {
       if (!isAssortionOpen()) openAssortionWithRetry();
-    }, 800);
+    }, 600);
+    setTimeout(() => {
+      if (!isAssortionOpen()) openAssortionWithRetry();
+    }, 1200);
   }
 
   function bindCartIcon() {
@@ -204,19 +80,6 @@
       );
     });
   }
-
-  // Watch Assortion mount late, then ensure cart icon is bound
-  const observer = new MutationObserver(() => {
-    const openStub = document.querySelector('[data-headzup-cart-stub].is-open');
-    if (openStub) killThemeStubOnly();
-    bindCartIcon();
-  });
-  observer.observe(document.documentElement, {
-    childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ['class', 'href', 'style'],
-  });
 
   document.addEventListener(
     'submit',
@@ -247,23 +110,34 @@
     openAssortionWithRetry();
   });
 
-  // If Assortion uses fetch interception, also nudge after our own ATC fetches settle
+  // After any cart mutation Assortion syncs — ensure drawer is open on PDP ATC
   const originalFetch = window.fetch;
   if (typeof originalFetch === 'function') {
     window.fetch = function () {
-      const args = arguments;
-      const input = args[0];
+      const input = arguments[0];
       const url = typeof input === 'string' ? input : input?.url || '';
-      return originalFetch.apply(this, args).then((response) => {
+      return originalFetch.apply(this, arguments).then((response) => {
         if (/\/cart\/(add|change|update)/.test(url)) {
           setTimeout(() => {
             if (!isAssortionOpen()) openAssortionWithRetry();
-          }, 300);
+          }, 250);
         }
         return response;
       });
     };
   }
+
+  const observer = new MutationObserver(() => {
+    const openStub = document.querySelector('[data-headzup-cart-stub].is-open');
+    if (openStub) killThemeStubOnly();
+    bindCartIcon();
+  });
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['class', 'href'],
+  });
 
   killThemeStubOnly();
   bindCartIcon();

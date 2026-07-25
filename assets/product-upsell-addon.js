@@ -38,11 +38,11 @@
   }
 
   function openAppCart() {
-    // Assortion auto-opens on cart/add; only nudge if icon open helper exists
     if (window.HeadzupCart?.killTheme) window.HeadzupCart.killTheme();
     setTimeout(() => {
-      if (window.HeadzupCart?.open) window.HeadzupCart.open();
-    }, 300);
+      if (window.HeadzupCart?.openWithRetry) window.HeadzupCart.openWithRetry();
+      else if (window.HeadzupCart?.open) window.HeadzupCart.open();
+    }, 200);
   }
 
   async function addBundleToCart(submitBtn, checkedItems) {
