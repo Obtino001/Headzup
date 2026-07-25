@@ -14,44 +14,44 @@
 }
 
 .product__content .anyday-widget-custom {
-  margin-top: 4px;
-  margin-bottom: 12px;
+  margin-top: 8px;
+  margin-bottom: 20px;
 }
 
 .product__content .rsg-inline-wrapper {
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  margin: 0 0 12px;
+  margin: 0 0 16px;
 }
 
 .product__content .product-cap-guide.block-padding {
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   padding: 0;
 }
 
 .product__content .product__form__holder.block-padding {
-  margin: 0 0 12px;
+  margin: 0 0 16px;
 }
 
 .product__content .gift-wrap-addon-container {
-  margin: 0 0 12px;
+  margin: 0 0 20px;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
 
 .product__content .product__block--buttons.block-padding {
-  margin: 0 0 8px;
+  margin: 0 0 12px;
 }
 
 .product__content .shipping-info-block {
-  margin-block: 12px;
+  margin-block: 16px;
 }
 
 .product__content shopify-block,
 .product__content .shopify-app-block {
   display: block;
-  margin: 0 0 8px;
+  margin: 0 0 12px;
 }
 
 @media only screen and (max-width: 749px) {
