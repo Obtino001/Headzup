@@ -6,9 +6,61 @@
     line-height: 150%;
 }
 
+/* Product buy-box: even spacing between blocks */
+.product__content .product__text--anyday-widget.block-padding,
+.product__content .product__text--anyday-widget {
+  margin: 0;
+  padding-bottom: 0 !important;
+}
+
+.product__content .anyday-widget-custom {
+  margin-top: 4px;
+  margin-bottom: 12px;
+}
+
+.product__content .rsg-inline-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin: 0 0 12px;
+}
+
+.product__content .product-cap-guide.block-padding {
+  margin: 0 0 12px;
+  padding: 0;
+}
+
+.product__content .product__form__holder.block-padding {
+  margin: 0 0 12px;
+}
+
+.product__content .gift-wrap-addon-container {
+  margin: 0 0 12px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.product__content .product__block--buttons.block-padding {
+  margin: 0 0 8px;
+}
+
+.product__content .shipping-info-block {
+  margin-block: 12px;
+}
+
+.product__content shopify-block,
+.product__content .shopify-app-block {
+  display: block;
+  margin: 0 0 8px;
+}
+
 @media only screen and (max-width: 749px) {
   .desktop-breadcrumb-wrapper {
     display: none !important;
+  }
+
+  .product__content .product__block.product__text:not(.product__text--anyday-widget) {
+    padding-bottom: 20px !important;
   }
 }
 @media only screen and (min-width: 750px) {

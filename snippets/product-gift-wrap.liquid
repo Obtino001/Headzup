@@ -4,8 +4,8 @@
 {%- liquid
   assign gift_product = block.settings.gift_product
   assign accent_color = block.settings.accent_color | default: "#0c2340"
-  assign padding_top = block.settings.padding_top | default: 16
-  assign padding_bottom = block.settings.padding_bottom | default: 16
+  assign padding_top = block.settings.padding_top | default: 0
+  assign padding_bottom = block.settings.padding_bottom | default: 12
 -%}
 
 {%- if gift_product != blank -%}

@@ -702,7 +702,7 @@ body.chapter-two .tab-link span {
     padding-bottom: 6px;
   }
 
-  .product__block.product__text {
+  .product__block.product__text:not(.product__text--anyday-widget) {
    padding-bottom: 20px !important;
   }
 

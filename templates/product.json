@@ -77,7 +77,7 @@
             "text_font_size": "body-medium",
             "text_alignment": "text-left",
             "layout": "left",
-            "padding_bottom": 0
+            "padding_bottom": 12
           }
         },
         "inventory_countdown_ePdH6p": {
@@ -131,7 +131,7 @@
           "type": "variants",
           "settings": {
             "subscriptions_enable_selectors": false,
-            "padding_bottom": 0
+            "padding_bottom": 12
           }
         },
         "gift_wrap_A7y3DW": {
@@ -139,8 +139,8 @@
           "settings": {
             "gift_product": "giftbox",
             "accent_color": "#0c2340",
-            "padding_top": 16,
-            "padding_bottom": 16
+            "padding_top": 0,
+            "padding_bottom": 12
           }
         },
         "buttons": {
@@ -155,7 +155,7 @@
             "button_size_dynamic": "",
             "button_style_dynamic": "btn--solid",
             "show_gift_card_recipient": false,
-            "padding_bottom": 20
+            "padding_bottom": 8
           }
         },
         "onskeskyen_wishlist_button_tfCaQD": {
@@ -189,7 +189,7 @@
             "cutoff_saturday": 14,
             "hardcoded_text": "1-3 hverdage",
             "delivery_days": 3,
-            "padding_bottom": 16
+            "padding_bottom": 12
           }
         },
         "countdown_jFJ7N3": {
