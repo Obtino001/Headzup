@@ -6306,6 +6306,8 @@
             const productPriceEl = wrap.querySelector(selectors$9.productPrice);
             const comparePriceText = wrap.querySelector(selectors$9.comparePriceText);
 
+            if (!productPriceEl) return;
+
             let comparePrice = '';
             let price = '';
 
@@ -6326,11 +6328,11 @@
             if (comparePriceEl) {
               if (this.productState.onSale || this.productState.planSale) {
                 comparePriceEl.classList.remove(classes$8.hidden);
-                comparePriceText.classList.remove(classes$8.hidden);
+                comparePriceText?.classList.remove(classes$8.hidden);
                 productPriceEl.classList.add(classes$8.productPriceSale);
               } else {
                 comparePriceEl.classList.add(classes$8.hidden);
-                comparePriceText.classList.add(classes$8.hidden);
+                comparePriceText?.classList.add(classes$8.hidden);
                 productPriceEl.classList.remove(classes$8.productPriceSale);
               }
               comparePriceEl.innerHTML = window.theme.formatMoney(comparePrice, theme.moneyFormat);

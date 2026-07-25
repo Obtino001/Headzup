@@ -1,9 +1,20 @@
 /**
- * Gift box + Ofte købt sammen addons.
- * Adds items via cart/add.js then opens Assortion cart (NOT Rebuy / theme drawer).
+ * Gift box + Ofte købt sammen — add via /cart/add.js then open Assortion.
  */
 (function () {
   const ATC_SELECTOR = '[data-add-to-cart], [type="submit"][name="add"], button[name="add"]';
+
+  function rootUrl() {
+    return window.Shopify?.routes?.root || '/';
+  }
+
+  // Must be .js endpoint for JSON { items: [...] }
+  function cartAddUrl() {
+    const fromTheme = window.theme?.routes?.cart_add_url || '';
+    if (fromTheme.endsWith('.js')) return fromTheme;
+    if (fromTheme) return fromTheme.replace(/\/?$/, '') + '.js';
+    return rootUrl() + 'cart/add.js';
+  }
 
   function collectCheckedItems() {
     const items = [];
@@ -18,16 +29,28 @@
   }
 
   function getMainVariantId(form) {
-    if (!form) {
-      const input = document.querySelector(
-        'product-form input[name="id"], form[action*="/cart/add"] input[name="id"]'
-      );
-      return input ? parseInt(input.value, 10) : null;
+    const formId = form?.getAttribute?.('id');
+    const candidates = [];
+
+    if (formId) {
+      candidates.push(document.querySelector(`input[name="id"][form="${formId}"]`));
     }
-    const formId = form.getAttribute('id');
-    let input = formId ? document.querySelector(`input[name="id"][form="${formId}"]`) : null;
-    if (!input) input = form.querySelector('[name="id"]');
-    return input ? parseInt(input.value, 10) : null;
+    if (form) {
+      candidates.push(form.querySelector('[name="id"]'));
+    }
+    candidates.push(
+      document.querySelector('product-form input[name="id"]'),
+      document.querySelector('[data-product-form] input[name="id"]'),
+      document.querySelector('form[action*="/cart/add"] [name="id"]'),
+      document.querySelector('input[name="id"][form]')
+    );
+
+    for (const input of candidates) {
+      if (!input || !input.value) continue;
+      const id = parseInt(input.value, 10);
+      if (id) return id;
+    }
+    return null;
   }
 
   function formatMoney(cents) {
@@ -38,49 +61,89 @@
   }
 
   function openAppCart() {
-    if (window.HeadzupCart?.killTheme) window.HeadzupCart.killTheme();
     setTimeout(() => {
       if (window.HeadzupCart?.openWithRetry) window.HeadzupCart.openWithRetry();
       else if (window.HeadzupCart?.open) window.HeadzupCart.open();
-    }, 200);
+      else document.querySelector('.ast-cart')?.classList.add('ast-open');
+      document.dispatchEvent(new CustomEvent('theme:product:added', { bubbles: true }));
+    }, 250);
+  }
+
+  async function addOneItem(item) {
+    const response = await fetch(cartAddUrl(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: JSON.stringify({ id: item.id, quantity: item.quantity || 1 }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || data.status) {
+      const msg = data.description || data.message || `Variant ${item.id} failed (${response.status})`;
+      const err = new Error(msg);
+      err.data = data;
+      err.item = item;
+      throw err;
+    }
+    return data;
   }
 
   async function addBundleToCart(submitBtn, checkedItems) {
-    const form = submitBtn.closest('form');
-    const mainId = getMainVariantId(form);
-    const itemsToAdd = [...checkedItems];
+    const form =
+      submitBtn.closest('form') ||
+      submitBtn.closest('product-form')?.querySelector('form') ||
+      document.querySelector('product-form form, form[action*="/cart/add"]');
 
-    if (mainId && !itemsToAdd.some((item) => item.id === mainId)) {
-      itemsToAdd.unshift({ id: mainId, quantity: 1 });
+    const mainId = getMainVariantId(form);
+    const itemsToAdd = [];
+    const seen = new Set();
+
+    if (mainId) {
+      itemsToAdd.push({ id: mainId, quantity: 1 });
+      seen.add(mainId);
     }
-    if (!itemsToAdd.length) return;
+
+    checkedItems.forEach((item) => {
+      if (!item.id || seen.has(item.id)) return;
+      seen.add(item.id);
+      itemsToAdd.push(item);
+    });
+
+    if (!itemsToAdd.length) {
+      console.warn('[upsell-addon] No variant ids found', { mainId, checkedItems });
+      return;
+    }
 
     const originalText = submitBtn.innerHTML;
     submitBtn.innerHTML =
       '<span class="btn__loader"><svg height="18" width="18" class="svg-loader"><circle r="7" cx="9" cy="9" /><circle stroke-dasharray="87.96459430051421 87.96459430051421" r="7" cx="9" cy="9" /></svg></span> Tilføjer...';
     submitBtn.disabled = true;
 
+    const errors = [];
+    let added = 0;
+
     try {
-      const response = await fetch(window.Shopify.routes.root + 'cart/add.js', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({ items: itemsToAdd }),
-      });
+      // Add one-by-one so one sold-out upsell does not block the main product
+      for (const item of itemsToAdd) {
+        try {
+          await addOneItem(item);
+          added += 1;
+        } catch (itemErr) {
+          console.warn('[upsell-addon] item failed', item, itemErr);
+          errors.push(itemErr.message);
+        }
+      }
 
-      if (!response.ok) throw new Error('Add to cart failed');
+      if (!added) {
+        throw new Error(errors[0] || 'Add to cart failed');
+      }
 
-      // Do not refresh theme cart. Assortion listens to cart/add network calls.
-      document.dispatchEvent(
-        new CustomEvent('theme:product:added', {
-          bubbles: true,
-          detail: { response: await response.json().catch(() => ({})) },
-        })
-      );
+      document.dispatchEvent(new CustomEvent('theme:product:added', { bubbles: true }));
 
-      fetch(window.Shopify.routes.root + 'cart.js')
+      fetch(rootUrl() + 'cart.js')
         .then((r) => r.json())
         .then((cart) => {
           document.dispatchEvent(
@@ -94,13 +157,11 @@
 
       openAppCart();
 
-      setTimeout(() => {
-        submitBtn.classList.remove('is-loading');
-        submitBtn.removeAttribute('disabled');
-        submitBtn.innerHTML = originalText;
-      }, 500);
+      submitBtn.classList.remove('is-loading');
+      submitBtn.removeAttribute('disabled');
+      submitBtn.innerHTML = originalText;
     } catch (error) {
-      console.error('Upsell add-to-cart error:', error);
+      console.error('Upsell add-to-cart error:', error, { url: cartAddUrl(), itemsToAdd });
       submitBtn.innerHTML = 'Fejl';
       setTimeout(() => {
         submitBtn.innerHTML = originalText;
