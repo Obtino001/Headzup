@@ -206,16 +206,10 @@
   .navlink--highlight-menu .navlink--child {
     margin-bottom: 15px !important;
   } */
-  /*  Mobile menu — column layout only for nested rows, not top-level */
-  #header-menu .sliderow.sliderow--level-1,
-  #header-menu .sliderow.sliderow--level-2 {
+  /*  Mobile menu */
+  #header-menu .sliderow {
     flex-direction: column;
     align-items: baseline;
-  }
-
-  #header-menu .sliderow.sliderow--level-0 {
-    flex-direction: row;
-    align-items: center;
   }
 
   #header-menu .sliderow.sliderow--level-1.sliderow--highlight-menu,
@@ -416,39 +410,6 @@
   box-shadow: none; 
 }
 
-/*
- * Mobile menu drawer sits BELOW announcement + topbar + header.
- * Without this, CAPS/first items paint under the sticky header chrome.
- */
-@media only screen and (max-width: 768px) {
-  #header-menu.drawer--header .drawer__inner {
-    top: calc(
-      var(--announcement-height, 0px) + var(--header-topbar-height, 0px) +
-        var(--header-height, 0px)
-    );
-    height: calc(
-      100% - var(--announcement-height, 0px) - var(--header-topbar-height, 0px) -
-        var(--header-height, 0px)
-    );
-    max-height: calc(
-      100dvh - var(--announcement-height, 0px) - var(--header-topbar-height, 0px) -
-        var(--header-height, 0px)
-    );
-    overflow: hidden;
-  }
-
-  /* Site header hamburger already toggles to X — avoid a second navy bar */
-  #header-menu.drawer--header .drawer__head {
-    display: none;
-  }
-
-  #header-menu.drawer--header .drawer__body {
-    flex: 1 1 auto;
-    min-height: 0;
-    overflow: hidden;
-  }
-}
-
 .sliderule__wrapper.sliderule__wrapper--level-0{
   border-bottom: 1px solid var(--grey-0);
 }
@@ -457,21 +418,9 @@
 .sliderow__title.sliderow__title--level-0 {
   font-weight: 700;
   font-size: var(--text-md);
-  line-height: 1.2;
+  line-height: 100%;
   letter-spacing: 0.8px;
   color: var(--navy);
-}
-
-#header-menu .sliderule__wrapper--level-0 > .sliderow,
-#header-menu .sliderule__wrapper--level-0 > mobile-sliderule > .sliderow,
-#header-menu .sliderow--level-0 > .sliderow__title--level-0,
-#header-menu .sliderow__title--level-0 {
-  min-height: var(--item-height, 48px);
-  align-items: center;
-}
-
-#header-menu .sliderow__title--level-0 span:first-of-type {
-  line-height: 1.2;
 }
 
 body.chapter-two .sliderule__wrapper.sliderule__wrapper--level-0,
