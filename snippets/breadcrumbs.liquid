@@ -5,21 +5,21 @@
 {% endcapture %}
 
 <nav class="breadcrumbs {{ breadcrumbs_modifier }}">
-  <a href="{{ routes.root_url }}">{{ 'general.breadcrumbs.home' | t }}</a>
+  <a href="{{ routes.root_url }}" class="breadcrumbs__link breadcrumbs__link--home">{{ 'general.breadcrumbs.home' | t }}</a>
 
   {{ divider_html }}
 
   {% if template contains 'product' %}
     {%- if collection -%}
-      {{ collection.title | link_to: collection.url }}
+      <a href="{{ collection.url }}" class="breadcrumbs__link">{{ collection.title }}</a>
 
       {{ divider_html }}
     {%- endif -%}
   {%- elsif template.name == 'article' -%}
-    {{ blog.title | link_to: blog.url }}
+    <a href="{{ blog.url }}" class="breadcrumbs__link">{{ blog.title }}</a>
 
     {{ divider_html }}
   {% endif %}
 
-  <span>{{- page_title -}}</span>
+  <span class="breadcrumbs__current">{{- page_title -}}</span>
 </nav>

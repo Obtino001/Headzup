@@ -13678,7 +13678,42 @@ body.has-header-transparent.has-first-section-overlay-header.template-product .p
 .product__breadcrumbs {
   --link: var(--text);
   --link-hover: var(--text-light);
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  width: 100%;
+  max-width: 100%;
   margin: 0 0 0.5em;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.product__breadcrumbs .breadcrumbs__link,
+.product__breadcrumbs .breadcrumbs__arrow {
+  flex: 0 0 auto;
+}
+
+.product__breadcrumbs .breadcrumbs__current {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.desktop-breadcrumb-wrapper,
+.mobile-breadcrumb-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.breadcrumbs.product__breadcrumbs,
+.breadcrumbs.product__breadcrumbs a,
+.breadcrumbs.product__breadcrumbs .breadcrumbs__current {
+  line-height: 1.2;
 }
 
 @media only screen and (min-width: 990px) {

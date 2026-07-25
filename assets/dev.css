@@ -647,14 +647,32 @@ body.chapter-two .tab-link span {
 /* Breadcrumbs */
 .breadcrumbs.product__breadcrumbs,
 .breadcrumbs.product__breadcrumbs li,
-.breadcrumbs.product__breadcrumbs a {
+.breadcrumbs.product__breadcrumbs a,
+.breadcrumbs.product__breadcrumbs .breadcrumbs__current {
   color: var(--grey1);
   font-family: 'Assistant';
   font-weight: 600;
   font-size: var(--text-sm);
-  line-height: 100%;
+  line-height: 1.2;
   letter-spacing: 0.8px;
   margin-bottom: 0;
+}
+
+.breadcrumbs.product__breadcrumbs {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  overflow: hidden !important;
+  white-space: nowrap;
+  width: 100%;
+  max-width: 100%;
+}
+
+.breadcrumbs.product__breadcrumbs .breadcrumbs__current {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 @media only screen and (max-width: 749px) {
