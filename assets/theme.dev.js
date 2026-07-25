@@ -1609,12 +1609,43 @@
                   })
                 );
               }
-              if (theme.settings.cartType === 'page') {
+
+              // Never hard-redirect when Rebuy Smart Cart is available
+              if (theme.settings.cartType === 'page' && !(window.Rebuy?.SmartCart)) {
                 window.location = theme.routes.cart_url;
+                return;
               }
+
               this.getCart();
             } else {
-              // Redirect to cart page if "Add to cart" is successful
+              // No theme cart element — still stay on page if Rebuy handles the cart
+              if (button) {
+                button.classList.remove(classes$n.loading);
+                button.classList.add(classes$n.added);
+                button.dispatchEvent(
+                  new CustomEvent('theme:product:add', {
+                    detail: {
+                      response: response,
+                      button: button,
+                    },
+                    bubbles: true,
+                  })
+                );
+              }
+
+              document.dispatchEvent(
+                new CustomEvent('theme:product:added', {
+                  bubbles: true,
+                  detail: {response: response},
+                })
+              );
+
+              if (window.Rebuy?.SmartCart && typeof window.Rebuy.SmartCart.show === 'function') {
+                window.Rebuy.SmartCart.skip_open = false;
+                window.Rebuy.SmartCart.show();
+                return;
+              }
+
               window.location = theme.routes.cart_url;
             }
           })
@@ -3307,8 +3338,11 @@
                   return;
                 }
 
-                // Theme drawer fallback disabled — go to cart page
-                window.location.href = theme.routes.cart_url || '/cart';
+                const cartDrawer = document.querySelector(selectors$m.cartDrawer);
+                if (cartDrawer) {
+                  cartDrawer.dispatchEvent(new CustomEvent('theme:cart-drawer:show'));
+                  window.a11y.lastElement = button;
+                }
               });
             });
           }

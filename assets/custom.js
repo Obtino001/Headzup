@@ -57,10 +57,14 @@
     document.addEventListener(
       'click',
       (event) => {
-        const cartToggle = event.target.closest('[data-cart-toggle], .header-topbar__icon--cart, a[href$="/cart"]');
+        const cartToggle = event.target.closest('[data-cart-toggle], .header-topbar__icon--cart');
         if (!cartToggle) return;
 
-        // Let checkout / real cart page links alone if explicitly needed
+        // Don't intercept quick-add / product forms
+        if (event.target.closest('[data-add-to-cart], [data-quick-add-btn], .quick-add__holder, form[action*="/cart/add"]')) {
+          return;
+        }
+
         if (cartToggle.closest('.rebuy-cart, #rebuy-cart')) return;
 
         event.preventDefault();
@@ -71,7 +75,6 @@
       true
     );
 
-    // If theme somehow opens its drawer, force-close it and show Rebuy
     document.addEventListener('theme:cart-drawer:show', (event) => {
       event.stopImmediatePropagation();
       hideThemeCartDrawer();
