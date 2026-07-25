@@ -1,0 +1,29 @@
+<div class="upsell-addon__item is-unchecked" data-upsell-item data-selected-variant-id="{{ current_variant.id }}" data-selected-price="{{ current_variant.price }}" data-selected-compare="{{ current_variant.compare_at_price | default: current_variant.price }}">
+  <div class="upsell-addon__checkbox-wrapper">
+    <div class="upsell-addon__checkbox">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+    </div>
+  </div>
+
+  {%- if upsell_product.featured_image != blank -%}
+    <img src="{{ upsell_product.featured_image | image_url: width: 120 }}" alt="{{ upsell_product.title | escape }}" class="upsell-addon__image" width="60" height="60" loading="lazy">
+  {%- else -%}
+    <div class="upsell-addon__image placeholder-bg"></div>
+  {%- endif -%}
+
+  <div class="upsell-addon__details">
+    <p class="upsell-addon__title">{{ upsell_product.title }}</p>
+    {%- unless upsell_product.has_only_default_variant -%}
+      <p class="upsell-addon__variant-title">{{ current_variant.title }}</p>
+    {%- endunless -%}
+
+    <div class="upsell-addon__price-row">
+      <span class="upsell-addon__price">{{ current_variant.price | money }}</span>
+      {%- if current_variant.compare_at_price > current_variant.price -%}
+        <span class="upsell-addon__compare-price">{{ current_variant.compare_at_price | money }}</span>
+      {%- endif -%}
+    </div>
+
+    <a href="{{ upsell_product.url }}" class="upsell-addon__read-more">Læs mere</a>
+  </div>
+</div>

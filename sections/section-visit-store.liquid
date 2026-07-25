@@ -102,8 +102,14 @@
 
           <div class="visit-store__actions">
             {%- if section.settings.button_text != blank -%}
+              {%- liquid
+                assign primary_button_link = section.settings.button_link
+                if primary_button_link == blank
+                  assign primary_button_link = pages.butik.url | default: pages.store.url | default: routes.root_url
+                endif
+              -%}
               <a
-                href="{{ section.settings.button_link | default: routes.root_url }}"
+                href="{{ primary_button_link }}"
                 class="visit-store__cta btn {{ section.settings.button_type }} {{ section.settings.button_size }} {{ button_style }}"
               >
                 <span>{{ section.settings.button_text | escape }}</span>
@@ -115,7 +121,7 @@
 
             {%- if directions_url != blank -%}
               <a href="{{ directions_url }}" class="visit-store__link" target="_blank" rel="noopener">
-                {{ section.settings.directions_text | default: 'Get directions' | escape }}
+                {{ section.settings.directions_text | default: 'Find vej' | escape }}
               </a>
             {%- endif -%}
           </div>
@@ -262,7 +268,8 @@
     {
       "type": "url",
       "id": "button_link",
-      "label": "Primary button link"
+      "label": "Primary button link",
+      "info": "E.g. store page /pages/butik — where customers can try caps in the physical shop."
     },
     {
       "type": "text",
@@ -274,7 +281,7 @@
       "type": "url",
       "id": "directions_url",
       "label": "Directions URL",
-      "info": "Leave blank to auto-generate from address"
+      "info": "Google Maps directions. Leave blank to auto-generate from the map address (Vesterbrogade 95H)."
     },
     {
       "type": "select",

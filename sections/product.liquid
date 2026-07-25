@@ -1838,8 +1838,19 @@
         {
           "type": "product_list",
           "id": "product_list",
-          "label": "Product list",
-          "limit": 4
+          "label": "Products (manual)",
+          "limit": 4,
+          "info": "Pick products from other collections. Highest priority."
+        },
+        {
+          "type": "collection",
+          "id": "upsell_collection",
+          "label": "Upsell collection",
+          "info": "Show products from a different collection (e.g. accessories, truckers). Used if product list is empty."
+        },
+        {
+          "type": "paragraph",
+          "content": "If both are empty, Shopify complementary recommendations are used (cross-sell). Configure them in the Search & Discovery app."
         },
         {
           "type": "color",
