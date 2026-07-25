@@ -1,6 +1,6 @@
 /*
  * Broadcast Theme — custom.js
- * Assortion = cart UI. Theme drawer hidden stub only (no refresh to /cart).
+ * Assortion = cart UI. Theme drawer = hidden stub only.
  */
 
 (function () {
@@ -9,7 +9,6 @@
   }
 
   function killThemeCartUI() {
-    // Never remove the AJAX stub — only kill real theme drawer UI / open state
     document.querySelectorAll('cart-drawer, .drawer--cart').forEach((drawer) => {
       drawer.classList.remove('is-open', 'is-closing');
       drawer.setAttribute('aria-hidden', 'true');
@@ -28,91 +27,98 @@
     document.dispatchEvent(new CustomEvent('theme:scroll:unlock', { bubbles: true }));
   }
 
-  function openAssortionCart() {
-    killThemeCartUI();
-
-    try {
-      if (typeof window.Assortion?.openCart === 'function') {
-        window.Assortion.openCart();
-        return true;
-      }
-      if (typeof window.Assortion?.Cart?.open === 'function') {
-        window.Assortion.Cart.open();
-        return true;
-      }
-      if (typeof window.AST?.openCart === 'function') {
-        window.AST.openCart();
-        return true;
-      }
-      if (typeof window.AST?.Cart?.open === 'function') {
-        window.AST.Cart.open();
-        return true;
-      }
-      if (typeof window.assortion?.openCart === 'function') {
-        window.assortion.openCart();
-        return true;
-      }
-      // Some Assortion builds expose these
-      if (typeof window.openAssortionCart === 'function') {
-        window.openAssortionCart();
-        return true;
-      }
-      if (window.AssortionCart?.open) {
-        window.AssortionCart.open();
-        return true;
-      }
-    } catch (e) {
-      console.warn('Assortion openCart error', e);
+  function findAssortionApi() {
+    const candidates = [
+      window.Assortion?.openCart,
+      window.Assortion?.Cart?.open,
+      window.Assortion?.cart?.open,
+      window.AST?.openCart,
+      window.AST?.Cart?.open,
+      window.assortion?.openCart,
+      window.AssortionCart?.open,
+      window.openAssortionCart,
+    ];
+    for (const fn of candidates) {
+      if (typeof fn === 'function') return fn.bind(window.Assortion || window.AST || window.assortion || window);
     }
 
-    document.dispatchEvent(new CustomEvent('assortion:cart:open', { bubbles: true }));
-    document.dispatchEvent(new CustomEvent('ast:cart:open', { bubbles: true }));
-    document.dispatchEvent(new CustomEvent('cart:open', { bubbles: true }));
-    document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true }));
+    // Scan window for Assortion-like objects
+    try {
+      for (const key of Object.keys(window)) {
+        if (!/ast|assort/i.test(key)) continue;
+        const val = window[key];
+        if (!val || typeof val !== 'object') continue;
+        if (typeof val.openCart === 'function') return val.openCart.bind(val);
+        if (typeof val.open === 'function') return val.open.bind(val);
+        if (val.Cart && typeof val.Cart.open === 'function') return val.Cart.open.bind(val.Cart);
+        if (val.cart && typeof val.cart.open === 'function') return val.cart.open.bind(val.cart);
+      }
+    } catch (e) {}
 
-    // Open Assortion drawer DOM if present
-    const drawer = document.querySelector(
+    return null;
+  }
+
+  function openAssortionDrawerDom() {
+    const drawers = document.querySelectorAll(
       [
         '#assortion-cart',
         '#ast-cart',
         '#astCartDrawer',
+        '#ast-cart-drawer',
         '.assortion-cart-drawer',
         '.ast-cart-drawer',
         '[data-assortion-cart-drawer]',
-        '[class*="AssortionCart"]',
+        '[data-ast-cart-drawer]',
         'assortion-cart',
+        '[id*="ast"][id*="cart" i]',
+        '[class*="ast-"][class*="cart" i]',
       ].join(', ')
     );
-    if (drawer) {
+
+    let opened = false;
+    drawers.forEach((drawer) => {
+      // skip tiny icons
+      if (drawer.closest('header') && drawer.tagName === 'A') return;
       drawer.classList.add('open', 'is-open', 'active', 'is-active', 'visible', 'is-visible');
-      drawer.style.removeProperty('display');
+      drawer.style.display = '';
+      drawer.style.visibility = 'visible';
+      drawer.style.opacity = '1';
+      drawer.style.pointerEvents = 'auto';
       drawer.setAttribute('aria-hidden', 'false');
-      const backdrop = document.querySelector(
-        '.assortion-cart-backdrop, .ast-cart-backdrop, [data-assortion-backdrop]'
-      );
-      if (backdrop) {
-        backdrop.classList.add('open', 'is-open', 'active', 'visible');
-        backdrop.style.removeProperty('display');
+      opened = true;
+    });
+
+    document.querySelectorAll('[class*="ast"][class*="backdrop" i], [class*="assortion"][class*="backdrop" i]').forEach((bg) => {
+      bg.classList.add('open', 'is-open', 'active', 'visible');
+      bg.style.display = '';
+    });
+
+    return opened;
+  }
+
+  function openAssortionCart() {
+    killThemeCartUI();
+
+    const api = findAssortionApi();
+    if (api) {
+      try {
+        api();
+        return true;
+      } catch (e) {
+        console.warn('Assortion API open failed', e);
       }
-      return true;
     }
 
-    const trigger = document.querySelector(
-      [
-        '[data-assortion-open-cart]',
-        '[data-ast-open-cart]',
-        '.ast-cart-toggle',
-        '#ast-cart-icon',
-        '.assortion-cart-button',
-        '[data-assortion-cart]',
-      ].join(', ')
-    );
-    if (trigger) {
-      trigger.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
-      return true;
-    }
+    if (openAssortionDrawerDom()) return true;
 
-    return false;
+    document.dispatchEvent(new CustomEvent('assortion:cart:open', { bubbles: true }));
+    document.dispatchEvent(new CustomEvent('ast:cart:open', { bubbles: true }));
+    document.dispatchEvent(new CustomEvent('ast:open-cart', { bubbles: true }));
+    document.dispatchEvent(new CustomEvent('cart:open', { bubbles: true }));
+    document.dispatchEvent(new CustomEvent('cart:updated', { bubbles: true }));
+    window.dispatchEvent(new CustomEvent('assortion:cart:open'));
+
+    return openAssortionDrawerDom();
   }
 
   function openAssortionWithRetry() {
@@ -120,12 +126,30 @@
     let attempts = 0;
     const id = setInterval(() => {
       attempts += 1;
-      openAssortionCart();
-      if (attempts >= 8) clearInterval(id);
-    }, 250);
+      if (openAssortionCart() || attempts >= 10) clearInterval(id);
+    }, 200);
   }
 
-  // Block native form POST to /cart/add (causes full page refresh)
+  // Stop /cart page navigation only — Assortion listens on these links
+  function bindCartIconLinks() {
+    document.querySelectorAll('[data-cart-toggle], a[href="/cart"], a[href$="/cart"]').forEach((link) => {
+      if (link.dataset.headzupCartBound) return;
+      link.dataset.headzupCartBound = '1';
+
+      // Keep original href for Assortion selectors, but block full page nav
+      link.addEventListener(
+        'click',
+        (e) => {
+          e.preventDefault();
+          killThemeCartUI();
+          openAssortionWithRetry();
+        },
+        false
+      );
+    });
+  }
+
+  // Block native form POST to /cart/add (page refresh)
   document.addEventListener(
     'submit',
     (event) => {
@@ -142,43 +166,13 @@
 
   document.addEventListener('theme:product:added', () => {
     killThemeCartUI();
-    setTimeout(() => {
-      killThemeCartUI();
-      openAssortionWithRetry();
-    }, 100);
+    setTimeout(openAssortionWithRetry, 100);
   });
 
   document.addEventListener('theme:product:add', () => {
     killThemeCartUI();
-    setTimeout(() => {
-      killThemeCartUI();
-      openAssortionWithRetry();
-    }, 100);
+    setTimeout(openAssortionWithRetry, 100);
   });
-
-  // Cart icon: stop /cart page navigation, but do NOT stopPropagation —
-  // Assortion must receive the click to open its drawer.
-  document.addEventListener(
-    'click',
-    (event) => {
-      const cartToggle = event.target.closest(
-        '[data-cart-toggle], .header-topbar__icon--cart, a[href="/cart"], a[href$="/cart"]'
-      );
-      if (!cartToggle) return;
-      if (
-        event.target.closest(
-          '[data-add-to-cart], [data-quick-add-btn], .quick-add__holder, form[action*="/cart/add"]'
-        )
-      ) {
-        return;
-      }
-
-      event.preventDefault(); // block navigation to /cart page only
-      killThemeCartUI();
-      openAssortionCart();
-    },
-    false // bubble — Assortion capture listeners run first
-  );
 
   document.addEventListener('theme:cart-drawer:show', (event) => {
     event.stopImmediatePropagation();
@@ -197,15 +191,18 @@
       'cart-drawer.is-open:not([data-headzup-cart-stub]), .drawer--cart.is-open:not([data-headzup-cart-stub])'
     );
     if (openTheme) killThemeCartUI();
+    bindCartIconLinks();
   });
   observer.observe(document.documentElement, {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ['class'],
+    attributeFilter: ['class', 'href'],
   });
 
   killThemeCartUI();
+  bindCartIconLinks();
+  document.addEventListener('DOMContentLoaded', bindCartIconLinks);
 
   window.HeadzupCart = {
     open: openAssortionCart,
