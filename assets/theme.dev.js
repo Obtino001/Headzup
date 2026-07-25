@@ -2327,7 +2327,10 @@
         this.cartDrawerSection = this.closest(selectors$r.shopifySection);
         this.a11y = window.theme.a11y;
 
-        this.closeCartEvents();
+        // Stub has no close button — skip listeners that crash on null
+        if (this.cartDrawerClose) {
+          this.closeCartEvents();
+        }
       }
 
       connectedCallback() {
@@ -2337,8 +2340,8 @@
         this.cartDrawerIsOpen = false;
         this.setAttribute('data-headzup-cart-stub', '');
         appendCartItems();
-        window.theme.hasCartDrawer = false;
-        // Do NOT register open listeners
+        // Keep true so ATC AJAX path treats cart as available (no /cart redirect)
+        window.theme.hasCartDrawer = true;
       }
 
       disconnectedCallback() {
@@ -2356,101 +2359,58 @@
         appendCartItems();
       }
 
-      /**
-       * Open cart drawer when product is added to cart
-       *
-       * @return  {Void}
-       */
       openCartDrawerOnProductAdded() {
-        // DISABLED — never open theme cart on ATC
+        // Never open theme drawer — Assortion handles cart UI
+        if (window.HeadzupCart?.openWithRetry) {
+          window.HeadzupCart.openWithRetry();
+        } else if (window.HeadzupCart?.open) {
+          window.HeadzupCart.open();
+        }
         return;
       }
 
-      /**
-       * Open cart drawer on block or section select
-       *
-       * @return  {Void}
-       */
       openCartDrawerOnSelect(e) {
-        const cartDrawerSection = e.target.querySelector(selectors$r.shopifySection) || e.target.closest(selectors$r.shopifySection) || e.target;
-
-        if (cartDrawerSection === this.cartDrawerSection) {
-          this.openCartDrawer(true);
-        }
+        return;
       }
 
-      /**
-       * Close cart drawer on section deselect
-       *
-       * @return  {Void}
-       */
       closeCartDrawerOnDeselect() {
-        if (this.cartDrawerIsOpen) {
-          this.closeCartDrawer();
-        }
+        return;
       }
-
-      /**
-       * Open cart drawer and add class on body
-       *
-       * @return  {Void}
-       */
 
       openCartDrawer(forceOpen = false) {
-        // COMPLETELY DISABLED — Rebuy Smart Cart only. Never open theme drawer.
         this.classList.remove(classes$m.open, classes$m.closing);
         this.cartDrawerIsOpen = false;
         this.setAttribute('aria-hidden', 'true');
         this.style.setProperty('display', 'none', 'important');
-        return;
-      }
-
-      /**
-       * Close cart drawer and remove class on body
-       *
-       * @return  {Void}
-       */
-
-      closeCartDrawer() {
-        this.classList.remove(classes$m.open, classes$m.closing);
-        this.cartDrawerIsOpen = false;
-        this.setAttribute('aria-hidden', 'true');
-        this.style.setProperty('display', 'none', 'important');
-
-        document.dispatchEvent(
-          new CustomEvent('theme:cart-drawer:close', {
-            bubbles: true,
-          })
-        );
-
-        document.dispatchEvent(new CustomEvent('theme:scroll:unlock', {bubbles: true}));
-      }
-
-      /**
-       * Toggle cart drawer
-       *
-       * @return  {Void}
-       */
-
-      toggleCartDrawer() {
-        // Theme cart disabled — Assortion handles cart UI
         if (window.HeadzupCart?.open) {
           window.HeadzupCart.open();
         }
         return;
       }
 
-      /**
-       * Event click to element to close cart drawer
-       *
-       * @return  {Void}
-       */
+      closeCartDrawer() {
+        this.classList.remove(classes$m.open, classes$m.closing);
+        this.cartDrawerIsOpen = false;
+        this.setAttribute('aria-hidden', 'true');
+        this.style.setProperty('display', 'none', 'important');
+        document.dispatchEvent(new CustomEvent('theme:cart-drawer:close', { bubbles: true }));
+        document.dispatchEvent(new CustomEvent('theme:scroll:unlock', { bubbles: true }));
+      }
+
+      toggleCartDrawer() {
+        if (window.HeadzupCart?.open) {
+          window.HeadzupCart.open();
+        }
+        return;
+      }
 
       closeCartEvents() {
-        this.cartDrawerClose.addEventListener('click', (e) => {
-          e.preventDefault();
-          this.closeCartDrawer();
-        });
+        if (this.cartDrawerClose) {
+          this.cartDrawerClose.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.closeCartDrawer();
+          });
+        }
 
         this.addEventListener('keyup', (e) => {
           if (e.code === 'Escape') {
@@ -2464,22 +2424,7 @@
       }
 
       observeAdditionalCheckoutButtons() {
-        // identify an element to observe
-        const additionalCheckoutButtons = this.querySelector(selectors$r.additionalCheckoutButtons);
-        if (additionalCheckoutButtons) {
-          // create a new instance of `MutationObserver` named `observer`,
-          // passing it a callback function
-          const observer = new MutationObserver(() => {
-            this.a11y.trapFocus(this, {
-              elementToFocus: this.querySelector(selectors$r.cartDrawerClose),
-            });
-            observer.disconnect();
-          });
-
-          // call `observe()` on that MutationObserver instance,
-          // passing it the element to observe, and the options object
-          observer.observe(additionalCheckoutButtons, {subtree: true, childList: true});
-        }
+        return;
       }
     }
 
