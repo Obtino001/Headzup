@@ -8315,6 +8315,7 @@ html.supports-touch ticker-bar[data-slide]:not([paused]) .ticker--animated {
   width: 100%;
   max-height: 100%;
   flex: 1 0 auto;
+  top: 60px;
 }
 
 .mobile-menu__block {
