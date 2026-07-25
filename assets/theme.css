@@ -13201,15 +13201,28 @@ product-sticky {
   }
 }
 .product__page .form__wrapper.is-sticky {
+  /* Gallery sticks instead of the form on this theme */
   position: static !important;
 }
 
 @media only screen and (min-width: 750px) {
+  /* Sticky product gallery — needs Product pages → Enable sticky form ON */
+  product-sticky,
+  product-sticky .product__wrapper__inner,
+  product-sticky .product__page {
+    overflow: visible !important;
+  }
+
+  product-sticky .product__page {
+    align-items: start;
+  }
+
   product-sticky .product__page > product-images {
-    position: sticky;
-    top: calc(var(--header-height, 0px) + 60px);
-    align-self: start;
-    z-index: 10;
+    position: sticky !important;
+    top: calc(var(--header-sticky-height, var(--header-height, 0px)) + 24px) !important;
+    align-self: start !important;
+    z-index: 5;
+    max-height: calc(100vh - var(--header-sticky-height, var(--header-height, 0px)) - 48px);
   }
 }
 
