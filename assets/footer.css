@@ -186,7 +186,10 @@ footer {
     }
 
     .socials {
+      --gap: 14px;
       padding-bottom: 0;
+      gap: 14px;
+      margin: 0;
 
       li {
         margin: 0;

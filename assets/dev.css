@@ -1068,15 +1068,21 @@ body.chapter-two .option-title {
 }
 
 @media only screen and (min-width: 990px) {
-  body.chapter-two  .product__wrapper--grid-2 .product__slides {
-    columns: 2;
-    column-gap: 10px;
+  /* CSS columns break sticky + can spill images beside FAQ — use grid */
+  body.chapter-two .product__wrapper--grid-2 .product__slides {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    columns: auto;
+    column-gap: normal;
   }
 }
 
 @media only screen and (min-width: 750px) {
-  body.chapter-two  .product__wrapper--grid-1 .product__slide, .product__wrapper--grid-2 .product__slide, .product__wrapper--stacked .product__slide {
-      padding-bottom: 10px; ;
+  body.chapter-two .product__wrapper--grid-1 .product__slide,
+  body.chapter-two .product__wrapper--grid-2 .product__slide,
+  body.chapter-two .product__wrapper--stacked .product__slide {
+    padding-bottom: 10px;
   }
 }
 
@@ -1093,7 +1099,8 @@ body.chapter-two product-images .image-wrapper {
   height: 100%;
 }
 
-body.chapter-two product-images .product__photo,product-images .image-wrapper {
+body.chapter-two product-images .product__photo,
+body.chapter-two product-images .image-wrapper {
   --aspect-ratio: 1 !important;
   aspect-ratio: 3 / 4;
   width: 100%;

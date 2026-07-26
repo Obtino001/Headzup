@@ -78,6 +78,6 @@
     position: sticky !important;
     top: calc(var(--header-sticky-height, var(--header-height, 0px)) + 24px) !important;
     align-self: start !important;
-    z-index: 5;
+    z-index: 1;
   }
 }

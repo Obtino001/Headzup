@@ -13233,8 +13233,15 @@ product-sticky {
     position: sticky !important;
     top: calc(var(--header-sticky-height, var(--header-height, 0px)) + 24px) !important;
     align-self: start !important;
-    z-index: 5;
+    z-index: 1;
     max-height: calc(100vh - var(--header-sticky-height, var(--header-height, 0px)) - 48px);
+  }
+
+  /* Keep FAQ / sections below PDP above sticky gallery leftovers */
+  .template-product .main-content > .shopify-section:not(:has(product-sticky)):not(:has(product-component)) {
+    position: relative;
+    z-index: 2;
+    background-color: var(--bg, #fff);
   }
 
   /* Gallery sticks; buy-box scrolls */

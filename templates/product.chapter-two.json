@@ -68,7 +68,7 @@
         "cap_guide": {
           "type": "cap_guide",
           "settings": {
-            "enable": true,
+            "enable": false,
             "trigger_text": "Ikke sikker på hvilken model?",
             "open_as": "drawer",
             "page_link": "shopify://pages/cap-guide",
