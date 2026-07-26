@@ -159,7 +159,7 @@
           }
         },
         "onskeskyen_wishlist_button_tfCaQD": {
-          "type": "shopify://apps/onskeskyen/blocks/wishlist-button/be6e5a80-54ea-40af-aa80-5746282173b8",
+          "type": "shopify://apps/oenskeskyen/blocks/wishlist-button/be6e5a80-54ea-40af-aa80-5746282173b8",
           "settings": {
             "text": "TILFØJ TIL ØNSKESKYEN",
             "rounded": "none",
@@ -216,6 +216,7 @@
           "settings": {
             "heading": "Ofte købt sammen",
             "product_list": [],
+            "upsell_collection": "",
             "accent_color": "#000000",
             "padding_bottom": 16
           }
@@ -482,7 +483,7 @@
             "default_open": false,
             "title": "Hvad gør jeg, hvis der er fejl på min vare?",
             "content": "<p>Kontakt os hurtigst muligt, hvis du har modtaget en forkert, beskadiget eller defekt vare.<br/>Send en mail til<strong> info@headzup.dk</strong> med:<br/>•\tDit ordrenummer<br/>•\tEn kort beskrivelse af problemet<br/>•\tTydelige billeder af varen og fejlen<br/>Så undersøger vi sagen og finder den bedst mulige løsning så hurtigt som muligt.<br/>Du kan også ringe til os på <strong>+45 31 32 68 48</strong>, hvis du har brug for hjælp.<br/>Almindelig slitage, forkert behandling eller skader, der er opstået efter modtagelsen, betragtes ikke nødvendigvis som en reklamation.</p>",
-            "show_icon": true,
+            "show_icon": false,
             "icon_name": "icon-truck",
             "icon_size": 20,
             "icon_color": ""
