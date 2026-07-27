@@ -25401,7 +25401,7 @@ body.chapter-two .product-item__price__holder .old-price {
 }
 
 .search-popdown .predictive-search__products__list .grid {
-  --columns: repeat(5, minmax(0, 1fr));
+  --columns: 5;
   gap: 20px !important;
 }
 
@@ -25452,7 +25452,7 @@ predictive-search[results] ~ .predictive-search--empty {
   }
 
   .search-popdown .predictive-search__products__list .grid {
-    --columns: repeat(2, minmax(0, 1fr)) !important;
+    --columns: 2 !important;
     gap: 14px !important;
   }
 }
