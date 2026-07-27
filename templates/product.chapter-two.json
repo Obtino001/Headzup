@@ -263,7 +263,7 @@
         "question_font_size": "heading-medium",
         "width": "wrapper",
         "columns": "1",
-        "color_scheme": "scheme_1",
+        "color_scheme": "scheme-1",
         "padding_top": 50,
         "padding_bottom": 50
       }
