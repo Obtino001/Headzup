@@ -60,10 +60,14 @@
     </div>
     <div class="header-topbar__icons">
       {%- if section.settings.enable_search -%}
-        <div class="header-topbar__icon header-topbar__icon--search navlink{% if show_icons == false %} navlink--toplevel{% endif %}" title="{{ 'general.search.search' | t }}" onclick="event.preventDefault(); document.getElementById('clerk-dummy-search-desktop').focus();" style="cursor:pointer;">
+        <a
+          href="{{ routes.search_url }}"
+          class="header-topbar__icon header-topbar__icon--search navlink{% if show_icons == false %} navlink--toplevel{% endif %}"
+          title="{{ 'general.search.search' | t }}"
+        >
             {%- render 'icon-search' -%}
             <span class="header-topbar__search-text">{{ 'layout.header.search' | t }}</span>
-        </div>
+        </a>
       {%- endif -%}
       {% if is_chapter_two %}
         <a href="{{ routes.cart_url }}" class="header-topbar__icon header-topbar__icon--cart navlink chapter-two {{ navlink_cart_classes }}" title="{{ 'cart.general.title' | t }}" data-cart-toggle>
