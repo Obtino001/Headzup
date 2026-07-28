@@ -9,8 +9,6 @@
   assign manual_products = block.settings.product_list
   assign upsell_collection = block.settings.upsell_collection
   assign upsell_limit = 5
-  assign main_product_type = product.type | downcase | strip
-  assign main_vendor = product.vendor | downcase | strip
   assign use_ajax = false
 
   if manual_products == blank and upsell_collection == blank
@@ -41,9 +39,8 @@
     {%- endfor -%}
 
   {%- else -%}
-    {%- comment -%} Auto: prefer other brands, never same product {%- endcomment -%}
+    {%- comment -%} Search & Discovery recommendations (intent from request URL) {%- endcomment -%}
     {%- assign shown_count = 0 -%}
-    {%- assign shown_ids = ',' | append: product.id | append: ',' -%}
 
     {%- if recommendations.performed and recommendations.products_count > 0 -%}
       {%- for upsell_product in recommendations.products -%}
@@ -54,11 +51,8 @@
         {%- if current_variant.available -%}
           {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
           {%- assign shown_count = shown_count | plus: 1 -%}
-          {%- assign shown_ids = shown_ids | append: upsell_product.id | append: ',' -%}
         {%- endif -%}
       {%- endfor -%}
-    {%- endif -%}
-
     {%- endif -%}
   {%- endif -%}
 {%- endcapture -%}
@@ -66,7 +60,8 @@
 {%- if use_ajax -%}
   <complementary-products
     class="complementary-products"
-    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=20&intent=related"
+    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=20&intent=complementary"
+    data-fallback-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=20&intent=related"
   >
     {%- if upsell_items != blank -%}
       <upsell-addon
