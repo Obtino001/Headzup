@@ -1418,3 +1418,25 @@ a[href="/collections/bandana"] .nav-link-collections {
     max-width: 100%;
     height: auto;
 }
+
+/* PostNord PNG has no built-in border — match other payment icon frames */
+.payment-icons__item--postnord,
+.payment-icons li:has(img[src*="postnord"]) {
+  border: 1px solid #e1e5e8;
+  border-radius: 4px;
+  background: #fff;
+  padding: 0 6px;
+  height: 21px;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-icons .payment-icon--postnord,
+.payment-icons img[src*="postnord"] {
+  display: block;
+  width: auto;
+  height: 12px;
+  max-height: 12px;
+  object-fit: contain;
+}
