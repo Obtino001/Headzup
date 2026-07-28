@@ -48,17 +48,11 @@
         {{ search_block.shopify_attributes }}>
 
         <div class="mobile-menu__block-search">
-          <header-search-popdown>
-            <details>
-              <summary class="navlink navlink--search" aria-haspopup="dialog" title="{{ 'general.search.search' | t }}">
-                {%- render 'icon-search' -%}
-                {%- render 'icon-cancel' -%}
-                <span class="visually-hidden">{{ 'layout.header.search' | t }}</span>
-              </summary>
-
-              {%- render 'header-search-popdown', unique: search_id -%}
-            </details>
-          </header-search-popdown>
+          <a href="{{ routes.search_url }}" class="navlink" onclick="event.preventDefault(); document.getElementById('clerk-dummy-search-mobile').focus();" title="{{ 'general.search.search' | t }}">
+            {%- render 'icon-search' -%}
+            <span class="visually-hidden">{{ 'layout.header.search' | t }}</span>
+            <input type="text" id="clerk-dummy-search-mobile" name="q" style="opacity:0; position:absolute; width:1px; height:1px; padding:0; border:0;">
+          </a>
         </div>
       </div>
     {%- endcapture -%}
