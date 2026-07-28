@@ -1,0 +1,73 @@
+<!-- Start of Clerk.io E-commerce Personalisation tool - www.clerk.io -->
+<script type="text/javascript">
+  (function (w, d) {
+    var e = d.createElement('script'); e.type = 'text/javascript'; e.async = true;
+    e.src = (d.location.protocol == 'https:' ? 'https' : 'http') + '://cdn.clerk.io/clerk.js';
+    var s = d.getElementsByTagName('script')[0]; s.parentNode.insertBefore(e, s);
+    w.__clerk_q = w.__clerk_q || []; w.Clerk = w.Clerk || function () { w.__clerk_q.push(arguments) };
+  })(window, document);
+  const publicKey = 'O3553x1kKCLV2OT01Q0rYxgmO1wU1cTE';
+  Clerk('config', {
+    key: publicKey,
+    formatters: {
+      currency_converter: function (price) {
+        var converted_price = (price * Shopify.currency.rate);
+        return (converted_price).toString();
+      }
+    },
+    globals: {
+      currency_iso: "{{ cart.currency.iso_code }}",
+      currency_symbol: "{{ cart.currency.symbol }}"
+    }
+  });
+
+  // Clerk.js Context
+  Clerk('context', {
+    product: {% if product %}{{ product.id }}{% else %}null{% endif %},
+    category: {% if collection %}{{ collection.id }}{% else %}null{% endif %},
+    page: {% if product %}null
+          {% elsif collection %}null
+          {% elsif page %}{{ page.id }}
+          {% elsif blog %}{{ blog.id }}
+          {% elsif article %}{{ article.id }}
+          {% elsif template.name == 'index' %}'homepage'
+          {% else %}'{{ template.name }}'
+          {% endif %}
+  });
+
+  {% if customer %}
+    Clerk('call', 'log/email', { email: "{{ customer.email }}" });
+  {% endif %}
+
+  document.addEventListener('DOMContentLoaded', (e) => {
+    (async function fetchVisitorId() {
+      let visitorId = window.sessionStorage.getItem('visitor_id');
+      try {
+        if (!visitorId) {
+          const response = await fetch(`https://api.clerk.io/v2/misc/visitor_id?key=${publicKey}&visitor=auto`);
+          const data = await response.json();
+          visitorId = data.visitor;
+          window.sessionStorage.setItem('visitor_id', data.visitor);
+        }
+        Clerk('config', {
+          visitor: visitorId,
+        });
+      } catch (error) {
+        console.error('Error:', error);
+      } finally {
+        function publishClerkContext() {
+          if (window.Shopify?.analytics?.publish) {
+            window.Shopify.analytics.publish('clerk_pixel_context', {
+              localeApiKey: publicKey,
+              visitor: visitorId,
+            });
+          } else {
+            setTimeout(publishClerkContext, 200);
+          }
+        }
+        publishClerkContext();
+      }
+    })();
+  });
+</script>
+<!-- End of Clerk.io E-commerce Personalisation tool - www.clerk.io -->
