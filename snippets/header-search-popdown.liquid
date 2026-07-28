@@ -37,12 +37,18 @@
     assign show_empty_search = true
     assign show_empty_search_product_list = true
   endif
+
+  assign show_predictive_search = settings.predictive_search_enabled
+  if settings.enable_clerk
+    assign show_predictive_search = false
+    assign show_empty_search = false
+  endif
 -%}
 
 <div class="search-popdown" aria-label="{{ 'general.search.search' | t }}" data-popdown>
   <div class="wrapper">
     <div class="search-popdown__main">
-      {%- if settings.predictive_search_enabled -%}
+      {%- if show_predictive_search -%}
         <predictive-search>
       {%- else -%}
         <header-search-form>
@@ -91,7 +97,7 @@
           </button>
         </div>
 
-        {%- if settings.predictive_search_enabled -%}
+        {%- if show_predictive_search -%}
           <div class="predictive-search" tabindex="-1" data-predictive-search-results data-scroll-lock-scrollable>
             <div class="predictive-search__loading-state">
               <div class="predictive-search__loader loader"><div class="loader-indeterminate"></div></div>
@@ -107,10 +113,10 @@
         {%- endif -%}
       </form>
 
-      {%- if settings.predictive_search_enabled -%}
+      {%- if show_predictive_search -%}
         </predictive-search>
       {%- else -%}
-        </header-search-form>
+        <header-search-form>
       {%- endif -%}
 
       {%- if show_empty_search -%}
