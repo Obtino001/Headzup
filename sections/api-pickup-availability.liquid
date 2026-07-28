@@ -25,7 +25,7 @@
           <p class="pickup__info__timing small">
             {{ closest_location.pick_up_time }}
           </p>
-          {% comment %} <button
+          <button
             id="ShowPickupAvailabilityDrawer"
             class="pickup__button text-link small"
             aria-haspopup="dialog"
@@ -36,7 +36,7 @@
             {%- else -%}
               {{ 'products.product.pickup_availability.check_other_stores' | t }}
             {%- endif -%}
-          </button> {% endcomment %}
+          </button>
         {%- else -%}
           <p class="pickup__info__text">
             {{

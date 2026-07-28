@@ -21,7 +21,7 @@
                 'products.product.pickup_availability.in_stock_online' | t
             }}
           </p>
-          {% comment %} <button
+          <button
             id="ShowPickupAvailabilityDrawer"
             class="pickup__button text-link small"
             aria-haspopup="dialog"
@@ -32,7 +32,7 @@
             {%- else -%}
               {{ 'products.product.pickup_availability.check_other_stores' | t }}
             {%- endif -%}
-          </button> {% endcomment %}
+          </button>
         {%- else -%}
           <p class="pickup__info__text">
             {{
