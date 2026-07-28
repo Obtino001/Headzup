@@ -1,3 +1,20 @@
 <template data-api-related-template>
   {%- render 'products-recommendation', product: product -%}
 </template>
+
+{%- comment -%} Same recommendations feed for Ofte købt sammen upsell checkboxes {%- endcomment -%}
+<div data-upsell-recommendations>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    {%- assign shown_count = 0 -%}
+    {%- for upsell_product in recommendations.products -%}
+      {%- if shown_count >= 5 -%}{%- break -%}{%- endif -%}
+      {%- if upsell_product.tags contains 'hide' -%}{%- continue -%}{%- endif -%}
+      {%- if upsell_product.id == product.id -%}{%- continue -%}{%- endif -%}
+      {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
+      {%- if current_variant != blank and current_variant.available -%}
+        {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
+        {%- assign shown_count = shown_count | plus: 1 -%}
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+</div>

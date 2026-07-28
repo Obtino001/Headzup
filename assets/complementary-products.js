@@ -3,6 +3,7 @@
   const TAG = "complementary-products";
   const ATTR_URL = "data-url";
   const ATTR_SLIDER = "data-slider";
+  const ATTR_INJECT = "data-inject-selector";
 
   class ComplementaryProducts extends HTMLElement {
     constructor() {
@@ -23,6 +24,25 @@
             .then((html) => {
               const wrapper = document.createElement("div");
               wrapper.innerHTML = html;
+
+              const injectSelector = this.getAttribute(ATTR_INJECT);
+              if (injectSelector) {
+                const source = wrapper.querySelector("[data-upsell-recommendations]");
+                const target = this.querySelector(injectSelector);
+                const host = this.querySelector("upsell-addon");
+                if (source && target && source.innerHTML.trim().length) {
+                  target.innerHTML = source.innerHTML;
+                  if (host) host.removeAttribute("hidden");
+                  this.dispatchEvent(
+                    new CustomEvent("theme:upsell:loaded", {
+                      bubbles: true,
+                      detail: { container: this },
+                    })
+                  );
+                }
+                return;
+              }
+
               const section = wrapper.querySelector(TAG);
               if (section && section.innerHTML.trim().length) {
                 this.innerHTML = section.innerHTML;

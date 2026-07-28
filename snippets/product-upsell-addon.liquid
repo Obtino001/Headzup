@@ -1,6 +1,6 @@
 {{ 'product-upsell-addon.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'product-upsell-addon.js' | asset_url | append: '?v=' | append: shop.metafields.cache.version.value | default: '1' }}" defer="defer"></script>
-<script src="{{ 'complementary-products.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'complementary-products.js' | asset_url | append: '?v=2' }}" defer="defer"></script>
 
 {%- liquid
   assign heading = block.settings.heading | default: "Ofte købt sammen"
@@ -37,50 +37,33 @@
         {%- assign shown_count = shown_count | plus: 1 -%}
       {%- endif -%}
     {%- endfor -%}
-
-  {%- else -%}
-    {%- comment -%} Search & Discovery recommendations (intent from request URL) {%- endcomment -%}
-    {%- assign shown_count = 0 -%}
-
-    {%- if recommendations.performed and recommendations.products_count > 0 -%}
-      {%- for upsell_product in recommendations.products -%}
-        {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
-        {%- if upsell_product.id == product.id or upsell_product.available == false -%}{%- continue -%}{%- endif -%}
-
-        {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-        {%- if current_variant.available -%}
-          {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
-          {%- assign shown_count = shown_count | plus: 1 -%}
-        {%- endif -%}
-      {%- endfor -%}
-    {%- endif -%}
   {%- endif -%}
 {%- endcapture -%}
 
 {%- if use_ajax -%}
   <complementary-products
     class="complementary-products"
-    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=20&intent=related"
+    data-url="{{ routes.product_recommendations_url }}?section_id=api-product-recommendation&product_id={{ product.id }}&limit=10&intent=related"
+    data-inject-selector="[data-upsell-list]"
   >
-    {%- if upsell_items != blank -%}
-      <upsell-addon
-        class="product__block upsell-addon block-padding"
-        data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}"
-        style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;"
-        {{ block.shopify_attributes }}
-      >
-        {%- if heading != blank -%}
-          <h3 class="upsell-addon__heading">{{ heading }}</h3>
-        {%- endif -%}
-        <div class="upsell-addon__list">{{ upsell_items }}</div>
-        <div class="upsell-addon__footer">
-          <div class="upsell-addon__total-price-wrapper">
-            <span>I alt:</span>
-            <span data-upsell-total>0,00 kr</span>
-          </div>
+    <upsell-addon
+      class="product__block upsell-addon block-padding"
+      data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}"
+      style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;"
+      {{ block.shopify_attributes }}
+      hidden
+    >
+      {%- if heading != blank -%}
+        <h3 class="upsell-addon__heading">{{ heading }}</h3>
+      {%- endif -%}
+      <div class="upsell-addon__list" data-upsell-list></div>
+      <div class="upsell-addon__footer">
+        <div class="upsell-addon__total-price-wrapper">
+          <span>I alt:</span>
+          <span data-upsell-total>0,00 kr</span>
         </div>
-      </upsell-addon>
-    {%- endif -%}
+      </div>
+    </upsell-addon>
   </complementary-products>
 {%- elsif upsell_items != blank -%}
   <upsell-addon
