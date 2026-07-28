@@ -60,8 +60,7 @@
 {%- if use_ajax -%}
   <complementary-products
     class="complementary-products"
-    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=20&intent=complementary"
-    data-fallback-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=20&intent=related"
+    data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit=20&intent=related"
   >
     {%- if upsell_items != blank -%}
       <upsell-addon
