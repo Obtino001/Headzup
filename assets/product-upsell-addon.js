@@ -1,5 +1,6 @@
 /**
- * Gift box + Ofte købt sammen — add via /cart/add.js then open Assortion.
+ * Gift box + Ofte købt sammen — loads Search & Discovery related products
+ * from /recommendations/products.json?intent=related (same feed as Andre kigger også på).
  */
 (function () {
   const ATC_SELECTOR = '[data-add-to-cart], [type="submit"][name="add"], button[name="add"]';
@@ -8,7 +9,6 @@
     return window.Shopify?.routes?.root || '/';
   }
 
-  // Must be .js endpoint for JSON { items: [...] }
   function cartAddUrl() {
     const fromTheme = window.theme?.routes?.cart_add_url || '';
     if (fromTheme.endsWith('.js')) return fromTheme;
@@ -57,7 +57,70 @@
     if (window.Shopify?.formatMoney) {
       return Shopify.formatMoney(cents, window.theme?.moneyFormat || '{{amount_no_decimals}} kr');
     }
-    return (cents / 100).toFixed(2) + ' kr';
+    return (cents / 100).toFixed(2).replace('.', ',') + ' kr';
+  }
+
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function pickVariant(product) {
+    if (!product?.variants?.length) return null;
+    return (
+      product.variants.find((v) => v.available) ||
+      product.variants[0] ||
+      null
+    );
+  }
+
+  function imageUrl(product) {
+    const img = product.featured_image;
+    if (!img) return '';
+    if (typeof img === 'string') return img;
+    return img.src || img.url || '';
+  }
+
+  function buildUpsellItemHtml(product, mainProductId) {
+    if (!product || String(product.id) === String(mainProductId)) return '';
+    if (product.available === false) return '';
+
+    const variant = pickVariant(product);
+    if (!variant || variant.available === false) return '';
+
+    const price = variant.price ?? product.price ?? 0;
+    const compare = variant.compare_at_price ?? product.compare_at_price ?? 0;
+    const img = imageUrl(product);
+    const url = product.url || `/products/${product.handle}`;
+    const title = escapeHtml(product.title);
+    const showVariantTitle = product.variants.length > 1 && variant.title && variant.title !== 'Default Title';
+
+    return `
+      <div class="upsell-addon__item is-unchecked" data-upsell-item data-selected-variant-id="${variant.id}" data-selected-price="${price}" data-selected-compare="${compare || price}">
+        <div class="upsell-addon__checkbox-wrapper">
+          <div class="upsell-addon__checkbox">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+        </div>
+        ${
+          img
+            ? `<img src="${escapeHtml(img)}" alt="${title}" class="upsell-addon__image" width="60" height="60" loading="lazy">`
+            : `<div class="upsell-addon__image placeholder-bg"></div>`
+        }
+        <div class="upsell-addon__details">
+          <p class="upsell-addon__title">${title}</p>
+          ${showVariantTitle ? `<p class="upsell-addon__variant-title">${escapeHtml(variant.title)}</p>` : ''}
+          <div class="upsell-addon__price-row">
+            <span class="upsell-addon__price">${formatMoney(price)}</span>
+            ${compare > price ? `<span class="upsell-addon__compare-price">${formatMoney(compare)}</span>` : ''}
+          </div>
+          <a href="${escapeHtml(url)}" class="upsell-addon__read-more">Læs mere</a>
+        </div>
+      </div>
+    `;
   }
 
   function openAppCart() {
@@ -126,7 +189,6 @@
     let added = 0;
 
     try {
-      // Add one-by-one so one sold-out upsell does not block the main product
       for (const item of itemsToAdd) {
         try {
           await addOneItem(item);
@@ -192,15 +254,57 @@
       'upsell-addon',
       class UpsellAddon extends HTMLElement {
         connectedCallback() {
-          this.items = this.querySelectorAll('[data-upsell-item]');
+          this.listEl = this.querySelector('[data-upsell-list]') || this.querySelector('.upsell-addon__list');
+          this.footerEl = this.querySelector('[data-upsell-footer]') || this.querySelector('.upsell-addon__footer');
           this.totalPriceEl = this.querySelector('[data-upsell-total]');
           this.mainProductPrice = parseInt(this.getAttribute('data-main-product-price') || 0, 10);
+          this.mainProductId = this.getAttribute('data-product-id') || '';
+          this.limit = parseInt(this.getAttribute('data-upsell-limit') || '5', 10);
+
+          const recommendationsUrl = this.getAttribute('data-recommendations-url');
+          if (recommendationsUrl && this.listEl) {
+            this.loadRelatedProducts(recommendationsUrl);
+          } else {
+            this.refreshItems();
+          }
+        }
+
+        async loadRelatedProducts(url) {
+          try {
+            const res = await fetch(url);
+            if (!res.ok) throw new Error(`Recommendations failed (${res.status})`);
+            const data = await res.json();
+            const products = Array.isArray(data.products) ? data.products : [];
+            const html = products
+              .map((product) => buildUpsellItemHtml(product, this.mainProductId))
+              .filter(Boolean)
+              .slice(0, this.limit)
+              .join('');
+
+            if (!html) {
+              this.style.display = 'none';
+              return;
+            }
+
+            this.listEl.innerHTML = html;
+            if (this.footerEl) this.footerEl.removeAttribute('hidden');
+            this.refreshItems();
+          } catch (err) {
+            console.error('[upsell-addon] related products failed', err);
+            this.style.display = 'none';
+          }
+        }
+
+        refreshItems() {
+          this.items = this.querySelectorAll('[data-upsell-item]');
           this.bindToggle();
           this.calculateTotal();
         }
 
         bindToggle() {
           this.items.forEach((item) => {
+            if (item.dataset.upsellBound) return;
+            item.dataset.upsellBound = '1';
             item.addEventListener('click', (e) => {
               if (e.target.closest('a')) return;
               item.classList.toggle('is-checked');

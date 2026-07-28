@@ -1,6 +1,5 @@
 {{ 'product-upsell-addon.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'product-upsell-addon.js' | asset_url | append: '?v=' | append: shop.metafields.cache.version.value | default: '1' }}" defer="defer"></script>
-<script src="{{ 'complementary-products.js' | asset_url | append: '?v=2' }}" defer="defer"></script>
+<script src="{{ 'product-upsell-addon.js' | asset_url | append: '?v=' | append: shop.metafields.cache.version.value | default: '1' | append: '&u=3' }}" defer="defer"></script>
 
 {%- liquid
   assign heading = block.settings.heading | default: "Ofte købt sammen"
@@ -41,30 +40,26 @@
 {%- endcapture -%}
 
 {%- if use_ajax -%}
-  <complementary-products
-    class="complementary-products"
-    data-url="{{ routes.product_recommendations_url }}?section_id=api-product-recommendation&product_id={{ product.id }}&limit=10&intent=related"
-    data-inject-selector="[data-upsell-list]"
+  <upsell-addon
+    class="product__block upsell-addon block-padding"
+    data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}"
+    data-product-id="{{ product.id }}"
+    data-upsell-limit="{{ upsell_limit }}"
+    data-recommendations-url="{{ routes.product_recommendations_url }}.json?product_id={{ product.id }}&limit=10&intent=related"
+    style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;"
+    {{ block.shopify_attributes }}
   >
-    <upsell-addon
-      class="product__block upsell-addon block-padding"
-      data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}"
-      style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;"
-      {{ block.shopify_attributes }}
-      hidden
-    >
-      {%- if heading != blank -%}
-        <h3 class="upsell-addon__heading">{{ heading }}</h3>
-      {%- endif -%}
-      <div class="upsell-addon__list" data-upsell-list></div>
-      <div class="upsell-addon__footer">
-        <div class="upsell-addon__total-price-wrapper">
-          <span>I alt:</span>
-          <span data-upsell-total>0,00 kr</span>
-        </div>
+    {%- if heading != blank -%}
+      <h3 class="upsell-addon__heading">{{ heading }}</h3>
+    {%- endif -%}
+    <div class="upsell-addon__list" data-upsell-list></div>
+    <div class="upsell-addon__footer" hidden data-upsell-footer>
+      <div class="upsell-addon__total-price-wrapper">
+        <span>I alt:</span>
+        <span data-upsell-total>0,00 kr</span>
       </div>
-    </upsell-addon>
-  </complementary-products>
+    </div>
+  </upsell-addon>
 {%- elsif upsell_items != blank -%}
   <upsell-addon
     class="product__block upsell-addon block-padding"
