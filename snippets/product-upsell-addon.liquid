@@ -46,13 +46,9 @@
     {%- assign shown_ids = ',' | append: product.id | append: ',' -%}
 
     {%- if recommendations.performed and recommendations.products_count > 0 -%}
-      {%- comment -%} Pass 1: other brands only {%- endcomment -%}
       {%- for upsell_product in recommendations.products -%}
         {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
         {%- if upsell_product.id == product.id or upsell_product.available == false -%}{%- continue -%}{%- endif -%}
-
-        {%- assign upsell_vendor = upsell_product.vendor | downcase | strip -%}
-        {%- if main_vendor != blank and upsell_vendor == main_vendor -%}{%- continue -%}{%- endif -%}
 
         {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
         {%- if current_variant.available -%}
@@ -61,88 +57,8 @@
           {%- assign shown_ids = shown_ids | append: upsell_product.id | append: ',' -%}
         {%- endif -%}
       {%- endfor -%}
-
-      {%- comment -%} Pass 2: fill remaining (avoid same type + same brand) {%- endcomment -%}
-      {%- if shown_count < upsell_limit -%}
-        {%- for upsell_product in recommendations.products -%}
-          {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
-          {%- assign id_check = ',' | append: upsell_product.id | append: ',' -%}
-          {%- if shown_ids contains id_check or upsell_product.available == false -%}{%- continue -%}{%- endif -%}
-
-          {%- liquid
-            assign upsell_type = upsell_product.type | downcase | strip
-            assign upsell_vendor = upsell_product.vendor | downcase | strip
-            assign same_family = false
-            if main_product_type != blank and upsell_type == main_product_type and main_vendor != blank and upsell_vendor == main_vendor
-              assign same_family = true
-            endif
-          -%}
-          {%- if same_family -%}{%- continue -%}{%- endif -%}
-
-          {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-          {%- if current_variant.available -%}
-            {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
-            {%- assign shown_count = shown_count | plus: 1 -%}
-            {%- assign shown_ids = shown_ids | append: upsell_product.id | append: ',' -%}
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
     {%- endif -%}
 
-    {%- comment -%} Liquid fallback: other brands from product collections / all {%- endcomment -%}
-    {%- if shown_count < upsell_limit -%}
-      {%- for collection in product.collections -%}
-        {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
-        {%- for upsell_product in collection.products -%}
-          {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
-          {%- assign id_check = ',' | append: upsell_product.id | append: ',' -%}
-          {%- if shown_ids contains id_check or upsell_product.available == false -%}{%- continue -%}{%- endif -%}
-
-          {%- assign upsell_vendor = upsell_product.vendor | downcase | strip -%}
-          {%- if main_vendor != blank and upsell_vendor == main_vendor -%}{%- continue -%}{%- endif -%}
-
-          {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-          {%- if current_variant.available -%}
-            {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
-            {%- assign shown_count = shown_count | plus: 1 -%}
-            {%- assign shown_ids = shown_ids | append: upsell_product.id | append: ',' -%}
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endfor -%}
-
-      {%- if shown_count < upsell_limit and collections.all != blank -%}
-        {%- for upsell_product in collections.all.products -%}
-          {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
-          {%- assign id_check = ',' | append: upsell_product.id | append: ',' -%}
-          {%- if shown_ids contains id_check or upsell_product.available == false -%}{%- continue -%}{%- endif -%}
-
-          {%- assign upsell_vendor = upsell_product.vendor | downcase | strip -%}
-          {%- if main_vendor != blank and upsell_vendor == main_vendor -%}{%- continue -%}{%- endif -%}
-
-          {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-          {%- if current_variant.available -%}
-            {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
-            {%- assign shown_count = shown_count | plus: 1 -%}
-            {%- assign shown_ids = shown_ids | append: upsell_product.id | append: ',' -%}
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
-
-      {%- comment -%} Last resort: any available product except current {%- endcomment -%}
-      {%- if shown_count < upsell_limit and collections.all != blank -%}
-        {%- for upsell_product in collections.all.products -%}
-          {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
-          {%- assign id_check = ',' | append: upsell_product.id | append: ',' -%}
-          {%- if shown_ids contains id_check or upsell_product.available == false -%}{%- continue -%}{%- endif -%}
-
-          {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-          {%- if current_variant.available -%}
-            {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
-            {%- assign shown_count = shown_count | plus: 1 -%}
-            {%- assign shown_ids = shown_ids | append: upsell_product.id | append: ',' -%}
-          {%- endif -%}
-        {%- endfor -%}
-      {%- endif -%}
     {%- endif -%}
   {%- endif -%}
 {%- endcapture -%}
