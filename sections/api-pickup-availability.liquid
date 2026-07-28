@@ -30,6 +30,7 @@
             class="pickup__button text-link small"
             aria-haspopup="dialog"
             data-popup-open
+            onclick="const d = this.closest('popup-component').querySelector('dialog'); if(d) d.showModal();"
           >
             {%- if pick_up_availabilities.size == 1 -%}
               {{ 'products.product.pickup_availability.view_store_info' | t }}
@@ -40,8 +41,7 @@
         {%- else -%}
           <p class="pickup__info__text">
             {{
-              'products.product.pickup_availability.pick_up_unavailable_at_html'
-              | t: location_name: closest_location.location.name
+              'products.product.pickup_availability.not_in_stock_online' | t
             }}
           </p>
           {%- if pick_up_availabilities.size > 1 -%}
@@ -50,6 +50,7 @@
               class="pickup__button text-link small"
               aria-haspopup="dialog"
               data-popup-open
+              onclick="const d = this.closest('popup-component').querySelector('dialog'); if(d) d.showModal();"
             >
               {{ 'products.product.pickup_availability.check_other_stores' | t }}
             </button>
@@ -64,6 +65,7 @@
       aria-labelledby="PickupAvailabilityHeading"
       data-pickup-drawer
       data-scroll-lock-required
+      onclick="if(event.target === this) this.close();"
     >
       <form method="dialog">
         <button class="visually-hidden no-js" aria-label="{{ 'general.accessibility.close' | t }}"></button>
@@ -81,6 +83,7 @@
             data-popup-close
             autofocus
             aria-label="{{ 'general.accessibility.close' | t }}"
+            onclick="const d = this.closest('dialog'); if(d) d.close();"
           >
             {%- render 'icon-cancel' -%}
           </button>

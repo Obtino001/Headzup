@@ -1,9 +1,9 @@
 .product__trustpilot-wrapper {
-    padding-bottom: 15px;
+  padding-bottom: 15px;
 }
 
 .anyday-widget-custom__content {
-    line-height: 150%;
+  line-height: 150%;
 }
 
 /* Product buy-box: even spacing between blocks */
@@ -63,6 +63,7 @@
     padding-bottom: 20px !important;
   }
 }
+
 @media only screen and (min-width: 750px) {
   .mobile-breadcrumb-wrapper {
     display: none !important;
@@ -74,10 +75,15 @@
     overflow-x: clip !important;
   }
 
-  body.template-product product-sticky .product__page > product-images.product__images {
+  body.template-product product-sticky .product__page>product-images.product__images {
     position: sticky !important;
     top: calc(var(--header-sticky-height, var(--header-height, 0px)) + 24px) !important;
     align-self: start !important;
     z-index: 1;
   }
+}
+
+
+div#viabill-product-pricetag-wrapper {
+  display: none !important;
 }
