@@ -215,7 +215,7 @@
         "image_size": "normal",
         "mobile_image_style": "thumbs",
         "color_scheme": "scheme-7",
-        "padding_top": 35,
+        "padding_top": 10,
         "padding_bottom": 100
       }
     },
