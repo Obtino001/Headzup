@@ -5,77 +5,26 @@
   assign heading = block.settings.heading | default: "Ofte købt sammen"
   assign accent_color = block.settings.accent_color | default: "#000000"
   assign padding_bottom = block.settings.padding_bottom | default: 16
-  assign manual_products = block.settings.product_list
-  assign upsell_collection = block.settings.upsell_collection
   assign upsell_limit = 5
-  assign use_ajax = false
-
-  if manual_products == blank and upsell_collection == blank
-    assign use_ajax = true
-  endif
 -%}
 
-{%- capture upsell_items -%}
-  {%- if manual_products != blank -%}
-    {%- for upsell_product in manual_products limit: upsell_limit -%}
-      {%- if upsell_product.id == product.id -%}{%- continue -%}{%- endif -%}
-      {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-      {%- if current_variant.available -%}
-        {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
-      {%- endif -%}
-    {%- endfor -%}
-
-  {%- elsif upsell_collection != blank -%}
-    {%- assign shown_count = 0 -%}
-    {%- for upsell_product in upsell_collection.products -%}
-      {%- if shown_count >= upsell_limit -%}{%- break -%}{%- endif -%}
-      {%- if upsell_product.id == product.id or upsell_product.available == false -%}{%- continue -%}{%- endif -%}
-      {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-      {%- if current_variant.available -%}
-        {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
-        {%- assign shown_count = shown_count | plus: 1 -%}
-      {%- endif -%}
-    {%- endfor -%}
+<upsell-addon
+  class="product__block upsell-addon block-padding"
+  data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}"
+  data-product-id="{{ product.id }}"
+  data-upsell-limit="{{ upsell_limit }}"
+  data-recommendations-url="{{ routes.product_recommendations_url }}.json?product_id={{ product.id }}&limit=10&intent=related"
+  style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;"
+  {{ block.shopify_attributes }}
+>
+  {%- if heading != blank -%}
+    <h3 class="upsell-addon__heading">{{ heading }}</h3>
   {%- endif -%}
-{%- endcapture -%}
-
-{%- if use_ajax -%}
-  <upsell-addon
-    class="product__block upsell-addon block-padding"
-    data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}"
-    data-product-id="{{ product.id }}"
-    data-upsell-limit="{{ upsell_limit }}"
-    data-recommendations-url="{{ routes.product_recommendations_url }}.json?product_id={{ product.id }}&limit=10&intent=related"
-    style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;"
-    {{ block.shopify_attributes }}
-  >
-    {%- if heading != blank -%}
-      <h3 class="upsell-addon__heading">{{ heading }}</h3>
-    {%- endif -%}
-    <div class="upsell-addon__list" data-upsell-list></div>
-    <div class="upsell-addon__footer" hidden data-upsell-footer>
-      <div class="upsell-addon__total-price-wrapper">
-        <span>I alt:</span>
-        <span data-upsell-total>0,00 kr</span>
-      </div>
+  <div class="upsell-addon__list" data-upsell-list></div>
+  <div class="upsell-addon__footer" hidden data-upsell-footer>
+    <div class="upsell-addon__total-price-wrapper">
+      <span>I alt:</span>
+      <span data-upsell-total>0,00 kr</span>
     </div>
-  </upsell-addon>
-{%- elsif upsell_items != blank -%}
-  <upsell-addon
-    class="product__block upsell-addon block-padding"
-    data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}"
-    style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;"
-    {{ block.shopify_attributes }}
-  >
-    {%- if heading != blank -%}
-      <h3 class="upsell-addon__heading">{{ heading }}</h3>
-    {%- endif -%}
-    <div class="upsell-addon__list">{{ upsell_items }}</div>
-    <div class="upsell-addon__footer">
-      <div class="upsell-addon__total-price-wrapper">
-        <span>I alt:</span>
-        <span data-upsell-total>0,00 kr</span>
-      </div>
-    </div>
-  </upsell-addon>
-{%- endif -%}
+  </div>
+</upsell-addon>
