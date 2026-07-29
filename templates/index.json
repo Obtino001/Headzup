@@ -815,6 +815,7 @@
       "blocks": {
         "media_7AA4AL": {
           "type": "media",
+          "disabled": true,
           "settings": {
             "video": "shopify://files/videos/Afsnit 4.mov",
             "label": "",
@@ -857,15 +858,6 @@
             "caption": "",
             "link": ""
           }
-        },
-        "media_gqJLHh": {
-          "type": "media",
-          "settings": {
-            "video": "shopify://files/videos/IMG_2722.MOV",
-            "label": "",
-            "caption": "",
-            "link": ""
-          }
         }
       },
       "block_order": [
@@ -873,8 +865,7 @@
         "media_bbq9j3",
         "media_UgqDBh",
         "media_KeipFr",
-        "media_CNQg7m",
-        "media_gqJLHh"
+        "media_CNQg7m"
       ],
       "name": "Video & Image Lookbook",
       "settings": {
