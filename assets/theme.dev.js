@@ -3318,19 +3318,10 @@
         }
 
         cartToggleEvent() {
-          if (theme.settings.cartType !== 'drawer') return;
-
-          this.querySelectorAll(selectors$m.cartToggleButton)?.forEach((button) => {
-            button.addEventListener('click', (e) => {
-              const cartDrawer = document.querySelector(selectors$m.cartDrawer);
-
-              if (cartDrawer) {
-                e.preventDefault();
-                cartDrawer.dispatchEvent(new CustomEvent('theme:cart-drawer:show'));
-                window.a11y.lastElement = button;
-              }
-            });
-          });
+          // Do not intercept cart icon clicks.
+          // Theme drawer open was disabled for Assortion; preventDefault left the
+          // link dead after add-to-cart. Native /cart navigation must work.
+          // Assortion (if present) can still listen for [href$="/cart"] clicks.
         }
 
         toggleButtonClick(e) {

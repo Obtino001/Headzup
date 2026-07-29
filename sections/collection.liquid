@@ -287,7 +287,8 @@
                     type="number"
                     placeholder="0"
                     min="0"
-                    max="{{ filter.range_max | divided_by: 100 }}">
+                    max="{{ filter.range_max | divided_by: 100 }}"
+                    aria-describedby="boost-price-range-error-{{ filter.param_name | default: forloop.index }}">
                 </div>
                 
                 <span class="boost-price-separator">-</span>
@@ -303,10 +304,19 @@
                     type="number"
                     placeholder="{{ filter.range_max | divided_by: 100 }}"
                     min="0"
-                    max="{{ filter.range_max | divided_by: 100 }}">
+                    max="{{ filter.range_max | divided_by: 100 }}"
+                    aria-describedby="boost-price-range-error-{{ filter.param_name | default: forloop.index }}">
                 </div>
                 
               </div>
+              <p
+                class="boost-price-range-error"
+                id="boost-price-range-error-{{ filter.param_name | default: forloop.index }}"
+                role="alert"
+                hidden
+              >
+                Minimumspris kan ikke være højere end maksimumspris.
+              </p>
               
               <div class="boost-price-slider-wrapper">
                 <div class="boost-price-slider-track"></div>

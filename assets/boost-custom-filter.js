@@ -305,6 +305,26 @@ class BoostFilter extends HTMLElement {
             const progress = wrapper.querySelector('.boost-price-slider-progress');
             if (!rangeMin || !rangeMax || !inputMin || !inputMax || !progress) return;
 
+            const errorEl = wrapper.querySelector('.boost-price-range-error');
+
+            const clearPriceError = () => {
+                if (!errorEl) return;
+                errorEl.hidden = true;
+                inputMin.removeAttribute('aria-invalid');
+                inputMax.removeAttribute('aria-invalid');
+                inputMin.classList.remove('is-invalid');
+                inputMax.classList.remove('is-invalid');
+            };
+
+            const showPriceError = () => {
+                if (!errorEl) return;
+                errorEl.hidden = false;
+                inputMin.setAttribute('aria-invalid', 'true');
+                inputMax.setAttribute('aria-invalid', 'true');
+                inputMin.classList.add('is-invalid');
+                inputMax.classList.add('is-invalid');
+            };
+
             const updateProgress = () => {
                 const min = parseFloat(rangeMin.value) || 0;
                 const max = parseFloat(rangeMax.value) || 0;
@@ -325,6 +345,7 @@ class BoostFilter extends HTMLElement {
                     min = max;
                 }
                 inputMin.value = min;
+                clearPriceError();
                 updateProgress();
             });
 
@@ -336,32 +357,70 @@ class BoostFilter extends HTMLElement {
                     max = min;
                 }
                 inputMax.value = max;
+                clearPriceError();
                 updateProgress();
             });
 
-            const onInputBoxChange = () => {
-                let min = parseFloat(inputMin.value) || 0;
-                let max = parseFloat(inputMax.value) || parseFloat(rangeMax.max);
+            const onInputBoxChange = (event) => {
+                let min = parseFloat(inputMin.value);
+                let max = parseFloat(inputMax.value);
                 const absoluteMax = parseFloat(rangeMax.max);
+                const previousMin = parseFloat(rangeMin.value) || 0;
+                const previousMax = parseFloat(rangeMax.value) || absoluteMax;
+
+                if (Number.isNaN(min)) min = previousMin;
+                if (Number.isNaN(max)) max = previousMax;
                 if (min < 0) min = 0;
                 if (max > absoluteMax) max = absoluteMax;
-                if (min > max) { let temp = min; min = max; max = temp; }
 
+                if (min > max) {
+                    showPriceError();
+                    // Keep the user's typed values visible, but do not normalize silently
+                    // or submit. Revert sliders to last valid range.
+                    rangeMin.value = previousMin;
+                    rangeMax.value = previousMax;
+                    updateProgress();
+                    event?.stopImmediatePropagation?.();
+                    return false;
+                }
+
+                clearPriceError();
                 inputMin.value = min;
                 inputMax.value = max;
                 rangeMin.value = min;
                 rangeMax.value = max;
                 updateProgress();
+                return true;
             };
 
-            inputMin.addEventListener('change', onInputBoxChange);
-            inputMax.addEventListener('change', onInputBoxChange);
+            inputMin.addEventListener('change', (e) => {
+                if (onInputBoxChange(e) === false) {
+                    e.stopImmediatePropagation();
+                }
+            });
+            inputMax.addEventListener('change', (e) => {
+                if (onInputBoxChange(e) === false) {
+                    e.stopImmediatePropagation();
+                }
+            });
 
-            // Fetch update on drop/change
-            rangeMin.addEventListener('change', this.submitForm);
-            rangeMax.addEventListener('change', this.submitForm);
-            inputMin.addEventListener('change', this.submitForm);
-            inputMax.addEventListener('change', this.submitForm);
+            // Fetch update on drop/change — skip submit when range is invalid
+            const submitIfValid = (e) => {
+                const min = parseFloat(inputMin.value) || 0;
+                const max = parseFloat(inputMax.value) || parseFloat(rangeMax.max);
+                if (min > max) {
+                    showPriceError();
+                    e?.stopImmediatePropagation?.();
+                    return;
+                }
+                clearPriceError();
+                this.submitForm();
+            };
+
+            rangeMin.addEventListener('change', submitIfValid);
+            rangeMax.addEventListener('change', submitIfValid);
+            inputMin.addEventListener('change', submitIfValid);
+            inputMax.addEventListener('change', submitIfValid);
         });
     }
 
@@ -458,6 +517,27 @@ class BoostFilter extends HTMLElement {
             e.stopPropagation();
         }
         if (!this.filterForm) return;
+
+        // Block reversed price ranges and surface validation instead of silent swap
+        const priceWrappers = this.querySelectorAll('.boost-price-range');
+        for (const wrapper of priceWrappers) {
+            const inputMin = wrapper.querySelector('.boost-price-input-min');
+            const inputMax = wrapper.querySelector('.boost-price-input-max');
+            const errorEl = wrapper.querySelector('.boost-price-range-error');
+            if (!inputMin || !inputMax) continue;
+
+            const min = parseFloat(inputMin.value);
+            const max = parseFloat(inputMax.value);
+            if (!Number.isNaN(min) && !Number.isNaN(max) && min > max) {
+                if (errorEl) errorEl.hidden = false;
+                inputMin.setAttribute('aria-invalid', 'true');
+                inputMax.setAttribute('aria-invalid', 'true');
+                inputMin.classList.add('is-invalid');
+                inputMax.classList.add('is-invalid');
+                inputMin.focus();
+                return;
+            }
+        }
 
         const searchParams = this.buildFilterParams();
 

@@ -25,13 +25,14 @@
 {%- endif -%}
 
 {%- if part == 'modal' or part == 'all' -%}
-<cap-guide-modal id="{{ modal_id }}" class="cap-guide-modal">
+<cap-guide-modal id="{{ modal_id }}" class="cap-guide-modal" hidden aria-hidden="true">
   <div class="cg-overlay" data-cap-guide-close></div>
-  <div class="cg-dialog" role="dialog" aria-modal="true" aria-labelledby="cg-title-{{ section.id }}">
+  <div class="cg-dialog" role="dialog" aria-modal="true" aria-labelledby="cg-title-{{ section.id }}" aria-hidden="true">
     <div class="cg-header">
       <h2 id="cg-title-{{ section.id }}">{{ section.settings.drawer_heading | default: section.settings.heading | default: 'Sammenlign modeller' | escape }}</h2>
       <button type="button" class="cg-close" data-cap-guide-close aria-label="{{ 'general.accessibility.close' | t }}">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <span class="cg-close__label">{{ 'general.accessibility.close' | t }}</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
     <div class="cg-body">
@@ -52,13 +53,17 @@
         super();
         this.closeBtns = this.querySelectorAll('[data-cap-guide-close]');
         this.overlay = this.querySelector('.cg-overlay');
+        this.dialog = this.querySelector('.cg-dialog');
+        this.onKeyDown = this.onKeyDown.bind(this);
         this.bindEvents();
+        this.setClosedState();
       }
 
       connectedCallback() {
         if (this.parentElement && this.parentElement !== document.body) {
           document.body.appendChild(this);
         }
+        this.setClosedState();
         document.querySelectorAll(`[data-cap-guide-target="${this.id}"]`).forEach(trigger => {
           if (trigger.dataset.cgBound === 'true') return;
           trigger.dataset.cgBound = 'true';
@@ -70,20 +75,45 @@
       }
 
       bindEvents() {
-        this.closeBtns.forEach(btn => btn.addEventListener('click', () => this.close()));
+        this.closeBtns.forEach(btn => btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          this.close();
+        }));
         this.overlay?.addEventListener('click', () => this.close());
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && this.hasAttribute('open')) this.close();
-        });
+        document.addEventListener('keydown', this.onKeyDown);
+      }
+
+      onKeyDown(e) {
+        if (e.key === 'Escape' && this.hasAttribute('open')) this.close();
+      }
+
+      setClosedState() {
+        this.removeAttribute('open');
+        this.setAttribute('hidden', '');
+        this.setAttribute('aria-hidden', 'true');
+        this.dialog?.setAttribute('aria-hidden', 'true');
+        if (typeof this.inert !== 'undefined') this.inert = true;
+      }
+
+      setOpenState() {
+        this.removeAttribute('hidden');
+        this.setAttribute('open', '');
+        this.setAttribute('aria-hidden', 'false');
+        this.dialog?.setAttribute('aria-hidden', 'false');
+        if (typeof this.inert !== 'undefined') this.inert = false;
       }
 
       open() {
-        this.setAttribute('open', '');
+        this.setOpenState();
         document.body.style.overflow = 'hidden';
+        requestAnimationFrame(() => {
+          this.querySelector('.cg-close')?.focus({ preventScroll: true });
+        });
       }
 
       close() {
-        this.removeAttribute('open');
+        this.setClosedState();
         document.body.style.overflow = '';
       }
     }

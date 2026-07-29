@@ -4,8 +4,21 @@
   --cg-text: var(--colorTextBody, #0c2340);
   --cg-muted: rgba(12, 35, 64, 0.55);
   --cg-border: rgba(12, 35, 64, 0.12);
-  --cg-z: 2147483646;
+  --cg-z: 10050;
   display: block;
+}
+
+/* Fully inert when closed — avoids off-viewport "Luk" / dialog a11y findings */
+.cap-guide-modal:not([open]) {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+.cap-guide-modal[open] {
+  display: block;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .cap-guide-modal .cg-overlay {
@@ -15,12 +28,14 @@
   z-index: var(--cg-z);
   opacity: 0;
   visibility: hidden;
+  pointer-events: none;
   transition: opacity 0.35s ease, visibility 0.35s ease;
 }
 
 .cap-guide-modal[open] .cg-overlay {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .cap-guide-modal .cg-dialog {
@@ -31,6 +46,7 @@
   max-width: 920px;
   height: 100vh;
   height: 100dvh;
+  max-height: 100dvh;
   background: var(--cg-bg);
   z-index: calc(var(--cg-z) + 1);
   transform: translateX(100%);
@@ -38,6 +54,10 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0);
+  padding-right: env(safe-area-inset-right, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .cap-guide-modal[open] .cg-dialog {
@@ -49,8 +69,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   padding: 24px 28px;
   border-bottom: 1px solid var(--cg-border);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--cg-bg);
 }
 
 .cap-guide-modal .cg-header h2 {
@@ -60,14 +85,30 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--cg-text);
+  min-width: 0;
 }
 
 .cap-guide-modal .cg-close {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 8px 12px;
   color: var(--cg-text);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  min-height: 44px;
+  min-width: 44px;
+  position: relative;
+  z-index: 3;
+}
+
+.cap-guide-modal .cg-close__label {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .cap-guide-modal .cg-body {
