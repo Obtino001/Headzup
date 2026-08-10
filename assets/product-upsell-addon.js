@@ -262,10 +262,16 @@
           this.limit = parseInt(this.getAttribute('data-upsell-limit') || '5', 10);
 
           const recommendationsUrl = this.getAttribute('data-recommendations-url');
-          if (recommendationsUrl && this.listEl) {
+          const hasServerItems = this.listEl?.querySelector('[data-upsell-item]');
+
+          if (hasServerItems) {
+            // Manual product list or upsell collection rendered in Liquid
+            if (this.footerEl) this.footerEl.removeAttribute('hidden');
+            this.refreshItems();
+          } else if (recommendationsUrl && this.listEl) {
             this.loadRelatedProducts(recommendationsUrl);
           } else {
-            this.refreshItems();
+            this.style.display = 'none';
           }
         }
 

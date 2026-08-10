@@ -67,10 +67,16 @@ Document of changes shipped to address the conversion drop on the new theme vers
 ### 8. “Ofte købt sammen” — complements not colour variants
 **Problem:** Related feed returned the same cap in other colours.  
 **Fix:**
-- Recommendations intent → `complementary` ([`snippets/product-upsell-addon.liquid`](snippets/product-upsell-addon.liquid)).
-- JS fallback to `related` if complementary is empty, with colour-variant title filtering ([`assets/product-upsell-addon.js`](assets/product-upsell-addon.js)).
+- Recommendations intent → `complementary` with related fallback + colour-variant filter.
+- **Also wired:** Theme Editor **Upsell collection** / **Products (manual)** now actually render (they were unused before).
 
-**Merchant note:** Best results when complementary products are set in **Shopify Admin → Search & Discovery** (e.g. Stetson Cap Strips / real accessories).
+**How to set for 1000+ products (recommended):**
+1. Shopify Admin → **Products → Collections → Create collection** (e.g. “Ofte købt sammen / Accessories”).
+2. Add accessories only: Cap Strips, stickers, cleaning kits, etc. (not colour variants of caps).
+3. Theme Editor → Product page → **Upsell Addon** → set **Upsell collection** to that collection.
+4. Done — every PDP shows the same 5 accessories. No per-product setup.
+
+Optional: Search & Discovery complementary rules if you want different accessories per collection.
 
 ---
 

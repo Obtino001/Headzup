@@ -18,7 +18,7 @@
     {%- endunless -%}
 
     <div class="upsell-addon__price-row">
-      <span class="upsell-addon__price">{{ current_variant.price | money }}</span>
+      <span class="upsell-addon__price{% if current_variant.compare_at_price > current_variant.price %} is-sale{% endif %}">{{ current_variant.price | money }}</span>
       {%- if current_variant.compare_at_price > current_variant.price -%}
         <span class="upsell-addon__compare-price">{{ current_variant.compare_at_price | money }}</span>
       {%- endif -%}
