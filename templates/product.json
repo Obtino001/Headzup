@@ -169,7 +169,7 @@
             "icon": "gowish",
             "font": "inherit",
             "color": "#0c2340",
-            "background": "transparent",
+            "background": "rgba(0,0,0,0)",
             "border": "#0c2340",
             "icon_color": "#0c2340",
             "data-region": "denmark"
@@ -222,7 +222,10 @@
           "type": "upsell_addon",
           "settings": {
             "heading": "Ofte købt sammen",
-            "product_list": [],
+            "product_list": [
+              "new-era-ne-sticker-tee-oversize-black",
+              "bls-backstage-tote-bag-raw"
+            ],
             "accent_color": "#000000",
             "padding_bottom": 16
           }
