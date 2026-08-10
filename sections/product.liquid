@@ -397,8 +397,9 @@
 
                     {%- when 'ring_size' -%}
                     {%- unless product.has_only_default_variant -%}
-                      <div class="rsg-inline-wrapper product__block">
-                        {%- render 'size-guide', block: block -%}
+                      {%- comment -%} Trigger lives next to Størrelse label; modal only here {%- endcomment -%}
+                      <div class="rsg-modal-host" {{ block.shopify_attributes }}>
+                        {%- render 'size-guide', block: block, hide_trigger: true -%}
                       </div>
                     {%- endunless -%}
 

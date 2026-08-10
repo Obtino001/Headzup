@@ -15,7 +15,7 @@
         "heading_rHpwGe": {
           "type": "heading",
           "settings": {
-            "title": "",
+            "title": "Danmarks bedste udvalg af caps",
             "heading_font_size": "heading-2x-large",
             "heading_tag": "automatic"
           }
@@ -23,18 +23,18 @@
         "text_subheading": {
           "type": "text",
           "settings": {
-            "text": "<p>Danmarks bedste udvalg. Personlig service siden 2020. 365 dages bytteservice, og fysisk butik i København. </p>",
-            "text_font_size": "body-x-large"
+            "text": "<p>Personlig service siden 2020. 365 dages bytteservice, og fysisk butik i København.</p>",
+            "text_font_size": "body-medium"
           }
         },
         "button_CedczP": {
           "type": "button",
           "settings": {
-            "link_text": "",
+            "link_text": "Shop caps",
             "link": "shopify://collections/new-era",
             "button_type": "btn--white",
             "button_size": "btn--large",
-            "button_style": "btn--text",
+            "button_style": "btn--solid",
             "show_arrow": false,
             "full_width": false
           }
@@ -51,15 +51,15 @@
         "link": "shopify://collections/new-era",
         "width": "wrapper--full",
         "height": "four-fifty-height-hero",
-        "flex_align_desktop": "align--bottom-left-desktop",
-        "content_width": 35,
+        "flex_align_desktop": "align--middle-left-desktop",
+        "content_width": 42,
         "mobile_image": "shopify://shop_images/Skaermbillede_2026-04-17_kl._23.14.33.png",
-        "mobile_height": "screen-height-one-half--mobile",
-        "flex_align_mobile": "align--bottom-left-mobile",
+        "mobile_height": "screen-height-two-thirds--mobile",
+        "flex_align_mobile": "align--middle-left-mobile",
         "color_scheme": "scheme-2",
         "show_text_background": true,
-        "overlay_opacity": 35,
-        "show_overlay_text": false,
+        "overlay_opacity": 55,
+        "show_overlay_text": true,
         "padding_top": 0,
         "padding_bottom": 0,
         "show_placeholder": true

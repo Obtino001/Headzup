@@ -482,6 +482,8 @@
       "zoom": "Zoom",
       "configure": "Configure",
       "select": "Select",
+      "select_size": "Select size",
+      "select_option": "Select {{ option }}",
       "select_value": "Select value",
       "select_color": "Select color",
       "each": "each",

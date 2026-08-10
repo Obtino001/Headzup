@@ -1,6 +1,6 @@
 /**
- * Gift box + Ofte købt sammen — loads Search & Discovery related products
- * from /recommendations/products.json?intent=related (same feed as Andre kigger også på).
+ * Gift box + Ofte købt sammen — loads complementary products first
+ * (Search & Discovery intent=complementary), with related fallback.
  */
 (function () {
   const ATC_SELECTOR = '[data-add-to-cart], [type="submit"][name="add"], button[name="add"]';
@@ -114,7 +114,7 @@
           <p class="upsell-addon__title">${title}</p>
           ${showVariantTitle ? `<p class="upsell-addon__variant-title">${escapeHtml(variant.title)}</p>` : ''}
           <div class="upsell-addon__price-row">
-            <span class="upsell-addon__price">${formatMoney(price)}</span>
+            <span class="upsell-addon__price${compare > price ? ' is-sale' : ''}">${formatMoney(price)}</span>
             ${compare > price ? `<span class="upsell-addon__compare-price">${formatMoney(compare)}</span>` : ''}
           </div>
           <a href="${escapeHtml(url)}" class="upsell-addon__read-more">Læs mere</a>
@@ -271,11 +271,31 @@
 
         async loadRelatedProducts(url) {
           try {
-            const res = await fetch(url);
-            if (!res.ok) throw new Error(`Recommendations failed (${res.status})`);
-            const data = await res.json();
-            const products = Array.isArray(data.products) ? data.products : [];
-            const html = products
+            let products = await this.fetchProducts(url);
+
+            // Prefer true complements; if Search & Discovery returns none, fall back to related
+            // but drop near-identical colour variants of the same model.
+            if (!products.length && url.includes('intent=complementary')) {
+              const fallbackUrl = url.replace('intent=complementary', 'intent=related');
+              products = await this.fetchProducts(fallbackUrl);
+            }
+
+            const mainTitle = (document.querySelector('h1.product__title, .product__title')?.textContent || '')
+              .trim()
+              .toLowerCase();
+
+            const filtered = products.filter((product) => {
+              if (!product || String(product.id) === String(this.mainProductId)) return false;
+              const title = String(product.title || '').toLowerCase();
+              if (!mainTitle || !title) return true;
+              // Same model, different colour often shares a long title prefix
+              const mainCore = mainTitle.replace(/\b(navy|black|white|grey|gray|red|blue|green|brown|pink|beige|olive|khaki|multi|sort|hvid|blå|rød|grøn)\b/gi, '').replace(/\s+/g, ' ').trim();
+              const titleCore = title.replace(/\b(navy|black|white|grey|gray|red|blue|green|brown|pink|beige|olive|khaki|multi|sort|hvid|blå|rød|grøn)\b/gi, '').replace(/\s+/g, ' ').trim();
+              if (mainCore.length > 12 && titleCore === mainCore) return false;
+              return true;
+            });
+
+            const html = filtered
               .map((product) => buildUpsellItemHtml(product, this.mainProductId))
               .filter(Boolean)
               .slice(0, this.limit)
@@ -293,6 +313,13 @@
             console.error('[upsell-addon] related products failed', err);
             this.style.display = 'none';
           }
+        }
+
+        async fetchProducts(url) {
+          const res = await fetch(url);
+          if (!res.ok) throw new Error(`Recommendations failed (${res.status})`);
+          const data = await res.json();
+          return Array.isArray(data.products) ? data.products : [];
         }
 
         refreshItems() {

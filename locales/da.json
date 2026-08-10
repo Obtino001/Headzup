@@ -482,6 +482,8 @@
       "zoom": "Zoom",
       "configure": "Konfigurer",
       "select": "Vælg",
+      "select_size": "Vælg størrelse",
+      "select_option": "Vælg {{ option }}",
       "select_value": "Vælg værdi",
       "select_color": "Vælg farve",
       "each": "hver",

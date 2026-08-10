@@ -2,6 +2,12 @@
   assign uniq_id = unique | append: 'product-' | append: product.id | append: '-'
   assign hide_labels_class = ''
   assign current_variant = product.selected_or_first_available_variant
+  assign force_size_select = false
+  unless product.selected_variant
+    unless product.has_only_default_variant
+      assign force_size_select = true
+    endunless
+  endunless
   assign enable_size_chart = enable_size_chart | default: false
   assign show_size_chart = false
   assign tags_string = product.tags | join: ','
@@ -13,6 +19,7 @@
   if form_button_blocks.size == 0 and quickview == false
     assign has_form_buttons = false
   endif
+  assign ring_size_block = section.blocks | where: 'type', 'ring_size' | first
 
   assign size_style = block.settings.size_chart_style
   assign specific_pages = ''
@@ -458,21 +465,31 @@
               <fieldset>
                 <div class="select__fieldset">
                   {%- capture input_id -%}{{ uniq_id }}-option-{{ option.position }}{%- endcapture -%}
-                  <legend class="radio__legend{% if is_size_option and size_chart_link and show_size_link_separated == false %} radio__legend--size{% endif %}">
+                  <legend class="radio__legend radio__legend--with-guide{% if is_size_option %} radio__legend--size{% endif %}">
                     <span class="radio__legend__label{% if size_style == 'text' %} radio__legend__label--text{% endif %}" id="{{ uniq_id }}-select-{{ option.name | handle }}-label">
                       <span class="radio__legend__option-name">{{ option.name }}:</span>
 
                       {%- if is_size_option -%}
                         {{- size_chart_link -}}
+                        {%- if ring_size_block -%}
+                          <button
+                            type="button"
+                            class="rsg-trigger-btn rsg-trigger-btn--inline radio__legend__link body-x-small text-link"
+                            data-modal-target="RingSizeModal-{{ ring_size_block.id }}"
+                          >
+                            {{ ring_size_block.settings.trigger_text | default: 'Størrelsesguide' | escape }}
+                          </button>
+                        {%- endif -%}
                       {%- endif -%}
-
-                      {% comment %} {%- if settings.show_labels -%}
-                        <small class="radio__legend__value" data-option-value>{{ current_value }}</small>
-                      {%- endif -%} {% endcomment %}
                     </span>
                   </legend>
 
-                  <popout-select class="select-popout">
+                  <popout-select
+                    class="select-popout"
+                    {% if is_size_option and force_size_select %}
+                      data-force-size-select
+                    {% endif %}
+                  >
                     <button type="button"
                       class="select-popout__toggle"
                       aria-expanded="false"
@@ -481,16 +498,22 @@
                       data-select-soldout=" - {{ 'products.product.sold_out' | t }}"
                       data-select-unavailable=" - {{ 'products.product.unavailable' | t }}"
                       data-popout-toggle>
-                      <span data-popout-toggle-text>{{ option.selected_value }}</span>
+                      <span data-popout-toggle-text>
+                        {%- if is_size_option and force_size_select -%}
+                          {{ 'products.product.select_size' | t }}
+                        {%- else -%}
+                          {{ option.selected_value }}
+                        {%- endif -%}
+                      </span>
                       {%- render 'icon-nav-arrow-down' -%}
                     </button>
 
                     <ul id="{{ uniq_id }}-select-{{ option.name | handle }}" class="select-popout__list" data-popout-list data-scroll-lock-scrollable>
                       {%- for value in option.values -%}
-                        <li class="select-popout__item{% if option.selected_value == value %} is-active{% endif %}">
+                        <li class="select-popout__item{% unless is_size_option and force_size_select %}{% if option.selected_value == value %} is-active{% endif %}{% endunless %}">
                           <a class="select-popout__option"
                             href="#"
-                            {% if option.selected_value == value %}aria-current="true"{% endif %}
+                            {% unless is_size_option and force_size_select %}{% if option.selected_value == value %}aria-current="true"{% endif %}{% endunless %}
                             data-value="{{ value | escape }}"
                             data-popout-option
                             data-select-soldout=" - {{ 'products.product.sold_out' | t }}"
@@ -502,7 +525,17 @@
                         </li>
                       {%- endfor -%}
                     </ul>
-                    <input form="{{ product_form_id }}" type="hidden" name="options[{{ option.name | escape }}]-{{ uniq_id }}" id="{{ input_id }}" value="{{ option.selected_value | escape }}" data-popout-input data-single-option-selector data-index="option{{ option.position }}">
+                    <input
+                      form="{{ product_form_id }}"
+                      type="hidden"
+                      name="options[{{ option.name | escape }}]-{{ uniq_id }}"
+                      id="{{ input_id }}"
+                      value="{% unless is_size_option and force_size_select %}{{ option.selected_value | escape }}{% endunless %}"
+                      data-popout-input
+                      data-single-option-selector
+                      data-index="option{{ option.position }}"
+                      {% if is_size_option and force_size_select %}data-pending-size{% endif %}
+                    >
                   </popout-select>
                 </div>
               </fieldset>

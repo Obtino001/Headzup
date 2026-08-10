@@ -13,7 +13,7 @@
   data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}"
   data-product-id="{{ product.id }}"
   data-upsell-limit="{{ upsell_limit }}"
-  data-recommendations-url="{{ routes.product_recommendations_url }}.json?product_id={{ product.id }}&limit=10&intent=related"
+  data-recommendations-url="{{ routes.product_recommendations_url }}.json?product_id={{ product.id }}&limit=10&intent=complementary"
   style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;"
   {{ block.shopify_attributes }}
 >

@@ -19,10 +19,7 @@
 }
 
 .product__content .rsg-inline-wrapper {
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  margin: 0 0 16px;
+  display: none;
 }
 
 .product__content .product-cap-guide.block-padding {
@@ -86,4 +83,176 @@
 
 div#viabill-product-pricetag-wrapper {
   display: none !important;
+}
+
+/* Ønskeskyen wishlist — muted outline so navy ATC stays primary CTA */
+.product__content .gowish-btn,
+.product__content #gowishBlueButton,
+.product__content #gowishWhiteButton,
+.product__content #gowishDynamicButton,
+.product__content #gowishRoundedButton,
+.product__content #ov-onskeskyen-generated-wish-button,
+.product__content shopify-block .gowish-btn,
+.product__content .shopify-app-block .gowish-btn {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #0c2340 !important;
+  border: 1px solid rgba(12, 35, 64, 0.35) !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  text-decoration: none !important;
+  opacity: 1 !important;
+}
+
+.product__content .gowish-btn.blue,
+.product__content .gowish-btn.blue:hover,
+.product__content .gowish-btn.blue:focus {
+  background-color: transparent !important;
+  background-image: none !important;
+  color: #0c2340 !important;
+  border-color: rgba(12, 35, 64, 0.35) !important;
+}
+
+.product__content .gowish-btn:hover,
+.product__content #gowishBlueButton:hover,
+.product__content #gowishDynamicButton:hover,
+.product__content #ov-onskeskyen-generated-wish-button:hover {
+  background-color: rgba(12, 35, 64, 0.04) !important;
+  border-color: #0c2340 !important;
+  color: #0c2340 !important;
+}
+
+.product__content .gowish-btn svg,
+.product__content .gowish-btn img,
+.product__content .gowish-btn [class*="icon"] {
+  filter: none !important;
+  color: #0c2340 !important;
+  fill: #0c2340 !important;
+}
+
+/* #7 Size guide next to Størrelse label */
+.product__content .radio__legend--with-guide,
+.product__content .radio__legend--size {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+}
+
+.product__content .radio__legend__label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.product__content .rsg-trigger-btn--inline {
+  width: auto !important;
+  justify-content: flex-end;
+  margin-left: auto;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  opacity: 1;
+  color: #0c2340;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.product__content .rsg-trigger-btn--inline:hover {
+  opacity: 0.7;
+}
+
+.product__content .rsg-modal-host {
+  display: contents;
+}
+
+/* #10 Mobile hero ~70vh */
+@media only screen and (max-width: 749px) {
+  .section-hero .hero.screen-height-two-thirds--mobile,
+  .hero.screen-height-two-thirds--mobile {
+    min-height: 70vh;
+  }
+}
+
+/* #11 Collapse topbar + slim header chrome on scroll */
+@media only screen and (max-width: 989px) {
+  body.js__header__stuck .header-topbar {
+    max-height: 0;
+    min-height: 0;
+    overflow: hidden;
+    border-bottom-width: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height 0.25s ease, opacity 0.2s ease, min-height 0.25s ease;
+  }
+
+  .header-topbar {
+    transition: max-height 0.25s ease, opacity 0.2s ease, min-height 0.25s ease;
+  }
+}
+
+/* #12 Soften Chapter Two tab — secondary, not equal hero */
+.header-topbar__brand:nth-child(2) {
+  opacity: 0.55;
+  font-size: 0.85rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.header-topbar__brand:nth-child(2) .header-topbar__text {
+  font-weight: 400;
+}
+
+.header-topbar__brand:nth-child(2):hover,
+.header-topbar__brand--active.header-topbar__brand:nth-child(2) {
+  opacity: 1;
+}
+
+.header-topbar__brand:first-child {
+  font-weight: 600;
+}
+
+/* #13 Blank product cards — don't wait on AOS / lazy for above-fold */
+.product-item [data-aos='img-in'],
+.product-item__image [data-aos='img-in'],
+.grid-item.product-item img[data-aos='img-in'] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.product-item img.is-loading {
+  opacity: 1 !important;
+}
+
+/* #14 Header visible on load (no fade-in delay) */
+.theme__header {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Hero hierarchy: headline stronger than subline */
+.section-hero .hero__title,
+.hero .hero__title {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.5em;
+}
+
+.section-hero .hero__description,
+.hero .hero__description {
+  font-size: 1rem;
+  line-height: 1.45;
+  max-width: 28em;
+  opacity: 0.92;
+}
+
+.section-hero .hero__button,
+.hero .hero__button {
+  margin-top: 1.25rem;
 }

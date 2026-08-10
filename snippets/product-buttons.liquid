@@ -162,6 +162,12 @@
               assign button_size = block.settings.button_size | default: 'btn--medium'
               assign button_style = block.settings.button_style | default: 'btn--solid'
               assign button_type = block.settings.button_type | default: 'btn--primary'
+              assign require_size_select = false
+              unless product.selected_variant
+                unless product.has_only_default_variant
+                  assign require_size_select = true
+                endunless
+              endunless
             -%}
 
             {%- unless current_variant.available and show_newsletter -%}
@@ -171,13 +177,21 @@
               id="AddToCart--{{ section.id }}"
               class="btn {{ button_size }} {{ button_style }} {{ button_type }}"
               data-add-to-cart
-              {% unless current_variant.available %}
+              {% if require_size_select %}
+                data-require-size-select
                 disabled="disabled"
-              {% endunless %}
+                aria-disabled="true"
+              {% elsif current_variant.available == false %}
+                disabled="disabled"
+              {% endif %}
             >
               <span class="btn__text" data-add-to-cart-text>
-                {{- button_text -}}
-                {%- if settings.atc_show_product_price %}
+                {%- if require_size_select -%}
+                  {{- 'products.product.select_size' | t -}}
+                {%- else -%}
+                  {{- button_text -}}
+                {%- endif -%}
+                {%- if settings.atc_show_product_price and require_size_select == false %}
                   <span
                     class="btn__price"
                     data-product-price

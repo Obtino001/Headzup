@@ -350,11 +350,13 @@
 </style>
 
 {%- comment -%} TRIGGER BUTTON {%- endcomment -%}
+{%- unless hide_trigger -%}
 <div class="product-block" {{ block.shopify_attributes }}>
   <button type="button" class="rsg-trigger-btn" data-modal-target="RingSizeModal-{{ block.id }}">
     {{ block.settings.trigger_text }}
   </button>
 </div>
+{%- endunless -%}
 
 {%- comment -%} MODAL COMPONENT {%- endcomment -%}
 <ring-size-modal id="RingSizeModal-{{ block.id }}">
@@ -548,8 +550,8 @@
         this.closeBtns = this.querySelectorAll('[data-modal-close]');
         this.tabs = this.querySelectorAll('.rsg-tab');
         this.panels = this.querySelectorAll('.rsg-panel');
-        // Because modal moves to body, we must query document for triggers
-        this.triggers = document.querySelectorAll(`[data-modal-target="${this.id}"]`);
+        // Triggers may render later (next to Størrelse label) — resolve on open bind
+        this.triggers = [];
         this.video = this.querySelector('.rsg-video-el');
         this.videoBtn = this.querySelector('.rsg-video-btn');
 
@@ -561,20 +563,33 @@
         if (this.parentElement && this.parentElement !== document.body) {
           document.body.appendChild(this);
         }
+        this.bindTriggers();
       }
 
-      bindEvents() {
-        this.triggers.forEach(trigger => {
+      bindTriggers() {
+        document.querySelectorAll(`[data-modal-target="${this.id}"]`).forEach((trigger) => {
+          if (trigger.dataset.rsgBound === 'true') return;
+          trigger.dataset.rsgBound = 'true';
           trigger.addEventListener('click', (e) => {
             e.preventDefault();
             this.open();
           });
         });
+      }
 
+      bindEvents() {
         this.closeBtns.forEach(btn => btn.addEventListener('click', () => this.close()));
         
         this.tabs.forEach(tab => {
           tab.addEventListener('click', (e) => this.switchTab(e.currentTarget));
+        });
+
+        // Late triggers (legend link rendered after this block)
+        document.addEventListener('click', (e) => {
+          const trigger = e.target.closest(`[data-modal-target="${this.id}"]`);
+          if (!trigger) return;
+          e.preventDefault();
+          this.open();
         });
 
         if (this.videoBtn && this.video) {

@@ -168,10 +168,10 @@
             "width": "100%",
             "icon": "gowish",
             "font": "inherit",
-            "color": "#ffffff",
-            "background": "#0099bb",
-            "border": "",
-            "icon_color": "",
+            "color": "#0c2340",
+            "background": "transparent",
+            "border": "#0c2340",
+            "icon_color": "#0c2340",
             "data-region": "denmark"
           }
         },

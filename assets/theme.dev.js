@@ -3229,7 +3229,6 @@
 
           if (this.style !== 'drawer' && this.desktop) {
             this.minWidth = this.getMinWidth();
-            this.minWidth = 1200;
             this.listenWidth();
           }
         }

@@ -120,13 +120,13 @@
     assign eager_images_limit = columns_desktop | times: 2
   endif
 
-  if layout_desktop == 'slider' and index > 3
+  if layout_desktop == 'slider' and index > 8
     assign loading = 'lazy'
   elsif index > eager_images_limit
     assign loading = 'lazy'
   endif
 
-  if block_index > 1
+  if block_index > 2
     assign loading = 'lazy'
   endif
 -%}

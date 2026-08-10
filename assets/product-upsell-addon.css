@@ -103,6 +103,10 @@ upsell-addon {
 .upsell-addon__price {
   font-size: 13px;
   font-weight: 600;
+  color: #0c2340;
+}
+
+.upsell-addon__price.is-sale {
   color: #d13d3d;
 }
 
