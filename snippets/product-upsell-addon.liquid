@@ -1,5 +1,5 @@
 {{ 'product-upsell-addon.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'product-upsell-addon.js' | asset_url | append: '?v=' | append: shop.metafields.cache.version.value | default: '1' | append: '&u=4' }}" defer="defer"></script>
+<script src="{{ 'product-upsell-addon.js' | asset_url | append: '?v=' | append: shop.metafields.cache.version.value | default: '1' | append: '&u=5' }}" defer="defer"></script>
 
 {%- liquid
   assign heading = block.settings.heading | default: "Ofte købt sammen"
@@ -7,14 +7,9 @@
   assign padding_bottom = block.settings.padding_bottom | default: 16
   assign upsell_limit = 5
   assign manual_products = block.settings.product_list
-  assign upsell_collection = block.settings.upsell_collection
   assign has_manual = false
   if manual_products != blank and manual_products.size > 0
     assign has_manual = true
-  endif
-  assign has_collection = false
-  if has_manual == false and upsell_collection != blank and upsell_collection.products_count > 0
-    assign has_collection = true
   endif
 -%}
 
@@ -23,7 +18,7 @@
   data-main-product-price="{{ product.selected_or_first_available_variant.price | default: 0 }}"
   data-product-id="{{ product.id }}"
   data-upsell-limit="{{ upsell_limit }}"
-  {% unless has_manual or has_collection %}
+  {% unless has_manual %}
     data-recommendations-url="{{ routes.product_recommendations_url }}.json?product_id={{ product.id }}&limit=10&intent=complementary"
   {% endunless %}
   style="--upsell-accent: {{ accent_color }}; --block-padding-bottom: {{ padding_bottom }}px;"
@@ -38,26 +33,16 @@
       {%- assign shown = 0 -%}
       {%- for upsell_product in manual_products -%}
         {%- if shown >= upsell_limit -%}{% break %}{%- endif -%}
-        {%- if upsell_product.id == product.id -%}{% continue %}{%- endif -%}
-        {%- if upsell_product.available == false -%}{% continue %}{%- endif -%}
-        {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-        {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
-        {%- assign shown = shown | plus: 1 -%}
-      {%- endfor -%}
-    {%- elsif has_collection -%}
-      {%- assign shown = 0 -%}
-      {%- for upsell_product in upsell_collection.products -%}
-        {%- if shown >= upsell_limit -%}{% break %}{%- endif -%}
-        {%- if upsell_product.id == product.id -%}{% continue %}{%- endif -%}
-        {%- if upsell_product.available == false -%}{% continue %}{%- endif -%}
-        {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
-        {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
-        {%- assign shown = shown | plus: 1 -%}
+        {%- unless upsell_product.id == product.id or upsell_product.available == false -%}
+          {%- assign current_variant = upsell_product.selected_or_first_available_variant -%}
+          {%- render 'product-upsell-addon-item', upsell_product: upsell_product, current_variant: current_variant -%}
+          {%- assign shown = shown | plus: 1 -%}
+        {%- endunless -%}
       {%- endfor -%}
     {%- endif -%}
   </div>
 
-  <div class="upsell-addon__footer"{% unless has_manual or has_collection %} hidden{% endunless %} data-upsell-footer>
+  <div class="upsell-addon__footer"{% unless has_manual %} hidden{% endunless %} data-upsell-footer>
     <div class="upsell-addon__total-price-wrapper">
       <span>I alt:</span>
       <span data-upsell-total>0,00 kr</span>

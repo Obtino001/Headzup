@@ -163,10 +163,20 @@
               assign button_style = block.settings.button_style | default: 'btn--solid'
               assign button_type = block.settings.button_type | default: 'btn--primary'
               assign require_size_select = false
+              assign product_has_size_option = false
+              assign size_translation = 'general.size_chart.size' | t
+              assign translation_string_size = size_translation | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | replace: ',', '____' | handle | replace: '____', ',' | append: ',' | prepend: ','
+              for option in product.options_with_values
+                assign option_name_handle_separator = option.name | handle | prepend: ',' | append: ','
+                if translation_string_size contains option_name_handle_separator
+                  assign product_has_size_option = true
+                  break
+                endif
+              endfor
               unless product.selected_variant
-                unless product.has_only_default_variant
+                if product_has_size_option
                   assign require_size_select = true
-                endunless
+                endif
               endunless
             -%}
 

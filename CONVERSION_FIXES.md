@@ -70,13 +70,13 @@ Document of changes shipped to address the conversion drop on the new theme vers
 - Recommendations intent → `complementary` with related fallback + colour-variant filter.
 - **Also wired:** Theme Editor **Upsell collection** / **Products (manual)** now actually render (they were unused before).
 
-**How to set for 1000+ products (recommended):**
-1. Shopify Admin → **Products → Collections → Create collection** (e.g. “Ofte købt sammen / Accessories”).
-2. Add accessories only: Cap Strips, stickers, cleaning kits, etc. (not colour variants of caps).
-3. Theme Editor → Product page → **Upsell Addon** → set **Upsell collection** to that collection.
-4. Done — every PDP shows the same 5 accessories. No per-product setup.
+**How to set (product list — up to 5 accessories):**
+1. Theme Editor → open any **Product** template
+2. Click block **Upsell Addon (Checkbox)** / Ofte købt sammen
+3. Under **Accessories (select up to 5)** → pick Cap Strips, stickers, etc.
+4. Save — same 5 show on every PDP
 
-Optional: Search & Discovery complementary rules if you want different accessories per collection.
+If the list is empty, complementary recommendations are used as fallback.
 
 ---
 

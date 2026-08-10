@@ -4,9 +4,15 @@
   assign current_variant = product.selected_or_first_available_variant
   assign force_size_select = false
   unless product.selected_variant
-    unless product.has_only_default_variant
-      assign force_size_select = true
-    endunless
+    assign size_translation_check = 'general.size_chart.size' | t
+    assign size_handles = size_translation_check | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | replace: ',', '____' | handle | replace: '____', ',' | append: ',' | prepend: ','
+    for option in product.options_with_values
+      assign option_sep = option.name | handle | prepend: ',' | append: ','
+      if size_handles contains option_sep
+        assign force_size_select = true
+        break
+      endif
+    endfor
   endunless
   assign enable_size_chart = enable_size_chart | default: false
   assign show_size_chart = false
