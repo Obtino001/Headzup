@@ -169,7 +169,7 @@
             "icon": "gowish",
             "font": "inherit",
             "color": "#0c2340",
-            "background": "transparent",
+            "background": "rgba(0,0,0,0)",
             "border": "#0c2340",
             "icon_color": "#0c2340",
             "data-region": "denmark"
@@ -222,7 +222,13 @@
           "type": "upsell_addon",
           "settings": {
             "heading": "Ofte købt sammen",
-            "product_list": [],
+            "product_list": [
+              "huf-fuck-it-glow-sock-white-copy",
+              "edwin-denim-jacket-blazer-dark-grey-copy",
+              "edwin-edison-blazer-dark-grey",
+              "kamifuji-socks-white",
+              "edwin-oversize-basic-t-shirt-white"
+            ],
             "accent_color": "#000000",
             "padding_bottom": 16
           }
