@@ -25,7 +25,9 @@
   if form_button_blocks.size == 0 and quickview == false
     assign has_form_buttons = false
   endif
-  assign ring_size_block = section.blocks | where: 'type', 'ring_size' | first
+  if ring_size_block == blank
+    assign ring_size_block = section.blocks | where: 'type', 'ring_size' | first
+  endif
 
   assign size_style = block.settings.size_chart_style
   assign specific_pages = ''
@@ -476,16 +478,27 @@
                       <span class="radio__legend__option-name">{{ option.name }}:</span>
 
                       {%- if is_size_option -%}
-                        {{- size_chart_link -}}
-                        {%- if ring_size_block -%}
-                          <button
-                            type="button"
-                            class="rsg-trigger-btn rsg-trigger-btn--inline radio__legend__link body-x-small text-link"
-                            data-modal-target="RingSizeModal-{{ ring_size_block.id }}"
-                          >
-                            {{ ring_size_block.settings.trigger_text | default: 'Størrelsesguide' | escape }}
-                          </button>
-                        {%- endif -%}
+                        {%- liquid
+                          assign size_guide_label = 'Størrelsesguide'
+                          if ring_size_block != blank and ring_size_block.settings.trigger_text != blank
+                            assign size_guide_label = ring_size_block.settings.trigger_text
+                          endif
+                          assign size_guide_modal_id = ''
+                          if ring_size_block != blank
+                            assign size_guide_modal_id = 'RingSizeModal-' | append: ring_size_block.id
+                          endif
+                        -%}
+                        <button
+                          type="button"
+                          class="rsg-trigger-btn rsg-trigger-btn--inline radio__legend__link"
+                          {% if size_guide_modal_id != blank %}
+                            data-modal-target="{{ size_guide_modal_id }}"
+                          {% else %}
+                            data-rsg-open-any
+                          {% endif %}
+                        >
+                          <span class="rsg-trigger-btn__text">{{ size_guide_label | escape }}</span>
+                        </button>
                       {%- endif -%}
                     </span>
                   </legend>

@@ -386,6 +386,9 @@
                     {%- endunless -%}
 
                 {%- when 'variants' -%}
+                    {%- liquid
+                      assign ring_size_block_for_variants = section.blocks | where: 'type', 'ring_size' | first
+                    -%}
                     {%- render 'product-variant-options',
                     product: product,
                     unique: unique,
@@ -393,6 +396,7 @@
                     block_style: block_style,
                     product_form_id: product_form_id,
                     enable_size_chart: true,
+                    ring_size_block: ring_size_block_for_variants
                     -%}
 
                     {%- when 'ring_size' -%}

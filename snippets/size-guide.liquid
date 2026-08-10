@@ -584,8 +584,14 @@
           tab.addEventListener('click', (e) => this.switchTab(e.currentTarget));
         });
 
-        // Late triggers (legend link rendered after this block)
+        // Late triggers (legend link rendered after this block) + fallback opener
         document.addEventListener('click', (e) => {
+          const anyBtn = e.target.closest('[data-rsg-open-any]');
+          if (anyBtn) {
+            e.preventDefault();
+            this.open();
+            return;
+          }
           const trigger = e.target.closest(`[data-modal-target="${this.id}"]`);
           if (!trigger) return;
           e.preventDefault();
