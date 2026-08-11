@@ -52,11 +52,17 @@
   assign chapter_two_mobile_menu_linklist = section.settings.chapter_two_mobile_menu_linklist | default: 'chapter-two-mobile-menu'
   assign secondary_menu_linklist = section.settings.secondary_menu_linklist
   assign tertiary_menu_linklist = section.settings.tertiary_menu_linklist
+  assign main_menu = linklists[main_menu_linklist]
+  assign chapter_two_main_menu = linklists[chapter_two_main_menu_linklist]
+  assign mobile_menu = linklists[mobile_menu_linklist]
+  assign chapter_two_mobile_menu = linklists[chapter_two_mobile_menu_linklist]
+  assign secondary_menu = linklists[secondary_menu_linklist]
+  assign tertiary_menu = linklists[tertiary_menu_linklist]
   assign has_mobile_menu = false
-  if mobile_menu_linklist != blank and linklists[mobile_menu_linklist].links.size > 0 and mobile_menu_linklist != main_menu_linklist
+  if mobile_menu_linklist != blank and mobile_menu != blank and mobile_menu.links.size > 0 and mobile_menu_linklist != main_menu_linklist
     assign has_mobile_menu = true
   endif
-  if chapter_two_mobile_menu_linklist != blank and linklists[chapter_two_mobile_menu_linklist].links.size > 0 and chapter_two_mobile_menu_linklist != main_menu_linklist
+  if chapter_two_mobile_menu_linklist != blank and chapter_two_mobile_menu != blank and chapter_two_mobile_menu.links.size > 0 and chapter_two_mobile_menu_linklist != main_menu_linklist
     assign has_mobile_menu = true
   endif
 
@@ -111,7 +117,7 @@
     assign header_height_mobile = header_upper_height_mobile | plus: padding_top_mobile | plus: padding_bottom_mobile
   endif
 
-  if tertiary_menu_linklist != blank and linklists[tertiary_menu_linklist].links.size > 0
+  if tertiary_menu_linklist != blank and tertiary_menu != blank and tertiary_menu.links.size > 0
     assign tertiary_menu_height = 0.75 | times: settings.nav_font_size | times: 1.2 | plus: 32
     assign header_height_mobile = header_height_mobile | plus: tertiary_menu_height
   endif
@@ -391,11 +397,11 @@
     </div>
   </div>
 
-  {%- if tertiary_menu_linklist != blank and linklists[tertiary_menu_linklist].links.size > 0 -%}
+  {%- if tertiary_menu_linklist != blank and tertiary_menu != blank and tertiary_menu.links.size > 0 -%}
     <div class="header__mobile__bottom">
       <nav class="header__mobile__nav{% if settings.type_nav_caps %} caps{% endif %}" data-mobile-nav>
         <div class="header__mobile__nav__scroller">
-          {%- for link in linklists[tertiary_menu_linklist].links -%}
+          {%- for link in tertiary_menu.links -%}
             <a class="navlink" href="{{ link.url }}">
               <span class="navtext">{{ link.title }}</span>
             </a>
@@ -455,13 +461,17 @@
 {%- capture menu -%}
   <nav class="header__menu{% if settings.type_nav_caps %} caps{% endif %}" {{ highlight_style }}>
     {%- if is_chapter_two -%}
-      {%- for link in linklists[chapter_two_main_menu_linklist].links -%}
-        {%- render 'nav-item', link: link, index: forloop.index, highlight_item: highlight_item -%}
-      {%- endfor -%}
+      {%- if chapter_two_main_menu != blank -%}
+        {%- for link in chapter_two_main_menu.links -%}
+          {%- render 'nav-item', link: link, index: forloop.index, highlight_item: highlight_item -%}
+        {%- endfor -%}
+      {%- endif -%}
     {%- else -%}
-      {%- for link in linklists[main_menu_linklist].links -%}
-        {%- render 'nav-item', link: link, index: forloop.index, highlight_item: highlight_item -%}
-      {%- endfor -%}
+      {%- if main_menu != blank -%}
+        {%- for link in main_menu.links -%}
+          {%- render 'nav-item', link: link, index: forloop.index, highlight_item: highlight_item -%}
+        {%- endfor -%}
+      {%- endif -%}
     {%- endif -%}
 
     <div class="hover__bar"></div>
@@ -512,33 +522,41 @@
           <div class="drawer__content__scroll" data-scroll-lock-scrollable>
             <nav class="drawer__menu" data-scroll-lock-scrollable data-sliderule-pane="0" {{ highlight_style }}>
               <div class="drawer__main-menu{% if has_mobile_menu %} drawer__main-menu--desktop{% endif %}">
-                {%- for link in linklists[main_menu_linklist].links -%}
-                  {%- assign item_animation_delay = animation_delay_increment | times: forloop.index | plus: animation_delay -%}
-                  {%- render 'nav-item-mobile', link: link, index: forloop.index, forloop_index: forloop.index, highlight_item: highlight_item, animation_delay: item_animation_delay, unique: 'mobile-menu--desktop' -%}
-                {%- endfor -%}
+                {%- if main_menu != blank -%}
+                  {%- for link in main_menu.links -%}
+                    {%- assign item_animation_delay = animation_delay_increment | times: forloop.index | plus: animation_delay -%}
+                    {%- render 'nav-item-mobile', link: link, index: forloop.index, forloop_index: forloop.index, highlight_item: highlight_item, animation_delay: item_animation_delay, unique: 'mobile-menu--desktop' -%}
+                  {%- endfor -%}
+                {%- endif -%}
               </div>
 
               {%- if has_mobile_menu -%}
                 <div class="drawer__main-menu drawer__main-menu--mobile">
                   {%- if is_chapter_two -%}
-                    {%- for link in linklists[chapter_two_mobile_menu_linklist].links -%}
-                      {%- assign item_animation_delay = animation_delay_increment | times: forloop.index | plus: animation_delay -%}
-                      {%- render 'nav-item-mobile', link: link, index: forloop.index, forloop_index: forloop.index, highlight_item: highlight_item, animation_delay: item_animation_delay, unique: 'mobile-menu--mobile' -%}
-                    {%- endfor -%}
+                    {%- if chapter_two_mobile_menu != blank -%}
+                      {%- for link in chapter_two_mobile_menu.links -%}
+                        {%- assign item_animation_delay = animation_delay_increment | times: forloop.index | plus: animation_delay -%}
+                        {%- render 'nav-item-mobile', link: link, index: forloop.index, forloop_index: forloop.index, highlight_item: highlight_item, animation_delay: item_animation_delay, unique: 'mobile-menu--mobile' -%}
+                      {%- endfor -%}
+                    {%- endif -%}
                   {%- else -%}
-                    {%- for link in linklists[mobile_menu_linklist].links -%}
-                      {%- assign item_animation_delay = animation_delay_increment | times: forloop.index | plus: animation_delay -%}
-                      {%- render 'nav-item-mobile', link: link, index: forloop.index, forloop_index: forloop.index, highlight_item: highlight_item, animation_delay: item_animation_delay, unique: 'mobile-menu--mobile' -%}
-                    {%- endfor -%}
+                    {%- if mobile_menu != blank -%}
+                      {%- for link in mobile_menu.links -%}
+                        {%- assign item_animation_delay = animation_delay_increment | times: forloop.index | plus: animation_delay -%}
+                        {%- render 'nav-item-mobile', link: link, index: forloop.index, forloop_index: forloop.index, highlight_item: highlight_item, animation_delay: item_animation_delay, unique: 'mobile-menu--mobile' -%}
+                      {%- endfor -%}
+                    {%- endif -%}
                   {%- endif -%}
                 </div>
               {%- endif -%}
 
               {%- unless secondary_menu_linklist == blank -%}
-                {%- for link in linklists[secondary_menu_linklist].links -%}
-                  {%- assign item_animation_delay = animation_delay_increment | times: forloop.index | plus: animation_delay -%}
-                  {%- render 'nav-item-mobile', link: link, index: forloop.index, forloop_index: forloop.index, secondary_menu: true, highlight_item: highlight_item, animation_delay: item_animation_delay, unique: 'secondary-menu' -%}
-                {%- endfor -%}
+                {%- if secondary_menu != blank -%}
+                  {%- for link in secondary_menu.links -%}
+                    {%- assign item_animation_delay = animation_delay_increment | times: forloop.index | plus: animation_delay -%}
+                    {%- render 'nav-item-mobile', link: link, index: forloop.index, forloop_index: forloop.index, secondary_menu: true, highlight_item: highlight_item, animation_delay: item_animation_delay, unique: 'secondary-menu' -%}
+                  {%- endfor -%}
+                {%- endif -%}
               {%- endunless -%}
             </nav>
           </div>
