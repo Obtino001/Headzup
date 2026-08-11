@@ -70,15 +70,6 @@
         >
           {%- render 'icon-search' -%}
           <span class="header-topbar__search-text">{{ 'layout.header.search' | t }}</span>
-          <input
-            type="text"
-            name="q"
-            class="clerk-search-input"
-            id="clerk-dummy-search-desktop"
-            aria-hidden="true"
-            tabindex="-1"
-            autocomplete="off"
-          >
         </div>
       {%- endif -%}
       {% if is_chapter_two %}
@@ -209,18 +200,6 @@
 .header-topbar__icon--search {
   cursor: pointer;
   position: relative;
-}
-.clerk-search-input {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  opacity: 0;
-  pointer-events: none;
 }
 .header-topbar__cart-count {
   background: #eaeaea;

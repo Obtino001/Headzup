@@ -359,20 +359,6 @@
       {%- render 'icon-cancel' -%}
     </button>
     </div>
-
-    {%- if section.settings.enable_search -%}
-      <div class="header__mobile__button{% if settings.type_nav_caps %} caps{% endif %}">
-        <a
-          href="{{ routes.search_url }}"
-          class="navlink navlink--search header__icon--search{% if show_icons == false %} navlink--toplevel{% endif %}"
-          title="{{ 'general.search.search' | t }}"
-          data-clerk-search-trigger
-        >
-          {%- render 'icon-search' -%}
-          <span class="navtext">{{ 'layout.header.search' | t }}</span>
-        </a>
-      </div>
-    {%- endif -%}
   </div>
 
   {{ logos }}
@@ -395,6 +381,21 @@
         </a>
       </div>
     {%- endif -%}
+
+    {%- if section.settings.enable_search -%}
+      <div class="header__mobile__button header__mobile__button--search{% if settings.type_nav_caps %} caps{% endif %}">
+        <a
+          href="{{ routes.search_url }}"
+          class="navlink navlink--search header__icon--search{% if show_icons == false %} navlink--toplevel{% endif %}"
+          title="{{ 'general.search.search' | t }}"
+          data-clerk-search-trigger
+        >
+          {%- render 'icon-search' -%}
+          <span class="navtext">{{ 'layout.header.search' | t }}</span>
+        </a>
+      </div>
+    {%- endif -%}
+
     <div class="header__mobile__button">
       <a href="{{ routes.cart_url }}" class="navlink header__icon--cart {{ navlink_cart_classes }}" data-cart-toggle>
         {{ cart_status }}
@@ -649,6 +650,22 @@
   data-section-id="{{ section.id }}"
   data-section-type="header"
 >
+  {%- if section.settings.enable_search -%}
+    {%- comment -%}
+      The Clerk app binds its overlay to this input, so it has to stay outside
+      any container that can be hidden with display: none.
+    {%- endcomment -%}
+    <input
+      type="text"
+      name="q"
+      class="clerk-search-input"
+      id="clerk-dummy-search-desktop"
+      aria-hidden="true"
+      tabindex="-1"
+      autocomplete="off"
+    >
+  {%- endif -%}
+
   {% render 'header-topbar', section: section %}
 
   <header

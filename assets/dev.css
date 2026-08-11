@@ -1214,9 +1214,65 @@ span.sale-box {
 }
 
 /* Topbar already has SØG — hide the duplicate search trigger in the header row */
-.header__wrapper:has(.header-topbar) .header__mobile .navlink--search,
 .header__wrapper:has(.header-topbar) .header__desktop .navlink--search {
   display: none !important;
+}
+
+.clerk-search-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Mobile: search and cart live in the main header row, so the topbar keeps
+   only the brand tabs and both actions survive the sticky topbar collapse */
+@media only screen and (max-width: 749px) {
+  .header-topbar .header-topbar__icon--search,
+  .header-topbar .header-topbar__icon--cart {
+    display: none !important;
+  }
+
+  .header__mobile .header__icon--search,
+  .header__mobile .header__icon--cart {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .header__mobile__right {
+    gap: 14px;
+  }
+
+  .header__mobile .header__mobile__button--search .navlink--search {
+    gap: 8px;
+    padding: 7px 14px;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border-color: color-mix(in srgb, currentColor 45%, transparent);
+    border-radius: 999px;
+  }
+
+  .header__mobile .header__mobile__button--search .navlink--search .icon {
+    --icon-size: 20px;
+  }
+
+  .header__mobile .header__mobile__button--search .navtext {
+    display: inline-block;
+    font-weight: 700;
+    font-size: var(--text-sm);
+    line-height: 1;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  .header__mobile .header__mobile__button .header__icon--cart .icon {
+    --icon-size: 26px;
+  }
 }
 
 a[href="/collections/bandana"] .nav-link-collections {
