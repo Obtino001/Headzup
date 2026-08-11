@@ -1240,41 +1240,40 @@ span.sale-box {
   background: transparent;
 }
 
-/* Mobile: search and cart live in the main header row, so the topbar keeps
-   only the brand tabs and both actions survive the sticky topbar collapse */
+/* Mobile: search stays up in the brand topbar (bigger), cart stays in navy header */
 @media only screen and (max-width: 749px) {
-  .header-topbar .header-topbar__icon--search,
   .header-topbar .header-topbar__icon--cart {
     display: none !important;
   }
 
-  .header__mobile .header__icon--search,
+  .header-topbar .header-topbar__icon--search {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 4px;
+  }
+
+  .header-topbar .header-topbar__icon--search .icon {
+    --icon-size: 22px;
+    width: 22px;
+    height: 22px;
+  }
+
+  .header-topbar .header-topbar__search-text {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    line-height: 1;
+  }
+
+  .header-topbar__icons {
+    gap: 0;
+    padding-right: 16px;
+  }
+
   .header__mobile .header__icon--cart {
     opacity: 1 !important;
     pointer-events: auto !important;
-  }
-
-  .header__mobile__right {
-    gap: 18px;
-  }
-
-  /* Same treatment as the topbar: icon plus SØG label, no box around it */
-  .header__mobile .header__mobile__button--search .navlink--search {
-    gap: 6px;
-    padding: 0;
-  }
-
-  .header__mobile .header__mobile__button--search .navlink--search .icon {
-    --icon-size: 18px;
-  }
-
-  .header__mobile .header__mobile__button--search .navtext {
-    display: inline-block;
-    font-weight: 700;
-    font-size: var(--text-base);
-    line-height: 1;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
   }
 
   .header__mobile .header__icon--cart-cap .header-topbar__cart-count-badge {
