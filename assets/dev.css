@@ -1218,15 +1218,26 @@ span.sale-box {
   display: none !important;
 }
 
-/* Kept off-screen rather than display:none so the Clerk app can still bind to
-   it and the input stays focusable */
+/* Transparent instead of display:none / off-screen so the Clerk app can bind to
+   it and mobile browsers still allow the input to take focus */
 .clerk-search-form {
   position: absolute;
   top: 0;
-  left: -9999px;
-  width: 320px;
+  left: 0;
+  width: 100%;
+  max-width: 320px;
   height: 44px;
   overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.clerk-search-form input[type='search'] {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: transparent;
 }
 
 /* Mobile: search and cart live in the main header row, so the topbar keeps
@@ -1237,7 +1248,6 @@ span.sale-box {
     display: none !important;
   }
 
-  .header__mobile .header__icon--search,
   .header__mobile .header__icon--cart {
     opacity: 1 !important;
     pointer-events: auto !important;
@@ -1247,25 +1257,51 @@ span.sale-box {
     gap: 14px;
   }
 
-  .header__mobile .header__mobile__button--search .navlink--search {
-    gap: 8px;
-    padding: 7px 14px;
+  .header__mobile__search {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 12px;
     border: 1.5px solid rgba(255, 255, 255, 0.45);
     border-color: color-mix(in srgb, currentColor 45%, transparent);
     border-radius: 999px;
   }
 
-  .header__mobile .header__mobile__button--search .navlink--search .icon {
+  .header__mobile__search__submit {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+  }
+
+  .header__mobile__search__submit .icon {
     --icon-size: 20px;
   }
 
-  .header__mobile .header__mobile__button--search .navtext {
-    display: inline-block;
+  /* 16px keeps iOS from zooming the page when the field takes focus */
+  .header__mobile__search input[type='search'] {
+    width: 90px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
     font-weight: 700;
-    font-size: var(--text-sm);
+    font-size: 16px;
     line-height: 1;
     letter-spacing: 0.8px;
     text-transform: uppercase;
+  }
+
+  .header__mobile__search input[type='search']::placeholder {
+    color: currentColor;
+    opacity: 0.85;
+  }
+
+  .header__mobile__search input[type='search']:focus {
+    outline: none;
   }
 
   .header__mobile .header__icon--cart-cap .header-topbar__cap-badge-wrapper {

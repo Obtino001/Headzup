@@ -622,18 +622,30 @@
   const clerkSearchInput = () =>
     document.querySelector('#SearchInput--desktop, #clerk-dummy-search-desktop, .clerk-search-form input[name="q"], .search-form input[name="q"]');
 
-  document.addEventListener('click', (e) => {
-    const trigger = e.target instanceof Element ? e.target.closest('[data-clerk-search-trigger]') : null;
-    if (!trigger) return;
-
-    const input = clerkSearchInput();
-    if (!input) return;
-
-    e.preventDefault();
-
+  const openClerkSearch = (input) => {
     input.focus();
-    input.click();
-  });
+
+    // Clerk hooks different events depending on how the app embed is configured
+    ['pointerdown', 'mousedown', 'mouseup', 'click', 'touchstart'].forEach((type) => {
+      input.dispatchEvent(new Event(type, {bubbles: true}));
+    });
+  };
+
+  document.addEventListener(
+    'click',
+    (e) => {
+      const trigger = e.target instanceof Element ? e.target.closest('[data-clerk-search-trigger]') : null;
+      if (!trigger) return;
+
+      const input = clerkSearchInput();
+      if (!input) return;
+
+      e.preventDefault();
+
+      openClerkSearch(input);
+    },
+    true
+  );
 
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;

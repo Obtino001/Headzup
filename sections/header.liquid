@@ -384,15 +384,35 @@
 
     {%- if section.settings.enable_search -%}
       <div class="header__mobile__button header__mobile__button--search{% if settings.type_nav_caps %} caps{% endif %}">
-        <a
-          href="{{ routes.search_url }}"
-          class="navlink navlink--search header__icon--search{% if show_icons == false %} navlink--toplevel{% endif %}"
-          title="{{ 'general.search.search' | t }}"
-          data-clerk-search-trigger
+        {%- comment -%}
+          A real input, so tapping it focuses natively — that is what makes the
+          Clerk overlay open on touch devices.
+        {%- endcomment -%}
+        <form
+          class="search-form header__mobile__search"
+          action="{{ routes.search_url }}"
+          method="get"
+          role="search"
         >
-          {%- render 'icon-search' -%}
-          <span class="navtext">{{ 'layout.header.search' | t }}</span>
-        </a>
+          <input name="options[prefix]" type="hidden" value="last">
+
+          <button type="submit" class="header__mobile__search__submit" aria-label="{{ 'layout.header.search' | t }}">
+            {%- render 'icon-search' -%}
+          </button>
+
+          <label for="SearchInput--mobile" class="visually-hidden">{{ 'general.search.search' | t }}</label>
+          <input
+            type="search"
+            id="SearchInput--mobile"
+            name="q"
+            placeholder="{{ 'layout.header.search' | t }}"
+            aria-label="{{ 'general.search.placeholder' | t }}"
+            autocorrect="off"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+          >
+        </form>
       </div>
     {%- endif -%}
 
