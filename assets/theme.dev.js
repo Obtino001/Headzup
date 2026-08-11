@@ -618,18 +618,19 @@
     document.documentElement.removeAttribute('data-scroll-locked');
   }
 
-  // Search is owned by the Clerk app: focusing its input is what opens the overlay
+  // Search is owned by the Clerk app: focusing the search input is what opens its overlay
+  const clerkSearchInput = () =>
+    document.querySelector('#SearchInput--desktop, #clerk-dummy-search-desktop, .clerk-search-form input[name="q"], .search-form input[name="q"]');
+
   document.addEventListener('click', (e) => {
     const trigger = e.target instanceof Element ? e.target.closest('[data-clerk-search-trigger]') : null;
     if (!trigger) return;
 
-    const input = document.getElementById('clerk-dummy-search-desktop');
+    const input = clerkSearchInput();
     if (!input) return;
 
     e.preventDefault();
-    e.stopPropagation();
 
-    input.style.pointerEvents = 'auto';
     input.focus();
     input.click();
   });

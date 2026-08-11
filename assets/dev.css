@@ -1218,17 +1218,15 @@ span.sale-box {
   display: none !important;
 }
 
-.clerk-search-input {
+/* Kept off-screen rather than display:none so the Clerk app can still bind to
+   it and the input stays focusable */
+.clerk-search-form {
   position: absolute;
   top: 0;
-  left: 0;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  opacity: 0;
-  pointer-events: none;
+  left: -9999px;
+  width: 320px;
+  height: 44px;
+  overflow: hidden;
 }
 
 /* Mobile: search and cart live in the main header row, so the topbar keeps
@@ -1270,8 +1268,19 @@ span.sale-box {
     text-transform: uppercase;
   }
 
-  .header__mobile .header__mobile__button .header__icon--cart .icon {
-    --icon-size: 26px;
+  .header__mobile .header__icon--cart-cap .header-topbar__cap-badge-wrapper {
+    width: 40px;
+    height: 20px;
+  }
+
+  .header__mobile .header__icon--cart-cap .header-topbar__cap-svg {
+    width: 40px;
+    height: 20px;
+  }
+
+  .header__mobile .header__icon--cart-cap .header-topbar__cart-count-badge {
+    color: currentColor;
+    font-size: 12px;
   }
 }
 
