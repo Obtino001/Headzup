@@ -47,6 +47,7 @@ h2.logos__title.subheading {
   z-index: -1;
   background: #0000004D;
   backdrop-filter: blur(4px);
+  pointer-events: none;
   transition: opacity .2s cubic-bezier(.215,.61,.355,1), visibility 0s .2s;
 }
 
