@@ -362,10 +362,19 @@
 
     {%- if section.settings.enable_search -%}
       <div class="header__mobile__button{% if settings.type_nav_caps %} caps{% endif %}">
-        <a href="{{ routes.search_url }}" class="navlink navlink--search header__icon--search{% if show_icons == false %} navlink--toplevel{% endif %}" title="{{ 'general.search.search' | t }}">
-          {%- render 'icon-search' -%}
-          <span class="navtext">{{ 'layout.header.search' | t }}</span>
-        </a>
+        <header-search-popdown>
+          <details>
+            <summary class="navlink navlink--search header__icon--search{% if show_icons == false %} navlink--toplevel{% endif %}" aria-haspopup="dialog" title="{{ 'general.search.search' | t }}">
+              {%- render 'icon-search' -%}
+              {%- render 'icon-cancel' -%}
+              <span class="navtext">{{ 'layout.header.search' | t }}</span>
+            </summary>
+
+            {%- render 'header-search-popdown', unique: 'mobile' -%}
+
+            <span class="underlay" data-popdown-underlay></span>
+          </details>
+        </header-search-popdown>
       </div>
     {%- endif -%}
   </div>
@@ -443,10 +452,19 @@
 
     {%- if section.settings.enable_search -%}
       <div class="header__desktop__button">
-        <a href="{{ routes.search_url }}" class="navlink navlink--search header__icon--search{% if show_icons == false %} navlink--toplevel{% endif %}" title="{{ 'general.search.search' | t }}">
-          {%- render 'icon-search' -%}
-          <span class="navtext">{{ 'layout.header.search' | t }}</span>
-        </a>
+        <header-search-popdown>
+          <details>
+            <summary class="navlink navlink--search header__icon--search{% if show_icons == false %} navlink--toplevel{% endif %}" aria-haspopup="dialog" title="{{ 'general.search.search' | t }}">
+              {%- render 'icon-search' -%}
+              {%- render 'icon-cancel' -%}
+              <span class="navtext">{{ 'layout.header.search' | t }}</span>
+            </summary>
+
+            {%- render 'header-search-popdown', unique: 'desktop' -%}
+
+            <span class="underlay" data-popdown-underlay></span>
+          </details>
+        </header-search-popdown>
       </div>
     {%- endif -%}
 

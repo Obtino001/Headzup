@@ -60,14 +60,14 @@
     </div>
     <div class="header-topbar__icons">
       {%- if section.settings.enable_search -%}
-        <a
-          href="{{ routes.search_url }}"
-          class="header-topbar__icon header-topbar__icon--search navlink{% if show_icons == false %} navlink--toplevel{% endif %}"
+        <div
+          class="header-topbar__icon header-topbar__icon--search navlink navlink--search{% if show_icons == false %} navlink--toplevel{% endif %}"
+          aria-haspopup="dialog"
           title="{{ 'general.search.search' | t }}"
         >
-            {%- render 'icon-search' -%}
-            <span class="header-topbar__search-text">{{ 'layout.header.search' | t }}</span>
-        </a>
+          {%- render 'icon-search' -%}
+          <span class="header-topbar__search-text">{{ 'layout.header.search' | t }}</span>
+        </div>
       {%- endif -%}
       {% if is_chapter_two %}
         <a href="{{ routes.cart_url }}" class="header-topbar__icon header-topbar__icon--cart navlink chapter-two {{ navlink_cart_classes }}" title="{{ 'cart.general.title' | t }}" data-cart-toggle>
@@ -193,6 +193,9 @@
   align-items: center;
   gap: 0.3rem;
   font-weight: 500;
+}
+.header-topbar__icon--search {
+  cursor: pointer;
 }
 .header-topbar__cart-count {
   background: #eaeaea;

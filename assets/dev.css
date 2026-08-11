@@ -1213,14 +1213,7 @@ span.sale-box {
   letter-spacing: 0.8px;
 }
 
-/* App search (Boost) owns /search — hide theme popdown + duplicate header search */
-header-search-popdown,
-.search-popdown,
-.search-popdown + .underlay {
-  display: none !important;
-}
-
-/* Topbar already has SØG — hide duplicate search in drawer-style mobile header row */
+/* Topbar already has SØG — hide duplicate search trigger in header row (popdown still opens via JS) */
 .header__wrapper:has(.header-topbar) .header__mobile .navlink--search,
 .header__wrapper:has(.header-topbar) .header__desktop .navlink--search {
   display: none !important;
