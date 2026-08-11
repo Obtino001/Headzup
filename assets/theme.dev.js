@@ -632,23 +632,29 @@
     });
   };
 
-  const clerkSearchTriggerHandler = (e) => {
+  // The click has to keep travelling to Clerk's own listener, so nothing here
+  // cancels or stops it unless the trigger is a link that would navigate away
+  document.addEventListener('click', (e) => {
     const trigger = e.target instanceof Element ? e.target.closest('[data-clerk-search-trigger]') : null;
     if (!trigger) return;
 
+    if (trigger.tagName === 'A') {
+      e.preventDefault();
+    }
+
+    // Replay the desktop path, which Clerk already reacts to, for the mobile
+    // trigger — the topbar element stays in the DOM even when it is hidden
+    const topbarTrigger = document.querySelector('.header-topbar__icon--search');
+    if (topbarTrigger && !trigger.closest('.header-topbar')) {
+      topbarTrigger.click();
+      return;
+    }
+
     const input = clerkSearchInput();
-    if (!input) return;
-
-    e.preventDefault();
-
-    openClerkSearch(input);
-  };
-
-  document.addEventListener('click', clerkSearchTriggerHandler, true);
-
-  // iOS only treats focus() as user-initiated inside the touch handler itself,
-  // and preventing the default here stops the click from firing twice
-  document.addEventListener('touchend', clerkSearchTriggerHandler, {capture: true, passive: false});
+    if (input) {
+      openClerkSearch(input);
+    }
+  });
 
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;

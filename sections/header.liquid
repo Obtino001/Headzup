@@ -384,15 +384,21 @@
 
     {%- if section.settings.enable_search -%}
       <div class="header__mobile__button header__mobile__button--search{% if settings.type_nav_caps %} caps{% endif %}">
-        <a
-          href="{{ routes.search_url }}"
+        {%- comment -%}
+          Same element type as the topbar trigger: Clerk opens its overlay from a
+          click, so this must not be a link that needs preventDefault.
+        {%- endcomment -%}
+        <div
           class="navlink navlink--search header__icon--search{% if show_icons == false %} navlink--toplevel{% endif %}"
+          role="button"
+          tabindex="0"
+          aria-haspopup="dialog"
           title="{{ 'general.search.search' | t }}"
           data-clerk-search-trigger
         >
           {%- render 'icon-search' -%}
           <span class="navtext">{{ 'layout.header.search' | t }}</span>
-        </a>
+        </div>
       </div>
     {%- endif -%}
 
