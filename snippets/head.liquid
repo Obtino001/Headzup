@@ -25,6 +25,12 @@
   <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
 {%- endunless -%}
 
+{%- if settings.enable_clerk -%}
+  <link rel="preconnect" href="https://cdn.clerk.io" crossorigin>
+  <link rel="preconnect" href="https://api.clerk.io" crossorigin>
+  <link rel="preload" as="script" href="https://cdn.clerk.io/clerk.js" crossorigin>
+{%- endif -%}
+
 <!-- Title and description ================================================ -->
 {% capture seo_title %}
     {% assign title_content = page_title %}

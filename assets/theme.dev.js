@@ -618,27 +618,30 @@
     document.documentElement.removeAttribute('data-scroll-locked');
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const topbarSearchIcon = document.querySelector('.header-topbar .header-topbar__icon--search');
-    const desktopHeaderSearchIcon = document.querySelector('header .header__desktop__buttons .header__icon--search');
-    const mobileHeaderSearchIcon = document.querySelector('header .header__mobile__button .header__icon--search');
+  // Search is owned by the Clerk app: focusing its input is what opens the overlay
+  document.addEventListener('click', (e) => {
+    const trigger = e.target instanceof Element ? e.target.closest('[data-clerk-search-trigger]') : null;
+    if (!trigger) return;
 
-    if(topbarSearchIcon) {
-      topbarSearchIcon.addEventListener('click', function (e) {
-        // Determine if we're on mobile or desktop based on viewport width
-        e.preventDefault();
-        e.stopPropagation();
+    const input = document.getElementById('clerk-dummy-search-desktop');
+    if (!input) return;
 
-        const isMobile = window.matchMedia('(max-width: 749px)').matches;
+    e.preventDefault();
+    e.stopPropagation();
 
-        // Decide which search icon to trigger
-        if (isMobile && mobileHeaderSearchIcon) {
-          mobileHeaderSearchIcon.click();
-        } else if (!isMobile && desktopHeaderSearchIcon) {
-          desktopHeaderSearchIcon.click();
-        }
-      });
-    }
+    input.style.pointerEvents = 'auto';
+    input.focus();
+    input.click();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+
+    const trigger = e.target instanceof Element ? e.target.closest('[data-clerk-search-trigger]') : null;
+    if (!trigger) return;
+
+    e.preventDefault();
+    trigger.click();
   });
   
   document.addEventListener('DOMContentLoaded', function() {

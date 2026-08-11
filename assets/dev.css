@@ -1213,7 +1213,7 @@ span.sale-box {
   letter-spacing: 0.8px;
 }
 
-/* Topbar already has SØG — hide duplicate search trigger in header row (popdown still opens via JS) */
+/* Topbar already has SØG — hide the duplicate search trigger in the header row */
 .header__wrapper:has(.header-topbar) .header__mobile .navlink--search,
 .header__wrapper:has(.header-topbar) .header__desktop .navlink--search {
   display: none !important;
