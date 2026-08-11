@@ -1248,75 +1248,37 @@ span.sale-box {
     display: none !important;
   }
 
+  .header__mobile .header__icon--search,
   .header__mobile .header__icon--cart {
     opacity: 1 !important;
     pointer-events: auto !important;
   }
 
   .header__mobile__right {
-    gap: 14px;
+    gap: 18px;
   }
 
-  .header__mobile__search {
-    display: flex;
-    align-items: center;
+  /* Same treatment as the topbar: icon plus SØG label, no box around it */
+  .header__mobile .header__mobile__button--search .navlink--search {
     gap: 6px;
-    height: 36px;
-    padding: 0 12px;
-    border: 1.5px solid rgba(255, 255, 255, 0.45);
-    border-color: color-mix(in srgb, currentColor 45%, transparent);
-    border-radius: 999px;
-  }
-
-  .header__mobile__search__submit {
-    display: flex;
-    align-items: center;
     padding: 0;
-    border: 0;
-    background: none;
-    color: inherit;
   }
 
-  .header__mobile__search__submit .icon {
-    --icon-size: 20px;
+  .header__mobile .header__mobile__button--search .navlink--search .icon {
+    --icon-size: 18px;
   }
 
-  /* 16px keeps iOS from zooming the page when the field takes focus */
-  .header__mobile__search input[type='search'] {
-    width: 90px;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
+  .header__mobile .header__mobile__button--search .navtext {
+    display: inline-block;
     font-weight: 700;
-    font-size: 16px;
+    font-size: var(--text-base);
     line-height: 1;
     letter-spacing: 0.8px;
     text-transform: uppercase;
   }
 
-  .header__mobile__search input[type='search']::placeholder {
-    color: currentColor;
-    opacity: 0.85;
-  }
-
-  .header__mobile__search input[type='search']:focus {
-    outline: none;
-  }
-
-  .header__mobile .header__icon--cart-cap .header-topbar__cap-badge-wrapper {
-    width: 40px;
-    height: 20px;
-  }
-
-  .header__mobile .header__icon--cart-cap .header-topbar__cap-svg {
-    width: 40px;
-    height: 20px;
-  }
-
   .header__mobile .header__icon--cart-cap .header-topbar__cart-count-badge {
     color: currentColor;
-    font-size: 12px;
   }
 }
 

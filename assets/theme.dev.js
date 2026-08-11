@@ -623,6 +623,7 @@
     document.querySelector('#SearchInput--desktop, #clerk-dummy-search-desktop, .clerk-search-form input[name="q"], .search-form input[name="q"]');
 
   const openClerkSearch = (input) => {
+    input.style.pointerEvents = 'auto';
     input.focus();
 
     // Clerk hooks different events depending on how the app embed is configured
@@ -631,21 +632,23 @@
     });
   };
 
-  document.addEventListener(
-    'click',
-    (e) => {
-      const trigger = e.target instanceof Element ? e.target.closest('[data-clerk-search-trigger]') : null;
-      if (!trigger) return;
+  const clerkSearchTriggerHandler = (e) => {
+    const trigger = e.target instanceof Element ? e.target.closest('[data-clerk-search-trigger]') : null;
+    if (!trigger) return;
 
-      const input = clerkSearchInput();
-      if (!input) return;
+    const input = clerkSearchInput();
+    if (!input) return;
 
-      e.preventDefault();
+    e.preventDefault();
 
-      openClerkSearch(input);
-    },
-    true
-  );
+    openClerkSearch(input);
+  };
+
+  document.addEventListener('click', clerkSearchTriggerHandler, true);
+
+  // iOS only treats focus() as user-initiated inside the touch handler itself,
+  // and preventing the default here stops the click from firing twice
+  document.addEventListener('touchend', clerkSearchTriggerHandler, {capture: true, passive: false});
 
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
