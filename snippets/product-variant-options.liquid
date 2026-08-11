@@ -7,8 +7,9 @@
     assign size_translation_check = 'general.size_chart.size' | t
     assign size_handles = size_translation_check | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | replace: ',', '____' | handle | replace: '____', ',' | append: ',' | prepend: ','
     for option in product.options_with_values
-      assign option_sep = option.name | handle | prepend: ',' | append: ','
-      if size_handles contains option_sep or (option.name | handle) == 'size' or (option.name | handle) == 'sizes'
+      assign option_handle = option.name | handle
+      assign option_sep = option_handle | prepend: ',' | append: ','
+      if size_handles contains option_sep or option_handle == 'size' or option_handle == 'sizes'
         assign force_size_select = true
         break
       endif
@@ -203,7 +204,8 @@
       <div class="product__selectors" data-product-variants>
         {%- for option in product.options_with_values -%}
           {%- liquid
-            assign option_name_handle_separator = option.name | handle | prepend: ',' | append: ','
+            assign option_name_handle = option.name | handle
+            assign option_name_handle_separator = option_name_handle | prepend: ',' | append: ','
 
             comment
               Determine if current option matches size handle translations
@@ -215,7 +217,7 @@
             if translation_string_size contains option_name_handle_separator
               assign is_size_option = true
               assign show_size_link_separated = false
-            elsif (option.name | handle) == 'size' or (option.name | handle) == 'sizes'
+            elsif option_name_handle == 'size' or option_name_handle == 'sizes'
               assign is_size_option = true
               assign show_size_link_separated = false
             endif
