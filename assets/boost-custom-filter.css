@@ -807,13 +807,19 @@
 }
 
 /* Ensure the image slides inside the hover container are visible */
-.collection-products-section .product-item__bg__slider,
-.collection-products-section .product-item__bg__slide {
+.no-touch .collection-products-section .product-item__bg__slider,
+.no-touch .collection-products-section .product-item__bg__slide {
     opacity: 1 !important;
     visibility: visible !important;
     display: block !important;
     width: 100% !important;
     height: 100% !important;
+}
+
+/* The first slide repeats the featured image, so it has to stay out of the
+   hover layer — otherwise hovering swaps to an identical image */
+.no-touch .collection-products-section hover-images .product-item__bg__slider:not(.flickity-enabled) .product-item__bg__slide:not([data-hover-slide]) {
+    display: none !important;
 }
 
 /* ========================================================================
