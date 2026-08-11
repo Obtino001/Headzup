@@ -8,7 +8,7 @@
     assign size_handles = size_translation_check | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | replace: ',', '____' | handle | replace: '____', ',' | append: ',' | prepend: ','
     for option in product.options_with_values
       assign option_sep = option.name | handle | prepend: ',' | append: ','
-      if size_handles contains option_sep or option.name | handle == 'size' or option.name | handle == 'sizes'
+      if size_handles contains option_sep or (option.name | handle) == 'size' or (option.name | handle) == 'sizes'
         assign force_size_select = true
         break
       endif
@@ -215,7 +215,7 @@
             if translation_string_size contains option_name_handle_separator
               assign is_size_option = true
               assign show_size_link_separated = false
-            elsif option.name | handle == 'size' or option.name | handle == 'sizes'
+            elsif (option.name | handle) == 'size' or (option.name | handle) == 'sizes'
               assign is_size_option = true
               assign show_size_link_separated = false
             endif
