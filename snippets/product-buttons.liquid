@@ -167,13 +167,14 @@
               assign size_translation = 'general.size_chart.size' | t
               assign translation_string_size = size_translation | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | replace: ',', '____' | handle | replace: '____', ',' | append: ',' | prepend: ','
               for option in product.options_with_values
-                assign option_name_handle_separator = option.name | handle | prepend: ',' | append: ','
-                if translation_string_size contains option_name_handle_separator
+                assign option_name_handle = option.name | handle
+                assign option_name_handle_separator = option_name_handle | prepend: ',' | append: ','
+                if translation_string_size contains option_name_handle_separator or option_name_handle == 'size' or option_name_handle == 'sizes'
                   assign product_has_size_option = true
                   break
                 endif
               endfor
-              unless product.selected_variant
+              unless product.selected_variant or settings.force_size_select == false
                 if product_has_size_option
                   assign require_size_select = true
                 endif
@@ -187,10 +188,12 @@
               id="AddToCart--{{ section.id }}"
               class="btn {{ button_size }} {{ button_style }} {{ button_type }}"
               data-add-to-cart
+              {% comment %}
+                Not disabled while a size is missing — the button stays the primary
+                CTA and clicking it opens the size picker instead of adding.
+              {% endcomment %}
               {% if require_size_select %}
                 data-require-size-select
-                disabled="disabled"
-                aria-disabled="true"
               {% elsif current_variant.available == false %}
                 disabled="disabled"
               {% endif %}

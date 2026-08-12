@@ -3,7 +3,7 @@
   assign hide_labels_class = ''
   assign current_variant = product.selected_or_first_available_variant
   assign force_size_select = false
-  unless product.selected_variant
+  unless product.selected_variant or settings.force_size_select == false
     assign size_translation_check = 'general.size_chart.size' | t
     assign size_handles = size_translation_check | remove: '  ' | replace: ', ', ',' | replace: ' ,', ',' | replace: ',', '____' | handle | replace: '____', ',' | append: ',' | prepend: ','
     for option in product.options_with_values

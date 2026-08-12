@@ -5803,12 +5803,17 @@
     optionPosition: '[data-option-position]',
     installment: '[data-product-form-installment]',
     inputId: 'input[name="id"]',
+    pendingSize: '[data-pending-size]',
+    popoutSelect: 'popout-select',
+    popoutToggle: '[data-popout-toggle]',
+    selectorWrapper: '.selector-wrapper',
   };
 
   const classes$8 = {
     hidden: 'hidden',
     variantSoldOut: 'variant--soldout',
     variantUnavailable: 'variant--unavailable',
+    needsSelection: 'needs-selection',
     productPriceSale: 'product__price--sale',
     remainingLow: 'count-is-low',
     remainingIn: 'count-is-in',
@@ -5925,6 +5930,8 @@
           this.buttonATC.addEventListener('click', (e) => {
             e.preventDefault();
 
+            if (this.promptSizeSelection()) return;
+
             document.dispatchEvent(
               new CustomEvent('theme:cart:add', {
                 detail: {
@@ -5942,6 +5949,36 @@
 
         destroy() {
           this.productForm.destroy();
+        }
+
+        /**
+         * A size has to be picked explicitly, so the product loads without a variant.
+         * That is a deliberate state, not an unavailable product.
+         */
+        pendingSizeInput() {
+          const input = this.container?.querySelector(selectors$9.pendingSize);
+          return input && !input.value ? input : null;
+        }
+
+        promptSizeSelection() {
+          const pending = this.pendingSizeInput();
+          if (!pending) return false;
+
+          const popout = pending.closest(selectors$9.popoutSelect);
+          const wrapper = pending.closest(selectors$9.selectorWrapper) || popout;
+
+          wrapper?.scrollIntoView({behavior: 'smooth', block: 'center'});
+
+          if (popout) {
+            popout.classList.add(classes$8.needsSelection);
+            setTimeout(() => popout.classList.remove(classes$8.needsSelection), 1500);
+
+            // Opening on the next frames keeps the popout's own outside-click
+            // handler from catching the click that got us here
+            setTimeout(() => popout.querySelector(selectors$9.popoutToggle)?.click(), 250);
+          }
+
+          return true;
         }
 
         linkForm() {
@@ -5994,6 +6031,7 @@
 
         updateAddToCartState(formState) {
           const variant = formState.variant;
+          const awaitingSize = !variant && this.pendingSizeInput() !== null;
           let addText = theme.strings.addToCart;
           const priceWrapper = this.container.querySelectorAll(selectors$9.priceWrapper);
           const addToCart = this.container.querySelectorAll(selectors$9.addToCart);
@@ -6010,7 +6048,7 @@
             addText = theme.strings.preOrder;
           }
 
-          if (theme.settings.atcButtonShowPrice) {
+          if (theme.settings.atcButtonShowPrice && variant) {
             const quantity = this.container.querySelector('quantity-counter input')?.value || 1;
             const totalPrice = variant.price * quantity;
             let priceText = totalPrice === 0 ? window.theme.strings.free : window.theme.formatMoney(totalPrice, theme.moneyFormat);
@@ -6023,7 +6061,7 @@
             addText = `${addText} <span class="btn__price">${priceText}</span>`;
           }
 
-          if (priceWrapper.length && variant) {
+          if (priceWrapper.length && (variant || awaitingSize)) {
             priceWrapper.forEach((element) => {
               element.classList.remove(classes$8.hidden);
             });
@@ -6039,7 +6077,8 @@
                 button.disabled = true;
               }
             } else {
-              button.disabled = true;
+              // Stays clickable while waiting for a size: the click opens the size picker
+              button.disabled = !awaitingSize;
             }
           });
 
@@ -6050,7 +6089,7 @@
                 btnText = theme.strings.soldOut;
               }
             } else {
-              btnText = theme.strings.unavailable;
+              btnText = awaitingSize ? theme.strings.selectSize : theme.strings.unavailable;
             }
 
             element.innerHTML = btnText;
@@ -6059,6 +6098,8 @@
           if (formWrapper.length) {
             formWrapper.forEach((element) => {
               if (variant) {
+                element.classList.remove(classes$8.needsSelection);
+
                 if (variant.available) {
                   element.classList.remove(classes$8.variantSoldOut, classes$8.variantUnavailable);
                 } else {
@@ -6076,9 +6117,12 @@
                   inputId.value = variant.id;
                   inputId.dispatchEvent(new Event('change'));
                 }
+              } else if (awaitingSize) {
+                element.classList.add(classes$8.needsSelection);
+                element.classList.remove(classes$8.variantUnavailable, classes$8.variantSoldOut);
               } else {
                 element.classList.add(classes$8.variantUnavailable);
-                element.classList.remove(classes$8.variantSoldOut);
+                element.classList.remove(classes$8.variantSoldOut, classes$8.needsSelection);
               }
             });
           }
@@ -6329,6 +6373,9 @@
             if (this.productState.available) {
               comparePrice = variant.compare_at_price;
               price = variant.price;
+            } else if (!variant && this.pendingSizeInput() && this.productJSON) {
+              // Waiting on a size choice — keep the product's own price on screen
+              price = this.productJSON.price;
             }
 
             if (this.productState.hasPlan) {

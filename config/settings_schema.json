@@ -1350,6 +1350,13 @@
         "id": "atc_show_product_price",
         "label": "Display product price",
         "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "force_size_select",
+        "label": "Require an explicit size choice",
+        "info": "Size starts empty and the button reads \"Vælg størrelse\" until a size is picked. Turn off to pre-select the first available size.",
+        "default": true
       }
     ]
   },

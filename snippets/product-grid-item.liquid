@@ -718,14 +718,23 @@
 
           
           {%- liquid
-            assign display_title = product.title | strip_html | escape
+            comment
+              Titles share a long brand/model prefix, so a plain truncate made every
+              card read the same. The vendor is already printed above, so it is
+              dropped here and the rest is clamped over two lines in CSS instead.
+            endcomment
+            assign display_title = product.title | strip_html
+
             if product.metafields.custom.short_title != blank
               assign display_title = product.metafields.custom.short_title
             elsif product.metafields.custom.short_name != blank
               assign display_title = product.metafields.custom.short_name
-            else
-              assign display_title = display_title | truncate: 35
+            elsif product.vendor != blank
+              assign vendor_prefix = product.vendor | append: ' - '
+              assign display_title = display_title | remove_first: vendor_prefix
             endif
+
+            assign display_title = display_title | escape
           -%}
           {% if product.vendor != blank %}
             <p class="product-item__vendor">{{ product.vendor | upcase }}</p>

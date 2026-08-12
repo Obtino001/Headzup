@@ -122,6 +122,29 @@ If the list is empty, complementary recommendations are used as fallback.
 
 ---
 
+### 15. Empty size state no longer reads as "Unavailable" (post-test fix)
+**Problem:** With no size pre-selected the theme's variant handler treated the product as having no variant: ATC was relabelled **UTILGÆNGELIG** and greyed out, and `.variant--unavailable` hid the price. The page looked like a dead product on load — the likely cause of the −62% test result.  
+**Fix:**
+- [`assets/theme.dev.js`](assets/theme.dev.js) — when there is no variant *because a size is still pending*, the form gets `needs-selection` instead of `variant--unavailable`, the CTA reads **Vælg størrelse**, stays enabled, and the price falls back to the product's own price. Clicking the CTA scrolls to and opens the size dropdown instead of adding to cart.
+- [`snippets/product-buttons.liquid`](snippets/product-buttons.liquid) — ATC is no longer rendered `disabled` while a size is missing.
+- [`snippets/head.liquid`](snippets/head.liquid) — exposes `products.product.select_size` to JS.
+- [`assets/custom.js`](assets/custom.js) — stopped re-disabling the button.
+- [`assets/custom.css`](assets/custom.css) — navy CTA, visible price, and a nudge animation on the size picker.
+
+---
+
+### 16. Hero scrim
+**Problem:** Subline was thin light text over grey stadium seats.  
+**Fix:** Gradient scrim behind the first hero's content in [`assets/custom.css`](assets/custom.css) (left-to-right on desktop, bottom-up on mobile).
+
+---
+
+### 17. Collection titles no longer truncate identically
+**Problem:** `truncate: 35` cut every New Era title at the shared prefix, so four cards read the same.  
+**Fix:** [`snippets/product-grid-item.liquid`](snippets/product-grid-item.liquid) drops the vendor prefix (vendor is already shown above) and the title clamps over two lines instead of being cut, so the colourway stays visible.
+
+---
+
 ## How to QA (preview)
 
 | # | Check |
@@ -136,6 +159,9 @@ If the list is empty, complementary recommendations are used as fallback.
 | 12 | Chapter Two quieter than Headz Up |
 | 13 | Homepage product rows show images without blank boxes |
 | 14 | Desktop: menu visible without waiting for scroll/fade |
+| 15 | PDP on load (no `?variant=`): price visible, CTA navy and reads Vælg størrelse; clicking it opens the size dropdown; picking a size switches it to Tilføj til kurv |
+| 16 | Homepage hero: subline readable against the photo |
+| 17 | Collection grid: four New Era caps show different colourways in the title |
 
 ---
 

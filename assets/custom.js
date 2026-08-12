@@ -85,33 +85,22 @@
     });
   }
 
+  /*
+   * The button is never disabled while a size is missing — it reads "Vælg størrelse"
+   * and opens the size picker. Once a size is picked the theme's variant handler
+   * relabels it, so all that is left here is dropping the marker attribute.
+   */
   function unlockAddToCartAfterSizeSelect() {
     const pending = document.querySelectorAll('[data-pending-size]');
     if (!pending.length) return;
 
     const stillPending = Array.from(pending).some((input) => !input.value);
-    const buttons = document.querySelectorAll('[data-add-to-cart][data-require-size-select]');
+    if (stillPending) return;
 
-    buttons.forEach((btn) => {
-      if (stillPending) {
-        btn.setAttribute('disabled', 'disabled');
-        btn.setAttribute('aria-disabled', 'true');
-        return;
-      }
+    document.querySelectorAll('[data-add-to-cart][data-require-size-select]').forEach((btn) => {
       btn.removeAttribute('disabled');
       btn.removeAttribute('aria-disabled');
       btn.removeAttribute('data-require-size-select');
-      const label = btn.querySelector('[data-add-to-cart-text]');
-      if (label) {
-        const addLabel =
-          window.theme?.strings?.addToCart ||
-          (document.documentElement.lang?.startsWith('da') ? 'Tilføj til kurv' : 'Add to cart');
-        // Only replace placeholder select-size copy
-        const text = (label.textContent || '').trim().toLowerCase();
-        if (text.includes('vælg størrelse') || text.includes('select size')) {
-          label.textContent = addLabel;
-        }
-      }
     });
   }
 
