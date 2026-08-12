@@ -99,6 +99,7 @@
     "final_sale": false,
     "quantity_style": "dropdown",
     "atc_show_product_price": false,
+    "force_size_select": true,
     "swatches_type": "theme",
     "swatch_size": "regular",
     "swatch_style": "circle",
