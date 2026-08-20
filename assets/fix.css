@@ -235,3 +235,115 @@ body.chapter-two .product-item__image {
     font-weight: 600;
     font-size: var(--text-lg);
   }
+
+/* Mobile drawer brands — separate markup, no desktop flex/grid conflicts */
+#header-menu .sliderule-grid:has(.menu__block-brands--drawer),
+#header-menu .sliderule-grid:has(.brands-drawer) {
+  display: block !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+#header-menu .menu__block-brands--drawer {
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+#header-menu .brands-drawer {
+  display: block;
+  width: 100%;
+  padding: 8px 16px 24px;
+}
+
+#header-menu .brands-drawer__group {
+  display: block;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+#header-menu .brands-drawer__group:last-child {
+  margin-bottom: 0;
+}
+
+#header-menu .brands-drawer__heading {
+  margin: 0 0 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--grey-0, #e5e5e5);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+#header-menu .brands-drawer__items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+
+#header-menu .brands-drawer__item {
+  min-width: 0;
+  width: 100%;
+}
+
+#header-menu .brands-drawer__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
+#header-menu .brands-drawer__image {
+  width: 45px;
+  height: 45px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#header-menu .brands-drawer__image img {
+  max-width: 45px;
+  max-height: 45px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+#header-menu .brands-drawer__name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+/* Desktop mega menu brands — override theme.css flex row */
+.header__dropdown__brands.header__dropdown__brands--grouped {
+  display: grid !important;
+  grid-template-columns: 1fr;
+  flex-wrap: unset !important;
+}
+
+.brands-category.brands-category--grouped {
+  flex: none !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.header__dropdown__brands--grouped .brand-item {
+  width: 100% !important;
+}
+
+@media only screen and (min-width: 990px) {
+  .header__dropdown__brands--grouped {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  .header__dropdown__brands--grouped {
+    grid-template-columns: repeat(6, 1fr) !important;
+  }
+}

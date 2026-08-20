@@ -53,13 +53,35 @@ Required params:
 
 -%}
 {% if block.type == 'brands' %}
-  <div class="menu__block menu__block-brands {{ width_class }}" {{ block.shopify_attributes }}
+  {%- liquid
+    if is_mobile
+      assign brands_root_class = 'brands-drawer'
+      assign brands_group_class = 'brands-drawer__group'
+      assign brands_heading_class = 'brands-drawer__heading'
+      assign brands_list_class = 'brands-drawer__items'
+      assign brands_item_class = 'brands-drawer__item'
+      assign brands_link_class = 'brands-drawer__link'
+      assign brands_image_class = 'brands-drawer__image'
+      assign brands_name_class = 'brands-drawer__name'
+    else
+      assign brands_root_class = 'header__dropdown__brands header__dropdown__brands--grouped'
+      assign brands_group_class = 'brands-category brands-category--grouped'
+      assign brands_heading_class = 'brands-category-title'
+      assign brands_list_class = 'brands-category-list--grouped'
+      assign brands_item_class = 'brand-item'
+      assign brands_link_class = 'brand-link'
+      assign brands_image_class = 'brand-image'
+      assign brands_name_class = 'brand-title'
+    endif
+  -%}
+  <div class="menu__block menu__block-brands{% if is_mobile %} menu__block-brands--drawer{% endif %} {{ width_class }}" {{ block.shopify_attributes }}
     {% if link_level_next %}
       data-animates="{{ link_level_next }}"
       data-animation="{{ animation_name }}"
       data-animation-delay="{{ animation_delay }}"
       data-animation-duration="{{ animation_duration }}"
     {% endif %}>
+    {%- unless is_mobile -%}
     <style>
       .menu__blocks-brands,
       .menu__block-brands {
@@ -77,6 +99,8 @@ Required params:
       }
       .brands-category--grouped {
         margin-bottom: 20px;
+        flex: none;
+        width: 100%;
       }
       .brands-category--grouped:first-child .brands-category-title {
         margin-top: 0;
@@ -90,12 +114,6 @@ Required params:
         width: 100%;
         min-width: 0;
       }
-      @media only screen and (max-width: 749px) {
-        .header__dropdown__brands--grouped {
-          padding-top: 20px;
-          padding-bottom: 24px;
-        }
-      }
       @media only screen and (min-width: 990px) {
         .header__dropdown__brands--grouped {
           grid-template-columns: repeat(3, 1fr);
@@ -107,7 +125,8 @@ Required params:
         }
       }
     </style>
-    <div class="header__dropdown__brands header__dropdown__brands--grouped">
+    {%- endunless -%}
+    <div class="{{ brands_root_class }}">
       {% assign brand_metaobject_values = metaobjects.brands.values | sort: 'title' %}
       {% capture chapter_two_flag %}{% render 'chapter-two-flag' %}{% endcapture %}
       {% if chapter_two_flag != blank %}
@@ -142,27 +161,27 @@ Required params:
             {%- if current_group != '' -%}
               </div></div>
             {%- endif -%}
-            <div class="brands-category brands-category--grouped">
-              <h4 class="brands-category-title" style="margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;">{{ group_name }}</h4>
-              <div class="brands-category-list--grouped">
+            <div class="{{ brands_group_class }}">
+              <h4 class="{{ brands_heading_class }}"{% unless is_mobile %} style="margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;"{% endunless %}>{{ group_name }}</h4>
+              <div class="{{ brands_list_class }}">
             {% assign current_group = group_name %}
           {%- endif -%}
           
-          <div class="brand-item">
+          <div class="{{ brands_item_class }}">
             {%- if brand.link_collection.value.url != blank -%}
-              <a href="{{ brand.link_collection.value.url }}" class="brand-link" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;">
+              <a href="{{ brand.link_collection.value.url }}" class="{{ brands_link_class }}"{% unless is_mobile %} style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;"{% endunless %}>
             {%- else -%}
-              <div class="brand-link" style="display: flex; align-items: center; gap: 15px;">
+              <div class="{{ brands_link_class }}"{% unless is_mobile %} style="display: flex; align-items: center; gap: 15px;"{% endunless %}>
             {%- endif -%}
             
             {%- if brand.image != blank -%}
-              <div class="brand-image" style="width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                <img src="{{ brand.image | image_url: width: 90 }}" alt="{{ brand.title | escape }}" width="45" height="45" loading="lazy" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+              <div class="{{ brands_image_class }}"{% unless is_mobile %} style="width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"{% endunless %}>
+                <img src="{{ brand.image | image_url: width: 90 }}" alt="{{ brand.title | escape }}" width="45" height="45" loading="lazy"{% unless is_mobile %} style="max-width: 100%; max-height: 100%; object-fit: contain;"{% endunless %}>
               </div>
             {%- endif -%}
             
             {%- if brand.title != blank -%}
-              <h3 class="brand-title" style="margin: 0; font-size: 14px; font-weight: 500;">{{ brand.title | escape }}</h3>
+              <h3 class="{{ brands_name_class }}"{% unless is_mobile %} style="margin: 0; font-size: 14px; font-weight: 500;"{% endunless %}>{{ brand.title | escape }}</h3>
             {%- endif -%}
             
             {%- if brand.link_collection.value.url != blank -%}
@@ -196,27 +215,27 @@ Required params:
             {%- if current_group != '' -%}
               </div></div>
             {%- endif -%}
-            <div class="brands-category brands-category--grouped">
-              <h4 class="brands-category-title" style="margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;">{{ group_name }}</h4>
-              <div class="brands-category-list--grouped">
+            <div class="{{ brands_group_class }}">
+              <h4 class="{{ brands_heading_class }}"{% unless is_mobile %} style="margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px; font-weight: bold; font-size: 16px;"{% endunless %}>{{ group_name }}</h4>
+              <div class="{{ brands_list_class }}">
             {% assign current_group = group_name %}
           {%- endif -%}
           
-          <div class="brand-item">
+          <div class="{{ brands_item_class }}">
             {%- if brand.link_collection.value.url != blank -%}
-              <a href="{{ brand.link_collection.value.url }}" class="brand-link" style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;">
+              <a href="{{ brand.link_collection.value.url }}" class="{{ brands_link_class }}"{% unless is_mobile %} style="display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit;"{% endunless %}>
             {%- else -%}
-              <div class="brand-link" style="display: flex; align-items: center; gap: 15px;">
+              <div class="{{ brands_link_class }}"{% unless is_mobile %} style="display: flex; align-items: center; gap: 15px;"{% endunless %}>
             {%- endif -%}
             
             {%- if brand.image != blank -%}
-              <div class="brand-image" style="width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                <img src="{{ brand.image | image_url: width: 90 }}" alt="{{ brand.title | escape }}" width="45" height="45" loading="lazy" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+              <div class="{{ brands_image_class }}"{% unless is_mobile %} style="width: 45px; height: 45px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;"{% endunless %}>
+                <img src="{{ brand.image | image_url: width: 90 }}" alt="{{ brand.title | escape }}" width="45" height="45" loading="lazy"{% unless is_mobile %} style="max-width: 100%; max-height: 100%; object-fit: contain;"{% endunless %}>
               </div>
             {%- endif -%}
             
             {%- if brand.title != blank -%}
-              <h3 class="brand-title" style="margin: 0; font-size: 14px; font-weight: 500;">{{ brand.title | escape }}</h3>
+              <h3 class="{{ brands_name_class }}"{% unless is_mobile %} style="margin: 0; font-size: 14px; font-weight: 500;"{% endunless %}>{{ brand.title | escape }}</h3>
             {%- endif -%}
             
             {%- if brand.link_collection.value.url != blank -%}
