@@ -96,7 +96,12 @@ Required params:
           padding-bottom: 24px;
         }
       }
-      @media only screen and (min-width: 750px) {
+      @media only screen and (min-width: 990px) {
+        .header__dropdown__brands--grouped {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media only screen and (min-width: 1200px) {
         .header__dropdown__brands--grouped {
           grid-template-columns: repeat(6, 1fr);
         }

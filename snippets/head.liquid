@@ -34,6 +34,8 @@
 <!-- Title and description ================================================ -->
 {% capture seo_title %}
     {% assign title_content = page_title %}
+    {% assign shop_suffix = ' - ' | append: shop.name %}
+    {% assign title_content = title_content | replace: shop_suffix, '' | replace: ' - Headz Up', '' | replace: ' | Headz Up', '' %}
     {% if template == 'password' %}
       {% assign title_content = shop.name %}
     {%- endif -%}

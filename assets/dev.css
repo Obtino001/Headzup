@@ -1495,3 +1495,85 @@ a[href="/collections/bandana"] .nav-link-collections {
   max-height: 12px;
   object-fit: contain;
 }
+
+/* BRANDS mega menu — stop logo overlap on mobile / tablet */
+.header__dropdown__brands.header__dropdown__brands--grouped {
+  display: grid !important;
+  flex-wrap: unset !important;
+}
+
+@media only screen and (max-width: 989px) {
+  .grandparent .header__dropdown__inner {
+    flex-direction: column;
+    padding: 16px 20px 24px;
+    max-height: calc(100dvh - var(--header-height, 120px));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .grandparent .header__grandparent__links {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    min-width: 100%;
+    width: 100%;
+  }
+
+  .grandparent .dropdown__family {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .grandparent .menu__blocks-brands {
+    display: block !important;
+    width: 100% !important;
+    flex: none !important;
+  }
+
+  .header__dropdown__brands--grouped {
+    grid-template-columns: 1fr !important;
+    gap: 24px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .brands-category-list--grouped {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 12px;
+  }
+
+  .header__dropdown__brands--grouped .brand-item {
+    width: 100% !important;
+    text-align: left;
+  }
+
+  .header__dropdown__brands--grouped .brand-link {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px !important;
+  }
+
+  .header__dropdown__brands--grouped .brand-image {
+    width: 45px !important;
+    height: 45px !important;
+    flex-shrink: 0;
+  }
+
+  .header__dropdown__brands--grouped .brand-image img {
+    width: 45px !important;
+    height: 45px !important;
+  }
+
+  .header__dropdown__brands--grouped .brand-title {
+    font-size: 13px;
+    line-height: 1.3;
+    text-align: left;
+  }
+
+  /* Same layout inside the mobile drawer */
+  .sliderule-grid .header__dropdown__brands--grouped,
+  .mobile__menu__dropdown .header__dropdown__brands--grouped {
+    grid-template-columns: 1fr !important;
+    padding: 0 16px 24px;
+  }
+}
