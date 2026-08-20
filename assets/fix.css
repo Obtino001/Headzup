@@ -348,12 +348,49 @@ body.chapter-two .product-item__image {
   }
 }
 
-/* Mobile header menu drawer background */
-/* The theme uses a white default for .drawer__inner, but for this drawer
-   we want the normal menu background variable to show. */
+/* Mobile submenu panel — solid white so parent menu items don't bleed through */
 #header-menu.drawer--header .drawer__inner,
 #header-menu.drawer--header .drawer__body,
 #header-menu.drawer--header .drawer__content,
 #header-menu.drawer--header .drawer__menu {
-  background: var(--COLOR-MENU-BG) !important;
+  background: #fff;
+}
+
+#header-menu .sliderule__panel.is-visible,
+#header-menu .sliderule__panel.is-hiding,
+#header-menu [data-sliderule].is-visible,
+#header-menu [data-sliderule].is-hiding {
+  background: #fff;
+  z-index: 20;
+}
+
+#header-menu .sliderule__panel.is-visible .sliderow__links,
+#header-menu .sliderule__panel.is-hiding .sliderow__links {
+  background: #fff;
+  min-height: calc(100% - var(--item-height, 48px));
+}
+
+#header-menu .sliderow--back {
+  --bg: #fff;
+  background: #fff !important;
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+/* When a submenu is open, hide the main menu row underneath */
+#header-menu [data-sliderule-pane="1"] .drawer__main-menu .sliderule__wrapper--level-0,
+#header-menu [data-sliderule-pane="2"] .drawer__main-menu .sliderule__wrapper--level-0,
+#header-menu [data-sliderule-pane="1"] .drawer__main-menu > .sliderule__wrapper--secondary,
+#header-menu [data-sliderule-pane="2"] .drawer__main-menu > .sliderule__wrapper--secondary {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#header-menu .brands-drawer,
+#header-menu .brands-drawer__group,
+#header-menu .brands-drawer__items,
+#header-menu .brands-drawer__item,
+#header-menu .brands-drawer__link {
+  background: #fff;
 }
