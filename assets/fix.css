@@ -348,53 +348,10 @@ body.chapter-two .product-item__image {
   }
 }
 
-/* Mobile submenu panel — solid white so parent menu items don't bleed through.
-   Do NOT hide/disable .sliderule__wrapper--level-0 — the open panel and back
-   button live inside that wrapper, so pointer-events:none broke Back. */
-#header-menu.drawer--header .drawer__inner,
-#header-menu.drawer--header .drawer__body,
-#header-menu.drawer--header .drawer__content,
-#header-menu.drawer--header .drawer__menu {
-  background: #fff;
-}
-
-#header-menu .sliderule__panel.is-visible,
-#header-menu .sliderule__panel.is-hiding,
-#header-menu [data-sliderule].is-visible,
-#header-menu [data-sliderule].is-hiding {
-  background: #fff;
-  z-index: 30;
-  pointer-events: auto;
-}
-
-#header-menu .sliderule__panel.is-visible .sliderow__links,
-#header-menu .sliderule__panel.is-hiding .sliderow__links {
-  background: #fff;
-  min-height: 100%;
-}
-
-#header-menu .sliderow--back {
-  --bg: #fff;
-  background: #fff !important;
-  width: 100%;
-  left: 0;
-  right: 0;
-  z-index: 50;
-  pointer-events: auto;
-}
-
-#header-menu .sliderow--back .sliderow__back-button,
-#header-menu .sliderow--back [data-sliderule-close] {
-  pointer-events: auto;
-  position: relative;
-  z-index: 51;
-  cursor: pointer;
-}
-
-#header-menu .brands-drawer,
-#header-menu .brands-drawer__group,
-#header-menu .brands-drawer__items,
-#header-menu .brands-drawer__item,
-#header-menu .brands-drawer__link {
-  background: #fff;
+/* Mobile submenu panels have no background of their own in theme.css, so the
+   parent menu rows show through wherever a panel's content isn't a .sliderow
+   (e.g. the brands grid). One opaque background on the panel is the whole fix —
+   never disable pointer events here, the Back button lives inside the panel. */
+#header-menu .sliderule__panel {
+  background: var(--COLOR-BG, #fff);
 }
