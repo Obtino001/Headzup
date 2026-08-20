@@ -208,7 +208,7 @@
   } */
   /*  Mobile menu */
   #header-menu .sliderow {
-    flex-direction: column;
+    /* flex-direction: column; */
     align-items: baseline;
   }
 
