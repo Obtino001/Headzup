@@ -348,7 +348,9 @@ body.chapter-two .product-item__image {
   }
 }
 
-/* Mobile submenu panel — solid white so parent menu items don't bleed through */
+/* Mobile submenu panel — solid white so parent menu items don't bleed through.
+   Do NOT hide/disable .sliderule__wrapper--level-0 — the open panel and back
+   button live inside that wrapper, so pointer-events:none broke Back. */
 #header-menu.drawer--header .drawer__inner,
 #header-menu.drawer--header .drawer__body,
 #header-menu.drawer--header .drawer__content,
@@ -361,13 +363,14 @@ body.chapter-two .product-item__image {
 #header-menu [data-sliderule].is-visible,
 #header-menu [data-sliderule].is-hiding {
   background: #fff;
-  z-index: 20;
+  z-index: 30;
+  pointer-events: auto;
 }
 
 #header-menu .sliderule__panel.is-visible .sliderow__links,
 #header-menu .sliderule__panel.is-hiding .sliderow__links {
   background: #fff;
-  min-height: calc(100% - var(--item-height, 48px));
+  min-height: 100%;
 }
 
 #header-menu .sliderow--back {
@@ -376,15 +379,16 @@ body.chapter-two .product-item__image {
   width: 100%;
   left: 0;
   right: 0;
+  z-index: 50;
+  pointer-events: auto;
 }
 
-/* When a submenu is open, hide the main menu row underneath */
-#header-menu [data-sliderule-pane="1"] .drawer__main-menu .sliderule__wrapper--level-0,
-#header-menu [data-sliderule-pane="2"] .drawer__main-menu .sliderule__wrapper--level-0,
-#header-menu [data-sliderule-pane="1"] .drawer__main-menu > .sliderule__wrapper--secondary,
-#header-menu [data-sliderule-pane="2"] .drawer__main-menu > .sliderule__wrapper--secondary {
-  visibility: hidden;
-  pointer-events: none;
+#header-menu .sliderow--back .sliderow__back-button,
+#header-menu .sliderow--back [data-sliderule-close] {
+  pointer-events: auto;
+  position: relative;
+  z-index: 51;
+  cursor: pointer;
 }
 
 #header-menu .brands-drawer,
