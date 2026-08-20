@@ -347,3 +347,13 @@ body.chapter-two .product-item__image {
     grid-template-columns: repeat(6, 1fr) !important;
   }
 }
+
+/* Mobile header menu drawer background */
+/* The theme uses a white default for .drawer__inner, but for this drawer
+   we want the normal menu background variable to show. */
+#header-menu.drawer--header .drawer__inner,
+#header-menu.drawer--header .drawer__body,
+#header-menu.drawer--header .drawer__content,
+#header-menu.drawer--header .drawer__menu {
+  background: var(--COLOR-MENU-BG) !important;
+}
